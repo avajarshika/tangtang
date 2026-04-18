@@ -7409,7 +7409,7 @@ async function sendChat() {
   if (btn) { btn.disabled = true; btn.style.opacity = '.5'; }
 
   try {
-    const GEMINI_KEY = 'AIzaSyAb8RN6JBZqbMU1gNg0_Skb9Jjkk39N6ShpesA3O4YGJjIfexog';
+    const GEMINI_KEY = 'AIzaSyDJVMyDjGx1mnzJhcfXfReDRcA3_pW1_Ls';
     const geminiMessages = chatHistory.slice(-10).map(m => ({
       role: m.role === 'assistant' ? 'model' : 'user',
       parts: [{ text: m.content }]
