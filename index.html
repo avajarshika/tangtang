@@ -8879,7 +8879,7 @@ function renderHubVocab() {
   const fDiv = document.getElementById('hub-vm-filters');
   if (fDiv && !fDiv.hasChildNodes()) {
     fDiv.innerHTML = VM_THEMES.map(t =>
-      `<button class="vm-filter ${t===hubVmFilter?'active':''}" onclick="setHubVMFilter('${t}')" style="flex-shrink:0;padding:6px 14px;border:1px solid var(--paper3);border-radius:20px;font-size:12px;font-weight:600;font-family:inherit;background:white;color:var(--ink3);cursor:pointer">${t}</button>`
+      `<button class="vm-filter ${t===hubVmFilter?'active':''}" onclick="setHubVMFilter('${t}')" style="flex-shrink:0;padding:6px 14px;border:1px solid var(--paper3);border-radius:20px;font-size:12px;font-weight:600;font-family:inherit;background:white;color:var(--ink3);cursor:pointer">${t}${t!=='ทั้งหมด' && !FREE_VOCAB_THEMES.includes(t) && !isPremium() ? ' 🔒' : ''}</button>`
     ).join('');
   }
   const q = (document.getElementById('hub-vm-search')?.value || '').toLowerCase();
@@ -8906,6 +8906,10 @@ function renderHubVocab() {
 }
 
 function setHubVMFilter(t) {
+  if (t !== 'ทั้งหมด' && !FREE_VOCAB_THEMES.includes(t) && !isPremium()) {
+    showPaymentModal();
+    return;
+  }
   hubVmFilter = t;
   const fDiv = document.getElementById('hub-vm-filters');
   if (fDiv) fDiv.innerHTML = '';
