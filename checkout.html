@@ -563,18 +563,66 @@ body {
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-function submitOrder() {
+const SUPABASE_URL = 'https://zmshxxmcgbxavzlqmpxd.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inptc2h4eG1jZ2J4YXZ6bHFtcHhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NzkwODEsImV4cCI6MjA5MjA1NTA4MX0.USeFzW09aOqqtwtYFaC9lgmcLkpkjz12ciQLrG3IhZQ';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const LINE_TOKEN = '+WbGwnkpRP3YEFWTZWQmQUymKht18Nwvg20UN6VvzzDD7gnPA6J1cw14SRf4F9dHEj1AcBkrut1B1ZontGgn4JKT5NYNgFTNN71TCsfWSziWn7LuuXx/aIB7nMlxrA1/bLAaQ3SNf5DBs/TeEryaQgdB04t89/1O/w1cDnyilFU=';
+const LINE_USER_ID = 'Ua7c4b19f63d71e152cf8cb90d45ebfb0';
+
+async function sendLineNotify(name, phone, email) {
+  const now = new Date().toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' });
+  const msg = `🎉 มีคำสั่งซื้อใหม่!\n\n👤 ชื่อ: ${name}\n📱 เบอร์: ${phone}\n📧 Email: ${email}\n💰 ยอด: ฿1,290\n🕐 เวลา: ${now}\n\n⚡ กรุณาปลดล็อคใน Admin Panel`;
+  
+  try {
+    await fetch('https://api.line.me/v2/bot/message/push', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + LINE_TOKEN
+      },
+      body: JSON.stringify({
+        to: LINE_USER_ID,
+        messages: [{ type: 'text', text: msg }]
+      })
+    });
+  } catch(e) { console.log('Line notify error:', e); }
+}
+
+async function saveToSupabase(name, phone, email) {
+  try {
+    await sb.from('orders').insert({
+      name, phone, email,
+      amount: 1290,
+      status: 'pending',
+      created_at: new Date().toISOString()
+    });
+  } catch(e) { console.log('Supabase error:', e); }
+}
+
+async function submitOrder() {
   const fname = document.getElementById('fname').value.trim();
+  const phone = document.getElementById('phone').value.trim();
   const email = document.getElementById('email').value.trim();
   const err = document.getElementById('form-err');
+  const btn = document.querySelector('.btn-submit');
 
-  const phone = document.getElementById('phone').value.trim();
   if (!fname) { err.textContent = 'กรุณากรอกชื่อ-นามสกุล'; return; }
   if (!phone) { err.textContent = 'กรุณากรอกเบอร์โทรศัพท์'; return; }
   if (!email || !email.includes('@')) { err.textContent = 'กรุณากรอกอีเมลให้ถูกต้อง'; return; }
 
   err.textContent = '';
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ กำลังบันทึก...'; }
+
+  // บันทึกและแจ้งเตือนพร้อมกัน
+  await Promise.all([
+    saveToSupabase(fname, phone, email),
+    sendLineNotify(fname, phone, email)
+  ]);
+
+  if (btn) { btn.disabled = false; btn.textContent = '✅ ยืนยันการสั่งซื้อ — ฿1,290'; }
   document.getElementById('success-overlay').classList.add('show');
 }
 </script>
