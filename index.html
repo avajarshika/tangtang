@@ -8884,7 +8884,7 @@ function renderHubVocab() {
   }
   const q = (document.getElementById('hub-vm-search')?.value || '').toLowerCase();
   const filtered = VOCAB_POOL.filter(v =>
-    (hubVmFilter === 'ทั้งหมด' || v.theme === hubVmFilter) &&
+    (hubVmFilter === 'ทั้งหมด' ? isVocabThemeFree(v.theme) : v.theme === hubVmFilter) &&
     (!q || v.th.includes(q) || v.zh.includes(q) || (v.py||'').toLowerCase().includes(q))
   );
   const countEl = document.getElementById('hub-vm-count');
