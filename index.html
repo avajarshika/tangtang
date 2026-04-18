@@ -1403,6 +1403,125 @@ body {
       <div class="review-banner-count" id="review-count">0</div>
     </div>
 
+
+    <!-- ROAD MAP -->
+    <div style="padding:0 16px;margin-bottom:16px">
+      <div style="background:#FFF8FC;border:1px solid #F5C6E0;border-radius:16px;padding:16px;font-family:'Noto Sans Thai',sans-serif">
+        <div style="text-align:center;font-size:15px;font-weight:700;color:#2D1A24;margin-bottom:2px">🗺️ เส้นทางเรียนจีน</div>
+        <div style="text-align:center;font-size:11px;color:#8C6B7A;margin-bottom:14px">เริ่มจาก 0 สู่ระดับมือโปร · กดแต่ละขั้นเพื่อดูรายละเอียด</div>
+
+        <div id="rm-steps">
+          <div class="rm-step-wrap">
+            <div style="display:flex;gap:10px;position:relative">
+              <div style="position:relative;flex-shrink:0">
+                <div style="width:36px;height:36px;border-radius:50%;background:#FFF0F8;border:2px solid #F13596;display:flex;align-items:center;justify-content:center;font-size:16px;z-index:1;position:relative">🔤</div>
+                <div style="width:2px;background:#F5C6E0;position:absolute;left:17px;top:36px;bottom:-14px"></div>
+              </div>
+              <div style="flex:1;background:white;border:1px solid #F5C6E0;border-radius:12px;padding:10px 12px;margin-bottom:14px;cursor:pointer" onclick="rmToggle(this)">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
+                  <div style="font-size:13px;font-weight:700;color:#2D1A24">พินอิน — รากฐานทุกอย่าง</div>
+                  <span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;background:#FFF0F8;color:#F13596">1-2 สัปดาห์</span>
+                </div>
+                <div style="font-size:11px;color:#8C6B7A">ระบบออกเสียงภาษาจีน จำเป็นต้องเรียนก่อนเลย</div>
+                <div class="rm-detail" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid #FFEDF6">
+                  <div style="font-size:11px;color:#5C3D4E;padding:2px 0">✅ เรียนสระ พยัญชนะ และวรรณยุกต์ 4 เสียง</div>
+                  <div style="font-size:11px;color:#5C3D4E;padding:2px 0">✅ ออกเสียงถูกตั้งแต่ต้น ไม่ต้องแก้ทีหลัง</div>
+                  <div style="font-size:11px;color:#5C3D4E;padding:2px 0">✅ มีระบบเสียงในแอป ฟังและออกเสียงตามได้เลย</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rm-step-wrap">
+            <div style="display:flex;gap:10px;position:relative">
+              <div style="position:relative;flex-shrink:0">
+                <div style="width:36px;height:36px;border-radius:50%;background:#E8F4ED;border:2px solid #1a6b3a;display:flex;align-items:center;justify-content:center;font-size:16px;z-index:1;position:relative">📗</div>
+                <div style="width:2px;background:#F5C6E0;position:absolute;left:17px;top:36px;bottom:-14px"></div>
+              </div>
+              <div style="flex:1;background:white;border:1px solid #F5C6E0;border-radius:12px;padding:10px 12px;margin-bottom:14px;cursor:pointer" onclick="rmToggle(this)">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
+                  <div style="font-size:13px;font-weight:700;color:#2D1A24">HSK 1 — ผู้เริ่มต้น</div>
+                  <span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;background:#E8F4ED;color:#1a6b3a">1-2 เดือน</span>
+                </div>
+                <div style="font-size:11px;color:#8C6B7A">150 คำ ทักทาย สั่งอาหาร ตัวเลข เวลา</div>
+                <div class="rm-detail" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid #FFEDF6">
+                  <div style="font-size:11px;color:#5C3D4E;padding:2px 0">✅ แนะนำตัวและทักทายเป็นภาษาจีนได้</div>
+                  <div style="font-size:11px;color:#5C3D4E;padding:2px 0">✅ สั่งอาหาร จ่ายเงิน และถามราคาได้</div>
+                  <div style="font-size:11px;color:#5C3D4E;padding:2px 0">✅ บอกวัน เวลา และตัวเลขได้</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rm-step-wrap">
+            <div style="display:flex;gap:10px;position:relative">
+              <div style="position:relative;flex-shrink:0">
+                <div style="width:36px;height:36px;border-radius:50%;background:#E6F1FB;border:2px solid #185FA5;display:flex;align-items:center;justify-content:center;font-size:16px;z-index:1;position:relative">📘</div>
+                <div style="width:2px;background:#F5C6E0;position:absolute;left:17px;top:36px;bottom:-14px"></div>
+              </div>
+              <div style="flex:1;background:white;border:1px solid #F5C6E0;border-radius:12px;padding:10px 12px;margin-bottom:14px;cursor:pointer" onclick="rmToggle(this)">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
+                  <div style="font-size:13px;font-weight:700;color:#2D1A24">HSK 2 — พื้นฐาน</div>
+                  <span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;background:#E6F1FB;color:#185FA5">2-3 เดือน</span>
+                </div>
+                <div style="font-size:11px;color:#8C6B7A">300 คำ คุยชีวิตประจำวัน บอกทาง ช้อปปิ้ง</div>
+                <div class="rm-detail" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid #FFEDF6">
+                  <div style="font-size:11px;color:#5C3D4E;padding:2px 0">✅ สื่อสารเรื่องชีวิตประจำวันได้</div>
+                  <div style="font-size:11px;color:#5C3D4E;padding:2px 0">✅ บอกทาง ขึ้นรถ นั่งแท็กซี่ได้</div>
+                  <div style="font-size:11px;color:#5C3D4E;padding:2px 0">✅ ช้อปปิ้งและต่อราคาเป็นภาษาจีนได้</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rm-step-wrap">
+            <div style="display:flex;gap:10px;position:relative">
+              <div style="position:relative;flex-shrink:0">
+                <div style="width:36px;height:36px;border-radius:50%;background:#FBF3E8;border:2px solid #C9A96E;display:flex;align-items:center;justify-content:center;font-size:16px;z-index:1;position:relative">📙</div>
+                <div style="width:2px;background:#F5C6E0;position:absolute;left:17px;top:36px;bottom:-14px"></div>
+              </div>
+              <div style="flex:1;background:white;border:1px solid #F5C6E0;border-radius:12px;padding:10px 12px;margin-bottom:14px;cursor:pointer" onclick="rmToggle(this)">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
+                  <div style="font-size:13px;font-weight:700;color:#2D1A24">HSK 3 — กลาง</div>
+                  <span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;background:#FBF3E8;color:#854F0B">3-6 เดือน</span>
+                </div>
+                <div style="font-size:11px;color:#8C6B7A">600 คำ ท่องเที่ยวจีนได้สบาย แสดงความคิดเห็น</div>
+                <div class="rm-detail" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid #FFEDF6">
+                  <div style="font-size:11px;color:#5C3D4E;padding:2px 0">✅ ท่องเที่ยวจีนได้โดยไม่ต้องพึ่งล่าม</div>
+                  <div style="font-size:11px;color:#5C3D4E;padding:2px 0">✅ อ่านป้ายและเมนูภาษาจีนพื้นฐานได้</div>
+                  <div style="font-size:11px;color:#5C3D4E;padding:2px 0">✅ แสดงความคิดเห็นและบรรยายเหตุการณ์ได้</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="rm-step-wrap">
+            <div style="display:flex;gap:10px">
+              <div style="flex-shrink:0">
+                <div style="width:36px;height:36px;border-radius:50%;background:#FBEAF0;border:2px solid #993556;display:flex;align-items:center;justify-content:center;font-size:16px">🏆</div>
+              </div>
+              <div style="flex:1;background:white;border:1px solid #F5C6E0;border-radius:12px;padding:10px 12px;margin-bottom:14px;cursor:pointer" onclick="rmToggle(this)">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">
+                  <div style="font-size:13px;font-weight:700;color:#2D1A24">HSK 4-6 — มืออาชีพ</div>
+                  <span style="font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;background:#FBEAF0;color:#993556">6 เดือน+</span>
+                </div>
+                <div style="font-size:11px;color:#8C6B7A">1,200-5,000+ คำ ทำงาน ประชุม อ่านข่าวจีนได้</div>
+                <div class="rm-detail" style="display:none;margin-top:8px;padding-top:8px;border-top:1px solid #FFEDF6">
+                  <div style="font-size:11px;color:#5C3D4E;padding:2px 0">✅ ใช้ภาษาจีนในการทำงานและธุรกิจได้</div>
+                  <div style="font-size:11px;color:#5C3D4E;padding:2px 0">✅ อ่านและเขียนภาษาจีนระดับสูงได้</div>
+                  <div style="font-size:11px;color:#5C3D4E;padding:2px 0">✅ ระดับเทียบเท่าเจ้าของภาษา</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="showPaymentModal()" style="width:100%;padding:13px;background:#F13596;color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">
+          🚀 เริ่มเรียนเลย — ฿1,290 ตลอดชีพ
+        </button>
+      </div>
+    </div>
+
     <div class="section-title">Learning Paths</div>
     <div style="padding:0 16px 6px;font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase">📚 ตามระดับ HSK</div>
     <div class="path-row" id="path-row-hsk" style="grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px"></div>
@@ -10075,6 +10194,11 @@ function showToast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
 }
 
+
+function rmToggle(card) {
+  const detail = card.querySelector('.rm-detail');
+  detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+}
 
 // ═══════════════════════════════════
 // ADMIN PANEL
