@@ -7314,15 +7314,27 @@ function loadVoices() {
 
 if (synth) { loadVoices(); synth.onvoiceschanged = loadVoices; }
 
+// ใช้ Google TTS เป็น fallback สำหรับ Android
+function speakWithGoogleTTS(text, onEnd) {
+  const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&tl=zh-CN&client=tw-ob&q=${encodeURIComponent(text)}`);
+  audio.onended = () => { if (onEnd) onEnd(); };
+  audio.onerror = () => { if (onEnd) onEnd(); };
+  audio.play().catch(() => { if (onEnd) onEnd(); });
+}
+
 function speak(text, onEnd, rate=0.85) {
-  if (!synth) return;
-  synth.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'zh-CN'; u.rate = rate; u.pitch = 1.05;
-  if (zhVoice) u.voice = zhVoice;
-  u.onend = () => { if (onEnd) onEnd(); };
-  u.onerror = () => { if (onEnd) onEnd(); };
-  synth.speak(u);
+  // ลอง Web Speech API ก่อน ถ้าไม่มีเสียงจีนให้ใช้ Google TTS
+  if (synth && zhVoice) {
+    synth.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'zh-CN'; u.rate = rate; u.pitch = 1.05;
+    u.voice = zhVoice;
+    u.onend = () => { if (onEnd) onEnd(); };
+    u.onerror = () => { speakWithGoogleTTS(text, onEnd); };
+    synth.speak(u);
+  } else {
+    speakWithGoogleTTS(text, onEnd);
+  }
 }
 
 function stopSpeech() { if (synth) synth.cancel(); }
