@@ -434,8 +434,18 @@ body {
       </div>
       <div class="form-row single">
         <div class="form-field">
-          <label>อีเมล * (ใช้สมัครบัญชีในแอป)</label>
+          <label>อีเมล * (ใช้ login เข้าแอป)</label>
           <input type="email" id="email" placeholder="your@email.com">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>รหัสผ่าน * (อย่างน้อย 6 ตัว)</label>
+          <input type="password" id="password" placeholder="ตั้งรหัสผ่าน">
+        </div>
+        <div class="form-field">
+          <label>ยืนยันรหัสผ่าน *</label>
+          <input type="password" id="password2" placeholder="กรอกอีกครั้ง">
         </div>
       </div>
       <div id="form-err" style="font-size:12px;color:var(--red);min-height:16px;margin-top:4px"></div>
@@ -600,15 +610,34 @@ async function submitOrder() {
   const fname = document.getElementById('fname').value.trim();
   const phone = document.getElementById('phone').value.trim();
   const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const password2 = document.getElementById('password2').value;
   const err = document.getElementById('form-err');
   const btn = document.querySelector('.btn-submit');
 
   if (!fname) { err.textContent = 'กรุณากรอกชื่อ-นามสกุล'; return; }
   if (!phone) { err.textContent = 'กรุณากรอกเบอร์โทรศัพท์'; return; }
   if (!email || !email.includes('@')) { err.textContent = 'กรุณากรอกอีเมลให้ถูกต้อง'; return; }
+  if (password.length < 6) { err.textContent = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัว'; return; }
+  if (password !== password2) { err.textContent = 'รหัสผ่านไม่ตรงกัน'; return; }
 
   err.textContent = '';
-  if (btn) { btn.disabled = true; btn.textContent = '⏳ กำลังบันทึก...'; }
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ กำลังสมัครบัญชี...'; }
+
+  // สมัครบัญชีใน Supabase
+  const { data, error } = await sb.auth.signUp({
+    email,
+    password,
+    options: { data: { name: fname } }
+  });
+
+  if (error) {
+    err.textContent = error.message === 'User already registered' ? 'อีเมลนี้สมัครแล้ว กรุณาใช้อีเมลอื่น' : error.message;
+    if (btn) { btn.disabled = false; btn.textContent = '✅ ยืนยันการสั่งซื้อ — ฿1,290'; }
+    return;
+  }
+
+  if (btn) btn.textContent = '⏳ กำลังบันทึก...';
 
   // บันทึกและแจ้งเตือนพร้อมกัน
   await Promise.all([
