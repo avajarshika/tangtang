@@ -8773,12 +8773,21 @@ function renderLessonsHub() {
     const done3 = hsk3Lessons.filter(l => (d.completed||[]).includes(l.id)).length;
     if (badge) badge.innerHTML = `HSK 3 — Pre-Intermediate B1 &nbsp;·&nbsp; เรียนแล้ว ${done3}/${hsk3Lessons.length} บท &nbsp;·&nbsp; ~600 คำ`;
     if (!isPremium()) {
-      hub.innerHTML = `<div style="text-align:center;padding:40px 20px">
-        <div style="font-size:40px;margin-bottom:12px">🔒</div>
-        <div style="font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px">HSK 3 สำหรับสมาชิก Premium</div>
-        <div style="font-size:13px;color:var(--ink3);margin-bottom:16px">เรียนฟรีได้ถึง HSK 1-2 (3 บทแรก)</div>
-        <button onclick="showPaymentModal()" style="padding:12px 24px;background:var(--red);color:white;border:none;border-radius:20px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">🔓 สมัคร Premium</button>
-      </div>`;
+      hub.innerHTML = hsk3Lessons.map(l => {
+        const isDone = (d.completed||[]).includes(l.id);
+        return `<div class="lesson-card locked" onclick="showPaymentModal()" style="opacity:0.85">
+          <div class="lesson-num" style="background:#FFF0F8">🔒</div>
+          <div class="lesson-info">
+            <div class="lesson-title">${l.title}</div>
+            <div class="lesson-sub">${l.sub}</div>
+            <div class="lesson-pills">
+              <span class="pill" style="background:#e8f4ed;color:#1a6b3a;border:1px solid #1a6b3a">HSK 3</span>
+              <span class="pill pill-gray">${l.theme}</span>
+              <span class="pill" style="background:#fff5f9;color:var(--red)">Premium</span>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
       return;
     }
     hub.innerHTML = hsk3Lessons.map(l => {
@@ -8800,12 +8809,21 @@ function renderLessonsHub() {
     const hsk4Lessons = LESSONS.filter(l => l.hsk === 4);
     const done4 = hsk4Lessons.filter(l => (d.completed||[]).includes(l.id)).length;
     if (!isPremium()) {
-      hub.innerHTML = `<div style="text-align:center;padding:40px 20px">
-        <div style="font-size:40px;margin-bottom:12px">🔒</div>
-        <div style="font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px">HSK 4 สำหรับสมาชิก Premium</div>
-        <div style="font-size:13px;color:var(--ink3);margin-bottom:16px">เรียนฟรีได้ถึง HSK 1-2 (3 บทแรก)</div>
-        <button onclick="showPaymentModal()" style="padding:12px 24px;background:var(--red);color:white;border:none;border-radius:20px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">🔓 สมัคร Premium</button>
-      </div>`;
+      hub.innerHTML = hsk4Lessons.map(l => {
+        const isDone = (d.completed||[]).includes(l.id);
+        return `<div class="lesson-card locked" onclick="showPaymentModal()" style="opacity:0.85">
+          <div class="lesson-num" style="background:#FFF0F8">🔒</div>
+          <div class="lesson-info">
+            <div class="lesson-title">${l.title}</div>
+            <div class="lesson-sub">${l.sub}</div>
+            <div class="lesson-pills">
+              <span class="pill" style="background:#f0e8f4;color:#6b1a6b;border:1px solid #6b1a6b">HSK 4</span>
+              <span class="pill pill-gray">${l.theme}</span>
+              <span class="pill" style="background:#fff5f9;color:var(--red)">Premium</span>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
       return;
     }
     if (badge) badge.innerHTML = `HSK 4 — Intermediate B2 &nbsp;·&nbsp; เรียนแล้ว ${done4}/${hsk4Lessons.length} บท &nbsp;·&nbsp; ~1200 คำ`;
@@ -8828,12 +8846,21 @@ function renderLessonsHub() {
     const hsk5Lessons = LESSONS.filter(l => l.hsk === 5);
     const done5 = hsk5Lessons.filter(l => (d.completed||[]).includes(l.id)).length;
     if (!isPremium()) {
-      hub.innerHTML = `<div style="text-align:center;padding:40px 20px">
-        <div style="font-size:40px;margin-bottom:12px">🔒</div>
-        <div style="font-size:16px;font-weight:700;color:var(--ink);margin-bottom:8px">HSK 5 สำหรับสมาชิก Premium</div>
-        <div style="font-size:13px;color:var(--ink3);margin-bottom:16px">เรียนฟรีได้ถึง HSK 1-2 (3 บทแรก)</div>
-        <button onclick="showPaymentModal()" style="padding:12px 24px;background:var(--red);color:white;border:none;border-radius:20px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">🔓 สมัคร Premium</button>
-      </div>`;
+      hub.innerHTML = hsk5Lessons.map(l => {
+        const isDone = (d.completed||[]).includes(l.id);
+        return `<div class="lesson-card locked" onclick="showPaymentModal()" style="opacity:0.85">
+          <div class="lesson-num" style="background:#FFF0F8">🔒</div>
+          <div class="lesson-info">
+            <div class="lesson-title">${l.title}</div>
+            <div class="lesson-sub">${l.sub}</div>
+            <div class="lesson-pills">
+              <span class="pill" style="background:#e0f0f0;color:#1a5a5a;border:1px solid #1a5a5a">HSK 5</span>
+              <span class="pill pill-gray">${l.theme}</span>
+              <span class="pill" style="background:#fff5f9;color:var(--red)">Premium</span>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
       return;
     }
     if (badge) badge.innerHTML = `HSK 5 — Advanced C1 &nbsp;·&nbsp; เรียนแล้ว ${done5}/${hsk5Lessons.length} บท &nbsp;·&nbsp; ~2500 คำ`;
@@ -8855,6 +8882,24 @@ function renderLessonsHub() {
   } else {
     const hsk6Lessons = LESSONS.filter(l => l.hsk === 6);
     const done6 = hsk6Lessons.filter(l => (d.completed||[]).includes(l.id)).length;
+    if (!isPremium()) {
+      hub.innerHTML = hsk6Lessons.map(l => {
+        const isDone = (d.completed||[]).includes(l.id);
+        return `<div class="lesson-card locked" onclick="showPaymentModal()" style="opacity:0.85">
+          <div class="lesson-num" style="background:#FFF0F8">🔒</div>
+          <div class="lesson-info">
+            <div class="lesson-title">${l.title}</div>
+            <div class="lesson-sub">${l.sub}</div>
+            <div class="lesson-pills">
+              <span class="pill" style="background:#e0e4f0;color:#1a2a5a;border:1px solid #1a2a5a">HSK 6</span>
+              <span class="pill pill-gray">${l.theme}</span>
+              <span class="pill" style="background:#fff5f9;color:var(--red)">Premium</span>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+      return;
+    }
     if (badge) badge.innerHTML = `HSK 6 — Mastery C2 &nbsp;·&nbsp; เรียนแล้ว ${done6}/${hsk6Lessons.length} บท &nbsp;·&nbsp; ~5000 คำ`;
     hub.innerHTML = hsk6Lessons.map(l => {
       const isDone = (d.completed||[]).includes(l.id);
