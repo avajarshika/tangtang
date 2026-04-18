@@ -1659,6 +1659,16 @@ body {
 
 <div id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ═══════════════════════════════════
+// SUPABASE CONFIG
+// ═══════════════════════════════════
+const SUPABASE_URL = 'https://zmshxxmcgbxavzlqmpxd.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inptc2h4eG1jZ2J4YXZ6bHFtcHhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NzkwODEsImV4cCI6MjA5MjA1NTA4MX0.USeFzW09aOqqtwtYFaC9lgmcLkpkjz12ciQLrG3IhZQ';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+</script>
+
 <script>
 // ═══════════════════════════════════
 // TONE MARK PARSER — color by tone
@@ -5885,7 +5895,7 @@ function saveState() {
 }
 
 // ═══════════════════════════════════
-// AUTH (localStorage simulation)
+// AUTH (Supabase)
 // ═══════════════════════════════════
 function switchAuthTab(t) {
   document.getElementById('tab-login').classList.toggle('active', t === 'login');
@@ -5894,44 +5904,42 @@ function switchAuthTab(t) {
   document.getElementById('form-reg').style.display = t === 'reg' ? 'flex' : 'none';
 }
 
-function getUsers() {
-  return JSON.parse(localStorage.getItem('th_users') || '[]');
-}
-
-function saveUsers(u) {
-  localStorage.setItem('th_users', JSON.stringify(u));
-}
-
-function doLogin() {
+async function doLogin() {
   const email = document.getElementById('login-email').value.trim();
   const pass = document.getElementById('login-pass').value;
   const err = document.getElementById('login-err');
+  const btn = document.querySelector('#form-login button[onclick]');
   if (!email || !pass) { err.textContent = 'กรุณากรอกข้อมูลให้ครบ'; return; }
-  const users = getUsers();
-  const user = users.find(u => u.email === email && u.password === pass);
-  if (!user) { err.textContent = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง'; return; }
+  err.textContent = 'กำลังเข้าสู่ระบบ...';
+  if(btn) btn.disabled = true;
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+  if(btn) btn.disabled = false;
+  if (error) { err.textContent = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง'; return; }
   err.textContent = '';
-  loginUser(user);
+  const name = data.user.user_metadata?.name || email.split('@')[0];
+  loginUser({ id: data.user.id, name, email });
 }
 
-function doRegister() {
+async function doRegister() {
   const name = document.getElementById('reg-name').value.trim();
   const email = document.getElementById('reg-email').value.trim();
   const pass = document.getElementById('reg-pass').value;
   const err = document.getElementById('reg-err');
+  const btn = document.querySelector('#form-reg button[onclick]');
   if (!name || !email || !pass) { err.textContent = 'กรุณากรอกข้อมูลให้ครบ'; return; }
   if (pass.length < 6) { err.textContent = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัว'; return; }
-  const users = getUsers();
-  if (users.find(u => u.email === email)) { err.textContent = 'อีเมลนี้ถูกใช้แล้ว'; return; }
-  const user = { id: 'u_' + Date.now(), name, email, password: pass };
-  users.push(user);
-  saveUsers(users);
+  err.textContent = 'กำลังสมัครสมาชิก...';
+  if(btn) btn.disabled = true;
+  const { data, error } = await sb.auth.signUp({ email, password: pass, options: { data: { name } } });
+  if(btn) btn.disabled = false;
+  if (error) { err.textContent = error.message || 'สมัครไม่สำเร็จ'; return; }
   err.textContent = '';
-  loginUser(user);
+  showToast('✅ สมัครสมาชิกสำเร็จ! ยินดีต้อนรับ ' + name);
+  loginUser({ id: data.user.id, name, email });
 }
 
 function doGuest() {
-  loginUser({ id:'guest', name:'ผู้เยี่ยมชม', email:'(ไม่มีบัญชี)', password:'' });
+  loginUser({ id:'guest', name:'ผู้เยี่ยมชม', email:'(ไม่มีบัญชี)' });
 }
 
 function loginUser(u) {
@@ -5943,12 +5951,22 @@ function loginUser(u) {
   showToast('ยินดีต้อนรับ, ' + u.name + '! 🎉');
 }
 
-function doLogout() {
+async function doLogout() {
   saveState();
+  await sb.auth.signOut();
   state.user = null;
   document.getElementById('auth-screen').style.display = 'flex';
   document.getElementById('app').classList.remove('visible');
 }
+
+// Check if already logged in
+sb.auth.getSession().then(({ data }) => {
+  if (data.session) {
+    const u = data.session.user;
+    const name = u.user_metadata?.name || u.email.split('@')[0];
+    loginUser({ id: u.id, name, email: u.email });
+  }
+});
 
 function updateStreak() {
   const d = state.user.data;
