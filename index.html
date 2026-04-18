@@ -9943,11 +9943,13 @@ async function loadAdminUsers() {
 
   listEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink3)">⏳ กำลังโหลด...</div>';
 
-  const { data, error } = await sb.rpc('admin_list_users');
+  const { data: rawData, error } = await sb.rpc('admin_list_users');
   if (error) {
     listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--red)">❌ ' + error.message + '</div>';
     return;
   }
+  // function ส่งมาเป็น JSON array ต้อง parse แต่ละ row
+  const data = (rawData || []).map(row => typeof row === 'string' ? JSON.parse(row) : row);
 
   const total = data.length;
   const premiumCount = data.filter(u => u.is_premium).length;
