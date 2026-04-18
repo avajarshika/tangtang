@@ -5892,6 +5892,27 @@ function loadState(uid) {
 function saveState() {
   if (!state.user) return;
   localStorage.setItem('th_' + state.user.id, JSON.stringify(state.user.data));
+  // Sync to Supabase
+  if (state.user.id !== 'guest') {
+    sb.from('user_progress').upsert({
+      user_id: state.user.id,
+      data: state.user.data,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'user_id' }).then(() => {});
+  }
+}
+
+async function loadStateFromCloud(uid) {
+  try {
+    const { data } = await sb.from('user_progress').select('data').eq('user_id', uid).single();
+    if (data?.data) {
+      // Merge cloud data with local (take whichever has more XP)
+      const local = loadState(uid);
+      const cloud = data.data;
+      return (cloud.xp || 0) >= (local.xp || 0) ? cloud : local;
+    }
+  } catch(e) {}
+  return loadState(uid);
 }
 
 // ═══════════════════════════════════
@@ -5942,8 +5963,10 @@ function doGuest() {
   loginUser({ id:'guest', name:'ผู้เยี่ยมชม', email:'(ไม่มีบัญชี)' });
 }
 
-function loginUser(u) {
-  state.user = { ...u, data: loadState(u.id) };
+async function loginUser(u) {
+  const cloudData = u.id !== 'guest' ? await loadStateFromCloud(u.id) : loadState(u.id);
+  state.user = { ...u, data: cloudData };
+  localStorage.setItem('th_' + u.id, JSON.stringify(cloudData));
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('app').classList.add('visible');
   updateStreak();
