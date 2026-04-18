@@ -9605,7 +9605,7 @@ function renderMainQuizBody(title) {
         <span style="font-size:12px;font-weight:700;color:var(--ink3)">ข้อ ${mainQuizIdx+1}/${qs.length}</span>
         <div style="display:flex;align-items:center;gap:8px">
           <span style="font-size:12px;font-weight:700;color:var(--ink3)">✅ ${mainQuizScore}</span>
-          <div id="quiz-speed" style="width:30px;height:30px;border-radius:50%;border:2.5px solid var(--green);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--green);flex-shrink:0;transition:border-color .3s,color .3s">10</div>
+          <div id="quiz-speed" style="display:none">10</div>
         </div>
       </div>
       <!-- Progress bar -->
@@ -9775,7 +9775,7 @@ function awardXP(base, multiplier) {
 
 function initQuizGameState(isFinalExam) {
   quizCombo = 0; quizMaxCombo = 0;
-  quizLives = isFinalExam ? 3 : -1; // -1 = unlimited
+  quizLives = -1; // unlimited always
   quizXpThisSession = 0;
   _speedStreakCount = 0;
   unlockedBadgesThisSession = [];
@@ -9806,13 +9806,7 @@ function answerMainQuiz(chosen, title) {
     _speedStreakCount = 0;
     updateComboDisplay();
     // Lives (final exam)
-    if (quizLives > 0) {
-      quizLives--;
-      updateLivesDisplay();
-      // Shake lives bar
-      const livesEl = document.getElementById('quiz-lives');
-      if (livesEl) { livesEl.style.animation='shakeNo .4s ease'; setTimeout(()=>livesEl.style.animation='',450); }
-    }
+    // lives disabled
   }
 
   // Style buttons
@@ -9845,7 +9839,7 @@ function answerMainQuiz(chosen, title) {
   const delay = correct ? 650 : 900;
   setTimeout(() => {
     mainQuizIdx++;
-    const done = mainQuizIdx >= qs.length || (quizLives === 0);
+    const done = mainQuizIdx >= qs.length;
     if (done) mainQuizDone = true;
     renderMainQuizBody(title);
   }, delay);
