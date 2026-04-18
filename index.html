@@ -7416,10 +7416,26 @@ let micActive = false;
 let recognition = null;
 
 function initChat() {
+  const msgs = document.getElementById('chat-messages');
+  // เช็ค premium ก่อน
+  if (!isPremium()) {
+    if (msgs) msgs.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center;gap:12px">
+      <div style="font-size:48px">🦊</div>
+      <div style="font-size:16px;font-weight:700;color:var(--ink)">แชทกับ AI สำหรับสมาชิก Premium</div>
+      <div style="font-size:13px;color:var(--ink3);line-height:1.6">ฝึกภาษาจีนกับ AI แบบ 1:1<br>ตอบคำถาม อธิบายไวยากรณ์ และฝึกสนทนาได้ตลอดเวลา</div>
+      <button onclick="showPaymentModal()" style="margin-top:8px;padding:12px 28px;background:var(--red);color:white;border:none;border-radius:20px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">🔓 สมัคร Premium</button>
+    </div>`;
+    // ซ่อน input area
+    const inputArea = document.getElementById('chat-input-area');
+    if (inputArea) inputArea.style.display = 'none';
+    return;
+  }
+  // แสดง input area
+  const inputArea = document.getElementById('chat-input-area');
+  if (inputArea) inputArea.style.display = 'flex';
   if (chatInited) return;
   chatInited = true;
   chatHistory = [];
-  const msgs = document.getElementById('chat-messages');
   if (msgs) msgs.innerHTML = '';
 
   // Suggestion chips in header
