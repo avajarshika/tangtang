@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สั่งซื้อ — TangTang Chinese</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #F13596;
+  --red-dark: #c01078;
+  --red-light: #FFF0F8;
+  --amber: #C9A96E;
+  --ink: #2D1A24;
+  --ink2: #5C3D4E;
+  --ink3: #8C6B7A;
+  --paper: #FFF8FC;
+  --paper2: #FFEDF6;
+  --paper3: #F5C6E0;
+  --green: #1a6b3a;
+  --green-light: #e8f4ed;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', 'Noto Sans Thai', sans-serif;
+  background: var(--paper2);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* TOPBAR */
+.topbar {
+  background: white;
+  border-bottom: 1px solid var(--paper3);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.topbar-logo {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: 1px;
+}
+.topbar-back {
+  font-size: 13px;
+  color: var(--ink3);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.topbar-back:hover { color: var(--red); }
+
+/* LAYOUT */
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 16px 80px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .page { grid-template-columns: 1fr 360px; gap: 28px; padding: 40px 24px 80px; }
+}
+
+/* CARDS */
+.card {
+  background: white;
+  border: 1px solid var(--paper3);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(45,26,36,.06);
+}
+
+/* COURSE CARD */
+.course-card {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.course-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  background: var(--red-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  flex-shrink: 0;
+  border: 2px solid var(--paper3);
+}
+.course-info { flex: 1; }
+.course-tag {
+  display: inline-block;
+  background: var(--red-light);
+  color: var(--red);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-bottom: 6px;
+  letter-spacing: .3px;
+}
+.course-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+.course-desc {
+  font-size: 12px;
+  color: var(--ink3);
+  line-height: 1.6;
+}
+
+/* SECTION TITLE */
+.section-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* FORM */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.form-row.single { grid-template-columns: 1fr; }
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.form-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink2);
+}
+.form-field input {
+  padding: 11px 14px;
+  border: 1.5px solid var(--paper3);
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--ink);
+  background: var(--paper);
+  outline: none;
+  transition: .2s;
+}
+.form-field input:focus {
+  border-color: var(--red);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(241,53,150,.1);
+}
+.form-field input::placeholder { color: #ccc; }
+
+/* PAYMENT */
+.payment-option {
+  border: 2px solid var(--paper3);
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: .2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.payment-option.selected {
+  border-color: var(--red);
+  background: var(--red-light);
+}
+.payment-option-icon { font-size: 28px; flex-shrink: 0; }
+.payment-option-info { flex: 1; }
+.payment-option-name { font-size: 14px; font-weight: 700; color: var(--ink); }
+.payment-option-desc { font-size: 12px; color: var(--ink3); margin-top: 2px; }
+.payment-badge {
+  background: #dcfce7;
+  color: #16a34a;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+/* QR SECTION */
+.qr-section {
+  margin-top: 16px;
+  padding: 20px;
+  background: var(--paper);
+  border: 1px solid var(--paper3);
+  border-radius: 12px;
+  text-align: center;
+}
+.qr-img {
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 12px;
+  background: white;
+  border: 2px solid var(--paper3);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.qr-img img { width: 100%; height: 100%; object-fit: contain; }
+.qr-name { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+.qr-number { font-size: 20px; font-weight: 800; color: var(--red); letter-spacing: 1px; margin-bottom: 4px; }
+.qr-bank { font-size: 12px; color: var(--ink3); }
+
+/* SUBMIT BTN */
+.btn-submit {
+  width: 100%;
+  padding: 16px;
+  background: var(--red);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: .2s;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-submit:hover { background: var(--red-dark); transform: translateY(-1px); }
+.btn-submit:active { transform: translateY(0); }
+
+.btn-line {
+  width: 100%;
+  padding: 14px;
+  background: #06C755;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: .2s;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+}
+.btn-line:hover { background: #05a847; transform: translateY(-1px); }
+
+/* SUMMARY CARD (RIGHT) */
+.summary-card { position: sticky; top: 24px; }
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--paper3);
+  font-size: 13px;
+  color: var(--ink2);
+}
+.price-row:last-child { border-bottom: none; }
+.price-original { text-decoration: line-through; color: var(--ink3); font-size: 13px; }
+.price-total {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--red);
+}
+.price-save {
+  background: #dcfce7;
+  color: #16a34a;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.benefits {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.benefit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--ink2);
+}
+.benefit-icon { font-size: 18px; flex-shrink: 0; margin-top: -1px; }
+
+.what-you-get {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--paper3);
+}
+.what-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink3);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.what-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink);
+  padding: 5px 0;
+}
+.what-item::before {
+  content: '✅';
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+/* SUCCESS OVERLAY */
+.success-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(45,26,36,.7);
+  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.success-overlay.show { display: flex; }
+.success-card {
+  background: white;
+  border-radius: 20px;
+  padding: 36px 28px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+.success-icon { font-size: 56px; margin-bottom: 12px; }
+.success-title { font-size: 22px; font-weight: 800; color: var(--ink); margin-bottom: 8px; }
+.success-desc { font-size: 14px; color: var(--ink3); line-height: 1.6; margin-bottom: 20px; }
+.success-steps {
+  background: var(--paper);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+.success-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--ink2);
+  padding: 5px 0;
+}
+.step-num {
+  width: 22px;
+  height: 22px;
+  background: var(--red);
+  color: white;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="topbar-back">← กลับ</a>
+  <div class="topbar-logo">糖糖中文</div>
+  <div style="font-size:12px;color:var(--ink3)">🔒 ปลอดภัย</div>
+</div>
+
+<div class="page">
+
+  <!-- LEFT COLUMN -->
+  <div style="display:flex;flex-direction:column;gap:20px">
+
+    <!-- COURSE INFO -->
+    <div class="card">
+      <div class="course-card">
+        <div class="course-img">🦊</div>
+        <div class="course-info">
+          <div class="course-tag">คอร์สเรียน</div>
+          <div class="course-title">TangTang Chinese — เรียนภาษาจีน HSK 1-6 ครบทุกระดับ</div>
+          <div class="course-desc">บทเรียนครบ HSK 1-6 · คำศัพท์กว่า 5,000 คำ · Flashcard + Quiz · อัปเดตฟรีตลอด</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="card">
+      <div class="section-title">👤 ข้อมูลสำหรับการสมัครและชำระเงิน</div>
+      <div style="background:var(--paper);border:1px solid var(--paper3);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:8px">
+        💡 กรอกข้อมูลเพื่อสร้างบัญชีและชำระเงินในขั้นตอนเดียว ไม่ต้องยืนยันอีเมล
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label>ชื่อจริง *</label>
+          <input type="text" id="fname" placeholder="ชื่อจริง">
+        </div>
+        <div class="form-field">
+          <label>นามสกุล</label>
+          <input type="text" id="lname" placeholder="นามสกุล">
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-field">
+          <label>อีเมล *</label>
+          <input type="email" id="email" placeholder="your@email.com">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>รหัสผ่าน * (อย่างน้อย 6 ตัว)</label>
+          <input type="password" id="password" placeholder="รหัสผ่าน">
+        </div>
+        <div class="form-field">
+          <label>ยืนยันรหัสผ่าน *</label>
+          <input type="password" id="password2" placeholder="กรอกอีกครั้ง">
+        </div>
+      </div>
+      <div id="form-err" style="font-size:12px;color:var(--red);min-height:16px;margin-top:4px"></div>
+    </div>
+
+    <!-- PAYMENT -->
+    <div class="card">
+      <div class="section-title">💳 ชำระเงิน</div>
+
+      <div class="payment-option selected">
+        <div class="payment-option-icon">📱</div>
+        <div class="payment-option-info">
+          <div class="payment-option-name">QR PromptPay</div>
+          <div class="payment-option-desc">สแกนจ่ายผ่านทุกธนาคาร ปลอดภัย 100%</div>
+        </div>
+        <div class="payment-badge">แนะนำ</div>
+      </div>
+
+      <div class="qr-section">
+        <div class="qr-img">
+          <!-- QR Code จาก PromptPay 0836423619 -->
+          <img src="qr-promptpay.png" alt="QR PromptPay" style="width:100%;height:100%;object-fit:contain">
+        </div>
+        <div class="qr-name">จารชิกา แก้ววรรณา</div>
+        <div class="qr-number">083-642-3619</div>
+        <div class="qr-bank">PromptPay · ยอดชำระ ฿1,290</div>
+      </div>
+
+      <div style="margin-top:16px;padding:14px;background:#FBF3E8;border:1px solid #C9A96E;border-radius:10px;font-size:13px;color:#7a5c1a;line-height:1.6">
+        📌 หลังโอนเงินแล้ว กดปุ่ม "ส่งสลิปทาง Line" ด้านล่าง แล้วส่งสลิป พร้อมแจ้ง Email ที่ใช้สมัคร จะปลดล็อคให้ภายใน 30 นาที
+      </div>
+
+      <button class="btn-submit" onclick="submitOrder()">
+        ✅ ยืนยันการสั่งซื้อ — ฿1,290
+      </button>
+
+      <a href="https://line.me/ti/p/@ava11" target="_blank" class="btn-line">
+        <span style="font-size:18px">💬</span> ส่งสลิปทาง Line @ava11
+      </a>
+    </div>
+
+  </div>
+
+  <!-- RIGHT COLUMN — SUMMARY -->
+  <div>
+    <div class="card summary-card">
+      <div class="section-title">🛒 สรุปคำสั่งซื้อ</div>
+
+      <div class="price-row">
+        <span>TangTang Chinese Premium</span>
+      </div>
+      <div class="price-row">
+        <span>ราคาปกติ</span>
+        <span class="price-original">฿1,990</span>
+      </div>
+      <div class="price-row">
+        <span>ส่วนลด</span>
+        <span class="price-save">ลด ฿700</span>
+      </div>
+      <div class="price-row" style="border-bottom:none;padding-top:12px">
+        <span style="font-size:15px;font-weight:700;color:var(--ink)">ยอดรวม</span>
+        <span class="price-total">฿1,290</span>
+      </div>
+
+      <div style="margin-top:8px;padding:10px 12px;background:var(--green-light);border-radius:8px;font-size:12px;color:var(--green);font-weight:600;text-align:center">
+        🎉 ประหยัดไป ฿700 — ซื้อครั้งเดียวเรียนตลอดชีพ!
+      </div>
+
+      <div class="benefits">
+        <div class="benefit-item">
+          <span class="benefit-icon">🔓</span>
+          <span><b>เข้าถึงทันที</b> หลังแอดมินยืนยันสลิป ภายใน 30 นาที</span>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-icon">♾️</span>
+          <span><b>ตลอดชีพ</b> ไม่มีค่าใช้จ่ายเพิ่มเติม</span>
+        </div>
+        <div class="benefit-item">
+          <span class="benefit-icon">🔄</span>
+          <span><b>อัปเดตฟรี</b> เนื้อหาใหม่เพิ่มตลอด</span>
+        </div>
+      </div>
+
+      <div class="what-you-get">
+        <div class="what-title">สิ่งที่จะได้รับ</div>
+        <div class="what-item">บทเรียน HSK 1-6 ครบทุกบท</div>
+        <div class="what-item">คำศัพท์กว่า 5,000+ คำ</div>
+        <div class="what-item">Flashcard + Spaced Repetition</div>
+        <div class="what-item">Quiz + Final Exam ทุก Level</div>
+        <div class="what-item">บทอ่านภาษาจีน</div>
+        <div class="what-item">แชท AI ฝึกภาษาจีน</div>
+        <div class="what-item">ติดตั้งบนมือถือได้ (PWA)</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="success-overlay">
+  <div class="success-card">
+    <div class="success-icon">🎉</div>
+    <div class="success-title">สั่งซื้อสำเร็จ!</div>
+    <div class="success-desc">ขอบคุณที่เลือก TangTang Chinese นะคะ<br>กรุณาส่งสลิปมาทาง Line เพื่อปลดล็อคบทเรียน</div>
+    <div class="success-steps">
+      <div class="success-step">
+        <div class="step-num">1</div>
+        <span>โอนเงิน ฿1,290 ผ่าน QR PromptPay ด้านบน</span>
+      </div>
+      <div class="success-step">
+        <div class="step-num">2</div>
+        <span>ส่งสลิป + แจ้ง Email ที่ใช้สมัครมาทาง Line <b>@ava11</b></span>
+      </div>
+      <div class="success-step">
+        <div class="step-num">3</div>
+        <span>แอดมินจะปลดล็อคให้ภายใน 30 นาที ✅</span>
+      </div>
+    </div>
+    <a href="https://line.me/ti/p/@ava11" target="_blank" class="btn-line" style="margin-top:0">
+      💬 ส่งสลิปทาง Line @ava11
+    </a>
+    <button onclick="document.getElementById('success-overlay').classList.remove('show');window.location.href='index.html'" style="width:100%;padding:12px;margin-top:10px;background:none;border:1.5px solid var(--paper3);border-radius:12px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;color:var(--ink3)">
+      กลับหน้าหลัก
+    </button>
+  </div>
+</div>
+
+<script>
+function submitOrder() {
+  const fname = document.getElementById('fname').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const pass = document.getElementById('password').value;
+  const pass2 = document.getElementById('password2').value;
+  const err = document.getElementById('form-err');
+
+  if (!fname) { err.textContent = 'กรุณากรอกชื่อจริง'; return; }
+  if (!email || !email.includes('@')) { err.textContent = 'กรุณากรอกอีเมลให้ถูกต้อง'; return; }
+  if (pass.length < 6) { err.textContent = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัว'; return; }
+  if (pass !== pass2) { err.textContent = 'รหัสผ่านไม่ตรงกัน'; return; }
+
+  err.textContent = '';
+  document.getElementById('success-overlay').classList.add('show');
+}
+</script>
+
+</body>
+</html>
