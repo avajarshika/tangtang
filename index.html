@@ -1332,6 +1332,9 @@ body {
       </div>
       <div class="auth-err" id="login-err"></div>
       <button class="btn-primary" onclick="doLogin()">เข้าสู่ระบบ</button>
+      <div style="text-align:center;margin-top:10px">
+        <a onclick="showForgotPassword()" style="font-size:12px;color:var(--ink3);cursor:pointer;text-decoration:underline">ลืมรหัสผ่าน?</a>
+      </div>
     </div>
     <!-- Register form -->
     <div id="form-reg" class="auth-form" style="display:none">
@@ -6019,6 +6022,28 @@ async function loginUser(u) {
   updateStreak();
   renderHome();
   showToast('ยินดีต้อนรับ, ' + u.name + '! 🎉');
+}
+
+async function showForgotPassword() {
+  const email = document.getElementById('login-email').value.trim();
+  const err = document.getElementById('login-err');
+  
+  if (!email || !email.includes('@')) {
+    err.textContent = 'กรุณากรอกอีเมลก่อน แล้วกด "ลืมรหัสผ่าน"';
+    return;
+  }
+  
+  err.textContent = 'กำลังส่ง Email...';
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://avajarshika.github.io/tangtang/'
+  });
+  
+  if (error) {
+    err.textContent = 'เกิดข้อผิดพลาด กรุณาลองใหม่';
+  } else {
+    err.style.color = 'var(--green)';
+    err.textContent = '✅ ส่ง Email รีเซ็ตรหัสผ่านแล้ว กรุณาเช็ค Inbox ครับ';
+  }
 }
 
 async function doLogout() {
