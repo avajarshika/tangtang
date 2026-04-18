@@ -1636,7 +1636,31 @@ body {
       <div class="done-lessons" id="done-list">
         <div class="empty"><div class="empty-icon">📚</div><p>ยังไม่มีบทที่จบ</p></div>
       </div>
-      <button class="logout-btn" onclick="doLogout()">ออกจากระบบ</button>
+      <button id="admin-btn" onclick="goAdminPanel()" style="display:none;width:100%;padding:13px;margin-bottom:10px;background:linear-gradient(135deg,#1a1a2e,#16213e);color:white;border:none;border-radius:var(--r-sm);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;letter-spacing:.3px">👑 Admin Panel</button>
+            <button class="logout-btn" onclick="doLogout()">ออกจากระบบ</button>
+    </div>
+  </div>
+
+  <!-- ADMIN SCREEN -->
+  <div id="screen-admin" class="screen">
+    <div style="padding:20px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+        <button onclick="goScreen('profile')" style="background:none;border:none;font-size:20px;cursor:pointer;padding:0">←</button>
+        <div>
+          <div style="font-size:18px;font-weight:700;color:var(--ink)">👑 Admin Panel</div>
+          <div style="font-size:12px;color:var(--ink3)">จัดการสมาชิก Premium</div>
+        </div>
+      </div>
+
+      <div style="background:var(--red-light);border:1px solid var(--paper3);border-radius:var(--r);padding:14px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:4px">📊 สรุป</div>
+        <div id="admin-summary" style="font-size:12px;color:var(--ink2)">กำลังโหลด...</div>
+      </div>
+
+      <div style="font-size:12px;font-weight:700;color:var(--ink3);letter-spacing:.05em;margin-bottom:10px">รายชื่อสมาชิกทั้งหมด</div>
+      <div id="admin-user-list">
+        <div style="text-align:center;padding:30px;color:var(--ink3)">⏳ กำลังโหลด...</div>
+      </div>
     </div>
   </div>
 
@@ -1670,6 +1694,10 @@ body {
 const SUPABASE_URL = 'https://zmshxxmcgbxavzlqmpxd.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inptc2h4eG1jZ2J4YXZ6bHFtcHhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NzkwODEsImV4cCI6MjA5MjA1NTA4MX0.USeFzW09aOqqtwtYFaC9lgmcLkpkjz12ciQLrG3IhZQ';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Admin emails
+const ADMIN_EMAILS = ['ajinnda11@gmail.com', 'aonlovejdr11@gmail.com'];
+function isAdmin() { return state.user && ADMIN_EMAILS.includes(state.user.email); }
 </script>
 
 <script>
@@ -5968,7 +5996,12 @@ function doGuest() {
 
 async function loginUser(u) {
   const cloudData = u.id !== 'guest' ? await loadStateFromCloud(u.id) : loadState(u.id);
-  state.user = { ...u, data: cloudData };
+  state.user = { ...u, data: cloudData, is_premium: false };
+  // โหลดสถานะ premium จาก DB
+  if (u.id !== 'guest') {
+    const { data: row } = await sb.from('user_progress').select('is_premium').eq('user_id', u.id).single();
+    if (row) state.user.is_premium = row.is_premium;
+  }
   localStorage.setItem('th_' + u.id, JSON.stringify(cloudData));
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('app').classList.add('visible');
@@ -6339,7 +6372,8 @@ function getDueCount() {
 // ═══════════════════════════════════
 function isPremium() {
   if (!state.user) return false;
-  return state.user.data.isPremium === true;
+  if (isAdmin()) return true;
+  return state.user.is_premium === true || state.user.data.isPremium === true;
 }
 
 function tryOpenLesson(id, index) {
@@ -6804,6 +6838,10 @@ function renderProfile() {
     }).join('');
     achEl.innerHTML = `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px 8px">${achHTML}</div>`;
   }
+
+  // แสดง/ซ่อนปุ่ม Admin
+  const adminBtn = document.getElementById('admin-btn');
+  if (adminBtn) adminBtn.style.display = isAdmin() ? 'block' : 'none';
 
   const done = (d.completed || []).map(id => LESSONS.find(l => l.id === id)).filter(Boolean);
   const dl = document.getElementById('done-list');
@@ -9892,6 +9930,97 @@ function showToast(msg) {
   t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+
+// ═══════════════════════════════════
+// ADMIN PANEL
+// ═══════════════════════════════════
+
+function goAdminPanel() {
+  goScreen('admin');
+  loadAdminUsers();
+}
+
+async function loadAdminUsers() {
+  const listEl = document.getElementById('admin-user-list');
+  const summaryEl = document.getElementById('admin-summary');
+  if (!listEl) return;
+
+  listEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink3)">⏳ กำลังโหลด...</div>';
+
+  const { data, error } = await sb.rpc('admin_list_users');
+  if (error) {
+    listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--red)">❌ ' + error.message + '</div>';
+    return;
+  }
+
+  const total = data.length;
+  const premiumCount = data.filter(u => u.is_premium).length;
+  summaryEl.innerHTML = `สมาชิกทั้งหมด <b>${total} คน</b> · Premium <b style="color:var(--red)">${premiumCount} คน</b> · ฟรี <b>${total - premiumCount} คน</b>`;
+
+  if (data.length === 0) {
+    listEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink3)">ยังไม่มีสมาชิก</div>';
+    return;
+  }
+
+  listEl.innerHTML = data.map(u => `
+    <div id="user-row-${u.user_id}" style="background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:14px;margin-bottom:8px;box-shadow:var(--shadow)">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.email}</div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:2px">⭐ ${u.xp} XP · อัปเดต ${new Date(u.updated_at).toLocaleDateString('th-TH')}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+          <span id="badge-${u.user_id}" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;${u.is_premium ? 'background:#fff5f9;color:var(--red);border:1px solid var(--red)' : 'background:var(--paper2);color:var(--ink3);border:1px solid var(--paper3)'}">${u.is_premium ? '⭐ Premium' : 'ฟรี'}</span>
+          <button onclick="togglePremium('${u.user_id}', ${u.is_premium})" id="btn-${u.user_id}"
+            style="padding:6px 14px;border-radius:20px;border:none;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;${u.is_premium ? 'background:#fee2e2;color:#dc2626' : 'background:#dcfce7;color:#16a34a'}">
+            ${u.is_premium ? '🔒 ถอด' : '🔓 ปลดล็อค'}
+          </button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+async function togglePremium(userId, currentStatus) {
+  const newStatus = !currentStatus;
+  const btn = document.getElementById('btn-' + userId);
+  const badge = document.getElementById('badge-' + userId);
+  if (btn) { btn.disabled = true; btn.textContent = '⏳'; }
+
+  const { error } = await sb.rpc('admin_set_premium', {
+    target_user_id: userId,
+    premium_value: newStatus
+  });
+
+  if (error) {
+    showToast('❌ เกิดข้อผิดพลาด: ' + error.message);
+    if (btn) { btn.disabled = false; btn.textContent = currentStatus ? '🔒 ถอด' : '🔓 ปลดล็อค'; }
+    return;
+  }
+
+  if (badge) {
+    badge.textContent = newStatus ? '⭐ Premium' : 'ฟรี';
+    badge.style.cssText = newStatus
+      ? 'font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:#fff5f9;color:var(--red);border:1px solid var(--red)'
+      : 'font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--paper2);color:var(--ink3);border:1px solid var(--paper3)';
+  }
+  if (btn) {
+    btn.disabled = false;
+    btn.textContent = newStatus ? '🔒 ถอด' : '🔓 ปลดล็อค';
+    btn.style.cssText = newStatus
+      ? 'padding:6px 14px;border-radius:20px;border:none;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;background:#fee2e2;color:#dc2626'
+      : 'padding:6px 14px;border-radius:20px;border:none;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;background:#dcfce7;color:#16a34a';
+  }
+
+  showToast(newStatus ? '✅ ปลดล็อค Premium แล้ว!' : '🔒 ถอด Premium แล้ว');
+
+  // อัปเดต summary
+  const rows = document.querySelectorAll('[id^="badge-"]');
+  const total = rows.length;
+  const premiumCount = Array.from(rows).filter(b => b.textContent.includes('Premium')).length;
+  const summaryEl = document.getElementById('admin-summary');
+  if (summaryEl) summaryEl.innerHTML = `สมาชิกทั้งหมด <b>${total} คน</b> · Premium <b style="color:var(--red)">${premiumCount} คน</b> · ฟรี <b>${total - premiumCount} คน</b>`;
 }
 
 // ═══════════════════════════════════
