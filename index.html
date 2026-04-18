@@ -7409,18 +7409,22 @@ async function sendChat() {
   if (btn) { btn.disabled = true; btn.style.opacity = '.5'; }
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const GEMINI_KEY = 'AIzaSyAb8RN6JBZqbMU1gNg0_Skb9Jjkk39N6ShpesA3O4YGJjIfexog';
+    const geminiMessages = chatHistory.slice(-10).map(m => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }]
+    }));
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 400,
-        system: TANGTANG_SYSTEM,
-        messages: chatHistory.slice(-10),
+        system_instruction: { parts: [{ text: TANGTANG_SYSTEM }] },
+        contents: geminiMessages,
+        generationConfig: { maxOutputTokens: 400 }
       })
     });
     const data = await res.json();
-    const reply = data.content?.[0]?.text || 'ขอโทษนะ ลองใหม่อีกครั้งได้เลย 😊';
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'ขอโทษนะ ลองใหม่อีกครั้งได้เลย 😊';
     hideTyping();
     chatHistory.push({ role: 'assistant', content: reply });
     appendChatMsg('bot', reply, true);
