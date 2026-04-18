@@ -424,28 +424,18 @@ body {
 
       <div class="form-row">
         <div class="form-field">
-          <label>ชื่อจริง *</label>
-          <input type="text" id="fname" placeholder="ชื่อจริง">
+          <label>ชื่อ-นามสกุล *</label>
+          <input type="text" id="fname" placeholder="ชื่อจริง-นามสกุล">
         </div>
         <div class="form-field">
-          <label>นามสกุล</label>
-          <input type="text" id="lname" placeholder="นามสกุล">
+          <label>เบอร์โทรศัพท์ *</label>
+          <input type="tel" id="phone" placeholder="08x-xxx-xxxx">
         </div>
       </div>
       <div class="form-row single">
         <div class="form-field">
-          <label>อีเมล *</label>
+          <label>อีเมล * (ใช้สมัครบัญชีในแอป)</label>
           <input type="email" id="email" placeholder="your@email.com">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label>รหัสผ่าน * (อย่างน้อย 6 ตัว)</label>
-          <input type="password" id="password" placeholder="รหัสผ่าน">
-        </div>
-        <div class="form-field">
-          <label>ยืนยันรหัสผ่าน *</label>
-          <input type="password" id="password2" placeholder="กรอกอีกครั้ง">
         </div>
       </div>
       <div id="form-err" style="font-size:12px;color:var(--red);min-height:16px;margin-top:4px"></div>
@@ -577,14 +567,12 @@ body {
 function submitOrder() {
   const fname = document.getElementById('fname').value.trim();
   const email = document.getElementById('email').value.trim();
-  const pass = document.getElementById('password').value;
-  const pass2 = document.getElementById('password2').value;
   const err = document.getElementById('form-err');
 
-  if (!fname) { err.textContent = 'กรุณากรอกชื่อจริง'; return; }
+  const phone = document.getElementById('phone').value.trim();
+  if (!fname) { err.textContent = 'กรุณากรอกชื่อ-นามสกุล'; return; }
+  if (!phone) { err.textContent = 'กรุณากรอกเบอร์โทรศัพท์'; return; }
   if (!email || !email.includes('@')) { err.textContent = 'กรุณากรอกอีเมลให้ถูกต้อง'; return; }
-  if (pass.length < 6) { err.textContent = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัว'; return; }
-  if (pass !== pass2) { err.textContent = 'รหัสผ่านไม่ตรงกัน'; return; }
 
   err.textContent = '';
   document.getElementById('success-overlay').classList.add('show');
