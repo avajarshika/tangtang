@@ -1746,9 +1746,9 @@ body {
     <div id="hub-pane-lessons" style="padding:0">
       <!-- HSK level sub-tabs -->
       <div style="display:flex;gap:8px;padding:12px 16px 0;background:var(--paper);border-bottom:1px solid var(--paper3)">
-        <button id="hub-hsk1-btn" onclick="switchHubHSK(1)" style="padding:7px 20px;border-radius:20px;border:1.5px solid var(--red);background:var(--red);color:white;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s">ระดับ 1</button>
-        <button id="hub-hsk2-btn" onclick="switchHubHSK(2)" style="padding:7px 20px;border-radius:20px;border:1.5px solid var(--paper3);background:white;color:var(--ink3);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s">ระดับ 2</button>
-        <button id="hub-hsk3-btn" onclick="switchHubHSK(3)" style="padding:7px 20px;border-radius:20px;border:1.5px solid var(--paper3);background:white;color:var(--ink3);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s">ระดับ 3</button>
+        <button id="hub-hsk1-btn" onclick="switchHubHSK(1)" style="padding:7px 20px;border-radius:20px;border:1.5px solid var(--red);background:var(--red);color:white;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s">HSK 1</button>
+        <button id="hub-hsk2-btn" onclick="switchHubHSK(2)" style="padding:7px 20px;border-radius:20px;border:1.5px solid var(--paper3);background:white;color:var(--ink3);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s">HSK 2</button>
+        <button id="hub-hsk3-btn" onclick="switchHubHSK(3)" style="padding:7px 20px;border-radius:20px;border:1.5px solid var(--paper3);background:white;color:var(--ink3);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s">HSK 3</button>
         <button id="hub-hsk4-btn" onclick="switchHubHSK(4)" style="padding:7px 20px;border-radius:20px;border:1.5px solid var(--paper3);background:white;color:var(--ink3);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s">HSK 4</button>
         <button id="hub-hsk5-btn" onclick="switchHubHSK(5)" style="padding:7px 20px;border-radius:20px;border:1.5px solid var(--paper3);background:white;color:var(--ink3);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s">HSK 5</button>
         <button id="hub-hsk6-btn" onclick="switchHubHSK(6)" style="padding:7px 20px;border-radius:20px;border:1.5px solid var(--paper3);background:white;color:var(--ink3);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s">HSK 6</button>
@@ -1839,17 +1839,17 @@ body {
       <div class="hsk-progress-section">
         <div class="hsk-title">HSK Progress</div>
         <div class="hsk-row">
-          <div class="hsk-lbl">ระดับ 1</div>
+          <div class="hsk-lbl">HSK 1</div>
           <div class="hsk-bar"><div class="hsk-fill" id="hsk1-bar" style="width:0%;background:var(--red)"></div></div>
           <div class="hsk-pct" id="hsk1-pct">0%</div>
         </div>
         <div class="hsk-row" style="opacity:.4">
-          <div class="hsk-lbl">ระดับ 2</div>
+          <div class="hsk-lbl">HSK 2</div>
           <div class="hsk-bar"><div class="hsk-fill" style="width:0%;background:var(--amber)"></div></div>
           <div class="hsk-pct">เร็วๆนี้</div>
         </div>
         <div class="hsk-row" style="opacity:.25">
-          <div class="hsk-lbl">ระดับ 3</div>
+          <div class="hsk-lbl">HSK 3</div>
           <div class="hsk-bar"><div class="hsk-fill" style="width:0%;background:var(--blue)"></div></div>
           <div class="hsk-pct">เร็วๆนี้</div>
         </div>
@@ -9427,7 +9427,7 @@ function renderLessonsHub() {
           <div class="lesson-title">${l.title}</div>
           <div class="lesson-sub">${l.sub}</div>
           <div class="lesson-pills">
-            <span class="pill pill-red">ระดับ 1</span>
+            <span class="pill pill-red">HSK 1</span>
             <span class="pill pill-gray">${l.theme}</span>
             ${isDone?'<span class="pill pill-green">จบแล้ว</span>':''}
             ${locked?'<span class="pill" style="background:#fff5f9;color:var(--red)">Premium</span>':''}
@@ -9450,7 +9450,7 @@ function renderLessonsHub() {
           <div class="lesson-title">${l.title}</div>
           <div class="lesson-sub">${l.sub}</div>
           <div class="lesson-pills">
-            <span class="pill" style="background:#e6f1fb;color:var(--blue);border:1px solid var(--blue)">ระดับ 2</span>
+            <span class="pill" style="background:#e6f1fb;color:var(--blue);border:1px solid var(--blue)">HSK 2</span>
             <span class="pill pill-gray">${l.theme}</span>
             ${isDone?'<span class="pill pill-green">จบแล้ว</span>':''}
             ${locked?'<span class="pill" style="background:#fff5f9;color:var(--red)">Premium</span>':''}
@@ -9471,7 +9471,7 @@ function renderLessonsHub() {
             <div class="lesson-title">${l.title}</div>
             <div class="lesson-sub">${l.sub}</div>
             <div class="lesson-pills">
-              <span class="pill" style="background:#e8f4ed;color:#1a6b3a;border:1px solid #1a6b3a">ระดับ 3</span>
+              <span class="pill" style="background:#e8f4ed;color:#1a6b3a;border:1px solid #1a6b3a">HSK 3</span>
               <span class="pill pill-gray">${l.theme}</span>
               <span class="pill" style="background:#fff5f9;color:var(--red)">Premium</span>
             </div>
@@ -9488,7 +9488,7 @@ function renderLessonsHub() {
           <div class="lesson-title">${l.title}</div>
           <div class="lesson-sub">${l.sub}</div>
           <div class="lesson-pills">
-            <span class="pill" style="background:#e8f4ed;color:#1a6b3a;border:1px solid #1a6b3a">ระดับ 3</span>
+            <span class="pill" style="background:#e8f4ed;color:#1a6b3a;border:1px solid #1a6b3a">HSK 3</span>
             <span class="pill pill-gray">${l.theme}</span>
             ${isDone?'<span class="pill pill-green">จบแล้ว</span>':''}
           </div>
