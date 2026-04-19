@@ -1998,7 +1998,7 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 
 // หมวดคำศัพท์ที่เรียนฟรี
-const FREE_VOCAB_THEMES = ['ทักทาย', 'ตัวเลข', 'อาหาร'];
+const FREE_VOCAB_THEMES = ['ทักทาย', 'ตัวเลข', 'อาหาร', 'ความรู้สึก', 'กริยา'];
 function isVocabThemeFree(theme) {
   return isPremium() || FREE_VOCAB_THEMES.includes(theme);
 }
@@ -6072,17 +6072,17 @@ const EXTRA_VOCAB = [
   {zh:'半',py:'bàn',th:'ครึ่ง',en:'Half',em:'½',theme:'ตัวเลข'},
   {zh:'倍',py:'bèi',th:'เท่า',en:'Times / Multiple',em:'✖️',theme:'ตัวเลข'},
   // หมวด: สี
-  {zh:'红色',py:'hóngsè',th:'สีแดง',en:'Red',em:'🔴',theme:'สี'},
-  {zh:'蓝色',py:'lánsè',th:'สีน้ำเงิน',en:'Blue',em:'🔵',theme:'สี'},
-  {zh:'绿色',py:'lǜsè',th:'สีเขียว',en:'Green',em:'🟢',theme:'สี'},
-  {zh:'黄色',py:'huángsè',th:'สีเหลือง',en:'Yellow',em:'🟡',theme:'สี'},
-  {zh:'白色',py:'báisè',th:'สีขาว',en:'White',em:'⚪',theme:'สี'},
-  {zh:'黑色',py:'hēisè',th:'สีดำ',en:'Black',em:'⚫',theme:'สี'},
-  {zh:'粉色',py:'fěnsè',th:'สีชมพู',en:'Pink',em:'🌸',theme:'สี'},
-  {zh:'橙色',py:'chéngsè',th:'สีส้ม',en:'Orange',em:'🟠',theme:'สี'},
-  {zh:'紫色',py:'zǐsè',th:'สีม่วง',en:'Purple',em:'🟣',theme:'สี'},
-  {zh:'棕色',py:'zōngsè',th:'สีน้ำตาล',en:'Brown',em:'🟤',theme:'สี'},
-  {zh:'灰色',py:'huīsè',th:'สีเทา',en:'Gray',em:'🔘',theme:'สี'},
+  {zh:'红色',py:'hóngsè',th:'สีแดง',en:'Red',em:'🔴',theme:'_hidden_'},
+  {zh:'蓝色',py:'lánsè',th:'สีน้ำเงิน',en:'Blue',em:'🔵',theme:'_hidden_'},
+  {zh:'绿色',py:'lǜsè',th:'สีเขียว',en:'Green',em:'🟢',theme:'_hidden_'},
+  {zh:'黄色',py:'huángsè',th:'สีเหลือง',en:'Yellow',em:'🟡',theme:'_hidden_'},
+  {zh:'白色',py:'báisè',th:'สีขาว',en:'White',em:'⚪',theme:'_hidden_'},
+  {zh:'黑色',py:'hēisè',th:'สีดำ',en:'Black',em:'⚫',theme:'_hidden_'},
+  {zh:'粉色',py:'fěnsè',th:'สีชมพู',en:'Pink',em:'🌸',theme:'_hidden_'},
+  {zh:'橙色',py:'chéngsè',th:'สีส้ม',en:'Orange',em:'🟠',theme:'_hidden_'},
+  {zh:'紫色',py:'zǐsè',th:'สีม่วง',en:'Purple',em:'🟣',theme:'_hidden_'},
+  {zh:'棕色',py:'zōngsè',th:'สีน้ำตาล',en:'Brown',em:'🟤',theme:'_hidden_'},
+  {zh:'灰色',py:'huīsè',th:'สีเทา',en:'Gray',em:'🔘',theme:'_hidden_'},
   // หมวด: ขนาดและรูปร่าง
   {zh:'大',py:'dà',th:'ใหญ่',en:'Big',em:'🐘',theme:'คำคุณศัพท์'},
   {zh:'小',py:'xiǎo',th:'เล็ก',en:'Small',em:'🐭',theme:'คำคุณศัพท์'},
@@ -6115,19 +6115,7 @@ const EXTRA_VOCAB = [
   {zh:'洗澡',py:'xǐzǎo',th:'อาบน้ำ',en:'Take a shower',em:'🚿',theme:'กริยา'},
   {zh:'上班',py:'shàngbān',th:'ไปทำงาน',en:'Go to work',em:'💼',theme:'กริยา'},
   {zh:'下班',py:'xiàbān',th:'เลิกงาน',en:'Get off work',em:'🏠',theme:'กริยา'},
-  // หมวด: สุขภาพ
-  {zh:'头',py:'tóu',th:'หัว',en:'Head',em:'🗣️',theme:'ร่างกาย'},
-  {zh:'眼睛',py:'yǎnjīng',th:'ตา',en:'Eyes',em:'👀',theme:'ร่างกาย'},
-  {zh:'耳朵',py:'ěrduo',th:'หู',en:'Ears',em:'👂',theme:'ร่างกาย'},
-  {zh:'鼻子',py:'bízi',th:'จมูก',en:'Nose',em:'👃',theme:'ร่างกาย'},
-  {zh:'嘴',py:'zuǐ',th:'ปาก',en:'Mouth',em:'👄',theme:'ร่างกาย'},
-  {zh:'手',py:'shǒu',th:'มือ',en:'Hand',em:'✋',theme:'ร่างกาย'},
-  {zh:'脚',py:'jiǎo',th:'เท้า',en:'Foot',em:'🦶',theme:'ร่างกาย'},
-  {zh:'身体',py:'shēntǐ',th:'ร่างกาย',en:'Body',em:'🧍',theme:'ร่างกาย'},
-  {zh:'不舒服',py:'bù shūfu',th:'ไม่สบาย',en:'Feel unwell',em:'😷',theme:'ร่างกาย'},
-  {zh:'头疼',py:'tóuténg',th:'ปวดหัว',en:'Headache',em:'🤕',theme:'ร่างกาย'},
-  {zh:'发烧',py:'fāshāo',th:'มีไข้',en:'Have a fever',em:'🌡️',theme:'ร่างกาย'},
-  {zh:'感冒',py:'gǎnmào',th:'เป็นหวัด',en:'Have a cold',em:'🤧',theme:'ร่างกาย'},
+  // หมวด: ร่างกาย (ซ่อน — มีในบทเรียนแล้ว)
   // หมวด: บ้านและสิ่งของ
   {zh:'家',py:'jiā',th:'บ้าน / ครอบครัว',en:'Home / Family',em:'🏠',theme:'บ้าน'},
   {zh:'房间',py:'fángjiān',th:'ห้อง',en:'Room',em:'🚪',theme:'บ้าน'},
@@ -6167,6 +6155,122 @@ const EXTRA_VOCAB = [
   {zh:'警察',py:'jǐngchá',th:'ตำรวจ',en:'Police',em:'👮',theme:'อาชีพ'},
   {zh:'记者',py:'jìzhě',th:'นักข่าว',en:'Journalist',em:'📰',theme:'อาชีพ'},
   {zh:'演员',py:'yǎnyuán',th:'นักแสดง',en:'Actor / Actress',em:'🎭',theme:'อาชีพ'},
+
+  // ══════════════════════════════════════
+  // หมวด: ความรู้สึก (เพิ่มใหม่ — ง่าย อยู่หน้าๆ)
+  // ══════════════════════════════════════
+  {zh:'开心',py:'kāixīn',th:'มีความสุข / ดีใจ',en:'Happy',em:'😄',theme:'ความรู้สึก'},
+  {zh:'高兴',py:'gāoxìng',th:'ยินดี / ดีใจ',en:'Glad / Pleased',em:'😊',theme:'ความรู้สึก'},
+  {zh:'快乐',py:'kuàilè',th:'มีความสุข',en:'Joyful / Happy',em:'🥳',theme:'ความรู้สึก'},
+  {zh:'难过',py:'nánguò',th:'เศร้า / เสียใจ',en:'Sad',em:'😢',theme:'ความรู้สึก'},
+  {zh:'伤心',py:'shāngxīn',th:'เจ็บปวดใจ / เสียใจมาก',en:'Heartbroken',em:'💔',theme:'ความรู้สึก'},
+  {zh:'生气',py:'shēngqì',th:'โกรธ',en:'Angry',em:'😠',theme:'ความรู้สึก'},
+  {zh:'害怕',py:'hàipà',th:'กลัว',en:'Scared / Afraid',em:'😨',theme:'ความรู้สึก'},
+  {zh:'担心',py:'dānxīn',th:'เป็นห่วง / กังวล',en:'Worried',em:'😟',theme:'ความรู้สึก'},
+  {zh:'紧张',py:'jǐnzhāng',th:'ตื่นเต้น / เครียด',em:'😬',en:'Nervous / Tense',theme:'ความรู้สึก'},
+  {zh:'兴奋',py:'xīngfèn',th:'ตื่นเต้น (ดีใจ)',en:'Excited',em:'🤩',theme:'ความรู้สึก'},
+  {zh:'累',py:'lèi',th:'เหนื่อย',en:'Tired',em:'😩',theme:'ความรู้สึก'},
+  {zh:'无聊',py:'wúliáo',th:'เบื่อ',en:'Bored',em:'🥱',theme:'ความรู้สึก'},
+  {zh:'舒服',py:'shūfu',th:'สบาย / สุขสบาย',en:'Comfortable',em:'😌',theme:'ความรู้สึก'},
+  {zh:'失望',py:'shīwàng',th:'ผิดหวัง',en:'Disappointed',em:'😞',theme:'ความรู้สึก'},
+  {zh:'惊喜',py:'jīngxǐ',th:'แปลกใจ (ดีใจ) / เซอร์ไพรส์',en:'Surprised (pleasantly)',em:'🎁',theme:'ความรู้สึก'},
+  {zh:'感动',py:'gǎndòng',th:'ซาบซึ้ง / ประทับใจ',en:'Moved / Touched',em:'🥹',theme:'ความรู้สึก'},
+  {zh:'孤独',py:'gūdú',th:'เหงา / โดดเดี่ยว',en:'Lonely',em:'🌧️',theme:'ความรู้สึก'},
+  {zh:'满足',py:'mǎnzú',th:'พึงพอใจ',en:'Satisfied / Content',em:'😎',theme:'ความรู้สึก'},
+  {zh:'后悔',py:'hòuhuǐ',th:'เสียใจ / เสียดาย',en:'Regret',em:'😔',theme:'ความรู้สึก'},
+  {zh:'放松',py:'fàngsōng',th:'ผ่อนคลาย',en:'Relaxed',em:'🧘',theme:'ความรู้สึก'},
+  // ความรู้สึก — ความรัก & ชีวิตประจำวัน (เพิ่มใหม่)
+  {zh:'爱你',py:'ài nǐ',th:'รักคุณ / รักเธอ',en:'Love you',em:'❤️',theme:'ความรู้สึก'},
+  {zh:'想你',py:'xiǎng nǐ',th:'คิดถึงคุณ',en:'Miss you',em:'🥺',theme:'ความรู้สึก'},
+  {zh:'喜欢你',py:'xǐhuān nǐ',th:'ชอบคุณ / ชอบเธอ',en:'I like you',em:'💕',theme:'ความรู้สึก'},
+  {zh:'想见你',py:'xiǎng jiàn nǐ',th:'อยากเจอคุณ',en:'Want to see you',em:'🤗',theme:'ความรู้สึก'},
+  {zh:'想抱你',py:'xiǎng bào nǐ',th:'อยากกอดคุณ',en:'Want to hug you',em:'🫂',theme:'ความรู้สึก'},
+  {zh:'幸福',py:'xìngfú',th:'มีความสุข / อบอุ่นใจ',en:'Happiness / Bliss',em:'🌸',theme:'ความรู้สึก'},
+  {zh:'甜蜜',py:'tiánmì',th:'หวานชื่น / โรแมนติก',en:'Sweet / Romantic',em:'🍯',theme:'ความรู้สึก'},
+  {zh:'心动',py:'xīndòng',th:'หัวใจเต้นแรง / ใจหาย',en:'Heart flutter',em:'💓',theme:'ความรู้สึก'},
+  {zh:'暖心',py:'nuǎnxīn',th:'อบอุ่นใจ',en:'Heartwarming',em:'🥰',theme:'ความรู้สึก'},
+  {zh:'依赖',py:'yīlài',th:'พึ่งพา / ติดใจ',en:'Rely on / Depend on',em:'🤝',theme:'ความรู้สึก'},
+  {zh:'嫉妬',py:'jídù',th:'อิจฉา / หึงหวง',en:'Jealous',em:'😒',theme:'ความรู้สึก'},
+  {zh:'委屈',py:'wěiqu',th:'น้อยใจ / รู้สึกไม่ยุติธรรม',en:'Feel wronged',em:'🥺',theme:'ความรู้สึก'},
+  {zh:'难为情',py:'nánwéiqíng',th:'เขิน / อาย',en:'Embarrassed / Shy',em:'😳',theme:'ความรู้สึก'},
+  {zh:'期待',py:'qīdài',th:'ตั้งตารอ / คาดหวัง',en:'Look forward to',em:'✨',theme:'ความรู้สึก'},
+  {zh:'着急',py:'zháojí',th:'ร้อนใจ / รีบร้อน',en:'Anxious / In a hurry',em:'😰',theme:'ความรู้สึก'},
+  {zh:'烦恼',py:'fánnǎo',th:'กังวลใจ / รำคาญ',en:'Troubled / Annoyed',em:'😤',theme:'ความรู้สึก'},
+  {zh:'压力',py:'yālì',th:'ความกดดัน / ความเครียด',en:'Stress / Pressure',em:'😫',theme:'ความรู้สึก'},
+  {zh:'开朗',py:'kāilǎng',th:'ร่าเริง / สดชื่น',en:'Cheerful / Outgoing',em:'☀️',theme:'ความรู้สึก'},
+  {zh:'温柔',py:'wēnróu',th:'อ่อนโยน / นุ่มนวล',en:'Gentle / Tender',em:'🌷',theme:'ความรู้สึก'},
+  {zh:'思念',py:'sīniàn',th:'คิดถึง (ลึกๆ)',en:'Miss deeply / Yearn',em:'💭',theme:'ความรู้สึก'},
+  {zh:'在乎',py:'zàihu',th:'ใส่ใจ / แคร์',en:'Care about',em:'🫶',theme:'ความรู้สึก'},
+  {zh:'心疼',py:'xīnténg',th:'สงสาร / เจ็บปวดแทน',en:'Feel for someone',em:'💔',theme:'ความรู้สึก'},
+  {zh:'珍惜',py:'zhēnxī',th:'ให้คุณค่า / ถนอมรัก',en:'Cherish / Treasure',em:'💎',theme:'ความรู้สึก'},
+  {zh:'舍不得',py:'shě bu de',th:'ใจไม่อยากปล่อย / อาลัย',en:'Reluctant to let go',em:'🥺',theme:'ความรู้สึก'},
+  {zh:'没关系',py:'méiguānxi',th:'ไม่เป็นไร',en:"It's okay / No worries",em:'😊',theme:'ความรู้สึก'},
+
+  // ══════════════════════════════════════
+  // หมวด: คำกริยาชีวิตประจำวัน (เพิ่มใหม่ 30+ คำ)
+  // ══════════════════════════════════════
+  {zh:'走',py:'zǒu',th:'เดิน / ไป',en:'Walk / Go',em:'🚶',theme:'กริยา'},
+  {zh:'跑',py:'pǎo',th:'วิ่ง',en:'Run',em:'🏃',theme:'กริยา'},
+  {zh:'跳',py:'tiào',th:'กระโดด',en:'Jump',em:'🏃',theme:'กริยา'},
+  {zh:'坐',py:'zuò',th:'นั่ง',en:'Sit',em:'💺',theme:'กริยา'},
+  {zh:'站',py:'zhàn',th:'ยืน',en:'Stand',em:'🧍',theme:'กริยา'},
+  {zh:'给',py:'gěi',th:'ให้',en:'Give',em:'🤲',theme:'กริยา'},
+  {zh:'拿',py:'ná',th:'หยิบ / ถือ',en:'Take / Hold',em:'✋',theme:'กริยา'},
+  {zh:'打',py:'dǎ',th:'ตี / โทร / เล่น (กีฬา)',en:'Hit / Call / Play',em:'🥊',theme:'กริยา'},
+  {zh:'做',py:'zuò',th:'ทำ',en:'Do / Make',em:'🛠️',theme:'กริยา'},
+  {zh:'想',py:'xiǎng',th:'คิด / อยาก',en:'Think / Want',em:'💭',theme:'กริยา'},
+  {zh:'知道',py:'zhīdào',th:'รู้ / ทราบ',en:'Know',em:'💡',theme:'กริยา'},
+  {zh:'觉得',py:'juéde',th:'รู้สึก / คิดว่า',en:'Feel / Think',em:'🤔',theme:'กริยา'},
+  {zh:'喜欢',py:'xǐhuān',th:'ชอบ',en:'Like',em:'❤️',theme:'กริยา'},
+  {zh:'爱',py:'ài',th:'รัก',en:'Love',em:'💕',theme:'กริยา'},
+  {zh:'用',py:'yòng',th:'ใช้',en:'Use',em:'🔧',theme:'กริยา'},
+  {zh:'找',py:'zhǎo',th:'หา',en:'Look for / Find',em:'🔍',theme:'กริยา'},
+  {zh:'等',py:'děng',th:'รอ',en:'Wait',em:'⏳',theme:'กริยา'},
+  {zh:'帮',py:'bāng',th:'ช่วย',en:'Help',em:'🤝',theme:'กริยา'},
+  {zh:'问',py:'wèn',th:'ถาม',en:'Ask',em:'❓',theme:'กริยา'},
+  {zh:'回答',py:'huídá',th:'ตอบ',en:'Answer',em:'💬',theme:'กริยา'},
+  {zh:'学',py:'xué',th:'เรียน',en:'Study / Learn',em:'📚',theme:'กริยา'},
+  {zh:'教',py:'jiāo',th:'สอน',en:'Teach',em:'👨‍🏫',theme:'กริยา'},
+  {zh:'玩',py:'wán',th:'เล่น',en:'Play',em:'🎮',theme:'กริยา'},
+  {zh:'休息',py:'xiūxi',th:'พัก',en:'Rest',em:'😴',theme:'กริยา'},
+  {zh:'工作',py:'gōngzuò',th:'ทำงาน',en:'Work',em:'💼',theme:'กริยา'},
+  {zh:'聊天',py:'liáotiān',th:'คุย / สนทนา',en:'Chat',em:'💬',theme:'กริยา'},
+  {zh:'笑',py:'xiào',th:'หัวเราะ / ยิ้ม',en:'Laugh / Smile',em:'😄',theme:'กริยา'},
+  {zh:'哭',py:'kū',th:'ร้องไห้',en:'Cry',em:'😭',theme:'กริยา'},
+  {zh:'唱歌',py:'chànggē',th:'ร้องเพลง',en:'Sing',em:'🎤',theme:'กริยา'},
+  {zh:'跳舞',py:'tiàowǔ',th:'เต้นรำ',en:'Dance',em:'💃',theme:'กริยา'},
+  {zh:'拍照',py:'pāizhào',th:'ถ่ายรูป',en:'Take a photo',em:'📸',theme:'กริยา'},
+  {zh:'发',py:'fā',th:'ส่ง / ส่งออก',en:'Send',em:'📤',theme:'กริยา'},
+  {zh:'接',py:'jiē',th:'รับ / รับโทรศัพท์',en:'Receive / Answer (call)',em:'📲',theme:'กริยา'},
+  {zh:'出发',py:'chūfā',th:'ออกเดินทาง',en:'Set off / Depart',em:'🚀',theme:'กริยา'},
+  {zh:'回来',py:'huílái',th:'กลับมา',en:'Come back',em:'↩️',theme:'กริยา'},
+
+  // ══════════════════════════════════════
+  // หมวด: คำคุณศัพท์ชีวิตประจำวัน (เพิ่มใหม่)
+  // ══════════════════════════════════════
+  {zh:'漂亮',py:'piàoliang',th:'สวย',en:'Beautiful / Pretty',em:'💄',theme:'คำคุณศัพท์'},
+  {zh:'帅',py:'shuài',th:'หล่อ',en:'Handsome',em:'😎',theme:'คำคุณศัพท์'},
+  {zh:'可爱',py:'kě ài',th:'น่ารัก',en:'Cute / Adorable',em:'🥰',theme:'คำคุณศัพท์'},
+  {zh:'聪明',py:'cōngmíng',th:'ฉลาด',en:'Smart / Clever',em:'🧠',theme:'คำคุณศัพท์'},
+  {zh:'厉害',py:'lìhai',th:'เก่ง / เจ๋ง',en:'Impressive / Great',em:'💪',theme:'คำคุณศัพท์'},
+  {zh:'认真',py:'rènzhēn',th:'ตั้งใจ / จริงจัง',en:'Serious / Hardworking',em:'📝',theme:'คำคุณศัพท์'},
+  {zh:'懒',py:'lǎn',th:'ขี้เกียจ',em:'🛋️',en:'Lazy',theme:'คำคุณศัพท์'},
+  {zh:'忙',py:'máng',th:'ยุ่ง /바쁨',en:'Busy',em:'🏃',theme:'คำคุณศัพท์'},
+  {zh:'热',py:'rè',th:'ร้อน',en:'Hot',em:'🔥',theme:'คำคุณศัพท์'},
+  {zh:'冷',py:'lěng',th:'หนาว / เย็น',en:'Cold',em:'🥶',theme:'คำคุณศัพท์'},
+  {zh:'贵',py:'guì',th:'แพง',en:'Expensive',em:'💸',theme:'คำคุณศัพท์'},
+  {zh:'便宜',py:'piányí',th:'ถูก (ราคา)',en:'Cheap',em:'🏷️',theme:'คำคุณศัพท์'},
+  {zh:'干净',py:'gānjìng',th:'สะอาด',en:'Clean',em:'✨',theme:'คำคุณศัพท์'},
+  {zh:'脏',py:'zāng',th:'สกปรก',en:'Dirty',em:'🗑️',theme:'คำคุณศัพท์'},
+  {zh:'好吃',py:'hǎochī',th:'อร่อย',en:'Delicious',em:'😋',theme:'คำคุณศัพท์'},
+  {zh:'难吃',py:'nánchī',th:'ไม่อร่อย',en:'Tasteless / Bad-tasting',em:'🤢',theme:'คำคุณศัพท์'},
+  {zh:'有意思',py:'yǒu yìsi',th:'น่าสนใจ / สนุก',en:'Interesting / Fun',em:'🎉',theme:'คำคุณศัพท์'},
+  {zh:'无聊',py:'wúliáo',th:'น่าเบื่อ',en:'Boring',em:'😴',theme:'คำคุณศัพท์'},
+  {zh:'简单',py:'jiǎndān',th:'ง่าย / เรียบง่าย',en:'Simple / Easy',em:'😊',theme:'คำคุณศัพท์'},
+  {zh:'复杂',py:'fùzá',th:'ซับซ้อน',en:'Complicated',em:'🤯',theme:'คำคุณศัพท์'},
+  {zh:'重要',py:'zhòngyào',th:'สำคัญ',en:'Important',em:'❗',theme:'คำคุณศัพท์'},
+  {zh:'普通',py:'pǔtōng',th:'ธรรมดา / ปกติ',en:'Ordinary / Common',em:'👌',theme:'คำคุณศัพท์'},
+  {zh:'特别',py:'tèbié',th:'พิเศษ / โดยเฉพาะ',en:'Special / Especially',em:'⭐',theme:'คำคุณศัพท์'},
 ];
 
 EXTRA_VOCAB.forEach(v => {
@@ -7082,7 +7186,11 @@ function markDone() {
 // ═══════════════════════════════════
 // VOCAB MODE (300 คำ)
 // ═══════════════════════════════════
-const VM_THEMES = ['ทั้งหมด', ...new Set(VOCAB_POOL.map(v => v.theme))];
+const THEME_ORDER = ['ทั้งหมด','ความรู้สึก','กริยา','ทักทาย','ตัวเลข','อาหาร','คำคุณศัพท์','บ้าน','อาชีพ','ร่างกายและสุขภาพ','การเดินทาง','ช้อปปิ้ง','ครอบครัว','เวลา','ธรรมชาติ'];
+const VM_THEMES = [
+  ...THEME_ORDER.filter(t => t==='ทั้งหมด' || VOCAB_POOL.some(v => v.theme===t)),
+  ...new Set(VOCAB_POOL.map(v => v.theme).filter(t => t && t!=='_hidden_' && !THEME_ORDER.includes(t)))
+];
 
 function renderVocabMode() {
   const fDiv = document.getElementById('vm-filters');
@@ -7109,7 +7217,7 @@ function renderVocabMode() {
 
   const filtered = VOCAB_POOL.filter(v => {
     const themeOk = state.vmFilter === 'ทั้งหมด'
-      ? isVocabThemeFree(v.theme)
+      ? (isVocabThemeFree(v.theme) && v.theme !== '_hidden_')
       : v.theme === state.vmFilter;
     return themeOk && (!q || v.th.includes(q) || v.zh.includes(q) || v.py.toLowerCase().includes(q));
   });
@@ -9610,7 +9718,10 @@ function renderLessonsHub() {
 }
 
 function renderHubVocab() {
-  const VM_THEMES = ['ทั้งหมด', ...new Set(VOCAB_POOL.map(v => v.theme).filter(Boolean))];
+  const VM_THEMES = [
+    ...THEME_ORDER.filter(t => t==='ทั้งหมด' || VOCAB_POOL.some(v => v.theme===t)),
+    ...new Set(VOCAB_POOL.map(v => v.theme).filter(t => t && t!=='_hidden_' && !THEME_ORDER.includes(t)))
+  ];
   const fDiv = document.getElementById('hub-vm-filters');
   if (fDiv && !fDiv.hasChildNodes()) {
     fDiv.innerHTML = VM_THEMES.map(t =>
@@ -9620,7 +9731,7 @@ function renderHubVocab() {
   const q = (document.getElementById('hub-vm-search')?.value || '').toLowerCase();
   const filtered = VOCAB_POOL.filter(v =>
     (hubVmFilter === 'ทั้งหมด' ? isVocabThemeFree(v.theme) : v.theme === hubVmFilter) &&
-    (!q || v.th.includes(q) || v.zh.includes(q) || (v.py||'').toLowerCase().includes(q))
+    v.theme !== '_hidden_' && (!q || v.th.includes(q) || v.zh.includes(q) || (v.py||'').toLowerCase().includes(q))
   );
   const countEl = document.getElementById('hub-vm-count');
   const knownEl = document.getElementById('hub-vm-known');
