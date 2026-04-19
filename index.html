@@ -1850,22 +1850,44 @@ body {
 
   <!-- ADMIN SCREEN -->
   <div id="screen-admin" class="screen">
-    <div style="padding:20px">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+    <div style="padding:16px 20px 0">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
         <button onclick="goScreen('profile')" style="background:none;border:none;font-size:20px;cursor:pointer;padding:0">←</button>
         <div>
           <div style="font-size:18px;font-weight:700;color:var(--ink)">👑 Admin Panel</div>
-          <div style="font-size:12px;color:var(--ink3)">จัดการสมาชิก Premium</div>
+          <div style="font-size:12px;color:var(--ink3)">จัดการสมาชิกและ Affiliate</div>
         </div>
       </div>
 
+      <!-- Admin Tabs -->
+      <div style="display:flex;border-bottom:1px solid var(--paper3);margin-bottom:16px">
+        <button id="admin-tab-users" onclick="switchAdminTab('users')" style="flex:1;padding:10px;font-size:13px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:var(--red);border-bottom:2px solid var(--red);margin-bottom:-1px">👥 สมาชิก</button>
+        <button id="admin-tab-affiliate" onclick="switchAdminTab('affiliate')" style="flex:1;padding:10px;font-size:13px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:var(--ink3);border-bottom:2px solid transparent;margin-bottom:-1px">🤝 Affiliate</button>
+      </div>
+    </div>
+
+    <!-- Tab: Users -->
+    <div id="admin-pane-users" style="padding:0 20px 20px">
       <div style="background:var(--red-light);border:1px solid var(--paper3);border-radius:var(--r);padding:14px;margin-bottom:16px">
         <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:4px">📊 สรุป</div>
         <div id="admin-summary" style="font-size:12px;color:var(--ink2)">กำลังโหลด...</div>
       </div>
-
       <div style="font-size:12px;font-weight:700;color:var(--ink3);letter-spacing:.05em;margin-bottom:10px">รายชื่อสมาชิกทั้งหมด</div>
       <div id="admin-user-list">
+        <div style="text-align:center;padding:30px;color:var(--ink3)">⏳ กำลังโหลด...</div>
+      </div>
+    </div>
+
+    <!-- Tab: Affiliate -->
+    <div id="admin-pane-affiliate" style="padding:0 20px 20px;display:none">
+      <div style="background:var(--amber-light);border:1px solid #DFC090;border-radius:var(--r);padding:14px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:var(--amber);margin-bottom:4px">💰 สรุป Affiliate</div>
+        <div id="affiliate-admin-summary" style="font-size:12px;color:var(--ink2)">กำลังโหลด...</div>
+      </div>
+      <div style="background:var(--paper2);border:1px solid var(--paper3);border-radius:var(--r);padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--ink3)">
+        📅 จ่ายค่าคอมทุกวันสุดท้ายของเดือน · กด "จ่ายแล้ว" หลังโอนเงินเสร็จ
+      </div>
+      <div id="admin-affiliate-list">
         <div style="text-align:center;padding:30px;color:var(--ink3)">⏳ กำลังโหลด...</div>
       </div>
     </div>
@@ -10605,6 +10627,107 @@ function rmToggle(card) {
 function goAdminPanel() {
   goScreen('admin');
   loadAdminUsers();
+  loadAffiliateAdmin();
+}
+
+function switchAdminTab(tab) {
+  document.getElementById('admin-pane-users').style.display = tab==='users'?'block':'none';
+  document.getElementById('admin-pane-affiliate').style.display = tab==='affiliate'?'block':'none';
+  document.getElementById('admin-tab-users').style.cssText = `flex:1;padding:10px;font-size:13px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:${tab==='users'?'var(--red)':'var(--ink3)'};border-bottom:2px solid ${tab==='users'?'var(--red)':'transparent'};margin-bottom:-1px`;
+  document.getElementById('admin-tab-affiliate').style.cssText = `flex:1;padding:10px;font-size:13px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:${tab==='affiliate'?'var(--amber)':'var(--ink3)'};border-bottom:2px solid ${tab==='affiliate'?'var(--amber)':'transparent'};margin-bottom:-1px`;
+}
+
+async function loadAffiliateAdmin() {
+  const listEl = document.getElementById('admin-affiliate-list');
+  const summaryEl = document.getElementById('affiliate-admin-summary');
+  if (!listEl) return;
+
+  listEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink3)">⏳ กำลังโหลด...</div>';
+
+  const { data, error } = await sb.from('user_progress')
+    .select('user_id, data, referral_code, affiliate_earnings, affiliate_count, bank_name, bank_account, bank_owner')
+    .gt('affiliate_count', 0)
+    .order('affiliate_earnings', { ascending: false });
+
+  if (error) { listEl.innerHTML = '<div style="color:var(--red);padding:16px">❌ ' + error.message + '</div>'; return; }
+
+  const affiliates = data || [];
+  const totalPending = affiliates.reduce((s, a) => s + (a.affiliate_earnings||0), 0);
+  const totalAffiliates = affiliates.length;
+
+  if (summaryEl) summaryEl.innerHTML = `Affiliate ทั้งหมด <b>${totalAffiliates} คน</b> · ค่าคอมรวม <b style="color:var(--amber)">฿${totalPending}</b>`;
+
+  if (affiliates.length === 0) {
+    listEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink3)">ยังไม่มี Affiliate</div>';
+    return;
+  }
+
+  listEl.innerHTML = affiliates.map(a => {
+    const email = a.data?.email || a.user_id?.substring(0,8) + '...';
+    const name = a.data?.name || 'ไม่ระบุ';
+    const earnings = a.affiliate_earnings || 0;
+    const count = a.affiliate_count || 0;
+    const hasBankInfo = a.bank_account;
+
+    return `<div id="aff-row-${a.user_id}" style="background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:var(--shadow)">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:700;color:var(--ink)">${name}</div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:2px">${email}</div>
+          <div style="font-size:11px;color:var(--ink3)">โค้ด: <b>${a.referral_code||'-'}</b> · ชวนสำเร็จ ${count} คน</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-size:20px;font-weight:900;color:var(--amber)">฿${earnings}</div>
+          <div style="font-size:10px;color:var(--ink3)">ค่าคอมรอจ่าย</div>
+        </div>
+      </div>
+      ${hasBankInfo ? `
+      <div style="background:var(--green-light);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--green);margin-bottom:10px">
+        🏦 ${a.bank_name} · ${a.bank_account} · ${a.bank_owner}
+      </div>` : `
+      <div style="background:var(--red-light);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--red);margin-bottom:10px">
+        ⚠️ ยังไม่มีข้อมูลบัญชี
+      </div>`}
+      ${earnings > 0 ? `
+      <button onclick="markAffiliatePaid('${a.user_id}', ${earnings})" style="width:100%;padding:10px;background:var(--green);color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">
+        ✅ จ่ายแล้ว ฿${earnings} — ตัดยอดเป็น ฿0
+      </button>` : `
+      <div style="text-align:center;font-size:12px;color:var(--ink3);padding:6px">✅ จ่ายแล้วเดือนนี้</div>`}
+    </div>`;
+  }).join('');
+}
+
+async function markAffiliatePaid(userId, amount) {
+  const btn = document.querySelector(`#aff-row-${userId} button`);
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ กำลังบันทึก...'; }
+
+  const now = new Date().toISOString();
+  const month = new Date().toLocaleDateString('th-TH', { month: 'long', year: 'numeric' });
+
+  // Reset earnings to 0 + save payment history
+  const { data: existing } = await sb.from('user_progress').select('data').eq('user_id', userId).single();
+  const userData = existing?.data || {};
+  if (!userData.affiliateHistory) userData.affiliateHistory = [];
+  userData.affiliateHistory.push({ amount, date: now, month });
+
+  const { error } = await sb.from('user_progress').update({
+    affiliate_earnings: 0,
+    data: userData
+  }).eq('user_id', userId);
+
+  // Update affiliate_earnings table
+  await sb.from('affiliate_earnings').update({ status: 'paid' })
+    .eq('affiliate_id', userId)
+    .eq('status', 'pending');
+
+  if (error) {
+    showToast('❌ เกิดข้อผิดพลาด: ' + error.message);
+    if (btn) { btn.disabled = false; btn.textContent = `✅ จ่ายแล้ว ฿${amount} — ตัดยอดเป็น ฿0`; }
+    return;
+  }
+
+  showToast(`✅ บันทึกแล้ว! จ่าย ฿${amount} ให้ Affiliate แล้ว`);
+  loadAffiliateAdmin();
 }
 
 async function loadAdminUsers() {
@@ -11034,6 +11157,7 @@ async function renderAffiliateSection() {
   const count = aff.affiliate_count || 0;
   const shareText = `เรียนภาษาจีนกับ TangTang Chinese! HSK 1-6 ครบ สนุกเหมือนเล่นเกม ฿1,290 ครั้งเดียวตลอดชีพ 🦊\nhttps://avajarshika.github.io/tangtang/checkout.html`;
 
+  const historyHTML = `<div id="aff-history" style="margin-top:12px"></div>`;
   box.innerHTML = `
     <!-- Referral Code Card -->
     <div style="background:linear-gradient(135deg,#6b1a6b15,#F1359615);border:1.5px solid #F1359630;border-radius:var(--r);padding:16px;margin-bottom:12px">
@@ -11068,8 +11192,25 @@ async function renderAffiliateSection() {
 
     <div style="background:var(--amber-light);border:1px solid #DFC090;border-radius:var(--r-sm);padding:10px 12px;font-size:11px;color:#7a5c1a;line-height:1.7;margin-top:8px">
       💡 ค่าคอม 15% = <b>฿193</b> ต่อการขาย 1 ครั้ง<br>
-      เพื่อนกรอกโค้ด <b>${code}</b> ตอนซื้อ แล้วคุณได้ค่าคอมทันที
-    </div>`;
+      เพื่อนกรอกโค้ด <b>${code}</b> ตอนซื้อ แล้วคุณได้ค่าคอมทันที<br>
+      📅 จ่ายทุกวันสุดท้ายของเดือน · สอบถาม <a href="https://line.me/ti/p/@ava11" target="_blank" style="color:var(--red)">Line @ava11</a>
+    </div>
+    ${historyHTML}`;
+
+  // Load payment history
+  async function loadHistory() {
+    const { data } = await sb.from('user_progress').select('data').eq('user_id', state.user.id).single();
+    const history = data?.data?.affiliateHistory || [];
+    if (history.length === 0) return;
+    const hEl = document.getElementById('aff-history');
+    if (!hEl) return;
+    hEl.innerHTML = \`<div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:8px">📋 ประวัติรับเงิน</div>\` +
+      history.slice().reverse().map(h => \`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--paper3);font-size:12px">
+        <span style="color:var(--ink2)">\${h.month || new Date(h.date).toLocaleDateString('th-TH')}</span>
+        <span style="font-weight:700;color:var(--green)">+฿\${h.amount} ✅</span>
+      </div>\`).join('');
+  }
+  setTimeout(loadHistory, 300);
 }
 
 async function renderBankSection() {
