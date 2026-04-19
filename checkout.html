@@ -800,6 +800,25 @@ async function submitOrder() {
   if (btn) { btn.disabled = false; btn.innerHTML = '✅ ยืนยันการสั่งซื้อ — ฿1,290'; }
   document.getElementById('success-overlay').classList.add('show');
 }
+
+// ── Auto-fill referral code from URL ──
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const ref = params.get('ref');
+  if (ref) {
+    const input = document.getElementById('referral-code');
+    if (input) {
+      input.value = ref.toUpperCase();
+      input.style.borderColor = 'var(--green)';
+      input.style.background = 'var(--green-light)';
+      input.readOnly = true;
+      const tag = document.createElement('div');
+      tag.style.cssText = 'font-size:11px;color:var(--green);font-weight:700;margin-top:4px';
+      tag.textContent = '✅ ใช้โค้ดแนะนำจากเพื่อนแล้ว!';
+      input.parentNode.appendChild(tag);
+    }
+  }
+});
 </script>
 
 
