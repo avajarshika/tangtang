@@ -1589,14 +1589,14 @@ body {
     <div id="play-hub">
       <div style="background:linear-gradient(135deg,#6b1a6b,#F13596);padding:28px 20px 22px;color:white;position:relative;overflow:hidden">
         <div style="position:absolute;right:-10px;top:-10px;font-size:80px;opacity:.08;font-family:'Noto Serif SC',serif;line-height:1">玩</div>
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
-          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#f9c74f,#f3722c);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;box-shadow:0 3px 10px rgba(0,0,0,.2)">🦊</div>
+        <div style="display:flex;align-items:center;gap:16px;margin-bottom:10px">
+          <img src="https://avajarshika.github.io/tangtang/tangtang.png" alt="TangTang" style="width:72px;height:72px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.3))">
           <div>
             <div style="font-size:10px;font-weight:700;letter-spacing:.1em;opacity:.7;text-transform:uppercase">Mini Games with Tangtang</div>
             <div style="font-size:20px;font-weight:800;line-height:1.2">เล่น & ฝึกภาษาจีน</div>
+            <div style="font-size:12px;opacity:.8;margin-top:4px">ฝึกสนุก ได้ XP ไต่ Level ไปด้วยกัน! 🎮</div>
           </div>
         </div>
-        <div style="font-size:12px;opacity:.8">ฝึกสนุก ได้ XP ไต่ Level ไปด้วยกัน! 🎮</div>
       </div>
       <div style="padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <!-- Stroke Order -->
@@ -1842,7 +1842,13 @@ body {
       </div>
 
       <div class="hsk-progress-section">
-        <div class="hsk-title">HSK Progress</div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+          <img src="https://avajarshika.github.io/tangtang/tangtang.png" alt="TangTang" style="width:56px;height:56px;object-fit:contain;filter:drop-shadow(0 3px 8px rgba(241,53,150,0.2))">
+          <div>
+            <div class="hsk-title" style="margin-bottom:2px">HSK Progress</div>
+            <div style="font-size:11px;color:var(--ink3)">ขยันเรียนนะคะ ถังถังเชียร์อยู่! 🦊</div>
+          </div>
+        </div>
         <div class="hsk-row">
           <div class="hsk-lbl">HSK 1</div>
           <div class="hsk-bar"><div class="hsk-fill" id="hsk1-bar" style="width:0%;background:var(--red)"></div></div>
@@ -1992,12 +1998,7 @@ body {
 
 <div id="toast"></div>
 
-<!-- Floating TangTang Mascot -->
-<div id="tangtang-mascot" style="position:fixed;bottom:80px;left:16px;z-index:30;cursor:pointer;animation:floatIn .5s ease;display:none;pointer-events:none" title="ถังถัง">
-  <img src="https://avajarshika.github.io/tangtang/tangtang.png" 
-    alt="TangTang Mascot"
-    style="width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(241,53,150,0.3));animation:bounce 2s ease-in-out infinite alternate">
-</div>
+<!-- TangTang Mascot removed - now in game hub & affiliate -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -6434,8 +6435,7 @@ async function loginUser(u) {
   localStorage.setItem('th_' + u.id, JSON.stringify(cloudData));
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('app').classList.add('visible');
-  const mascot = document.getElementById('tangtang-mascot');
-  if (mascot) setTimeout(() => mascot.style.display = 'block', 1000);
+
   updateStreak();
   renderHome();
   showToast('ยินดีต้อนรับ, ' + u.name + '! 🎉');
@@ -11618,6 +11618,12 @@ async function renderAffiliateSection() {
 
   const historyHTML = `<div id="aff-history" style="margin-top:12px"></div>`;
   box.innerHTML = `
+    <!-- TangTang ให้กำลังใจ -->
+    <div style="text-align:center;margin-bottom:16px">
+      <img src="https://avajarshika.github.io/tangtang/tangtang.png" alt="TangTang" style="width:80px;height:80px;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(241,53,150,0.2))">
+      <div style="font-size:13px;font-weight:700;color:var(--red);margin-top:6px">แชร์ให้เพื่อน รับค่าคอม 15% ทุกคน! 🦊</div>
+    </div>
+
     <!-- Referral Code Card -->
     <div style="background:linear-gradient(135deg,#6b1a6b15,#F1359615);border:1.5px solid #F1359630;border-radius:var(--r);padding:16px;margin-bottom:12px">
       <div style="font-size:11px;color:var(--ink3);margin-bottom:6px">โค้ดของคุณ</div>
