@@ -6179,14 +6179,17 @@ function loadState(uid) {
 
 function saveState() {
   if (!state.user) return;
+  // ฝัง name + email ลงใน data เสมอ เพื่อให้ Admin Panel อ่านได้
+  if (state.user.name) state.user.data.name = state.user.name;
+  if (state.user.email) state.user.data.email = state.user.email;
   localStorage.setItem('th_' + state.user.id, JSON.stringify(state.user.data));
-  // Sync to Supabase
+  // Sync to Supabase — ใช้ update แทน upsert เพื่อไม่ overwrite bank_name/bank_account/bank_owner
   if (state.user.id !== 'guest') {
     sb.from('user_progress').upsert({
       user_id: state.user.id,
       data: state.user.data,
       updated_at: new Date().toISOString()
-    }, { onConflict: 'user_id' }).then(() => {});
+    }, { onConflict: 'user_id', ignoreDuplicates: false }).then(() => {});
   }
 }
 
@@ -6253,6 +6256,9 @@ function doGuest() {
 
 async function loginUser(u) {
   const cloudData = u.id !== 'guest' ? await loadStateFromCloud(u.id) : loadState(u.id);
+  // ฝัง name + email ลงใน data เสมอ เพื่อให้ Admin Panel อ่านชื่อได้
+  if (u.name) cloudData.name = u.name;
+  if (u.email) cloudData.email = u.email;
   state.user = { ...u, data: cloudData, is_premium: false };
   // โหลดสถานะ premium จาก DB
   if (u.id !== 'guest') {
@@ -10706,7 +10712,7 @@ async function loadAffiliateAdmin() {
 
   listEl.innerHTML = affiliates.map(a => {
     const email = a.data?.email || a.user_id?.substring(0,8) + '...';
-    const name = a.data?.name || 'ไม่ระบุ';
+    const name = a.data?.name || a.data?.display_name || (a.data?.email ? a.data.email.split('@')[0] : null) || 'ไม่ระบุ';
     const earnings = a.affiliate_earnings || 0;
     const count = a.affiliate_count || 0;
     const hasBankInfo = a.bank_account;
@@ -11332,7 +11338,18 @@ async function saveBankInfo() {
   const bankOwner   = document.getElementById('bank-owner-input').value.trim();
   if (!bankName || !bankAccount || !bankOwner) { showToast('กรุณากรอกข้อมูลให้ครบ'); return; }
 
-  await sb.from('user_progress').update({ bank_name: bankName, bank_account: bankAccount, bank_owner: bankOwner }).eq('user_id', state.user.id);
+  // บันทึกลง Supabase โดยตรง (แยก column เพื่อไม่ให้ saveState() overwrite)
+  const { error } = await sb.from('user_progress')
+    .update({ bank_name: bankName, bank_account: bankAccount, bank_owner: bankOwner })
+    .eq('user_id', state.user.id);
+  if (error) { showToast('❌ บันทึกไม่สำเร็จ: ' + error.message); return; }
+
+  // เก็บใน state ด้วย เผื่อต้องแสดงผล
+  if (state.user) {
+    state.user.bank_name = bankName;
+    state.user.bank_account = bankAccount;
+    state.user.bank_owner = bankOwner;
+  }
   document.getElementById('bank-modal').remove();
   showToast('✅ บันทึกข้อมูลบัญชีแล้ว!');
   renderAffiliateSection();
