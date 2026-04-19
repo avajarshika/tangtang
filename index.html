@@ -1837,6 +1837,12 @@ body {
       <div class="done-lessons" id="done-list">
         <div class="empty"><div class="empty-icon">📚</div><p>ยังไม่มีบทที่จบ</p></div>
       </div>
+      <!-- AFFILIATE SECTION -->
+      <div style="padding:14px 16px;border-top:1px solid var(--paper3);margin-top:8px">
+        <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px">🤝 โปรแกรม Affiliate</div>
+        <div id="affiliate-section"></div>
+      </div>
+
       <button id="admin-btn" onclick="goAdminPanel()" style="display:none;width:100%;padding:13px;margin-bottom:10px;background:linear-gradient(135deg,#1a1a2e,#16213e);color:white;border:none;border-radius:var(--r-sm);font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;letter-spacing:.3px">👑 Admin Panel</button>
             <button class="logout-btn" onclick="doLogout()">ออกจากระบบ</button>
     </div>
@@ -7097,6 +7103,7 @@ function renderProfile() {
         <div class="done-lesson-xp">+20 XP ✅</div>
       </div>`).join('');
   }
+  renderAffiliateSection();
 }
 
 // ═══════════════════════════════════
@@ -10976,6 +10983,173 @@ function renderSpeedDone() {
       <div style="font-size:13px;color:var(--ink3);margin-bottom:20px">ตอบถูก ${speedIdx} ข้อ จาก 20</div>
       <button onclick="initSpeedQuiz()" style="width:100%;padding:14px;background:linear-gradient(135deg,#6b1a6b,#F13596);color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer">⚡ เล่นอีกครั้ง</button>
     </div>`;
+}
+
+
+// ═══════════════════════════════════
+// AFFILIATE SYSTEM
+// ═══════════════════════════════════
+
+function generateReferralCode(name, userId) {
+  const prefix = 'TANG';
+  const namePart = name.replace(/\s/g,'').substring(0,3).toUpperCase();
+  const idPart = userId.substring(0,4).toUpperCase();
+  return `${prefix}-${namePart}${idPart}`;
+}
+
+async function getOrCreateReferralCode() {
+  if (!state.user) return null;
+  const uid = state.user.id;
+
+  // Check if already has code in Supabase
+  const { data } = await sb.from('user_progress')
+    .select('referral_code, affiliate_earnings, affiliate_count')
+    .eq('user_id', uid).single();
+
+  if (data?.referral_code) return data;
+
+  // Create new code
+  const code = generateReferralCode(state.user.name, uid);
+  await sb.from('user_progress')
+    .update({ referral_code: code })
+    .eq('user_id', uid);
+  return { referral_code: code, affiliate_earnings: 0, affiliate_count: 0 };
+}
+
+async function renderAffiliateSection() {
+  const box = document.getElementById('affiliate-section');
+  if (!box || !state.user) return;
+  if (state.user.id === 'guest') {
+    box.innerHTML = `<div style="text-align:center;padding:16px;font-size:13px;color:var(--ink3)">เข้าสู่ระบบเพื่อดูโค้ด Affiliate</div>`;
+    return;
+  }
+
+  box.innerHTML = `<div style="text-align:center;padding:12px;color:var(--ink3);font-size:12px">⏳ กำลังโหลด...</div>`;
+
+  const aff = await getOrCreateReferralCode();
+  if (!aff) return;
+
+  const code = aff.referral_code || '-';
+  const earnings = aff.affiliate_earnings || 0;
+  const count = aff.affiliate_count || 0;
+  const shareText = `เรียนภาษาจีนกับ TangTang Chinese! HSK 1-6 ครบ สนุกเหมือนเล่นเกม ฿1,290 ครั้งเดียวตลอดชีพ 🦊\nhttps://avajarshika.github.io/tangtang/checkout.html`;
+
+  box.innerHTML = `
+    <!-- Referral Code Card -->
+    <div style="background:linear-gradient(135deg,#6b1a6b15,#F1359615);border:1.5px solid #F1359630;border-radius:var(--r);padding:16px;margin-bottom:12px">
+      <div style="font-size:11px;color:var(--ink3);margin-bottom:6px">โค้ดของคุณ</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-size:20px;font-weight:900;color:var(--red);letter-spacing:2px;flex:1">${code}</div>
+        <button onclick="copyReferralCode('${code}')" style="padding:7px 14px;background:var(--red);color:white;border:none;border-radius:20px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer" id="copy-code-btn">📋 คัดลอก</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+      <div style="background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:14px;text-align:center">
+        <div style="font-size:24px;font-weight:900;color:var(--green)">${count}</div>
+        <div style="font-size:11px;color:var(--ink3);margin-top:2px">คนที่ชวนสำเร็จ</div>
+      </div>
+      <div style="background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:14px;text-align:center">
+        <div style="font-size:24px;font-weight:900;color:var(--amber)">฿${earnings}</div>
+        <div style="font-size:11px;color:var(--ink3);margin-top:2px">ค่าคอมสะสม</div>
+      </div>
+    </div>
+
+    <!-- Share button -->
+    <button onclick="shareAffiliate('${code}')" style="width:100%;padding:12px;background:linear-gradient(135deg,#6b1a6b,#F13596);color:white;border:none;border-radius:var(--r);font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;margin-bottom:10px">
+      🚀 แชร์ให้เพื่อน — ได้ค่าคอม ฿193/คน
+    </button>
+
+    <!-- Bank account setup -->
+    <div id="bank-section">
+      ${await renderBankSection()}
+    </div>
+
+    <div style="background:var(--amber-light);border:1px solid #DFC090;border-radius:var(--r-sm);padding:10px 12px;font-size:11px;color:#7a5c1a;line-height:1.7;margin-top:8px">
+      💡 ค่าคอม 15% = <b>฿193</b> ต่อการขาย 1 ครั้ง<br>
+      เพื่อนกรอกโค้ด <b>${code}</b> ตอนซื้อ แล้วคุณได้ค่าคอมทันที
+    </div>`;
+}
+
+async function renderBankSection() {
+  if (!state.user || state.user.id === 'guest') return '';
+  const { data } = await sb.from('user_progress')
+    .select('bank_name, bank_account, bank_owner')
+    .eq('user_id', state.user.id).single();
+
+  if (data?.bank_account) {
+    return `<div style="background:var(--green-light);border:1px solid #b8dfc7;border-radius:var(--r-sm);padding:10px 12px;font-size:12px;color:var(--green)">
+      ✅ บัญชีรับค่าคอม: ${data.bank_name} · ${data.bank_account} · ${data.bank_owner}
+      <button onclick="openBankModal()" style="margin-left:8px;font-size:11px;color:var(--ink3);background:none;border:none;cursor:pointer;text-decoration:underline;font-family:inherit">แก้ไข</button>
+    </div>`;
+  }
+  return `<button onclick="openBankModal()" style="width:100%;padding:11px;background:white;border:1.5px dashed var(--paper3);border-radius:var(--r-sm);font-size:13px;font-weight:600;color:var(--ink2);font-family:inherit;cursor:pointer">
+    🏦 ตั้งค่าบัญชีรับค่าคอม
+  </button>`;
+}
+
+function copyReferralCode(code) {
+  navigator.clipboard.writeText(code).then(() => {
+    const btn = document.getElementById('copy-code-btn');
+    if (btn) { btn.textContent = '✅ คัดลอกแล้ว!'; setTimeout(() => btn.textContent = '📋 คัดลอก', 2000); }
+  });
+}
+
+function shareAffiliate(code) {
+  const text = `เรียนภาษาจีนกับ TangTang Chinese! 🦊\nHSK 1-6 ครบ สนุกเหมือนเล่นเกม ฿1,290 ครั้งเดียวตลอดชีพ\n\n🎯 ใช้โค้ด: ${code}\n👉 https://avajarshika.github.io/tangtang/checkout.html`;
+  if (navigator.share) {
+    navigator.share({ title: 'TangTang Chinese', text });
+  } else {
+    navigator.clipboard.writeText(text);
+    showToast('📋 คัดลอกข้อความแชร์แล้ว!');
+  }
+}
+
+function openBankModal() {
+  const existing = document.getElementById('bank-modal');
+  if (existing) existing.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'bank-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.5);display:flex;align-items:flex-end';
+  modal.innerHTML = `
+    <div style="background:white;border-radius:24px 24px 0 0;padding:24px;width:100%;max-height:80vh;overflow-y:auto">
+      <div style="font-size:16px;font-weight:700;color:var(--ink);margin-bottom:4px">🏦 ตั้งค่าบัญชีรับค่าคอม</div>
+      <div style="font-size:12px;color:var(--ink3);margin-bottom:20px">ค่าคอมจะโอนให้ทาง PromptPay / บัญชีธนาคาร</div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:5px">ธนาคาร / PromptPay</div>
+          <input id="bank-name-input" placeholder="เช่น PromptPay, กสิกรไทย, SCB" style="width:100%;padding:11px 14px;border:1.5px solid var(--paper3);border-radius:10px;font-size:14px;font-family:inherit;outline:none">
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:5px">เลขบัญชี / เบอร์ PromptPay</div>
+          <input id="bank-account-input" placeholder="0xx-xxx-xxxx หรือเลขบัญชี" style="width:100%;padding:11px 14px;border:1.5px solid var(--paper3);border-radius:10px;font-size:14px;font-family:inherit;outline:none">
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:5px">ชื่อบัญชี</div>
+          <input id="bank-owner-input" placeholder="ชื่อ-นามสกุล เจ้าของบัญชี" style="width:100%;padding:11px 14px;border:1.5px solid var(--paper3);border-radius:10px;font-size:14px;font-family:inherit;outline:none">
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:20px">
+        <button onclick="document.getElementById('bank-modal').remove()" style="flex:1;padding:12px;background:var(--paper2);border:none;border-radius:12px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer">ยกเลิก</button>
+        <button onclick="saveBankInfo()" style="flex:2;padding:12px;background:var(--red);color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">💾 บันทึก</button>
+      </div>
+    </div>`;
+  modal.addEventListener('click', e => { if(e.target===modal) modal.remove(); });
+  document.body.appendChild(modal);
+}
+
+async function saveBankInfo() {
+  const bankName    = document.getElementById('bank-name-input').value.trim();
+  const bankAccount = document.getElementById('bank-account-input').value.trim();
+  const bankOwner   = document.getElementById('bank-owner-input').value.trim();
+  if (!bankName || !bankAccount || !bankOwner) { showToast('กรุณากรอกข้อมูลให้ครบ'); return; }
+
+  await sb.from('user_progress').update({ bank_name: bankName, bank_account: bankAccount, bank_owner: bankOwner }).eq('user_id', state.user.id);
+  document.getElementById('bank-modal').remove();
+  showToast('✅ บันทึกข้อมูลบัญชีแล้ว!');
+  renderAffiliateSection();
 }
 
 </script>

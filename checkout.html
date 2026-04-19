@@ -528,6 +528,15 @@ body {
         ⚡ ระบบจะส่งข้อมูลและสลิปให้แอดมินอัตโนมัติ จะปลดล็อคให้ภายใน 30 นาที
       </div>
 
+      <!-- REFERRAL CODE -->
+      <div style="margin-top:14px;">
+        <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px">🎁 มีโค้ดแนะนำไหม? <span style="font-size:11px;font-weight:400;color:var(--ink3)">(ไม่บังคับ)</span></div>
+        <input type="text" id="referral-code" placeholder="เช่น TANG-AVA001" maxlength="20"
+          style="width:100%;padding:11px 14px;border:1.5px solid var(--paper3);border-radius:10px;font-size:14px;font-family:inherit;color:var(--ink);background:var(--paper);outline:none;text-transform:uppercase"
+          oninput="this.value=this.value.toUpperCase()">
+        <div style="font-size:11px;color:var(--ink3);margin-top:4px">ถ้าเพื่อนแนะนำมา กรอกโค้ดเพื่อให้เพื่อนได้ค่าคอม</div>
+      </div>
+
       <button class="btn-submit" onclick="submitOrder()">
         ✅ ยืนยันการสั่งซื้อ — ฿1,290
       </button>
@@ -685,7 +694,7 @@ async function uploadSlip(file, email) {
   } catch(e) { console.log('Upload error:', e); return null; }
 }
 
-async function sendLineNotify(name, phone, email, slipUrl) {
+async function sendLineNotify(name, phone, email, slipUrl, referralCode) {
   try {
     await fetch('https://zmshxxmcgbxavzlqmpxd.supabase.co/functions/v1/line-notify', {
       method: 'POST',
@@ -693,21 +702,46 @@ async function sendLineNotify(name, phone, email, slipUrl) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inptc2h4eG1jZ2J4YXZ6bHFtcHhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NzkwODEsImV4cCI6MjA5MjA1NTA4MX0.USeFzW09aOqqtwtYFaC9lgmcLkpkjz12ciQLrG3IhZQ'
       },
-      body: JSON.stringify({ name, phone, email, slipUrl })
+      body: JSON.stringify({ name, phone, email, slipUrl, referralCode })
     });
   } catch(e) { console.log('Line notify error:', e); }
 }
 
-async function saveToSupabase(name, phone, email, slipUrl) {
+async function saveToSupabase(name, phone, email, slipUrl, referralCode) {
   try {
     await sb.from('orders').insert({
       name, phone, email,
       amount: 1290,
       status: 'pending',
       slip_url: slipUrl || null,
+      referral_code: referralCode || null,
       created_at: new Date().toISOString()
     });
   } catch(e) { console.log('Supabase error:', e); }
+}
+
+async function updateAffiliateStats(code) {
+  try {
+    // Find affiliate by referral code
+    const { data } = await sb.from('user_progress')
+      .select('user_id, affiliate_earnings, affiliate_count')
+      .eq('referral_code', code).single();
+    if (!data) return;
+
+    // Update affiliate stats
+    await sb.from('user_progress').update({
+      affiliate_earnings: (data.affiliate_earnings || 0) + 193,
+      affiliate_count: (data.affiliate_count || 0) + 1
+    }).eq('user_id', data.user_id);
+
+    // Insert into affiliate_earnings table
+    await sb.from('affiliate_earnings').insert({
+      affiliate_id: data.user_id,
+      buyer_email: '',
+      amount: 193,
+      status: 'pending'
+    });
+  } catch(e) { console.log('Affiliate update error:', e); }
 }
 
 async function submitOrder() {
@@ -750,11 +784,18 @@ async function submitOrder() {
 
   if (btn) btn.innerHTML = '⏳ กำลังส่งข้อมูล...';
 
+  const referralCode = document.getElementById('referral-code')?.value?.trim() || null;
+
+  if (btn) btn.innerHTML = '⏳ กำลังส่งข้อมูล...';
+
   // บันทึกและแจ้งเตือนพร้อมกัน
   await Promise.all([
-    saveToSupabase(fname, phone, email, slipUrl),
-    sendLineNotify(fname, phone, email, slipUrl)
+    saveToSupabase(fname, phone, email, slipUrl, referralCode),
+    sendLineNotify(fname, phone, email, slipUrl, referralCode)
   ]);
+
+  // Update affiliate stats if referral code used
+  if (referralCode) await updateAffiliateStats(referralCode);
 
   if (btn) { btn.disabled = false; btn.innerHTML = '✅ ยืนยันการสั่งซื้อ — ฿1,290'; }
   document.getElementById('success-overlay').classList.add('show');
