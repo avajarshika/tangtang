@@ -11062,47 +11062,151 @@ function openJournalDay(dateKey) {
 // ═══════════════════════════════════
 // SPEED QUIZ — Time Attack (Premium)
 // ═══════════════════════════════════
-const SPEED_POOL = [
-  {q:'我',opts:['ฉัน','คุณ','เขา','เธอ'],ans:0},
-  {q:'你',opts:['ฉัน','คุณ','เขา','เธอ'],ans:1},
-  {q:'他',opts:['ฉัน','คุณ','เขา(ผู้ชาย)','เธอ'],ans:2},
-  {q:'好',opts:['ไม่ดี','ดี','ขอบคุณ','ลาก่อน'],ans:1},
-  {q:'是',opts:['ไม่ใช่','มี','เป็น','ไม่มี'],ans:2},
-  {q:'不',opts:['ใช่','ไม่','มาก','น้อย'],ans:1},
-  {q:'吃',opts:['ดื่ม','นอน','กิน','พูด'],ans:2},
-  {q:'喝',opts:['กิน','ดื่ม','ซื้อ','ขาย'],ans:1},
-  {q:'大',opts:['เล็ก','ยาว','ใหญ่','สูง'],ans:2},
-  {q:'小',opts:['ใหญ่','เล็ก','สูง','เตี้ย'],ans:1},
-  {q:'来',opts:['ไป','มา','อยู่','กลับ'],ans:1},
-  {q:'去',opts:['มา','อยู่','ไป','กลับ'],ans:2},
-  {q:'水',opts:['ไฟ','ลม','น้ำ','ดิน'],ans:2},
-  {q:'火',opts:['น้ำ','ไฟ','ลม','ดิน'],ans:1},
-  {q:'人',opts:['สัตว์','คน','บ้าน','รถ'],ans:1},
-  {q:'日',opts:['เดือน','วัน/ดวงอาทิตย์','ปี','สัปดาห์'],ans:1},
-  {q:'月',opts:['วัน','สัปดาห์','เดือน/พระจันทร์','ปี'],ans:2},
-  {q:'山',opts:['ทะเล','แม่น้ำ','ภูเขา','ทุ่งนา'],ans:2},
-  {q:'今天',opts:['เมื่อวาน','พรุ่งนี้','วันนี้','ทุกวัน'],ans:2},
-  {q:'明天',opts:['วันนี้','เมื่อวาน','พรุ่งนี้','อาทิตย์หน้า'],ans:2},
-  {q:'朋友',opts:['ครอบครัว','เพื่อน','ครู','นักเรียน'],ans:1},
-  {q:'学校',opts:['โรงพยาบาล','ร้านอาหาร','โรงเรียน','สนามบิน'],ans:2},
-  {q:'老师',opts:['นักเรียน','หมอ','ครู','พ่อครัว'],ans:2},
-  {q:'谢谢',opts:['ขอโทษ','ไม่เป็นไร','ขอบคุณ','สวัสดี'],ans:2},
-  {q:'对不起',opts:['ขอบคุณ','ไม่เป็นไร','ขอโทษ','สวัสดี'],ans:2},
-  {q:'再见',opts:['สวัสดี','ขอบคุณ','ลาก่อน','ขอโทษ'],ans:2},
-  {q:'多少钱',opts:['อยู่ที่ไหน','กี่โมง','เท่าไหร่','ชื่ออะไร'],ans:2},
-  {q:'喜欢',opts:['เกลียด','ชอบ','รัก','กลัว'],ans:1},
-  {q:'漂亮',opts:['น่าเกลียด','สวย','ใหญ่','เล็ก'],ans:1},
-  {q:'很',opts:['ไม่','มาก','น้อย','บาง'],ans:1},
-  {q:'也',opts:['แต่','และ','ด้วย/ก็','เพราะ'],ans:2},
-  {q:'都',opts:['บางคน','ทั้งหมด','ไม่มีเลย','บางครั้ง'],ans:1},
-  {q:'在',opts:['มี','อยู่ที่','เป็น','ไป'],ans:1},
-  {q:'有',opts:['ไม่มี','เป็น','มี','อยู่'],ans:2},
-  {q:'上',opts:['ล่าง','หน้า','บน','หลัง'],ans:2},
-  {q:'下',opts:['บน','หน้า','ล่าง','หลัง'],ans:2},
-];
+// ═══════════════════════════════════
+// SPEED QUIZ — INFINITE LEVEL SYSTEM
+// ═══════════════════════════════════
 
+// ── คลังคำศัพท์แบ่งตาม Level ──
+const SPEED_LEVELS = {
+  1: { name:'ระดับ 1 — HSK 1 พื้นฐาน', timeLimit:10, questions:[
+    {q:'我',opts:['ฉัน','คุณ','เขา','เธอ'],ans:0},
+    {q:'你',opts:['ฉัน','คุณ','เขา','เธอ'],ans:1},
+    {q:'他',opts:['ฉัน','คุณ','เขา(ผู้ชาย)','เธอ'],ans:2},
+    {q:'好',opts:['ไม่ดี','ดี','ขอบคุณ','ลาก่อน'],ans:1},
+    {q:'是',opts:['ไม่ใช่','มี','เป็น','ไม่มี'],ans:2},
+    {q:'不',opts:['ใช่','ไม่','มาก','น้อย'],ans:1},
+    {q:'吃',opts:['ดื่ม','นอน','กิน','พูด'],ans:2},
+    {q:'喝',opts:['กิน','ดื่ม','ซื้อ','ขาย'],ans:1},
+    {q:'大',opts:['เล็ก','ยาว','ใหญ่','สูง'],ans:2},
+    {q:'小',opts:['ใหญ่','เล็ก','สูง','เตี้ย'],ans:1},
+    {q:'来',opts:['ไป','มา','อยู่','กลับ'],ans:1},
+    {q:'去',opts:['มา','อยู่','ไป','กลับ'],ans:2},
+    {q:'水',opts:['ไฟ','ลม','น้ำ','ดิน'],ans:2},
+    {q:'人',opts:['สัตว์','คน','บ้าน','รถ'],ans:1},
+    {q:'日',opts:['เดือน','วัน','ปี','สัปดาห์'],ans:1},
+    {q:'今天',opts:['เมื่อวาน','พรุ่งนี้','วันนี้','ทุกวัน'],ans:2},
+    {q:'明天',opts:['วันนี้','เมื่อวาน','พรุ่งนี้','อาทิตย์หน้า'],ans:2},
+    {q:'谢谢',opts:['ขอโทษ','ไม่เป็นไร','ขอบคุณ','สวัสดี'],ans:2},
+    {q:'再见',opts:['สวัสดี','ขอบคุณ','ลาก่อน','ขอโทษ'],ans:2},
+    {q:'朋友',opts:['ครอบครัว','เพื่อน','ครู','นักเรียน'],ans:1},
+  ]},
+  2: { name:'ระดับ 2 — HSK 1 ขยาย', timeLimit:9, questions:[
+    {q:'学校',opts:['โรงพยาบาล','ร้านอาหาร','โรงเรียน','สนามบิน'],ans:2},
+    {q:'老师',opts:['นักเรียน','หมอ','ครู','พ่อครัว'],ans:2},
+    {q:'多少钱',opts:['อยู่ที่ไหน','กี่โมง','เท่าไหร่','ชื่ออะไร'],ans:2},
+    {q:'喜欢',opts:['เกลียด','ชอบ','รัก','กลัว'],ans:1},
+    {q:'漂亮',opts:['น่าเกลียด','สวย','ใหญ่','เล็ก'],ans:1},
+    {q:'很',opts:['ไม่','มาก','น้อย','บาง'],ans:1},
+    {q:'在',opts:['มี','อยู่ที่','เป็น','ไป'],ans:1},
+    {q:'有',opts:['ไม่มี','เป็น','มี','อยู่'],ans:2},
+    {q:'上',opts:['ล่าง','หน้า','บน','หลัง'],ans:2},
+    {q:'下',opts:['บน','หน้า','ล่าง','หลัง'],ans:2},
+    {q:'也',opts:['แต่','และ','ด้วย/ก็','เพราะ'],ans:2},
+    {q:'都',opts:['บางคน','ทั้งหมด','ไม่มีเลย','บางครั้ง'],ans:1},
+    {q:'对不起',opts:['ขอบคุณ','ไม่เป็นไร','ขอโทษ','สวัสดี'],ans:2},
+    {q:'火',opts:['น้ำ','ไฟ','ลม','ดิน'],ans:1},
+    {q:'山',opts:['ทะเล','แม่น้ำ','ภูเขา','ทุ่งนา'],ans:2},
+    {q:'月',opts:['วัน','สัปดาห์','เดือน','ปี'],ans:2},
+    {q:'书',opts:['ปากกา','สมุด','หนังสือ','โต๊ะ'],ans:2},
+    {q:'车',opts:['เครื่องบิน','เรือ','รถ','จักรยาน'],ans:2},
+    {q:'家',opts:['โรงเรียน','บ้าน','ร้าน','ออฟฟิศ'],ans:1},
+    {q:'钱',opts:['เวลา','เงิน','ทอง','ของ'],ans:1},
+  ]},
+  3: { name:'ระดับ 3 — HSK 2 พื้นฐาน', timeLimit:8, questions:[
+    {q:'工作',opts:['เรียน','ทำงาน','เล่น','นอน'],ans:1},
+    {q:'医院',opts:['โรงเรียน','ร้านอาหาร','โรงพยาบาล','สนามบิน'],ans:2},
+    {q:'商店',opts:['ธนาคาร','ร้านค้า','โรงแรม','สวนสาธารณะ'],ans:1},
+    {q:'时间',opts:['สถานที่','เงิน','เวลา','อากาศ'],ans:2},
+    {q:'知道',opts:['ลืม','รู้/ทราบ','เรียน','สอน'],ans:1},
+    {q:'觉得',opts:['เห็น','ได้ยิน','รู้สึก/คิดว่า','พูด'],ans:2},
+    {q:'问题',opts:['คำตอบ','ปัญหา/คำถาม','ความคิด','ความฝัน'],ans:1},
+    {q:'一起',opts:['คนเดียว','ทีละคน','ด้วยกัน','แยกกัน'],ans:2},
+    {q:'已经',opts:['ยัง','แล้ว/เสร็จแล้ว','กำลัง','จะ'],ans:1},
+    {q:'还是',opts:['เพราะ','หรือ','และ','แต่'],ans:1},
+    {q:'比较',opts:['เท่ากัน','ค่อนข้าง/เปรียบเทียบ','ทั้งหมด','บาง'],ans:1},
+    {q:'可以',opts:['ต้อง','ไม่ได้','ได้/สามารถ','อยาก'],ans:2},
+    {q:'应该',opts:['ไม่ควร','ควร/ต้อง','อยาก','สามารถ'],ans:1},
+    {q:'告诉',opts:['ถาม','ตอบ','บอก','ฟัง'],ans:2},
+    {q:'帮助',opts:['ขัดขวาง','ช่วยเหลือ','แข่งขัน','ต่อสู้'],ans:1},
+    {q:'准备',opts:['เสร็จแล้ว','เตรียม','ลืม','ยกเลิก'],ans:1},
+    {q:'希望',opts:['กลัว','เกลียด','หวัง','สงสัย'],ans:2},
+    {q:'认为',opts:['รู้สึก','เห็น','คิดว่า','ได้ยิน'],ans:2},
+    {q:'方便',opts:['ยุ่งยาก','สะดวก','อันตราย','ปลอดภัย'],ans:1},
+    {q:'重要',opts:['ไม่สำคัญ','สำคัญ','ธรรมดา','พิเศษ'],ans:1},
+  ]},
+  4: { name:'ระดับ 4 — HSK 2 ขยาย', timeLimit:7, questions:[
+    {q:'经常',opts:['นานๆครั้ง','บางครั้ง','บ่อย/ประจำ','ไม่เคย'],ans:2},
+    {q:'突然',opts:['ค่อยๆ','ทันที/กะทันหัน','ช้าๆ','นาน'],ans:1},
+    {q:'继续',opts:['หยุด','เริ่มใหม่','ทำต่อ','ยกเลิก'],ans:2},
+    {q:'成功',opts:['ล้มเหลว','สำเร็จ','พยายาม','ยอมแพ้'],ans:1},
+    {q:'环境',opts:['สภาพอากาศ','สิ่งแวดล้อม','ธรรมชาติ','ป่า'],ans:1},
+    {q:'发展',opts:['ล้าหลัง','พัฒนา','เสื่อมโทรม','หยุดนิ่ง'],ans:1},
+    {q:'影响',opts:['ไม่เกี่ยว','ส่งผล/อิทธิพล','ตั้งใจ','เพิกเฉย'],ans:1},
+    {q:'解决',opts:['สร้างปัญหา','แก้ปัญหา','หนีปัญหา','ซ่อนปัญหา'],ans:1},
+    {q:'表示',opts:['ซ่อน','แสดง/หมายความว่า','ลืม','ปฏิเสธ'],ans:1},
+    {q:'参加',opts:['ออกจาก','เข้าร่วม','ดู','ห้าม'],ans:1},
+    {q:'选择',opts:['ปฏิเสธ','บังคับ','เลือก','ยอมรับ'],ans:2},
+    {q:'努力',opts:['ขี้เกียจ','พยายาม/ขยัน','ยอมแพ้','ละเลย'],ans:1},
+    {q:'机会',opts:['อุปสรรค','โอกาส','ความเสี่ยง','ปัญหา'],ans:1},
+    {q:'态度',opts:['ความรู้','ทัศนคติ/ท่าที','ความสามารถ','ประสบการณ์'],ans:1},
+    {q:'负责',opts:['โทษคนอื่น','รับผิดชอบ','หลีกเลี่ยง','ปฏิเสธ'],ans:1},
+    {q:'联系',opts:['แยกจากกัน','ติดต่อ','ลืม','ทะเลาะ'],ans:1},
+    {q:'提高',opts:['ลดลง','คงที่','เพิ่มขึ้น/ยกระดับ','หายไป'],ans:2},
+    {q:'实现',opts:['ฝัน','ล้มเหลว','บรรลุ/ทำให้เป็นจริง','ยกเลิก'],ans:2},
+    {q:'建议',opts:['บังคับ','แนะนำ/เสนอแนะ','ปฏิเสธ','วิจารณ์'],ans:1},
+    {q:'负担',opts:['สิทธิ์','ภาระ/ความรับผิดชอบ','รางวัล','ของขวัญ'],ans:1},
+  ]},
+  5: { name:'ระดับ 5 — HSK 3 พื้นฐาน', timeLimit:6, questions:[
+    {q:'根据',opts:['ไม่เกี่ยวกับ','ตามที่/อ้างอิง','แทนที่','นอกจาก'],ans:1},
+    {q:'尽管',opts:['เพราะ','เนื่องจาก','แม้ว่า','ถ้าหาก'],ans:2},
+    {q:'否则',opts:['ดังนั้น','มิฉะนั้น','อีกทั้ง','กล่าวคือ'],ans:1},
+    {q:'逐渐',opts:['ทันที','ค่อยๆ/ทีละน้อย','ส่วนใหญ่','บางส่วน'],ans:1},
+    {q:'目前',opts:['ในอดีต','ในอนาคต','ในปัจจุบัน','ตลอดเวลา'],ans:2},
+    {q:'观点',opts:['ข้อเท็จจริง','มุมมอง/ทัศนะ','ข้อมูล','ประวัติ'],ans:1},
+    {q:'总结',opts:['แนะนำ','สรุป','วิเคราะห์','อธิบาย'],ans:1},
+    {q:'具体',opts:['คลุมเครือ','เป็นนามธรรม','เป็นรูปธรรม/ชัดเจน','กว้างๆ'],ans:2},
+    {q:'强调',opts:['เพิกเฉย','ย้ำ/เน้น','ลดความสำคัญ','ลืม'],ans:1},
+    {q:'承认',opts:['ปฏิเสธ','ยอมรับ/สารภาพ','หลบเลี่ยง','โกหก'],ans:1},
+    {q:'批评',opts:['ชมเชย','วิจารณ์/ตำหนิ','สนับสนุน','ปกป้อง'],ans:1},
+    {q:'代表',opts:['คัดค้าน','เป็นตัวแทน/หมายถึง','ซ่อน','ละเลย'],ans:1},
+    {q:'传统',opts:['ทันสมัย','ประเพณี/วัฒนธรรม','นวัตกรรม','การทดลอง'],ans:1},
+    {q:'矛盾',opts:['สอดคล้องกัน','ขัดแย้ง/ความขัดแย้ง','ร่วมมือ','สนับสนุน'],ans:1},
+    {q:'判断',opts:['ไม่แน่ใจ','ตัดสิน/วินิจฉัย','เดา','เพิกเฉย'],ans:1},
+    {q:'积极',opts:['เฉยๆ','แง่ลบ','แง่บวก/กระตือรือร้น','เกียจคร้าน'],ans:2},
+    {q:'消极',opts:['กระตือรือร้น','แง่บวก','แง่ลบ/ไม่กระตือรือร้น','มีพลัง'],ans:2},
+    {q:'客观',opts:['อคติ','อัตนัย','ปรนัย/เป็นกลาง','สมมติ'],ans:2},
+    {q:'主观',opts:['เป็นกลาง','ปรนัย','อัตนัย/ส่วนตัว','ข้อเท็จจริง'],ans:2},
+    {q:'适当',opts:['เกินพอดี','ไม่เพียงพอ','เหมาะสม/พอดี','ผิดปกติ'],ans:2},
+  ]},
+  6: { name:'ระดับ 6 — HSK 3 ขั้นสูง', timeLimit:5, questions:[
+    {q:'相互',opts:['ฝ่ายเดียว','ซึ่งกันและกัน','ตามลำดับ','สลับกัน'],ans:1},
+    {q:'逻辑',opts:['อารมณ์','ตรรกะ','สัญชาตญาณ','จินตนาการ'],ans:1},
+    {q:'理性',opts:['อารมณ์','ไร้เหตุผล','มีเหตุมีผล','สัญชาตญาณ'],ans:2},
+    {q:'抽象',opts:['เป็นรูปธรรม','ชัดเจน','เป็นนามธรรม','ง่าย'],ans:2},
+    {q:'复杂',opts:['ง่าย','เรียบง่าย','ซับซ้อน','ชัดเจน'],ans:2},
+    {q:'本质',opts:['ภาพลักษณ์','ปรากฏการณ์','สาระสำคัญ/แก่นแท้','รูปแบบ'],ans:2},
+    {q:'规律',opts:['ความสุ่ม','กฎเกณฑ์/รูปแบบ','ความยุ่งเหยิง','ข้อยกเว้น'],ans:1},
+    {q:'现象',opts:['สาเหตุ','ผลลัพธ์','ปรากฏการณ์','กระบวนการ'],ans:2},
+    {q:'本能',opts:['ทักษะที่เรียนรู้','สัญชาตญาณ','นิสัย','ความทรงจำ'],ans:1},
+    {q:'推论',opts:['ข้อเท็จจริง','การสังเกต','การอนุมาน/สรุปความ','สมมติฐาน'],ans:2},
+    {q:'辩证',opts:['หลีกเลี่ยงความขัดแย้ง','วิภาษวิธี/การถกเถียง','การยอมรับ','การปฏิเสธ'],ans:1},
+    {q:'系统',opts:['ชิ้นส่วน','ระบบ','องค์ประกอบ','หน่วย'],ans:1},
+    {q:'精华',opts:['ส่วนที่ไม่สำคัญ','สิ่งที่ดีที่สุด/แก่นสาร','รายละเอียด','โครงสร้าง'],ans:1},
+    {q:'微妙',opts:['ชัดเจน','หยาบ','ละเอียดอ่อน/ซับซ้อน','ตรงไปตรงมา'],ans:2},
+    {q:'潜在',opts:['ชัดเจน','ปรากฏ','ซ่อนอยู่/มีศักยภาพ','หมดแล้ว'],ans:2},
+    {q:'启发',opts:['ยับยั้ง','ปิดบัง','สร้างแรงบันดาลใจ/ชี้แนะ','สับสน'],ans:2},
+    {q:'融合',opts:['แยกออก','ผสมผสาน/รวมกัน','ขัดแย้ง','ต่อต้าน'],ans:1},
+    {q:'演变',opts:['คงเดิม','ถดถอย','วิวัฒนาการ/เปลี่ยนแปลง','หยุดนิ่ง'],ans:2},
+    {q:'平衡',opts:['ความไม่สมดุล','สมดุล','การเอียง','ความสุดโต่ง'],ans:1},
+    {q:'哲学',opts:['วิทยาศาสตร์','คณิตศาสตร์','ปรัชญา','ศิลปะ'],ans:2},
+  ]},
+};
+
+// ── State ──
 let speedTimer = null, speedTimeLeft = 10, speedIdx = 0;
 let speedScore = 0, speedCombo = 0, speedDone = false, speedQuestions = [];
+let speedLevel = 1, speedLevelScore = 0, speedCorrectInLevel = 0;
+const SPEED_PASS_SCORE = 14; // ต้องตอบถูกกี่ข้อถึงผ่าน level (จาก 20)
 
 function initSpeedQuiz() {
   if (!isPremium()) {
@@ -11110,40 +11214,89 @@ function initSpeedQuiz() {
       <div style="text-align:center;padding:40px 20px">
         <div style="font-size:52px;margin-bottom:12px">⚡</div>
         <div style="font-size:18px;font-weight:800;color:var(--ink);margin-bottom:8px">Speed Quiz</div>
-        <div style="font-size:13px;color:var(--ink3);margin-bottom:20px">ตอบให้เร็วที่สุด! ยิ่งเร็วยิ่งได้ Bonus XP<br>มี Combo Multiplier สูงสุด x3!</div>
+        <div style="font-size:13px;color:var(--ink3);margin-bottom:20px">ตอบให้เร็วที่สุด! ยิ่งเร็วยิ่งได้ Bonus XP<br>มี Combo Multiplier และระบบ Level ไม่มีที่สิ้นสุด!</div>
         <div style="background:var(--red-light);border:1px solid var(--paper3);border-radius:var(--r);padding:16px;margin-bottom:20px;font-size:13px;color:var(--ink2)">🔒 ฟีเจอร์นี้สำหรับสมาชิก Premium เท่านั้น</div>
         <button onclick="showPaymentModal()" style="padding:14px 28px;background:var(--red);color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer">🔓 สมัคร Premium</button>
       </div>`;
     return;
   }
+  showSpeedLevelSelect();
+}
+
+function showSpeedLevelSelect() {
+  const box = document.getElementById('speed-content');
+  const maxLevel = Object.keys(SPEED_LEVELS).length;
+  const savedBest = state.user?.data?.speedBestLevel || 1;
+
+  const levelCards = Object.entries(SPEED_LEVELS).map(([lv, data]) => {
+    const locked = parseInt(lv) > savedBest;
+    const bg = locked ? '#f5f5f5' : parseInt(lv) <= 2 ? 'linear-gradient(135deg,#e8f4ed,#c8ecd8)' : parseInt(lv) <= 4 ? 'linear-gradient(135deg,#FBF3E8,#f0d9a8)' : 'linear-gradient(135deg,#ffedf6,#f5c6e0)';
+    const color = locked ? 'var(--ink3)' : parseInt(lv) <= 2 ? 'var(--green)' : parseInt(lv) <= 4 ? 'var(--amber)' : 'var(--red)';
+    const icon = locked ? '🔒' : parseInt(lv) <= 2 ? '🟢' : parseInt(lv) <= 4 ? '🟡' : '🔴';
+    return `<button onclick="${locked ? 'showToast("ผ่าน Level '+(parseInt(lv)-1)+' ก่อนนะคะ!")' : 'startSpeedLevel('+lv+')'}"
+      style="width:100%;padding:14px;background:${bg};border:${locked?'1px solid #e0e0e0':'1.5px solid '+color+'40'};border-radius:12px;text-align:left;cursor:${locked?'not-allowed':'pointer'};margin-bottom:8px;opacity:${locked?'0.6':'1'}">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:13px;font-weight:700;color:${locked?'var(--ink3)':color}">${icon} ${data.name}</div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:3px">⏱ ${data.timeLimit} วินาที/ข้อ · 20 ข้อ · ผ่านเกณฑ์ ${SPEED_PASS_SCORE}/20</div>
+        </div>
+        ${!locked && parseInt(lv) === savedBest && lv > 1 ? '<div style="font-size:10px;background:var(--amber);color:white;padding:3px 8px;border-radius:10px">ระดับปัจจุบัน</div>' : ''}
+      </div>
+    </button>`;
+  }).join('');
+
+  box.innerHTML = `
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:36px">⚡</div>
+      <div style="font-size:18px;font-weight:800;color:var(--ink)">Speed Quiz</div>
+      <div style="font-size:12px;color:var(--ink3);margin-top:4px">เลือก Level ที่ต้องการเล่น</div>
+      ${savedBest > 1 ? `<div style="display:inline-block;margin-top:8px;background:linear-gradient(135deg,#6b1a6b,#F13596);color:white;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700">🏆 สถิติสูงสุด: Level ${savedBest}</div>` : ''}
+    </div>
+    ${levelCards}`;
+}
+
+function startSpeedLevel(lv) {
+  speedLevel = parseInt(lv);
   speedDone = false; speedScore = 0; speedCombo = 0; speedIdx = 0;
-  speedQuestions = [...SPEED_POOL].sort(()=>Math.random()-.5).slice(0,20);
+  speedCorrectInLevel = 0; speedLevelScore = 0;
+  const levelData = SPEED_LEVELS[speedLevel];
+  speedTimeLeft = levelData.timeLimit;
+  speedQuestions = [...levelData.questions].sort(() => Math.random() - .5);
   renderSpeedQ();
 }
 
 function renderSpeedQ() {
   const box = document.getElementById('speed-content'); if (!box) return;
-  if (speedDone || speedIdx >= speedQuestions.length) { renderSpeedDone(); return; }
+  if (speedDone || speedIdx >= speedQuestions.length) { renderSpeedLevelDone(); return; }
+
   const q = speedQuestions[speedIdx];
   const letters = ['A','B','C','D'];
-  speedTimeLeft = 10;
+  const levelData = SPEED_LEVELS[speedLevel];
+  speedTimeLeft = levelData.timeLimit;
   if (speedTimer) clearInterval(speedTimer);
 
+  const lvColor = speedLevel <= 2 ? 'var(--green)' : speedLevel <= 4 ? 'var(--amber)' : 'var(--red)';
+  const progress = speedIdx / speedQuestions.length * 100;
+
   box.innerHTML = `
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div style="font-size:12px;font-weight:700;color:var(--ink3)">${speedIdx+1}/20</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <div style="font-size:11px;font-weight:700;color:var(--ink3)">
+        <span style="color:${lvColor}">⚡ Level ${speedLevel}</span> · ข้อ ${speedIdx+1}/${speedQuestions.length}
+      </div>
       <div style="display:flex;align-items:center;gap:8px">
-        ${speedCombo>=2?`<div style="background:linear-gradient(135deg,#e67e22,#f39c12);color:white;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700">🔥 x${speedCombo>=5?3:speedCombo>=3?2:1.5} Combo!</div>`:''}
-        <div style="font-size:14px;font-weight:700;color:#e67e22">⭐ ${speedScore}</div>
+        ${speedCombo>=2?`<div style="background:linear-gradient(135deg,#e67e22,#f39c12);color:white;padding:3px 8px;border-radius:12px;font-size:10px;font-weight:700">🔥 x${speedCombo>=5?3:speedCombo>=3?2:1.5}</div>`:''}
+        <div style="font-size:13px;font-weight:700;color:var(--amber)">⭐ ${speedScore}</div>
       </div>
     </div>
-    <div style="height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;margin-bottom:20px">
-      <div id="speed-progress" style="height:100%;width:${speedIdx/20*100}%;background:linear-gradient(90deg,#6b1a6b,#F13596);border-radius:3px;transition:width .3s ease"></div>
+    <div style="height:5px;background:#f0f0f0;border-radius:3px;overflow:hidden;margin-bottom:4px">
+      <div style="height:100%;width:${progress}%;background:linear-gradient(90deg,${speedLevel<=2?'#1a6b3a,#2ecc71':speedLevel<=4?'#C9A96E,#e67e22':'#6b1a6b,#F13596'});border-radius:3px;transition:width .3s"></div>
     </div>
-    <div style="background:linear-gradient(135deg,#6b1a6b,#F13596);border-radius:16px;padding:24px;text-align:center;margin-bottom:16px;position:relative;overflow:hidden">
-      <div style="position:absolute;top:8px;right:12px;display:flex;align-items:center;gap:4px">
-        <div id="speed-timer-circle" style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:white" id="speed-timer">${speedTimeLeft}</div>
-      </div>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--ink3);margin-bottom:14px">
+      <span>✅ ถูก ${speedCorrectInLevel}/${SPEED_PASS_SCORE} เพื่อผ่าน Level</span>
+      <span>${speedQuestions.length - speedIdx} ข้อเหลือ</span>
+    </div>
+    <div style="background:linear-gradient(135deg,${speedLevel<=2?'#1a6b3a,#27ae60':speedLevel<=4?'#7a5c1a,#C9A96E':'#6b1a6b,#F13596'});border-radius:16px;padding:24px;text-align:center;margin-bottom:16px;position:relative">
+      <div style="position:absolute;top:8px;right:12px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:white" id="speed-timer-circle">${speedTimeLeft}</div>
       <div style="font-family:'Noto Serif SC',serif;font-size:64px;color:white;font-weight:700;line-height:1;margin-bottom:8px">${q.q}</div>
       <div style="font-size:12px;color:rgba(255,255,255,.6)">ความหมายคืออะไร?</div>
     </div>
@@ -11155,17 +11308,15 @@ function renderSpeedQ() {
     </div>
     <div id="speed-feedback" style="text-align:center;min-height:32px;margin-top:12px;font-size:13px;font-weight:700"></div>`;
 
-  // Start countdown
   speedTimer = setInterval(() => {
     speedTimeLeft--;
     const tc = document.getElementById('speed-timer-circle');
     if (tc) {
       tc.textContent = speedTimeLeft;
-      if (speedTimeLeft <= 3) { tc.style.background = 'rgba(255,80,80,.5)'; tc.style.transform = 'scale(1.1)'; }
+      if (speedTimeLeft <= 3) { tc.style.background = 'rgba(255,80,80,.6)'; tc.style.transform = 'scale(1.15)'; }
     }
     if (speedTimeLeft <= 0) {
       clearInterval(speedTimer);
-      // Time out
       const fb = document.getElementById('speed-feedback');
       if (fb) fb.innerHTML = `<span style="color:var(--red)">⏰ หมดเวลา! เฉลย: ${speedQuestions[speedIdx].opts[speedQuestions[speedIdx].ans]}</span>`;
       speedCombo = 0;
@@ -11190,11 +11341,12 @@ function answerSpeed(chosen) {
   const fb = document.getElementById('speed-feedback');
   if (correct) {
     speedCombo++;
+    speedCorrectInLevel++;
     const mult = speedCombo>=5?3:speedCombo>=3?2:speedCombo>=2?1.5:1;
     const timeBonus = Math.max(0, speedTimeLeft);
     const xp = Math.round((5 + timeBonus) * mult);
-    speedScore += xp;
-    if (fb) fb.innerHTML = `<span style="color:var(--green)">✅ ถูก! +${xp} XP${mult>1?' (x'+mult+' Combo!)':''}</span>`;
+    speedScore += xp; speedLevelScore += xp;
+    if (fb) fb.innerHTML = `<span style="color:var(--green)">✅ ถูก! +${xp} XP${mult>1?' 🔥 x'+mult+' Combo!':''}</span>`;
     if (state.user) { state.user.data.xp=(state.user.data.xp||0)+xp; trackActivity(); saveState(); updateTopbar(); }
   } else {
     speedCombo = 0;
@@ -11203,20 +11355,68 @@ function answerSpeed(chosen) {
   setTimeout(() => { speedIdx++; renderSpeedQ(); }, correct?700:1000);
 }
 
-function renderSpeedDone() {
+function renderSpeedLevelDone() {
   if (speedTimer) clearInterval(speedTimer);
   const box = document.getElementById('speed-content');
-  const pct = Math.round(speedIdx>0?speedScore/(speedIdx*15)*100:0);
+  const passed = speedCorrectInLevel >= SPEED_PASS_SCORE;
+  const maxLevel = Object.keys(SPEED_LEVELS).length;
+  const nextLevel = speedLevel + 1;
+  const hasNext = nextLevel <= maxLevel;
+
+  // บันทึก best level
+  if (passed && state.user) {
+    const best = state.user.data.speedBestLevel || 1;
+    if (nextLevel > best) {
+      state.user.data.speedBestLevel = Math.min(nextLevel, maxLevel + 1);
+      saveState();
+    }
+  }
+
+  const emoji = passed ? (speedLevel >= 5 ? '🏆' : '🎉') : speedScore > 100 ? '💪' : '😅';
+  const msg = passed ? (hasNext ? `ยอดเยี่ยม! ผ่าน Level ${speedLevel} แล้ว!` : '🏆 คุณผ่านทุก Level แล้ว!') : `ไม่เป็นไร ลองใหม่ได้!`;
+
   box.innerHTML = `
-    <div style="text-align:center;padding:28px 16px">
-      <div style="font-size:52px;margin-bottom:12px">${speedScore>=200?'🏆':speedScore>=100?'⚡':'💪'}</div>
-      <div style="font-size:20px;font-weight:800;color:var(--ink);margin-bottom:8px">${speedScore>=200?'เร็วสุดๆ!':speedScore>=100?'ดีมาก!':'ฝึกต่อไปนะ!'}</div>
-      <div style="font-size:42px;font-weight:900;background:linear-gradient(135deg,#6b1a6b,#F13596);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:10px 0">${speedScore} XP</div>
-      <div style="font-size:13px;color:var(--ink3);margin-bottom:20px">ตอบถูก ${speedIdx} ข้อ จาก 20</div>
-      <button onclick="initSpeedQuiz()" style="width:100%;padding:14px;background:linear-gradient(135deg,#6b1a6b,#F13596);color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer">⚡ เล่นอีกครั้ง</button>
+    <div style="text-align:center;padding:20px 16px">
+      <div style="font-size:52px;margin-bottom:8px">${emoji}</div>
+      <div style="font-size:18px;font-weight:800;color:var(--ink);margin-bottom:4px">${msg}</div>
+      <div style="font-size:13px;color:var(--ink3);margin-bottom:16px">Level ${speedLevel} · ตอบถูก ${speedCorrectInLevel}/${speedQuestions.length} ข้อ</div>
+
+      <!-- Score Card -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:20px">
+        <div style="background:var(--amber-light);border-radius:12px;padding:12px">
+          <div style="font-size:18px;font-weight:900;color:var(--amber)">${speedScore}</div>
+          <div style="font-size:10px;color:var(--ink3)">XP รอบนี้</div>
+        </div>
+        <div style="background:${passed?'var(--green-light)':'var(--red-light)'};border-radius:12px;padding:12px">
+          <div style="font-size:18px;font-weight:900;color:${passed?'var(--green)':'var(--red)'}">${speedCorrectInLevel}/${speedQuestions.length}</div>
+          <div style="font-size:10px;color:var(--ink3)">ถูก/ทั้งหมด</div>
+        </div>
+        <div style="background:var(--paper2);border-radius:12px;padding:12px">
+          <div style="font-size:18px;font-weight:900;color:var(--ink2)">${Math.round(speedCorrectInLevel/speedQuestions.length*100)}%</div>
+          <div style="font-size:10px;color:var(--ink3)">ความแม่นยำ</div>
+        </div>
+      </div>
+
+      <!-- Pass indicator -->
+      <div style="background:${passed?'var(--green-light)':'var(--red-light)'};border:1px solid ${passed?'#b8dfc7':'#f5c6e0'};border-radius:12px;padding:12px;margin-bottom:20px;font-size:13px;color:${passed?'var(--green)':'var(--red)'}">
+        ${passed ? `✅ ผ่านเกณฑ์! (${speedCorrectInLevel}/${SPEED_PASS_SCORE} ขึ้นไป)${hasNext?' → ปลดล็อค Level '+nextLevel+' แล้ว!':''}` : `❌ ยังไม่ผ่าน (ต้องถูก ${SPEED_PASS_SCORE}/${speedQuestions.length} ขึ้นไป)`}
+      </div>
+
+      <!-- Buttons -->
+      <div style="display:flex;flex-direction:column;gap:10px">
+        ${passed && hasNext ? `
+        <button onclick="startSpeedLevel(${nextLevel})" style="width:100%;padding:14px;background:linear-gradient(135deg,#1a6b3a,#27ae60);color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer">
+          ⚡ ไป Level ${nextLevel} →
+        </button>` : ''}
+        <button onclick="startSpeedLevel(${speedLevel})" style="width:100%;padding:13px;background:linear-gradient(135deg,#6b1a6b,#F13596);color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">
+          🔄 เล่น Level ${speedLevel} อีกครั้ง
+        </button>
+        <button onclick="showSpeedLevelSelect()" style="width:100%;padding:12px;background:var(--paper2);color:var(--ink2);border:1px solid var(--paper3);border-radius:12px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer">
+          📋 เลือก Level
+        </button>
+      </div>
     </div>`;
 }
-
 
 // ═══════════════════════════════════
 // AFFILIATE SYSTEM
