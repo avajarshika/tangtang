@@ -11198,19 +11198,21 @@ async function renderAffiliateSection() {
     ${historyHTML}`;
 
   // Load payment history
-  async function loadHistory() {
+  setTimeout(async function() {
     const { data } = await sb.from('user_progress').select('data').eq('user_id', state.user.id).single();
-    const history = data?.data?.affiliateHistory || [];
-    if (history.length === 0) return;
+    const history = (data && data.data && data.data.affiliateHistory) ? data.data.affiliateHistory : [];
     const hEl = document.getElementById('aff-history');
-    if (!hEl) return;
-    hEl.innerHTML = \`<div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:8px">📋 ประวัติรับเงิน</div>\` +
-      history.slice().reverse().map(h => \`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--paper3);font-size:12px">
-        <span style="color:var(--ink2)">\${h.month || new Date(h.date).toLocaleDateString('th-TH')}</span>
-        <span style="font-weight:700;color:var(--green)">+฿\${h.amount} ✅</span>
-      </div>\`).join('');
-  }
-  setTimeout(loadHistory, 300);
+    if (!hEl || history.length === 0) return;
+    let html = '<div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:8px">📋 ประวัติรับเงิน</div>';
+    history.slice().reverse().forEach(function(h) {
+      const dateStr = h.month || new Date(h.date).toLocaleDateString('th-TH');
+      html += '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--paper3);font-size:12px">'
+            + '<span style="color:var(--ink2)">' + dateStr + '</span>'
+            + '<span style="font-weight:700;color:var(--green)">+฿' + h.amount + ' ✅</span>'
+            + '</div>';
+    });
+    hEl.innerHTML = html;
+  }, 300);
 }
 
 async function renderBankSection() {
