@@ -11097,12 +11097,13 @@ function copyReferralCode(code) {
 }
 
 function shareAffiliate(code) {
-  const text = `เรียนภาษาจีนกับ TangTang Chinese! 🦊\nHSK 1-6 ครบ สนุกเหมือนเล่นเกม ฿1,290 ครั้งเดียวตลอดชีพ\n\n🎯 ใช้โค้ด: ${code}\n👉 https://avajarshika.github.io/tangtang/checkout.html`;
+  const url = `https://avajarshika.github.io/tangtang/checkout.html?ref=${code}`;
+  const text = `🦊 เรียนภาษาจีนกับ TangTang Chinese!\nHSK 1-6 ครบ สนุกเหมือนเล่นเกม\n฿1,290 ครั้งเดียวตลอดชีพ\n\n🎯 ใช้โค้ด: ${code}\n👉 ${url}`;
   if (navigator.share) {
-    navigator.share({ title: 'TangTang Chinese', text });
+    navigator.share({ title: 'TangTang Chinese', text, url });
   } else {
     navigator.clipboard.writeText(text);
-    showToast('📋 คัดลอกข้อความแชร์แล้ว!');
+    showToast('📋 คัดลอกข้อความ + ลิงก์แล้ว!');
   }
 }
 
