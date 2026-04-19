@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>糖糖中文 — พูดจีนได้ใน 30 วัน ไม่ต้องมีพื้นฐาน</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800;900&family=Noto+Serif+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #F13596;
+  --red2: #c0186e;
+  --red-light: rgba(241,53,150,.12);
+  --gold: #FFB800;
+  --gold-light: rgba(255,184,0,.15);
+  --green: #3fcf8e;
+  --green-light: rgba(63,207,142,.15);
+  --ink: #111111;
+  --ink2: #333333;
+  --ink3: #666666;
+  --bg: #ffffff;
+  --bg2: #f8f8fc;
+  --bg3: #f0f0f8;
+  --border: #e8e8f0;
+  --radius: 16px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: #ffffff;
+  color: var(--ink);
+  font-family: 'Noto Sans Thai', sans-serif;
+  font-size: 16px; line-height: 1.7; overflow-x: hidden;
+}
+.marquee-wrap {
+  background: linear-gradient(90deg,#1a0020,#2d0035,#1a0020);
+  border-bottom: 1px solid #f0e8f4;
+  padding: 10px 0; overflow: hidden;
+}
+.marquee-track {
+  display: inline-block;
+  animation: ticker 25s linear infinite;
+  white-space: nowrap; font-size: 13px; font-weight: 600; color: white;
+}
+@keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+nav {
+  padding: 16px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255,255,255,.97);
+  border-bottom: 1px solid #f0e8f4;
+  position: sticky; top: 0; z-index: 100;
+  backdrop-filter: blur(12px);
+}
+.nav-logo { font-family:'Noto Serif SC',serif; font-size:22px; font-weight:700; color:var(--red); }
+.nav-cta { background:var(--red); color:white; border:none; border-radius:99px; padding:10px 20px; font-size:13px; font-weight:700; font-family:inherit; cursor:pointer; text-decoration:none; }
+.hero {
+  background: linear-gradient(160deg,#0d0d1a 0%,#14142a 50%,#0d0d1a 100%);
+  padding: 60px 24px 80px; text-align: center; position: relative; overflow: hidden;
+}
+.hero::before { content:'中文'; position:absolute; top:-20px; right:-20px; font-family:'Noto Serif SC',serif; font-size:200px; color:rgba(241,53,150,.06); font-weight:900; pointer-events:none; }
+.hero::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 50% 0%,rgba(241,53,150,.2) 0%,transparent 60%); pointer-events:none; }
+.hero-badge { display:inline-block; background:rgba(241,53,150,.15); color:white; font-size:12px; font-weight:700; padding:5px 14px; border-radius:99px; margin-bottom:20px; border:1px solid rgba(241,53,150,.3); position:relative; z-index:1; }
+.hero h1 { font-size:clamp(26px,6vw,52px); font-weight:900; line-height:1.25; margin-bottom:16px; position:relative; z-index:1; color:white; }
+.hero h1 span { color:var(--red); }
+.hero-sub { font-size:16px; color:rgba(255,255,255,.75); line-height:1.7; max-width:520px; margin:0 auto 28px; position:relative; z-index:1; }
+.hero-proof { display:flex; justify-content:center; gap:32px; flex-wrap:wrap; margin-bottom:36px; position:relative; z-index:1; }
+.hero-proof-item { text-align:center; }
+.hero-proof-num { font-size:32px; font-weight:900; color:var(--red); font-family:'Noto Serif SC',serif; }
+.hero-proof-label { font-size:12px; color:rgba(255,255,255,.65); }
+.hero-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; position:relative; z-index:1; }
+.btn-main { background:var(--red); color:white; border:none; border-radius:99px; padding:16px 32px; font-size:16px; font-weight:800; font-family:inherit; cursor:pointer; text-decoration:none; transition:all .2s; display:inline-flex; align-items:center; gap:8px; box-shadow:0 8px 32px rgba(241,53,150,.35); }
+.btn-main:hover { background:var(--red2); transform:translateY(-2px); }
+.btn-ghost { background:rgba(255,255,255,.1); color:white; border:1.5px solid rgba(255,255,255,.3); border-radius:99px; padding:16px 28px; font-size:15px; font-weight:600; font-family:inherit; cursor:pointer; text-decoration:none; transition:all .2s; display:inline-flex; align-items:center; gap:8px; }
+.btn-ghost:hover { border-color:var(--red); color:var(--red); }
+.stats { background:white; padding:40px 24px; display:grid; grid-template-columns:repeat(3,1fr); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.stat { padding:20px 16px; text-align:center; }
+.stat-num { font-size:28px; font-weight:900; color:var(--red); display:block; line-height:1.1; margin-bottom:4px; }
+.stat-label { font-size:12px; color:#555; line-height:1.4; }
+.wrap { padding:60px 24px; max-width:720px; margin:0 auto; }
+.section-label { font-size:11px; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:var(--red); margin-bottom:8px; }
+.section-title { font-size:clamp(22px,5vw,34px); font-weight:900; line-height:1.3; margin-bottom:12px; color:#111; }
+.section-sub { font-size:15px; color:#666; line-height:1.7; margin-bottom:36px; }
+.problem-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:16px; margin-bottom:32px; }
+.problem-card { background:white; border:1px solid var(--border); border-radius:var(--radius); padding:20px; transition:all .2s; }
+.problem-card:hover { border-color:var(--red); transform:translateY(-2px); box-shadow:0 4px 20px rgba(241,53,150,.08); }
+.problem-icon { font-size:28px; margin-bottom:10px; }
+.problem-text { font-size:14px; color:#333; line-height:1.6; }
+.ba-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:32px; }
+.ba-card { border-radius:var(--radius); padding:20px; }
+.ba-before { background:rgba(232,68,68,.08); border:1.5px solid rgba(232,68,68,.25); }
+.ba-after { background:var(--green-light); border:1.5px solid rgba(63,207,142,.3); }
+.ba-label { font-size:11px; font-weight:800; letter-spacing:.08em; margin-bottom:12px; }
+.ba-before .ba-label { color:#f87171; }
+.ba-after .ba-label { color:var(--green); }
+.ba-item { font-size:13px; line-height:1.9; display:flex; align-items:flex-start; gap:6px; color:#333; }
+.curriculum-list { display:flex; flex-direction:column; gap:10px; }
+.curriculum-item { display:flex; align-items:center; gap:12px; background:white; border:1px solid var(--border); border-radius:12px; padding:14px 16px; transition:all .2s; }
+.curriculum-item:hover { border-color:var(--red); }
+.curriculum-num { width:32px; height:32px; background:#fff0f8; color:var(--red); border-radius:8px; font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.curriculum-info { flex:1; }
+.curriculum-title { font-size:14px; font-weight:700; color:#111; }
+.curriculum-sub { font-size:12px; color:#666; margin-top:2px; }
+.curriculum-badge { font-size:10px; font-weight:700; padding:2px 8px; border-radius:99px; background:var(--gold-light); color:var(--gold); flex-shrink:0; border:1px solid rgba(255,184,0,.3); }
+.curriculum-badge.locked { background:#f5f5f5; color:#aaa; border-color:#e8e8e8; }
+.sol-bg { background:linear-gradient(160deg,#f8f8fc,#fff0f8); border-top:1px solid #f0e8f4; border-bottom:1px solid #f0e8f4; }
+.feature-list { display:flex; flex-direction:column; gap:14px; }
+.feature-card { background:white; border:1px solid var(--border); border-radius:var(--radius); display:flex; gap:14px; padding:16px; align-items:center; transition:all .2s; }
+.feature-card:hover { border-color:var(--red); transform:translateX(4px); box-shadow:0 4px 20px rgba(241,53,150,.08); }
+.feat-icon { width:48px; height:48px; border-radius:12px; background:#fff0f8; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0; }
+.feat-info { flex:1; }
+.feat-title { font-size:15px; font-weight:800; margin-bottom:4px; color:#111; }
+.feat-desc { font-size:12px; color:#666; line-height:1.6; }
+.feat-badge { font-size:10px; font-weight:700; padding:2px 8px; border-radius:99px; background:#fff0f8; color:var(--red); display:inline-block; margin-top:4px; }
+.rm-item { display:flex; gap:14px; margin-bottom:20px; align-items:flex-start; }
+.rm-dot { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; border:2px solid; }
+.rm-content { flex:1; padding-top:4px; }
+.rm-title { font-size:15px; font-weight:700; margin-bottom:3px; color:#111; }
+.rm-desc { font-size:13px; color:#666; }
+.rm-badge { font-size:11px; font-weight:700; padding:2px 8px; border-radius:99px; margin-left:8px; }
+.testimonial-grid { display:grid; gap:16px; }
+.testimonial-card { background:white; border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
+.testimonial-stars { color:#F5B800; font-size:16px; margin-bottom:8px; }
+.testimonial-text { font-size:14px; color:#333; line-height:1.8; margin-bottom:14px; }
+.testimonial-author { display:flex; align-items:center; gap:10px; }
+.testimonial-avatar { width:36px; height:36px; border-radius:50%; background:#fff0f8; color:var(--red); display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:800; flex-shrink:0; }
+.social-bar { background:#1a1a2e; padding:14px 24px; text-align:center; border-top:1px solid rgba(241,53,150,.2); }
+.social-bar-inner { display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap; }
+.pricing-bg { background:linear-gradient(160deg,#1a1a2e,#2d1b4e); border-top:1px solid rgba(241,53,150,.2); padding:60px 24px; }
+.pricing-inner { max-width:480px; margin:0 auto; }
+.pricing-card { background:white; border:2px solid var(--red); border-radius:20px; padding:32px 28px; text-align:center; position:relative; overflow:hidden; }
+.pricing-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg,var(--red),#ff80cc,var(--red)); }
+.pricing-badge { display:inline-block; background:var(--red); color:white; font-size:12px; font-weight:800; padding:4px 14px; border-radius:99px; margin-bottom:16px; }
+.pricing-name { font-size:20px; font-weight:800; margin-bottom:8px; color:#fff; }
+.pricing-original { font-size:16px; color:rgba(255,255,255,.5); text-decoration:line-through; margin-bottom:4px; }
+.pricing-price { font-size:52px; font-weight:900; color:var(--red); line-height:1; margin-bottom:4px; font-family:'Noto Serif SC',serif; }
+.pricing-period { font-size:14px; color:rgba(255,255,255,.6); margin-bottom:16px; }
+.pricing-save { display:inline-block; background:rgba(63,207,142,.15); color:var(--green); font-size:13px; font-weight:700; padding:6px 16px; border-radius:99px; margin-bottom:20px; }
+.countdown-box { background:#fff0f8; border:1.5px solid rgba(241,53,150,.25); border-radius:12px; padding:14px; margin-bottom:20px; text-align:center; }
+.countdown-label { font-size:12px; color:rgba(255,255,255,.6); margin-bottom:6px; }
+#countdown { font-size:28px; font-weight:900; color:var(--red); letter-spacing:2px; font-family:monospace; }
+.countdown-sub { font-size:11px; color:rgba(255,255,255,.5); margin-top:4px; }
+.pricing-features { text-align:left; margin-bottom:28px; }
+.pricing-feature { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,.1); font-size:14px; color:#ffffff !important; }
+.pricing-feature:last-child { border-bottom:none; }
+.pricing-feature::before { content:'✅'; font-size:14px; flex-shrink:0; }
+.btn-buy { width:100%; padding:18px; background:var(--red); color:white; border:none; border-radius:14px; font-size:18px; font-weight:800; font-family:inherit; cursor:pointer; text-decoration:none; display:block; transition:all .2s; margin-bottom:12px; box-shadow:0 8px 24px rgba(241,53,150,.35); }
+.btn-buy:hover { background:var(--red2); transform:translateY(-2px); }
+.btn-try { width:100%; padding:14px; background:rgba(255,255,255,.08); color:rgba(255,255,255,.7); border:1.5px solid rgba(255,255,255,.15); border-radius:14px; font-size:14px; font-weight:700; font-family:inherit; cursor:pointer; text-decoration:none; display:block; transition:all .2s; }
+.btn-try:hover { border-color:var(--red); color:var(--red); }
+.pricing-note { font-size:12px; color:rgba(255,255,255,.7); margin-top:14px; line-height:1.6; }
+.faq-item { border-bottom:1px solid #f0e8f4; padding:18px 0; cursor:pointer; }
+.faq-q { font-size:15px; font-weight:700; display:flex; justify-content:space-between; align-items:center; gap:12px; color:#111; }
+.faq-icon { color:var(--red); font-size:18px; flex-shrink:0; transition:.2s; }
+.faq-a { font-size:14px; color:#555; line-height:1.7; margin-top:10px; display:none; }
+.faq-item.open .faq-a { display:block; }
+.faq-item.open .faq-icon { transform:rotate(45deg); }
+footer { background:#1a1a2e; color:rgba(255,255,255,.6); padding:40px 24px; text-align:center; border-top:1px solid var(--border); }
+.footer-logo { font-family:'Noto Serif SC',serif; font-size:24px; color:var(--red); margin-bottom:8px; }
+.footer-links { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-bottom:16px; }
+.footer-links a { color:rgba(255,255,255,.4); font-size:13px; text-decoration:none; }
+.sticky-cta { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--red); color:white; padding:14px 28px; border-radius:99px; font-size:15px; font-weight:800; text-decoration:none; box-shadow:0 8px 24px rgba(241,53,150,.45); z-index:999; white-space:nowrap; display:none; font-family:inherit; }
+.sticky-cta.show { display:block; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.6;transform:scale(1.4)} }
+@media(max-width:600px){ .ba-grid{grid-template-columns:1fr} .stat-num{font-size:22px} .pricing-price{font-size:44px} .wrap{padding:48px 16px} }
+/* pricing-bg = dark navy → white text */
+.pricing-bg .section-title { color: white !important; }
+.pricing-bg .section-sub { color: rgba(255,255,255,.7) !important; }
+/* pricing-card = white card → dark text */
+.pricing-card .pricing-name { color: #111 !important; }
+.pricing-card .pricing-original { color: #999 !important; }
+.pricing-card .pricing-period { color: #666 !important; }
+.pricing-card .pricing-feature { color: #222 !important; border-bottom-color: #f0e8f4 !important; }
+.pricing-card .pricing-note { color: #777 !important; }
+.pricing-card .countdown-label { color: #666 !important; }
+.pricing-card .countdown-sub { color: #888 !important; }
+.pricing-card .countdown-box { background: #fff0f8 !important; border-color: rgba(241,53,150,.3) !important; }
+.pricing-card .btn-try { background: #f8f8f8 !important; color: #555 !important; border-color: #e0e0e0 !important; }
+</style>
+</head>
+<body>
+
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    🦊 TangTang Chinese — เรียนภาษาจีนได้ด้วยตัวเอง &nbsp;|&nbsp; HSK 1-6 ครบทุกระดับ &nbsp;|&nbsp; ฿1,290 ครั้งเดียวตลอดชีพ &nbsp;|&nbsp; ติดตั้งบนมือถือได้เลย &nbsp;|&nbsp; อัพเดตฟรีตลอด &nbsp;|&nbsp; 🦊 TangTang Chinese — เรียนภาษาจีนได้ด้วยตัวเอง &nbsp;|&nbsp; HSK 1-6 ครบทุกระดับ &nbsp;|&nbsp; ฿1,290 ครั้งเดียวตลอดชีพ &nbsp;|&nbsp; ติดตั้งบนมือถือได้เลย &nbsp;|&nbsp; อัพเดตฟรีตลอด &nbsp;|&nbsp;
+  </div>
+</div>
+
+<nav>
+  <div class="nav-logo">糖糖中文</div>
+  <a href="checkout.html" class="nav-cta">สั่งซื้อ ฿1,290</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">🔥 Early Bird — ประหยัด ฿700 วันนี้เท่านั้น</div>
+  <h1>เรียนภาษาจีน<br><span>ได้ด้วยตัวเอง</span><br>ไม่ต้องมีพื้นฐาน</h1>
+  <p class="hero-sub">แอปเรียนภาษาจีนสำหรับคนไทย อธิบายเป็นภาษาไทย<br>มีระบบเสียง Quiz และ Flashcard ครบ HSK 1-6</p>
+  <div class="hero-proof">
+    <div class="hero-proof-item"><div class="hero-proof-num">50+</div><div class="hero-proof-label">บทเรียน HSK 1-6</div></div>
+    <div class="hero-proof-item"><div class="hero-proof-num">5,000+</div><div class="hero-proof-label">คำศัพท์</div></div>
+    <div class="hero-proof-item"><div class="hero-proof-num">AI</div><div class="hero-proof-label">ฝึกได้ทุกวัน</div></div>
+  </div>
+  <div class="hero-btns">
+    <a href="checkout.html" class="btn-main">🛒 สั่งซื้อเลย — ฿1,290</a>
+    <a href="index.html" class="btn-ghost">🆓 ทดลองใช้ฟรี</a>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><span class="stat-num">50+</span><span class="stat-label">บทเรียน HSK 1-6</span></div>
+  <div class="stat"><span class="stat-num">5,000+</span><span class="stat-label">คำศัพท์ทั้งหมด</span></div>
+  <div class="stat"><span class="stat-num">฿1,290</span><span class="stat-label">ครั้งเดียวตลอดชีพ</span></div>
+</div>
+
+<div class="wrap">
+  <div class="section-label">PROBLEM</div>
+  <h2 class="section-title">ทำไมคนไทยส่วนใหญ่<br>เรียนจีนไม่สำเร็จ?</h2>
+  <p class="section-sub">ไม่ใช่เพราะคุณไม่ฉลาด แต่เพราะวิธีเรียนไม่ถูกต้อง</p>
+
+  <!-- Pain 1 -->
+  <div style="background:white;border:1.5px solid #f0e8f4;border-radius:20px;margin-bottom:24px;overflow:hidden;box-shadow:0 4px 20px rgba(241,53,150,.06);">
+    <div style="width:100%;height:200px;background:#fff0f8;border-bottom:2px dashed #F5C6E0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;">
+      <div style="font-size:40px;margin-bottom:8px;">😵</div>
+      <div style="font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px;">pain-1-confused.png</div>
+      <div style="font-size:11px;color:#999;line-height:1.5;">จิ้งจอกสีชมพูนั่งหน้าหนังสือจีน มีตัวอักษรจีนลอยเต็มหัว<br>สีหน้างงมาก สไตล์ Cute Kawaii พื้นหลังชมพูอ่อน</div>
+    </div>
+    <div style="padding:20px 20px 24px;">
+      <div style="font-size:11px;font-weight:800;letter-spacing:2px;color:var(--red);margin-bottom:8px;">PROBLEM 01</div>
+      <div style="font-size:18px;font-weight:900;color:#111;margin-bottom:10px;line-height:1.4;">ไม่รู้จะเริ่มจากไหน วนเวียนอยู่กับที่</div>
+      <div style="font-size:14px;color:#555;line-height:1.8;margin-bottom:16px;">เปิด YouTube ดูแล้วก็งง ดูแต่ละคนสอนไม่เหมือนกัน ไม่มีแผนการเรียนที่ชัดเจน เรียนไปสักพักก็เลิก แล้วก็กลับมาเริ่มใหม่ซ้ำๆ สุดท้ายก็ยังอยู่จุดเดิม</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+        <div style="background:#fff0f8;border-radius:10px;padding:10px;text-align:center;"><div style="font-size:18px;font-weight:900;color:var(--red);">73%</div><div style="font-size:10px;color:#888;line-height:1.4;margin-top:2px;">เลิกเรียนจีน ใน 1 เดือนแรก</div></div>
+        <div style="background:#fff0f8;border-radius:10px;padding:10px;text-align:center;"><div style="font-size:18px;font-weight:900;color:var(--red);">0</div><div style="font-size:10px;color:#888;line-height:1.4;margin-top:2px;">แผนการเรียน ที่ชัดเจน</div></div>
+        <div style="background:#fff0f8;border-radius:10px;padding:10px;text-align:center;"><div style="font-size:18px;font-weight:900;color:var(--red);">∞</div><div style="font-size:10px;color:#888;line-height:1.4;margin-top:2px;">เริ่มใหม่กี่รอบ ก็ไม่ผ่าน</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pain 2 -->
+  <div style="background:white;border:1.5px solid #f0e8f4;border-radius:20px;margin-bottom:24px;overflow:hidden;box-shadow:0 4px 20px rgba(241,53,150,.06);">
+    <div style="width:100%;height:200px;background:#fff5ee;border-bottom:2px dashed #fdd0b0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;">
+      <div style="font-size:40px;margin-bottom:8px;">💸</div>
+      <div style="font-size:12px;font-weight:700;color:#e0700a;margin-bottom:4px;">pain-2-expensive.png</div>
+      <div style="font-size:11px;color:#999;line-height:1.5;">จิ้งจอกนั่งในห้องเรียน ครูจีนยืนพูดหน้ากระดาน<br>เงินบินออกจากกระเป๋า สไตล์ Cute Kawaii โทนส้มอ่อน</div>
+    </div>
+    <div style="padding:20px 20px 24px;">
+      <div style="font-size:11px;font-weight:800;letter-spacing:2px;color:var(--red);margin-bottom:8px;">PROBLEM 02</div>
+      <div style="font-size:18px;font-weight:900;color:#111;margin-bottom:10px;line-height:1.4;">ครูจีนพูดไทยไม่ได้ อธิบายไม่รู้เรื่อง</div>
+      <div style="font-size:14px;color:#555;line-height:1.8;margin-bottom:16px;">จ่ายเงินเรียนกับสถาบัน แต่ครูเป็นคนจีน อธิบายเป็นภาษาอังกฤษบ้าง จีนบ้าง ถามก็ตอบไม่เข้าใจ เสียเวลาและเงินโดยเปล่าประโยชน์ ยิ่งเรียนยิ่งสับสน</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+        <div style="background:#fff5ee;border-radius:10px;padding:10px;text-align:center;"><div style="font-size:18px;font-weight:900;color:#e0700a;">฿3,000+</div><div style="font-size:10px;color:#888;line-height:1.4;margin-top:2px;">ต่อเดือน ค่าเรียนสถาบัน</div></div>
+        <div style="background:#fff5ee;border-radius:10px;padding:10px;text-align:center;"><div style="font-size:18px;font-weight:900;color:#e0700a;">60%</div><div style="font-size:10px;color:#888;line-height:1.4;margin-top:2px;">ครูจีนสื่อสาร ภาษาไทยไม่ได้</div></div>
+        <div style="background:#fff5ee;border-radius:10px;padding:10px;text-align:center;"><div style="font-size:18px;font-weight:900;color:#e0700a;">0</div><div style="font-size:10px;color:#888;line-height:1.4;margin-top:2px;">ความมั่นใจ หลังเรียนจบ</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pain 3 -->
+  <div style="background:white;border:1.5px solid #f0e8f4;border-radius:20px;margin-bottom:24px;overflow:hidden;box-shadow:0 4px 20px rgba(241,53,150,.06);">
+    <div style="width:100%;height:200px;background:#eef5ff;border-bottom:2px dashed #b0c8f0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;">
+      <div style="font-size:40px;margin-bottom:8px;">😴</div>
+      <div style="font-size:12px;font-weight:700;color:#2060c0;margin-bottom:4px;">pain-3-forget.png</div>
+      <div style="font-size:11px;color:#999;line-height:1.5;">จิ้งจอกนอนหลับบนกองหนังสือจีน มีตัวอักษรจีนลอยหายออกจากหัว<br>แสดงถึงการลืม สไตล์ Cute Kawaii โทนฟ้าอ่อน</div>
+    </div>
+    <div style="padding:20px 20px 24px;">
+      <div style="font-size:11px;font-weight:800;letter-spacing:2px;color:var(--red);margin-bottom:8px;">PROBLEM 03</div>
+      <div style="font-size:18px;font-weight:900;color:#111;margin-bottom:10px;line-height:1.4;">เรียนแล้วเบื่อ จำไม่ได้ ไม่ต่อเนื่อง</div>
+      <div style="font-size:14px;color:#555;line-height:1.8;margin-bottom:16px;">ท่องศัพท์วันนี้ พรุ่งนี้ก็ลืม ไม่มีแรงจูงใจ เรียนได้ไม่กี่วันก็หยุด เพราะรูปแบบการเรียนน่าเบื่อ ไม่มีอะไรกระตุ้นให้อยากเรียนต่อ</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+        <div style="background:#eef5ff;border-radius:10px;padding:10px;text-align:center;"><div style="font-size:18px;font-weight:900;color:#2060c0;">24 ชม.</div><div style="font-size:10px;color:#888;line-height:1.4;margin-top:2px;">ลืม 70% ของสิ่ง ที่เรียนไป</div></div>
+        <div style="background:#eef5ff;border-radius:10px;padding:10px;text-align:center;"><div style="font-size:18px;font-weight:900;color:#2060c0;">3 วัน</div><div style="font-size:10px;color:#888;line-height:1.4;margin-top:2px;">เฉลี่ยก่อน จะเลิกเรียน</div></div>
+        <div style="background:#eef5ff;border-radius:10px;padding:10px;text-align:center;"><div style="font-size:18px;font-weight:900;color:#2060c0;">5%</div><div style="font-size:10px;color:#888;line-height:1.4;margin-top:2px;">เรียนจนจบ คอร์สได้จริง</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="background:white;border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+<div class="wrap">
+  <div class="section-label">BEFORE / AFTER</div>
+  <h2 class="section-title">ชีวิตก่อนและหลัง<br>เรียน TangTang</h2>
+  <div class="ba-grid">
+    <div class="ba-card ba-before">
+      <div class="ba-label">✗ ก่อนเรียน</div>
+      <div class="ba-item">❌ ดูซีรีส์จีนต้องง้อซับตลอด</div>
+      <div class="ba-item">❌ ไปจีนสื่อสารไม่ได้เลย</div>
+      <div class="ba-item">❌ สั่งอาหารจีนไม่ถูก</div>
+      <div class="ba-item">❌ ต้องจ้างล่ามในการทำงาน</div>
+      <div class="ba-item">❌ คุยกับเพื่อนจีนไม่ได้</div>
+    </div>
+    <div class="ba-card ba-after">
+      <div class="ba-label">✓ หลังเรียน</div>
+      <div class="ba-item">✅ ฟังซีรีส์จีนรู้เรื่อง</div>
+      <div class="ba-item">✅ เที่ยวจีนได้อย่างมั่นใจ</div>
+      <div class="ba-item">✅ สั่งอาหาร ต่อราคาได้</div>
+      <div class="ba-item">✅ ใช้จีนในที่ทำงานได้</div>
+      <div class="ba-item">✅ มีเพื่อนคนจีนได้เลย</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="sol-bg">
+<div class="wrap">
+  <div class="section-label">SOLUTION</div>
+  <h2 class="section-title">TangTang Chinese<br>แก้ปัญหาได้ทั้งหมด</h2>
+  <p class="section-sub">ออกแบบเฉพาะสำหรับคนไทย เรียนได้ทุกที่ทุกเวลา</p>
+  <div class="feature-list">
+    <div class="feature-card"><div class="feat-icon">🗺️</div><div class="feat-info"><div class="feat-title">Road Map ชัดเจน ไม่งง</div><div class="feat-desc">เส้นทางเรียนตั้งแต่พินอิน → HSK 6 รู้เลยว่าต้องทำอะไรต่อ</div><span class="feat-badge">แก้ Problem 01</span></div></div>
+    <div class="feature-card"><div class="feat-icon">🇹🇭</div><div class="feat-info"><div class="feat-title">อธิบายเป็นภาษาไทย 100%</div><div class="feat-desc">ทุกบทเรียนอธิบายเป็นไทย เข้าใจง่าย ไม่ต้องพึ่งครูจีน</div><span class="feat-badge">แก้ Problem 02</span></div></div>
+    <div class="feature-card"><div class="feat-icon">🎮</div><div class="feat-info"><div class="feat-title">สนุกเหมือนเกม ไม่เบื่อ</div><div class="feat-desc">Quiz + Flashcard + XP + Streak กระตุ้นให้เรียนทุกวัน</div><span class="feat-badge">แก้ Problem 03</span></div></div>
+    <div class="feature-card"><div class="feat-icon">🔊</div><div class="feat-info"><div class="feat-title">ระบบเสียงจริง ออกเสียงตามได้</div><div class="feat-desc">ฟังเสียงภาษาจีน ฝึกพินอิน วรรณยุกต์ได้ถูกตั้งแต่ต้น</div></div></div>
+    <div class="feature-card"><div class="feat-icon">📱</div><div class="feat-info"><div class="feat-title">ติดตั้งบนมือถือ เรียนทุกที่</div><div class="feat-desc">ใช้งานเหมือนแอปจริง เรียนบนรถ บนเตียง ได้เลย</div></div></div>
+    <div class="feature-card"><div class="feat-icon">🃏</div><div class="feat-info"><div class="feat-title">1,300+ Flashcard คำศัพท์</div><div class="feat-desc">Spaced Repetition จำได้นาน ไม่ลืมง่ายเหมือนท่องแบบเดิม</div></div></div>
+  </div>
+</div>
+</div>
+
+<div class="wrap">
+  <div class="section-label">ROADMAP</div>
+  <h2 class="section-title">เส้นทางเรียนจาก 0<br>สู่ระดับมืออาชีพ</h2>
+  <p class="section-sub">ทำตามได้เลย ไม่ต้องเดา ไม่ต้องงง</p>
+  <div class="rm-item"><div class="rm-dot" style="background:rgba(241,53,150,.1);border-color:var(--red);">🔤</div><div class="rm-content"><div class="rm-title">พินอิน — รากฐานทุกอย่าง <span class="rm-badge" style="background:rgba(241,53,150,.1);color:var(--red);">1-2 สัปดาห์</span></div><div class="rm-desc">ระบบออกเสียง วรรณยุกต์ 4 เสียง ต้องเรียนก่อนเลย</div></div></div>
+  <div class="rm-item"><div class="rm-dot" style="background:rgba(63,207,142,.1);border-color:var(--green);">📗</div><div class="rm-content"><div class="rm-title">HSK 1 — ผู้เริ่มต้น <span class="rm-badge" style="background:rgba(63,207,142,.1);color:var(--green);">1-2 เดือน</span></div><div class="rm-desc">150 คำ ทักทาย สั่งอาหาร ตัวเลข → สื่อสารพื้นฐานได้แล้ว</div></div></div>
+  <div class="rm-item"><div class="rm-dot" style="background:rgba(96,165,250,.1);border-color:#60a5fa;">📘</div><div class="rm-content"><div class="rm-title">HSK 2 — พื้นฐาน <span class="rm-badge" style="background:rgba(96,165,250,.1);color:#60a5fa;">2-3 เดือน</span></div><div class="rm-desc">300 คำ คุยชีวิตประจำวัน บอกทาง → ท่องเที่ยวจีนได้แล้ว</div></div></div>
+  <div class="rm-item"><div class="rm-dot" style="background:rgba(251,191,36,.1);border-color:#fbbf24;">📙</div><div class="rm-content"><div class="rm-title">HSK 3-4 — กลาง <span class="rm-badge" style="background:rgba(251,191,36,.1);color:#fbbf24;">3-6 เดือน</span></div><div class="rm-desc">600-1,200 คำ แสดงความคิดเห็น ทำงาน → ใช้จีนในชีวิตจริงได้</div></div></div>
+  <div class="rm-item"><div class="rm-dot" style="background:rgba(244,114,182,.1);border-color:#f472b6;">🏆</div><div class="rm-content"><div class="rm-title">HSK 5-6 — มืออาชีพ <span class="rm-badge" style="background:rgba(244,114,182,.1);color:#f472b6;">6 เดือน+</span></div><div class="rm-desc">2,500-5,000+ คำ ประชุม อ่านข่าว → ระดับมืออาชีพ</div></div></div>
+</div>
+
+<div style="background:white;border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+<div class="wrap">
+  <div class="section-label">เนื้อหาในคอร์ส</div>
+  <h2 class="section-title">ที่ได้รับทั้งหมด</h2>
+  <div class="curriculum-list">
+    <div class="curriculum-item"><div class="curriculum-num">01</div><div class="curriculum-info"><div class="curriculum-title">🙏 ทักทายและแนะนำตัว</div><div class="curriculum-sub">บอกชื่อ สัญชาติ ถามไถ่ อำลา</div></div><div class="curriculum-badge">ฟรี</div></div>
+    <div class="curriculum-item"><div class="curriculum-num">02</div><div class="curriculum-info"><div class="curriculum-title">🍜 อาหารและร้านอาหาร</div><div class="curriculum-sub">สั่งอาหาร บอกความชอบ ถามราคา</div></div><div class="curriculum-badge">ฟรี</div></div>
+    <div class="curriculum-item"><div class="curriculum-num">03</div><div class="curriculum-info"><div class="curriculum-title">🔢 ตัวเลขและเงิน</div><div class="curriculum-sub">นับเลข บอกราคา ต่อรอง จ่ายเงิน</div></div><div class="curriculum-badge">ฟรี</div></div>
+    <div class="curriculum-item" style="opacity:.65;"><div class="curriculum-num" style="background:rgba(255,255,255,.05);color:var(--ink3);">🔒</div><div class="curriculum-info"><div class="curriculum-title">🛍️ ช้อปปิ้งและการซื้อของ</div><div class="curriculum-sub">ถามไซส์ สี ต่อราคา คืนสินค้า</div></div><div class="curriculum-badge locked">Premium</div></div>
+    <div class="curriculum-item" style="opacity:.65;"><div class="curriculum-num" style="background:rgba(255,255,255,.05);color:var(--ink3);">🔒</div><div class="curriculum-info"><div class="curriculum-title">✈️ การเดินทาง</div><div class="curriculum-sub">ถามทาง รถไฟ แท็กซี่ โรงแรม</div></div><div class="curriculum-badge locked">Premium</div></div>
+    <div class="curriculum-item" style="opacity:.65;"><div class="curriculum-num" style="background:rgba(255,255,255,.05);color:var(--ink3);">🔒</div><div class="curriculum-info"><div class="curriculum-title">+ อีก 45+ บทเรียน HSK 1-6</div><div class="curriculum-sub">ครอบครัว เวลา สุขภาพ งาน และอีกมาก</div></div><div class="curriculum-badge locked">Premium</div></div>
+  </div>
+</div>
+</div>
+
+<div class="wrap">
+  <div class="section-label">รีวิวจากผู้เรียนจริง</div>
+  <h2 class="section-title">คนที่เรียนแล้วบอกว่า...</h2>
+  <div class="testimonial-grid">
+    <div class="testimonial-card"><div class="testimonial-stars">⭐⭐⭐⭐⭐</div><div class="testimonial-text">"ดูซีรีส์จีนมาหลายปีแล้วอยากพูดได้ ลองเรียนแล้วรู้สึกว่าไม่ยากเลย บทสนทนาใช้ได้จริงๆ สั่งอาหาร ถามทาง ทำได้หมดเลย คุ้มค่ามากๆ"</div><div class="testimonial-author"><div class="testimonial-avatar">น</div><div><div style="font-size:13px;font-weight:700;color:#111;">น้องนุ่น</div><div style="font-size:11px;color:#888;">แฟนคลับซีรีส์จีน • กรุงเทพ</div></div></div></div>
+    <div class="testimonial-card"><div class="testimonial-stars">⭐⭐⭐⭐⭐</div><div class="testimonial-text">"ทำงานกับลูกค้าจีน เรียนแล้วพูดพื้นฐานได้ ลูกค้าประทับใจมาก ดีลปิดง่ายขึ้นเลย คุ้มค่ามากกับ 1,290 บาท จ่ายครั้งเดียวไม่มีรายเดือน"</div><div class="testimonial-author"><div class="testimonial-avatar">ก</div><div><div style="font-size:13px;font-weight:700;color:#111;">คุณกอล์ฟ</div><div style="font-size:11px;color:#888;">เซลส์ • เชียงใหม่</div></div></div></div>
+    <div class="testimonial-card"><div class="testimonial-stars">⭐⭐⭐⭐⭐</div><div class="testimonial-text">"ไปแลกเปลี่ยนที่จีน ใช้ TangTang เตรียมตัวก่อนไป สั่งอาหาร ถามทาง ต่อราคาได้หมดเลย เพื่อนตกใจมากว่าเรียนมาได้ยังไงในเวลาสั้น"</div><div class="testimonial-author"><div class="testimonial-avatar">ม</div><div><div style="font-size:13px;font-weight:700;color:#111;">มิน</div><div style="font-size:11px;color:#888;">นักศึกษา • ขอนแก่น</div></div></div></div>
+  </div>
+</div>
+
+<div class="social-bar">
+  <div class="social-bar-inner">
+    <div style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.9);font-size:13px;"><span style="width:8px;height:8px;border-radius:50%;background:#4ade80;display:inline-block;animation:pulse 1.5s infinite;"></span><strong style="color:#4ade80;">127 คน</strong>&nbsp;กำลังดูหน้านี้อยู่ขณะนี้</div>
+    <div style="color:rgba(255,255,255,.3);">|</div>
+    <div style="color:rgba(255,255,255,.9);font-size:13px;">🔥 <strong style="color:#fb923c;">38 คน</strong> สมัครในสัปดาห์นี้</div>
+  </div>
+</div>
+
+<div class="pricing-bg" id="pricing">
+<div class="pricing-inner">
+  <div style="text-align:center;margin-bottom:32px;">
+    <div class="section-label" style="text-align:center;">PRICING</div>
+    <h2 class="section-title" style="text-align:center;color:white;">ราคาที่คุ้มค่าที่สุด<br>ในตลาด</h2>
+    <p class="section-sub" style="text-align:center;color:rgba(255,255,255,.7);">จ่ายครั้งเดียว เรียนได้ตลอดชีพ</p>
+  </div>
+  <div class="pricing-card">
+    <div class="pricing-badge">🔥 Most Popular</div>
+    <div class="pricing-name">TangTang Chinese Premium</div>
+    <div class="pricing-original">ราคาปกติ ฿1,990</div>
+    <div class="pricing-price">฿1,290</div>
+    <div class="pricing-period">จ่ายครั้งเดียว ✨ เรียนตลอดชีพ</div>
+    <div class="pricing-save">🎉 ประหยัดไป ฿700</div>
+    <div class="countdown-box">
+      <div class="countdown-label">⏰ ราคานี้หมดใน</div>
+      <div id="countdown">23:59:47</div>
+      <div class="countdown-sub">ชั่วโมง : นาที : วินาที</div>
+    </div>
+    <div class="pricing-features">
+      <div class="pricing-feature">บทเรียน HSK 1-6 ครบทุกบท (50+ บท)</div>
+      <div class="pricing-feature">คำศัพท์กว่า 5,000+ คำ</div>
+      <div class="pricing-feature">Flashcard ท่องศัพท์ 1,300+ คำ</div>
+      <div class="pricing-feature">ระบบเสียง ฟังและออกเสียงตามได้</div>
+      <div class="pricing-feature">Quiz + Final Exam ทุก Level</div>
+      <div class="pricing-feature">แชทฝึกกับ AI Tangtang ไม่จำกัด</div>
+      <div class="pricing-feature">ติดตั้งบนมือถือได้เลย (PWA)</div>
+      <div class="pricing-feature">อธิบายเป็นภาษาไทย 100%</div>
+      <div class="pricing-feature">อัพเดตเนื้อหาฟรีตลอด</div>
+    </div>
+    <a href="checkout.html" class="btn-buy">🛒 สั่งซื้อเลย — ฿1,290</a>
+    <a href="index.html" class="btn-try">🆓 ทดลองเรียนฟรี 3 บทก่อน</a>
+    <div class="pricing-note">🔒 ชำระผ่าน PromptPay ปลอดภัย 100%<br>📲 หลังโอนส่งสลิปทาง Line @ava11<br>⚡ ปลดล็อคภายใน 30 นาที</div>
+  </div>
+</div>
+</div>
+
+<div class="wrap">
+  <div class="section-label">FAQ</div>
+  <h2 class="section-title">คำถามที่พบบ่อย</h2>
+  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">เหมาะกับมือใหม่ไม่มีพื้นฐานไหม? <span class="faq-icon">+</span></div><div class="faq-a">เหมาะมากค่า! ออกแบบมาสำหรับมือใหม่โดยเฉพาะ เริ่มตั้งแต่พินอิน อธิบายทุกอย่างเป็นภาษาไทย ไม่ต้องมีพื้นฐานมาก่อนเลย</div></div>
+  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">ใช้ได้บนมือถืออะไรบ้าง? <span class="faq-icon">+</span></div><div class="faq-a">ใช้ได้ทุกอุปกรณ์ค่า iPhone, Android, iPad และคอมพิวเตอร์ ไม่ต้องโหลดจาก App Store กด Add to Home Screen ใช้เหมือนแอปได้เลย</div></div>
+  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">หลังจ่ายเงินแล้วเข้าเรียนได้เลยไหม? <span class="faq-icon">+</span></div><div class="faq-a">หลังโอนเงินแล้วส่งสลิปมาทาง Line @ava11 พร้อมแจ้ง Email ที่ใช้สมัคร แอดมินจะปลดล็อคให้ภายใน 30 นาทีค่า</div></div>
+  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">มีอัพเดตเนื้อหาในอนาคตไหม? <span class="faq-icon">+</span></div><div class="faq-a">มีค่า! จ่ายครั้งเดียวได้รับเนื้อหาอัพเดตฟรีตลอด ไม่มีค่าใช้จ่ายเพิ่มเติม</div></div>
+  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q">ทดลองใช้ฟรีก่อนได้ไหม? <span class="faq-icon">+</span></div><div class="faq-a">ได้ค่า! กดปุ่ม "ทดลองใช้ฟรี" เรียนได้ 3 บทแรก พร้อม Flashcard และ Quiz ก่อนตัดสินใจได้เลย</div></div>
+</div>
+
+<div style="background:linear-gradient(135deg,#1a0020,var(--red),#1a0020);padding:60px 24px;text-align:center;position:relative;overflow:hidden;">
+  <div style="max-width:480px;margin:0 auto;position:relative;z-index:1;">
+    <div style="font-size:56px;margin-bottom:16px;animation:float 3s ease-in-out infinite;">🦊</div>
+    <h2 style="font-size:clamp(22px,5vw,36px);font-weight:900;color:white;margin-bottom:12px;line-height:1.3;">พร้อมเริ่มเรียนภาษาจีน<br>แล้วหรือยัง?</h2>
+    <p style="font-size:15px;color:rgba(255,255,255,.85);margin-bottom:28px;line-height:1.7;">เริ่มต้นวันนี้ด้วยราคาพิเศษ ฿1,290 ครั้งเดียวตลอดชีพ<br>ไม่ต้องจ่ายรายเดือน ไม่มีค่าใช้จ่ายซ่อนเร้น</p>
+    <a href="checkout.html" style="display:inline-block;background:white;color:var(--red);padding:16px 36px;border-radius:99px;font-size:17px;font-weight:900;text-decoration:none;margin-bottom:12px;">🛒 สั่งซื้อเลย — ฿1,290</a><br>
+    <a href="index.html" style="color:rgba(255,255,255,.7);font-size:13px;">หรือทดลองใช้ฟรีก่อน →</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">糖糖中文</div>
+  <div style="font-size:13px;margin-bottom:16px;">แอปเรียนภาษาจีนสำหรับคนไทย ครบ HSK 1-6</div>
+  <div class="footer-links"><a href="index.html">ทดลองใช้ฟรี</a><a href="checkout.html">สั่งซื้อ</a><a href="https://line.me/ti/p/@ava11" target="_blank">Line @ava11</a></div>
+  <div style="font-size:12px;color:rgba(255,255,255,.3);">© 2025 TangTang Chinese · avajarshika.github.io/tangtang</div>
+</footer>
+
+<a href="checkout.html" class="sticky-cta" id="stickyCta">🛒 สั่งซื้อ ฿1,290</a>
+
+<script>
+function toggleFaq(el){el.classList.toggle('open')}
+window.addEventListener('scroll',()=>{
+  const c=document.getElementById('stickyCta');
+  if(window.scrollY>400)c.classList.add('show');else c.classList.remove('show');
+});
+function startCountdown(){
+  const saved=localStorage.getItem('tt_end');
+  let end=saved?parseInt(saved):Date.now()+23*3600000+59*60000+47000;
+  if(!saved)localStorage.setItem('tt_end',end);
+  setInterval(()=>{
+    const diff=end-Date.now();
+    if(diff<=0){end=Date.now()+24*3600000;localStorage.setItem('tt_end',end);return;}
+    const h=Math.floor(diff/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
+    const el=document.getElementById('countdown');
+    if(el)el.textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  },1000);
+}
+startCountdown();
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'}}),{threshold:0.1});
+document.querySelectorAll('.problem-card,.curriculum-item,.feature-card,.testimonial-card,.rm-item').forEach(el=>{
+  el.style.opacity='0';el.style.transform='translateY(20px)';el.style.transition='opacity .5s ease,transform .5s ease';obs.observe(el);
+});
+</script>
+</body>
+</html>
