@@ -40,6 +40,8 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+@keyframes bounce { from { transform: translateY(0px); } to { transform: translateY(-8px); } }
+@keyframes floatIn { from { opacity:0; transform: translateY(20px) scale(0.8); } to { opacity:1; transform: translateY(0) scale(1); } }
 
 body {
   font-family: 'DM Sans', 'Noto Sans Thai', sans-serif;
@@ -1330,6 +1332,9 @@ body {
 <div id="auth-screen">
   <div class="auth-card">
     <div class="auth-logo">
+      <img src="https://avajarshika.github.io/tangtang/tangtang.png" 
+        alt="TangTang" 
+        style="width:120px;height:120px;object-fit:contain;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto;filter:drop-shadow(0 4px 12px rgba(241,53,150,0.2))">
       <span class="auth-logo-zh">糖糖中文</span>
       <span class="auth-logo-en">Tangtang Chinese</span>
     </div>
@@ -1986,6 +1991,13 @@ body {
 </div>
 
 <div id="toast"></div>
+
+<!-- Floating TangTang Mascot -->
+<div id="tangtang-mascot" style="position:fixed;bottom:80px;right:16px;z-index:40;cursor:pointer;animation:floatIn .5s ease;display:none" onclick="showToast('สวัสดี! ขยันเรียนนะคะ 🦊')" title="ถังถัง">
+  <img src="https://avajarshika.github.io/tangtang/tangtang.png" 
+    alt="TangTang Mascot"
+    style="width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(241,53,150,0.3));animation:bounce 2s ease-in-out infinite alternate">
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -6422,6 +6434,8 @@ async function loginUser(u) {
   localStorage.setItem('th_' + u.id, JSON.stringify(cloudData));
   document.getElementById('auth-screen').style.display = 'none';
   document.getElementById('app').classList.add('visible');
+  const mascot = document.getElementById('tangtang-mascot');
+  if (mascot) setTimeout(() => mascot.style.display = 'block', 1000);
   updateStreak();
   renderHome();
   showToast('ยินดีต้อนรับ, ' + u.name + '! 🎉');
@@ -7098,8 +7112,8 @@ function fcNav(dir) {
 function showFCDone() {
   document.getElementById('tab-flash').innerHTML = `
     <div class="srs-done">
-      <div class="srs-done-icon">🎉</div>
-      <div class="srs-done-title">เยี่ยมมาก!</div>
+      <img src="https://avajarshika.github.io/tangtang/tangtang.png" alt="TangTang" style="width:100px;height:100px;object-fit:contain;margin:0 auto 8px;display:block;animation:bounce 1s ease infinite alternate">
+      <div class="srs-done-title">เยี่ยมมาก! 🎉</div>
       <div class="srs-done-sub">ผ่านทุก Flashcard แล้ว<br>ไปทำ Quiz ต่อได้เลย!</div>
       <button class="btn-sm" style="width:100%;margin-bottom:10px" onclick="switchTab('quiz-lesson', document.querySelectorAll('.tab-btn')[3])">ไป Quiz →</button>
       <button class="retry-btn" onclick="state.fcIdx=0;state.fcFlipped=false;renderFlashcard()">🔄 เล่นอีกครั้ง</button>
