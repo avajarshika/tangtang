@@ -417,6 +417,7 @@ body {
 }
 .slip-preview img { width: 100%; max-height: 200px; object-fit: contain; display: block; background: var(--paper); }
 .slip-preview-label { font-size: 11px; font-weight: 700; color: var(--green); background: var(--green-light); padding: 6px 12px; text-align: center; }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
 </style>
 </head>
 <body>
@@ -435,7 +436,7 @@ body {
     <!-- COURSE INFO -->
     <div class="card">
       <div class="course-card">
-        <div class="course-img">🦊</div>
+        <div class="course-img"><img src="https://avajarshika.github.io/tangtang/tangtang-happy.png" alt="TangTang" style="width:60px;height:60px;object-fit:contain;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 3px 10px rgba(241,53,150,0.2))"></div>
         <div class="course-info">
           <div class="course-tag">คอร์สเรียน</div>
           <div class="course-title">TangTang Chinese — เรียนภาษาจีน HSK 1-6 ครบทุกระดับ</div>

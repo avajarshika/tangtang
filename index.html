@@ -1335,9 +1335,7 @@ body {
 <div id="auth-screen">
   <div class="auth-card">
     <div class="auth-logo">
-      <img src="https://avajarshika.github.io/tangtang/tangtang.png" 
-        alt="TangTang" 
-        style="width:120px;height:120px;object-fit:contain;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto;filter:drop-shadow(0 4px 12px rgba(241,53,150,0.2))">
+      <img src="https://avajarshika.github.io/tangtang/tangtang.png" alt="TangTang" style="width:120px;height:120px;object-fit:contain;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.25));animation:float 3s ease-in-out infinite">
       <span class="auth-logo-zh">糖糖中文</span>
       <span class="auth-logo-en">Tangtang Chinese</span>
     </div>
@@ -1849,10 +1847,10 @@ body {
 
       <div class="hsk-progress-section">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
-          <img src="https://avajarshika.github.io/tangtang/tangtang.png" alt="TangTang" style="width:56px;height:56px;object-fit:contain;filter:drop-shadow(0 3px 8px rgba(241,53,150,0.2));animation:bounce 2s ease-in-out infinite alternate">
+          <img src="https://avajarshika.github.io/tangtang/tangtang.png" alt="TangTang" style="width:56px;height:56px;object-fit:contain;filter:drop-shadow(0 3px 8px rgba(241,53,150,0.2));animation:float 3s ease-in-out infinite">
           <div>
             <div class="hsk-title" style="margin-bottom:2px">HSK Progress</div>
-            <div style="font-size:11px;color:var(--red);font-weight:600;animation:pulse 2s ease-in-out infinite">ขยันเรียนนะคะ ถังถังเชียร์อยู่! 🦊</div>
+            <div style="font-size:11px;color:var(--red);font-weight:600;">ขยันเรียนนะคะ ถังถังเชียร์อยู่! 🦊</div>
           </div>
         </div>
         <div class="hsk-row">
@@ -1879,9 +1877,9 @@ body {
       <!-- AFFILIATE SECTION -->
       <div style="padding:14px 16px;border-top:1px solid var(--paper3);margin-top:8px">
         <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px;display:flex;align-items:center;gap:8px">
-          <span style="animation:pulse 2s ease-in-out infinite;display:inline-block">🤝</span>
+          <span style=";display:inline-block">🤝</span>
           <span>โปรแกรม Affiliate</span>
-          <span style="font-size:14px;background:linear-gradient(135deg,#F13596,#C9A96E);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;animation:pulse 1.5s ease-in-out infinite">รับค่าคอม 15%!</span>
+          <span style="font-size:14px;background:linear-gradient(135deg,#F13596,#C9A96E);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">รับค่าคอม 15%!</span>
         </div>
         <div id="affiliate-section"></div>
       </div>
@@ -6876,7 +6874,7 @@ function showPaymentModal() {
   modal.innerHTML = `
     <div style="background:white;border-radius:24px 24px 0 0;padding:28px 24px 40px;width:100%;max-height:85vh;overflow-y:auto;">
       <div style="text-align:center;margin-bottom:20px;">
-        <img src="https://avajarshika.github.io/tangtang/tangtang.png" alt="TangTang" style="width:90px;height:90px;object-fit:contain;display:block;margin:0 auto 8px;filter:drop-shadow(0 4px 12px rgba(241,53,150,0.25))">
+        <img src="https://avajarshika.github.io/tangtang/tangtang-wow.png" alt="TangTang" style="width:90px;height:90px;object-fit:contain;display:block;margin:0 auto 8px;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.25));animation:float 3s ease-in-out infinite">
         <div style="font-size:20px;font-weight:700;color:#1a1a1a;">ปลดล็อคทุกบทเรียน</div>
         <div style="font-size:13px;color:#888;margin-top:4px;">เข้าถึงบทเรียนกว่า 50+ บท ตลอดชีพ</div>
       </div>
@@ -7122,7 +7120,7 @@ function fcNav(dir) {
 function showFCDone() {
   document.getElementById('tab-flash').innerHTML = `
     <div class="srs-done">
-      <img src="https://avajarshika.github.io/tangtang/tangtang.png" alt="TangTang" style="width:100px;height:100px;object-fit:contain;margin:0 auto 8px;display:block;animation:bounce 1s ease infinite alternate">
+      <img src="https://avajarshika.github.io/tangtang/tangtang-happy.png" alt="TangTang" style="width:100px;height:100px;object-fit:contain;margin:0 auto 8px;display:block;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.25));animation:float 3s ease-in-out infinite">
       <div class="srs-done-title">เยี่ยมมาก! 🎉</div>
       <div class="srs-done-sub">ผ่านทุก Flashcard แล้ว<br>ไปทำ Quiz ต่อได้เลย!</div>
       <button class="btn-sm" style="width:100%;margin-bottom:10px" onclick="switchTab('quiz-lesson', document.querySelectorAll('.tab-btn')[3])">ไป Quiz →</button>
@@ -7139,6 +7137,7 @@ function renderQuiz() {
     const pass = pct >= 60;
     document.getElementById('tab-quiz-lesson').innerHTML = `
       <div class="quiz-result">
+        <img src="${pass ? 'https://avajarshika.github.io/tangtang/tangtang-happy.png' : 'https://avajarshika.github.io/tangtang/tangtang-sad.png'}" alt="TangTang" style="width:80px;height:80px;object-fit:contain;display:block;margin:0 auto 12px;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.25));animation:float 3s ease-in-out infinite">
         <div class="result-score-ring" style="border-color:${pass?'var(--green)':'var(--red)'}">
           <div class="result-pct" style="color:${pass?'var(--green)':'var(--red)'}">${pct}%</div>
           <div class="result-pct-lbl">คะแนน</div>
@@ -7724,6 +7723,7 @@ function renderPinyinQuiz() {
     const pass = pct >= 60;
     box.innerHTML = `
       <div class="quiz-result">
+        <img src="${pass ? 'https://avajarshika.github.io/tangtang/tangtang-happy.png' : 'https://avajarshika.github.io/tangtang/tangtang-sad.png'}" alt="TangTang" style="width:80px;height:80px;object-fit:contain;display:block;margin:0 auto 12px;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.25));animation:float 3s ease-in-out infinite">
         <div class="result-score-ring" style="border-color:${pass?'var(--green)':'var(--red)'}">
           <div class="result-pct" style="color:${pass?'var(--green)':'var(--red)'}">${pct}%</div>
           <div class="result-pct-lbl">คะแนน</div>
@@ -11630,7 +11630,7 @@ async function renderAffiliateSection() {
   box.innerHTML = `
     <!-- TangTang ให้กำลังใจ -->
     <div style="text-align:center;margin-bottom:16px">
-      <img src="https://avajarshika.github.io/tangtang/tangtang.png" alt="TangTang" style="width:80px;height:80px;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(241,53,150,0.2))">
+      <img src="https://avajarshika.github.io/tangtang/tangtang-money.png" alt="TangTang" style="width:80px;height:80px;object-fit:contain;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.25));animation:float 3s ease-in-out infinite">
       <div style="font-size:13px;font-weight:700;color:var(--red);margin-top:6px">แชร์ให้เพื่อน รับค่าคอม 15% ทุกคน! 🦊</div>
     </div>
 
