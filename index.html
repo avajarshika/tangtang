@@ -10686,7 +10686,7 @@ async function loadAffiliateAdmin() {
 
   const { data, error } = await sb.from('user_progress')
     .select('user_id, data, referral_code, affiliate_earnings, affiliate_count, bank_name, bank_account, bank_owner')
-    .gt('affiliate_count', 0)
+    .not('referral_code', 'is', null)
     .order('affiliate_earnings', { ascending: false });
 
   if (error) { listEl.innerHTML = '<div style="color:var(--red);padding:16px">❌ ' + error.message + '</div>'; return; }
@@ -10694,8 +10694,10 @@ async function loadAffiliateAdmin() {
   const affiliates = data || [];
   const totalPending = affiliates.reduce((s, a) => s + (a.affiliate_earnings||0), 0);
   const totalAffiliates = affiliates.length;
+  const withBank = affiliates.filter(a => a.bank_account).length;
+  const withSales = affiliates.filter(a => (a.affiliate_count||0) > 0).length;
 
-  if (summaryEl) summaryEl.innerHTML = `Affiliate ทั้งหมด <b>${totalAffiliates} คน</b> · ค่าคอมรวม <b style="color:var(--amber)">฿${totalPending}</b>`;
+  if (summaryEl) summaryEl.innerHTML = `Affiliate ทั้งหมด <b>${totalAffiliates} คน</b> · มีบัญชี <b style="color:var(--green)">${withBank} คน</b> · มียอดขาย <b style="color:var(--amber)">${withSales} คน</b> · ค่าคอมรวม <b style="color:var(--red)">฿${totalPending}</b>`;
 
   if (affiliates.length === 0) {
     listEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink3)">ยังไม่มี Affiliate</div>';
