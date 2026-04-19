@@ -1885,6 +1885,7 @@ body {
       <div style="display:flex;border-bottom:1px solid var(--paper3);margin-bottom:16px">
         <button id="admin-tab-users" onclick="switchAdminTab('users')" style="flex:1;padding:10px;font-size:13px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:var(--red);border-bottom:2px solid var(--red);margin-bottom:-1px">👥 สมาชิก</button>
         <button id="admin-tab-affiliate" onclick="switchAdminTab('affiliate')" style="flex:1;padding:10px;font-size:13px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:var(--ink3);border-bottom:2px solid transparent;margin-bottom:-1px">🤝 Affiliate</button>
+        <button id="admin-tab-export" onclick="switchAdminTab('export')" style="flex:1;padding:10px;font-size:13px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:var(--ink3);border-bottom:2px solid transparent;margin-bottom:-1px">📥 Export</button>
       </div>
     </div>
 
@@ -1911,6 +1912,55 @@ body {
       </div>
       <div id="admin-affiliate-list">
         <div style="text-align:center;padding:30px;color:var(--ink3)">⏳ กำลังโหลด...</div>
+      </div>
+    </div>
+
+    <!-- Tab: Export -->
+    <div id="admin-pane-export" style="padding:0 20px 20px;display:none">
+      <div style="background:var(--blue-light);border:1px solid #b8cef0;border-radius:var(--r);padding:14px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:4px">📥 Export ข้อมูล</div>
+        <div style="font-size:12px;color:var(--ink2)">ดึงข้อมูลสมาชิกและ Affiliate เป็นไฟล์ Excel</div>
+      </div>
+
+      <!-- Filter Section -->
+      <div style="background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:16px;margin-bottom:14px">
+        <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px">🔍 เลือกข้อมูลที่ต้องการ</div>
+
+        <!-- ประเภทข้อมูล -->
+        <div style="margin-bottom:12px">
+          <div style="font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:6px">ประเภทข้อมูล</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button onclick="setExportType('all')" id="exp-type-all" style="padding:7px 14px;background:var(--red);color:white;border:none;border-radius:20px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">👥 สมาชิกทั้งหมด</button>
+            <button onclick="setExportType('affiliate')" id="exp-type-affiliate" style="padding:7px 14px;background:var(--paper2);color:var(--ink2);border:1px solid var(--paper3);border-radius:20px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">🤝 Affiliate เท่านั้น</button>
+            <button onclick="setExportType('premium')" id="exp-type-premium" style="padding:7px 14px;background:var(--paper2);color:var(--ink2);border:1px solid var(--paper3);border-radius:20px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">⭐ Premium เท่านั้น</button>
+          </div>
+        </div>
+
+        <!-- ช่วงวันที่ -->
+        <div style="margin-bottom:12px">
+          <div style="font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:6px">ช่วงวันที่สมัคร (ไม่บังคับ)</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input type="date" id="exp-date-from" style="flex:1;padding:9px 12px;border:1px solid var(--paper3);border-radius:8px;font-size:13px;font-family:inherit;outline:none">
+            <span style="color:var(--ink3);font-size:12px">ถึง</span>
+            <input type="date" id="exp-date-to" style="flex:1;padding:9px 12px;border:1px solid var(--paper3);border-radius:8px;font-size:13px;font-family:inherit;outline:none">
+          </div>
+        </div>
+
+        <button onclick="previewExportData()" style="width:100%;padding:11px;background:var(--blue);color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">
+          🔍 ดูตัวอย่างข้อมูล
+        </button>
+      </div>
+
+      <!-- Preview -->
+      <div id="export-preview" style="display:none;background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:16px;margin-bottom:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div id="export-preview-title" style="font-size:13px;font-weight:700;color:var(--ink)"></div>
+          <div id="export-count" style="font-size:12px;color:var(--ink3)"></div>
+        </div>
+        <div id="export-preview-table" style="overflow-x:auto;font-size:12px"></div>
+        <button onclick="downloadExcel()" id="export-download-btn" style="width:100%;margin-top:14px;padding:13px;background:var(--green);color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">
+          📥 ดาวน์โหลด Excel
+        </button>
       </div>
     </div>
   </div>
@@ -10679,8 +10729,10 @@ function goAdminPanel() {
 function switchAdminTab(tab) {
   document.getElementById('admin-pane-users').style.display = tab==='users'?'block':'none';
   document.getElementById('admin-pane-affiliate').style.display = tab==='affiliate'?'block':'none';
+  document.getElementById('admin-pane-export').style.display = tab==='export'?'block':'none';
   document.getElementById('admin-tab-users').style.cssText = `flex:1;padding:10px;font-size:13px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:${tab==='users'?'var(--red)':'var(--ink3)'};border-bottom:2px solid ${tab==='users'?'var(--red)':'transparent'};margin-bottom:-1px`;
   document.getElementById('admin-tab-affiliate').style.cssText = `flex:1;padding:10px;font-size:13px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:${tab==='affiliate'?'var(--amber)':'var(--ink3)'};border-bottom:2px solid ${tab==='affiliate'?'var(--amber)':'transparent'};margin-bottom:-1px`;
+  document.getElementById('admin-tab-export').style.cssText = `flex:1;padding:10px;font-size:13px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:${tab==='export'?'var(--blue)':'var(--ink3)'};border-bottom:2px solid ${tab==='export'?'var(--blue)':'transparent'};margin-bottom:-1px`;
 }
 
 async function loadAffiliateAdmin() {
@@ -11633,6 +11685,138 @@ async function showPaymentHistory(userId, name) {
     <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px">รายการจ่ายเงิน (${history.length} ครั้ง)</div>
     ${historyHTML}
   `;
+}
+
+// ═══════════════════════════════════
+// EXPORT TO EXCEL (Admin)
+// ═══════════════════════════════════
+let exportData = [];
+let exportType = 'all';
+
+function setExportType(type) {
+  exportType = type;
+  ['all','affiliate','premium'].forEach(t => {
+    const btn = document.getElementById('exp-type-' + t);
+    if (!btn) return;
+    if (t === type) {
+      btn.style.background = t === 'all' ? 'var(--red)' : t === 'affiliate' ? 'var(--amber)' : 'var(--green)';
+      btn.style.color = 'white';
+      btn.style.border = 'none';
+    } else {
+      btn.style.background = 'var(--paper2)';
+      btn.style.color = 'var(--ink2)';
+      btn.style.border = '1px solid var(--paper3)';
+    }
+  });
+}
+
+async function previewExportData() {
+  const previewEl = document.getElementById('export-preview');
+  const tableEl = document.getElementById('export-preview-table');
+  const titleEl = document.getElementById('export-preview-title');
+  const countEl = document.getElementById('export-count');
+  const btn = document.querySelector('#admin-pane-export button[onclick="previewExportData()"]');
+
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ กำลังดึงข้อมูล...'; }
+
+  const dateFrom = document.getElementById('exp-date-from').value;
+  const dateTo = document.getElementById('exp-date-to').value;
+
+  try {
+    // ดึงข้อมูลจาก admin_list_users RPC
+    const { data: rawData, error } = await sb.rpc('admin_list_users');
+    if (error) throw error;
+    let users = (rawData || []).map(row => typeof row === 'string' ? JSON.parse(row) : row);
+
+    // ดึง affiliate data
+    const { data: affData } = await sb.from('user_progress')
+      .select('user_id, referral_code, affiliate_earnings, affiliate_count, bank_name, bank_account, bank_owner, last_paid_at, last_paid_amount')
+      .not('referral_code', 'is', null);
+    const affMap = {};
+    (affData || []).forEach(a => { affMap[a.user_id] = a; });
+
+    // filter ตามประเภท
+    if (exportType === 'affiliate') users = users.filter(u => affMap[u.id]);
+    if (exportType === 'premium') users = users.filter(u => u.is_premium);
+
+    // filter ตามวันที่
+    if (dateFrom) users = users.filter(u => u.created_at && u.created_at >= dateFrom);
+    if (dateTo) users = users.filter(u => u.created_at && u.created_at <= dateTo + 'T23:59:59');
+
+    // เตรียม exportData
+    exportData = users.map(u => {
+      const aff = affMap[u.id] || {};
+      return {
+        'ชื่อ': u.name || '-',
+        'Email': u.email || '-',
+        'วันที่สมัคร': u.created_at ? new Date(u.created_at).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'}) : '-',
+        'สถานะ': u.is_premium ? 'Premium' : 'ฟรี',
+        'XP': u.xp || 0,
+        'Referral Code': aff.referral_code || '-',
+        'ชวนสำเร็จ (คน)': aff.affiliate_count || 0,
+        'ค่าคอมรอจ่าย (฿)': aff.affiliate_earnings || 0,
+        'ธนาคาร': aff.bank_name || '-',
+        'เลขบัญชี': aff.bank_account || '-',
+        'ชื่อบัญชี': aff.bank_owner || '-',
+        'จ่ายล่าสุด': aff.last_paid_at ? new Date(aff.last_paid_at).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'}) : '-',
+        'จ่ายล่าสุด (฿)': aff.last_paid_amount || 0,
+      };
+    });
+
+    // แสดง preview table
+    const typeLabel = exportType === 'all' ? 'สมาชิกทั้งหมด' : exportType === 'affiliate' ? 'Affiliate' : 'Premium';
+    titleEl.textContent = '📊 ตัวอย่างข้อมูล — ' + typeLabel;
+    countEl.textContent = exportData.length + ' รายการ';
+
+    const cols = Object.keys(exportData[0] || {});
+    const previewRows = exportData.slice(0, 5);
+    tableEl.innerHTML = `
+      <table style="width:100%;border-collapse:collapse;min-width:600px">
+        <thead>
+          <tr style="background:var(--paper2)">
+            ${cols.map(c => `<th style="padding:8px 10px;text-align:left;font-size:11px;color:var(--ink2);white-space:nowrap;border-bottom:1px solid var(--paper3)">${c}</th>`).join('')}
+          </tr>
+        </thead>
+        <tbody>
+          ${previewRows.map(row => `
+            <tr style="border-bottom:1px solid var(--paper3)">
+              ${cols.map(c => `<td style="padding:8px 10px;font-size:11px;color:var(--ink);white-space:nowrap">${row[c]}</td>`).join('')}
+            </tr>`).join('')}
+          ${exportData.length > 5 ? `<tr><td colspan="${cols.length}" style="padding:8px 10px;font-size:11px;color:var(--ink3);text-align:center">... และอีก ${exportData.length - 5} รายการ</td></tr>` : ''}
+        </tbody>
+      </table>`;
+
+    previewEl.style.display = 'block';
+  } catch(e) {
+    showToast('❌ ดึงข้อมูลไม่ได้: ' + e.message);
+  }
+
+  if (btn) { btn.disabled = false; btn.textContent = '🔍 ดูตัวอย่างข้อมูล'; }
+}
+
+function downloadExcel() {
+  if (!exportData.length) { showToast('ไม่มีข้อมูลให้ดาวน์โหลด'); return; }
+
+  const cols = Object.keys(exportData[0]);
+
+  // สร้าง CSV
+  const csvRows = [
+    cols.join(','),
+    ...exportData.map(row => cols.map(c => {
+      const val = String(row[c] ?? '').replace(/"/g, '""');
+      return `"${val}"`;
+    }).join(','))
+  ];
+  const csvContent = '\uFEFF' + csvRows.join('\n'); // BOM สำหรับ Excel ภาษาไทย
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const dateStr = new Date().toLocaleDateString('th-TH').replace(/\//g, '-');
+  a.href = url;
+  a.download = `TangTang_${exportType}_${dateStr}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('✅ ดาวน์โหลดสำเร็จ! เปิดด้วย Excel ได้เลยค่ะ');
 }
 </script>
 </body>
