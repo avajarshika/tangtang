@@ -10736,11 +10736,17 @@ async function loadAffiliateAdmin() {
       <div style="background:var(--red-light);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--red);margin-bottom:10px">
         ⚠️ ยังไม่มีข้อมูลบัญชี
       </div>`}
-      <button onclick="markAffiliatePaid('${a.user_id}', ${earnings})" 
-        style="width:100%;padding:10px;background:${earnings > 0 ? 'var(--green)' : '#94a3b8'};color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">
-        ✅ จ่ายแล้ว${earnings > 0 ? ' ฿'+earnings : ''} — บันทึกการจ่ายเงิน
-      </button>
-      ${a.last_paid_at ? `<div style="text-align:center;font-size:11px;color:var(--ink3);margin-top:6px">📅 จ่ายล่าสุด: ${new Date(a.last_paid_at).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'})}</div>` : ''}
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button onclick="markAffiliatePaid('${a.user_id}', ${earnings})"
+          style="flex:2;padding:10px;background:${earnings > 0 ? 'var(--green)' : '#94a3b8'};color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">
+          ✅ จ่ายแล้ว${earnings > 0 ? ' ฿'+earnings : ''} — บันทึกการจ่าย
+        </button>
+        <button onclick="showPaymentHistory('${a.user_id}', '${name}')"
+          style="flex:1;padding:10px;background:var(--paper2);color:var(--ink2);border:1px solid var(--paper3);border-radius:10px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">
+          📋 ประวัติ
+        </button>
+      </div>
+      ${a.last_paid_at ? `<div style="text-align:center;font-size:11px;color:var(--ink3);margin-top:6px">📅 จ่ายล่าสุด: ${new Date(a.last_paid_at).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'})} · ฿${a.last_paid_amount||0}</div>` : '<div style="text-align:center;font-size:11px;color:var(--ink3);margin-top:6px">ยังไม่มีประวัติการจ่าย</div>'}
     </div>`;
   }).join('');
 }
@@ -11250,19 +11256,60 @@ async function renderAffiliateSection() {
 
   // Load payment history
   setTimeout(async function() {
-    const { data } = await sb.from('user_progress').select('data').eq('user_id', state.user.id).single();
+    const { data } = await sb.from('user_progress')
+      .select('data, last_paid_at, last_paid_amount')
+      .eq('user_id', state.user.id).single();
     const history = (data && data.data && data.data.affiliateHistory) ? data.data.affiliateHistory : [];
     const hEl = document.getElementById('aff-history');
-    if (!hEl || history.length === 0) return;
-    let html = '<div style="font-size:12px;font-weight:700;color:var(--ink);margin-bottom:8px">📋 ประวัติรับเงิน</div>';
-    history.slice().reverse().forEach(function(h) {
-      const dateStr = h.month || new Date(h.date).toLocaleDateString('th-TH');
-      html += '<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--paper3);font-size:12px">'
-            + '<span style="color:var(--ink2)">' + dateStr + '</span>'
-            + '<span style="font-weight:700;color:var(--green)">+฿' + h.amount + ' ✅</span>'
-            + '</div>';
-    });
-    hEl.innerHTML = html;
+    if (!hEl) return;
+
+    const totalReceived = history.reduce((s, h) => s + (h.amount || 0), 0);
+
+    if (history.length === 0) {
+      hEl.innerHTML = `
+        <div style="margin-top:16px;background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:16px">
+          <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px">💰 ประวัติรับค่าคอม</div>
+          <div style="text-align:center;padding:16px;color:var(--ink3);font-size:12px">ยังไม่มีประวัติการรับเงิน<br>ชวนเพื่อนมาสมัครเพื่อรับค่าคอมได้เลย! 🎉</div>
+        </div>`;
+      return;
+    }
+
+    const rowsHTML = history.slice().reverse().map(function(h) {
+      const dateStr = h.date ? new Date(h.date).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'}) : '-';
+      const monthStr = h.month || dateStr;
+      return `<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--paper3)">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--ink)">${monthStr}</div>
+          <div style="font-size:11px;color:var(--ink3)">${dateStr}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:15px;font-weight:800;color:var(--green)">+฿${h.amount}</div>
+          <div style="font-size:10px;color:var(--green)">✅ จ่ายแล้ว</div>
+        </div>
+      </div>`;
+    }).join('');
+
+    hEl.innerHTML = `
+      <div style="margin-top:16px;background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div style="font-size:13px;font-weight:700;color:var(--ink)">💰 ประวัติรับค่าคอม</div>
+          <div style="font-size:11px;color:var(--ink3)">${history.length} ครั้ง</div>
+        </div>
+        <!-- Summary -->
+        <div style="display:flex;gap:8px;margin-bottom:14px">
+          <div style="flex:1;background:var(--green-light);border-radius:10px;padding:10px;text-align:center">
+            <div style="font-size:11px;color:var(--ink3)">รับไปแล้วทั้งหมด</div>
+            <div style="font-size:18px;font-weight:800;color:var(--green)">฿${totalReceived}</div>
+          </div>
+          <div style="flex:1;background:var(--amber-light);border-radius:10px;padding:10px;text-align:center">
+            <div style="font-size:11px;color:var(--ink3)">รอรับรอบนี้</div>
+            <div style="font-size:18px;font-weight:800;color:var(--amber)">฿${earnings}</div>
+          </div>
+        </div>
+        <!-- Rows -->
+        ${rowsHTML}
+        <div style="text-align:center;font-size:11px;color:var(--ink3);margin-top:10px">📅 จ่ายทุกวันสุดท้ายของเดือน</div>
+      </div>`;
   }, 300);
 }
 
@@ -11528,6 +11575,64 @@ async function saveNewName() {
   renderProfile();
   updateTopbar();
   showToast('✅ เปลี่ยนชื่อแล้ว!');
+}
+
+// ═══════════════════════════════════
+// PAYMENT HISTORY MODAL (Admin)
+// ═══════════════════════════════════
+async function showPaymentHistory(userId, name) {
+  const existing = document.getElementById('payment-history-modal');
+  if (existing) existing.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'payment-history-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.5);display:flex;align-items:flex-end';
+  modal.innerHTML = '<div style="background:white;border-radius:24px 24px 0 0;padding:24px;width:100%;max-height:80vh;overflow-y:auto"><div style="text-align:center;padding:20px;color:var(--ink3)">⏳ กำลังโหลด...</div></div>';
+  modal.addEventListener('click', e => { if(e.target===modal) modal.remove(); });
+  document.body.appendChild(modal);
+
+  // โหลดข้อมูลจาก Supabase
+  const { data } = await sb.from('user_progress')
+    .select('data, last_paid_at, last_paid_amount, affiliate_earnings')
+    .eq('user_id', userId).single();
+
+  const history = data?.data?.affiliateHistory || [];
+  const pending = data?.affiliate_earnings || 0;
+
+  const historyHTML = history.length === 0
+    ? '<div style="text-align:center;padding:30px;color:var(--ink3)">ยังไม่มีประวัติการจ่าย</div>'
+    : [...history].reverse().map((h, i) => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--paper3)">
+          <div>
+            <div style="font-size:13px;font-weight:600;color:var(--ink)">${h.month || '-'}</div>
+            <div style="font-size:11px;color:var(--ink3)">${new Date(h.date).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+          </div>
+          <div style="font-size:16px;font-weight:800;color:var(--green)">฿${h.amount || 0}</div>
+        </div>`).join('');
+
+  const totalPaid = history.reduce((s, h) => s + (h.amount || 0), 0);
+
+  modal.querySelector('div').innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <div style="font-size:16px;font-weight:700;color:var(--ink)">📋 ประวัติการจ่าย</div>
+      <button onclick="document.getElementById('payment-history-modal').remove()" style="background:var(--paper2);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer">✕</button>
+    </div>
+    <div style="font-size:13px;color:var(--ink3);margin-bottom:16px">${name}</div>
+
+    <div style="display:flex;gap:10px;margin-bottom:20px">
+      <div style="flex:1;background:var(--amber-light);border-radius:12px;padding:12px;text-align:center">
+        <div style="font-size:11px;color:var(--ink3)">รอจ่าย</div>
+        <div style="font-size:20px;font-weight:800;color:var(--amber)">฿${pending}</div>
+      </div>
+      <div style="flex:1;background:var(--green-light);border-radius:12px;padding:12px;text-align:center">
+        <div style="font-size:11px;color:var(--ink3)">จ่ายไปแล้วทั้งหมด</div>
+        <div style="font-size:20px;font-weight:800;color:var(--green)">฿${totalPaid}</div>
+      </div>
+    </div>
+
+    <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px">รายการจ่ายเงิน (${history.length} ครั้ง)</div>
+    ${historyHTML}
+  `;
 }
 </script>
 </body>
