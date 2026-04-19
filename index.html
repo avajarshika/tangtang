@@ -308,7 +308,7 @@ body {
 
 /* ── HOME ── */
 .home-header {
-  background: #F13596;
+  background: linear-gradient(135deg, #6b1a6b, #F13596);
   padding: 28px 20px 24px;
   color: white;
   position: relative;
@@ -1093,7 +1093,7 @@ body {
 
 /* ── PROFILE ── */
 .profile-hero {
-  background: linear-gradient(160deg, #E01080 0%, #F13596 100%);
+  background: linear-gradient(135deg, #6b1a6b 0%, #F13596 100%);
   padding: 24px 20px;
   color: white;
   display: flex;
@@ -1561,32 +1561,106 @@ body {
     <div class="lesson-section" id="home-lesson-list"></div>
   </div>
 
-  <!-- CHAT WITH TANGTANG -->
-  <div id="screen-chat" class="screen">
-    <div class="detail-header" style="padding:14px 20px">
-      <div style="display:flex;align-items:center;gap:12px">
-        <div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#f9c74f,#f3722c);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 3px 10px rgba(243,114,44,.3)">🦊</div>
-        <div>
-          <div style="font-size:16px;font-weight:700;color:var(--ink)">Tangtang</div>
-          <div style="font-size:11px;color:var(--green);font-weight:600;display:flex;align-items:center;gap:4px">
-            <span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block"></span>ออนไลน์ · ผู้ช่วยฝึกภาษาจีน
+  <!-- GAMES HUB -->
+  <div id="screen-play" class="screen">
+    <!-- Hub -->
+    <div id="play-hub">
+      <div style="background:linear-gradient(135deg,#6b1a6b,#F13596);padding:28px 20px 22px;color:white;position:relative;overflow:hidden">
+        <div style="position:absolute;right:-10px;top:-10px;font-size:80px;opacity:.08;font-family:'Noto Serif SC',serif;line-height:1">玩</div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+          <div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#f9c74f,#f3722c);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;box-shadow:0 3px 10px rgba(0,0,0,.2)">🦊</div>
+          <div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:.1em;opacity:.7;text-transform:uppercase">Mini Games with Tangtang</div>
+            <div style="font-size:20px;font-weight:800;line-height:1.2">เล่น & ฝึกภาษาจีน</div>
           </div>
         </div>
+        <div style="font-size:12px;opacity:.8">ฝึกสนุก ได้ XP ไต่ Level ไปด้วยกัน! 🎮</div>
       </div>
-      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap" id="chat-suggestions-header"></div>
+      <div style="padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <!-- Stroke Order -->
+        <div onclick="openGame('stroke')" style="background:white;border:1.5px solid var(--paper3);border-radius:16px;padding:18px 14px;cursor:pointer;transition:.2s;box-shadow:var(--shadow)" onmouseover="this.style.borderColor='#6b1a6b';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--paper3)';this.style.transform='none'">
+          <div style="font-size:38px;margin-bottom:10px">✍️</div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">ลำดับขีด</div>
+          <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:10px">ดู animation + ฝึกเขียนตัวอักษรจีน</div>
+          <span style="font-size:10px;font-weight:700;color:#6b1a6b;background:#f0e8f4;padding:3px 10px;border-radius:20px">ฟรี HSK1 (5 ตัว) ✨</span>
+        </div>
+        <!-- Daily Challenge -->
+        <div onclick="openGame('daily')" style="background:white;border:1.5px solid var(--paper3);border-radius:16px;padding:18px 14px;cursor:pointer;transition:.2s;box-shadow:var(--shadow)" onmouseover="this.style.borderColor='#e67e22';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--paper3)';this.style.transform='none'">
+          <div style="font-size:38px;margin-bottom:10px">🎯</div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">Daily Challenge</div>
+          <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:10px">5 ข้อต่อวัน เปลี่ยนทุกวัน มี Streak!</div>
+          <span id="daily-hub-badge" style="font-size:10px;font-weight:700;color:#e67e22;background:#fef3e2;padding:3px 10px;border-radius:20px">วันนี้ยังไม่ได้ทำ</span>
+        </div>
+        <!-- Sentence Builder -->
+        <div onclick="openGame('sentence')" style="background:white;border:1.5px solid var(--paper3);border-radius:16px;padding:18px 14px;cursor:pointer;transition:.2s;box-shadow:var(--shadow)" onmouseover="this.style.borderColor='#1a4a8a';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--paper3)';this.style.transform='none'">
+          <div style="font-size:38px;margin-bottom:10px">🧩</div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">เรียงประโยค</div>
+          <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:10px">แตะคำจีนเรียงให้ถูกประโยค</div>
+          <span style="font-size:10px;font-weight:700;color:#1a4a8a;background:#e6f1fb;padding:3px 10px;border-radius:20px">ฟรี Level 1 🎮</span>
+        </div>
+        <!-- Heatmap -->
+        <div onclick="openGame('speed')" style="background:white;border:1.5px solid var(--paper3);border-radius:16px;padding:18px 14px;cursor:pointer;transition:.2s;box-shadow:var(--shadow)" onmouseover="this.style.borderColor='#e67e22';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--paper3)';this.style.transform='none'">
+          <div style="font-size:38px;margin-bottom:10px">⚡</div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">Speed Quiz</div>
+          <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:10px">ตอบให้เร็ว! มี Bonus XP</div>
+          <span id="speed-hub-badge" style="font-size:10px;font-weight:700;color:#e67e22;background:#fef3e2;padding:3px 10px;border-radius:20px">⏱ Time Attack 🔒 Premium</span>
+        </div>
+        <!-- Journal — full width -->
+        <div onclick="openGame('journal')" style="grid-column:1/-1;background:white;border:1.5px solid var(--paper3);border-radius:16px;padding:18px;cursor:pointer;transition:.2s;box-shadow:var(--shadow);display:flex;align-items:center;gap:16px" onmouseover="this.style.borderColor='#C9A96E';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--paper3)';this.style.transform='none'">
+          <div style="font-size:42px;flex-shrink:0">📓</div>
+          <div style="flex:1">
+            <div style="font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px">บันทึกการเรียนรู้</div>
+            <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:8px">จดโน้ตถึงตัวเอง · ดูปฏิทินย้อนหลังได้</div>
+            <span style="font-size:10px;font-weight:700;color:#C9A96E;background:var(--amber-light);padding:3px 10px;border-radius:20px">Learning Journal 📖</span>
+          </div>
+          <div style="font-size:24px;opacity:.3">→</div>
+        </div>
+      </div>
     </div>
 
-    <div id="chat-messages" style="padding:12px 14px;display:flex;flex-direction:column;gap:10px;min-height:300px"></div>
-
-    <div id="chat-input-area" style="padding:10px 14px;border-top:1px solid var(--paper3);background:white;display:flex;gap:8px;align-items:flex-end">
-      <div style="flex:1;background:var(--paper);border:1px solid var(--paper3);border-radius:20px;padding:10px 14px;display:flex;align-items:center;gap:8px">
-        <textarea id="chat-input" placeholder="พิมพ์ภาษาไทยหรือจีนได้เลย..." rows="1"
-          style="flex:1;border:none;background:transparent;font-family:inherit;font-size:14px;color:var(--ink);resize:none;outline:none;max-height:80px;overflow-y:auto;line-height:1.5"
-          oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"
-          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"></textarea>
+    <!-- Game: Stroke Order -->
+    <div id="game-stroke" style="display:none">
+      <div style="padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--paper3);background:white;position:sticky;top:56px;z-index:30">
+        <button onclick="closeGame()" style="background:var(--paper2);border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center">←</button>
+        <div style="font-size:15px;font-weight:700;color:var(--ink)">✍️ ลำดับขีด</div>
       </div>
-      <button id="mic-btn" onclick="toggleMic()" style="width:42px;height:42px;border-radius:50%;border:1px solid var(--paper3);background:var(--paper);font-size:18px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s">🎤</button>
-      <button onclick="sendChat()" id="send-btn" style="width:42px;height:42px;border-radius:50%;border:none;background:var(--red);color:white;font-size:18px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .2s">➤</button>
+      <div id="stroke-content" style="padding:16px"></div>
+    </div>
+
+    <!-- Game: Daily Challenge -->
+    <div id="game-daily" style="display:none">
+      <div style="padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--paper3);background:white;position:sticky;top:56px;z-index:30">
+        <button onclick="closeGame()" style="background:var(--paper2);border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center">←</button>
+        <div style="font-size:15px;font-weight:700;color:var(--ink)">🎯 Daily Challenge</div>
+      </div>
+      <div id="daily-content" style="padding:16px"></div>
+    </div>
+
+    <!-- Game: Sentence Builder -->
+    <div id="game-sentence" style="display:none">
+      <div style="padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--paper3);background:white;position:sticky;top:56px;z-index:30">
+        <button onclick="closeGame()" style="background:var(--paper2);border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center">←</button>
+        <div style="font-size:15px;font-weight:700;color:var(--ink)">🧩 เรียงประโยค</div>
+      </div>
+      <div id="sentence-content" style="padding:16px"></div>
+    </div>
+
+    <!-- Game: Speed Quiz -->
+    <div id="game-speed" style="display:none">
+      <div style="padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--paper3);background:white;position:sticky;top:56px;z-index:30">
+        <button onclick="closeGame()" style="background:var(--paper2);border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center">←</button>
+        <div style="font-size:15px;font-weight:700;color:var(--ink)">⚡ Speed Quiz</div>
+      </div>
+      <div id="speed-content" style="padding:16px"></div>
+    </div>
+
+    <!-- Game: Journal -->
+    <div id="game-journal" style="display:none">
+      <div style="padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--paper3);background:white;position:sticky;top:56px;z-index:30">
+        <button onclick="closeGame()" style="background:var(--paper2);border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center">←</button>
+        <div style="font-size:15px;font-weight:700;color:var(--ink)">📓 บันทึกการเรียนรู้</div>
+      </div>
+      <div id="journal-content" style="padding:16px"></div>
     </div>
   </div>
 
@@ -1799,8 +1873,8 @@ body {
     <button class="nav-btn" id="nav-lessons" onclick="goScreen('lessons-hub')">
       <span class="nav-icon">📚</span>บทเรียน
     </button>
-    <button class="nav-btn" id="nav-chat" onclick="goScreen('chat');initChat()">
-      <span class="nav-icon">🦊</span>แชท
+    <button class="nav-btn" id="nav-chat" onclick="goScreen('play');initPlay()">
+      <span class="nav-icon">🦊</span>เกม
     </button>
     <button class="nav-btn" id="nav-quiz" onclick="goScreen('quiz');initMainQuiz()">
       <span class="nav-icon">🎯</span>ทดสอบ
@@ -6201,7 +6275,7 @@ function goScreen(s) {
   document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
   document.getElementById('screen-' + s).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  const navMap = { home:'nav-home', 'lessons-hub':'nav-lessons', chat:'nav-chat', quiz:'nav-quiz', profile:'nav-profile', lesson:'nav-home', pinyin:'nav-home', vocab:'nav-lessons' };
+  const navMap = { home:'nav-home', 'lessons-hub':'nav-lessons', play:'nav-chat', chat:'nav-chat', quiz:'nav-quiz', profile:'nav-profile', lesson:'nav-home', pinyin:'nav-home', vocab:'nav-lessons' };
   const nb = document.getElementById(navMap[s]);
   if (nb) nb.classList.add('active');
   state.curScreen = s;
@@ -6209,6 +6283,7 @@ function goScreen(s) {
   if (s === 'profile') renderProfile();
   if (s === 'vocab') renderVocabMode();
   if (s === 'home') renderHome();
+  if (s === 'play') initPlay();
   if (s === 'lessons-hub') { renderLessonsHub(); renderHubVocab(); }
   if (s === 'quiz') initMainQuiz();
   updateTopbar();
@@ -7538,265 +7613,562 @@ function speakFC() {
 }
 
 // ═══════════════════════════════════
-// CHAT WITH TANGTANG — AI Conversation Partner
+// GAMES HUB
 // ═══════════════════════════════════
 
-const TANGTANG_SYSTEM = `คุณคือ Tangtang 🦊 ผู้ช่วยสอนภาษาจีนที่เป็นมิตรและสนุกสนาน
-ออกแบบมาเพื่อช่วยผู้เรียนชาวไทยฝึกสนทนาภาษาจีนระดับ HSK 1-2
+function initPlay() { updateDailyBadge(); updateSpeedBadge(); }
 
-กฎสำคัญ:
-1. ตอบเป็นภาษาไทย แต่ใส่ภาษาจีน (พร้อมพินอิน) ในทุกประโยค
-2. ใช้ภาษาง่าย เหมาะกับผู้เริ่มต้น
-3. แก้ไขข้อผิดพลาดของผู้เรียนอย่างอ่อนโยน
-4. ถ้าผู้เรียนพิมพ์ภาษาจีน ให้ตรวจสอบความถูกต้องและชมเชยด้วย
-5. จบทุกข้อความด้วยคำถามหรือประโยคฝึกสั้นๆ เพื่อกระตุ้นให้ผู้เรียนตอบ
-6. รูปแบบ: [ภาษาไทยอธิบาย] แล้วใส่ภาษาจีนในรูป: 中文 (pīnyīn) = ความหมาย
-7. สั้น กระชับ อย่าตอบยาวเกิน 4-5 ประโยค`;
+function updateSpeedBadge() {
+  const b = document.getElementById('speed-hub-badge');
+  if (!b) return;
+  b.textContent = isPremium() ? '⏱ Time Attack ⚡' : '⏱ Time Attack 🔒 Premium';
+  b.style.color = isPremium() ? '#e67e22' : '#e67e22';
+}
 
-const CHAT_SUGGESTIONS = [
-  { th:'ฝึกทักทาย', zh:'你好！', prompt:'อยากฝึกทักทายภาษาจีนหน่อย' },
-  { th:'สั่งอาหาร', zh:'点菜', prompt:'ช่วยสอนฉันสั่งอาหารเป็นภาษาจีนหน่อย' },
-  { th:'ถามทาง', zh:'问路', prompt:'ฉันอยากเรียนถามทางเป็นภาษาจีน' },
-  { th:'ซื้อของ', zh:'买东西', prompt:'อยากฝึกการต่อราคาและซื้อของเป็นภาษาจีน' },
-  { th:'แนะนำตัว', zh:'自我介绍', prompt:'ช่วยสอนแนะนำตัวเองเป็นภาษาจีน' },
+function openGame(name) {
+  document.getElementById('play-hub').style.display = 'none';
+  ['stroke','daily','sentence','speed','journal'].forEach(g => {
+    document.getElementById('game-'+g).style.display = g===name ? 'block' : 'none';
+  });
+  window.scrollTo(0,0);
+  if (name==='stroke') initStrokeGame();
+  else if (name==='daily') initDailyGame();
+  else if (name==='sentence') initSentenceGame();
+  else if (name==='speed') initSpeedQuiz();
+  else if (name==='journal') renderJournalHub();
+}
+
+function closeGame() {
+  ['stroke','daily','sentence','speed','journal'].forEach(g => {
+    document.getElementById('game-'+g).style.display = 'none';
+  });
+  document.getElementById('play-hub').style.display = 'block';
+  updateDailyBadge();
+  window.scrollTo(0,0);
+}
+
+function trackActivity() {
+  if (!state.user) return;
+  const today = new Date().toISOString().split('T')[0];
+  const d = state.user.data;
+  if (!d.activityLog) d.activityLog = {};
+  d.activityLog[today] = (d.activityLog[today] || 0) + 1;
+}
+
+// ═══════════════════════════════════
+// GAME 1 — STROKE ORDER (HanziWriter)
+// ═══════════════════════════════════
+const STROKE_CHARS = {
+  1: ['我','你','他','好','是','不','有','大','小','人','中','国','水','火','山','木','日','月','上','下'],
+  2: ['朋','友','家','学','说','听','看','写','来','去','左','右','东','西','南','北','多','少','买','卖'],
+  3: ['因','为','所','以','但','虽','然','如','果','只','要','就','都','还','再','又','也','和','了','的'],
+};
+const STROKE_MEANINGS = {
+  '我':'ฉัน','你':'คุณ','他':'เขา','好':'ดี','是':'เป็น','不':'ไม่','有':'มี','大':'ใหญ่','小':'เล็ก','人':'คน',
+  '中':'กลาง','国':'ประเทศ','水':'น้ำ','火':'ไฟ','山':'ภูเขา','木':'ไม้','日':'วัน','月':'เดือน','上':'บน','下':'ล่าง',
+  '朋':'เพื่อน','友':'มิตร','家':'บ้าน','学':'เรียน','说':'พูด','听':'ฟัง','看':'ดู','写':'เขียน','来':'มา','去':'ไป',
+  '左':'ซ้าย','右':'ขวา','东':'ตะวันออก','西':'ตะวันตก','南':'ใต้','北':'เหนือ','多':'มาก','少':'น้อย','买':'ซื้อ','卖':'ขาย',
+  '因':'เพราะ','为':'เพื่อ','所':'ที่','以':'ด้วย','但':'แต่','虽':'แม้','然':'อย่างนั้น','如':'เหมือน','果':'ผล','只':'เท่านั้น',
+  '要':'ต้องการ','就':'ก็','都':'ทั้งหมด','还':'ยัง','再':'อีกครั้ง','又':'อีก','也':'ด้วย','和':'และ','了':'แล้ว','的':'ของ',
+};
+
+let hwWriter = null, strokeCharIdx = 0, strokeHSK = 1;
+
+function initStrokeGame() {
+  if (!window.HanziWriter) {
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js';
+    s.onload = () => renderStrokeGame();
+    s.onerror = () => { document.getElementById('stroke-content').innerHTML = '<div style="text-align:center;padding:40px 20px"><div style="font-size:40px">😢</div><div style="font-size:13px;color:var(--ink3);margin-top:8px">โหลด HanziWriter ไม่ได้<br>กรุณาเชื่อมต่ออินเทอร์เน็ต</div></div>'; };
+    document.head.appendChild(s);
+  } else { renderStrokeGame(); }
+}
+
+function renderStrokeGame() {
+  if (!isPremium() && strokeHSK > 1) { strokeHSK = 1; }
+  const freeLimit = isPremium() ? 999 : 5;
+  if (!isPremium() && strokeCharIdx >= freeLimit) { strokeCharIdx = freeLimit - 1; }
+  const chars = (isPremium() ? STROKE_CHARS[strokeHSK] : STROKE_CHARS[1].slice(0,5)) || STROKE_CHARS[1];
+  const char = chars[strokeCharIdx%chars.length];
+  const meaning = STROKE_MEANINGS[char]||'';
+  const box = document.getElementById('stroke-content');
+  box.innerHTML = `
+    <div style="display:flex;justify-content:center;gap:6px;margin-bottom:16px">
+      ${[1,2,3].map(h=>{const lk=!isPremium()&&h>1;return`<button onclick="${lk?'showPaymentModal()':'strokeHSK='+h+';strokeCharIdx=0;renderStrokeGame()'}" style="padding:6px 16px;border-radius:20px;border:1.5px solid ${strokeHSK===h?'#6b1a6b':'var(--paper3)'};background:${strokeHSK===h?'#6b1a6b':lk?'var(--paper2)':'white'};font-size:12px;font-weight:700;color:${strokeHSK===h?'white':lk?'var(--ink3)':'var(--ink3)'};cursor:pointer;font-family:inherit">${lk?'🔒 ':''}HSK ${h}</button>`;}).join('')}
+    </div>
+    <div style="text-align:center;margin-bottom:8px">
+      <div style="font-size:13px;color:var(--ink3)">${strokeCharIdx+1} / ${chars.length}</div>
+      <div style="font-size:16px;font-weight:700;color:var(--ink2);margin-top:2px">${meaning?'= '+meaning:''}</div>
+    </div>
+    <div style="display:flex;justify-content:center;margin-bottom:20px">
+      <div id="hanzi-target" style="width:220px;height:220px;border:2px solid var(--paper3);border-radius:16px;background:white;box-shadow:var(--shadow-lg);position:relative">
+        <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">
+          <line x1="110" y1="10" x2="110" y2="210" stroke="#f5eff5" stroke-width="1.5"/>
+          <line x1="10" y1="110" x2="210" y2="110" stroke="#f5eff5" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+      <button onclick="if(hwWriter)hwWriter.animateCharacter()" style="padding:10px 16px;background:#6b1a6b;color:white;border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">▶ ดูการเขียน</button>
+      <button onclick="if(hwWriter)hwWriter.quiz({onComplete:()=>strokeQuizDone()})" style="padding:10px 16px;background:var(--red);color:white;border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">✏️ ฝึกเขียน</button>
+      <button onclick="if(hwWriter)hwWriter.showCharacter()" style="padding:10px 16px;background:var(--paper2);color:var(--ink2);border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">👁 แสดง</button>
+    </div>
+    <div id="stroke-feedback" style="text-align:center;min-height:36px;margin-bottom:16px"></div>
+    <div style="display:flex;gap:10px">
+      <button onclick="strokeCharIdx=Math.max(0,strokeCharIdx-1);renderStrokeGame()" ${strokeCharIdx===0?'disabled style="opacity:.35"':''} style="flex:1;padding:12px;background:var(--paper2);border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">← ก่อนหน้า</button>
+      <button onclick="strokeCharIdx++;renderStrokeGame()" style="flex:1;padding:12px;background:#6b1a6b;color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">ถัดไป →</button>
+    </div>`;
+  if (window.HanziWriter) {
+    hwWriter = null;
+    const el = document.getElementById('hanzi-target');
+    if (el) {
+      el.innerHTML = `<svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none"><line x1="110" y1="10" x2="110" y2="210" stroke="#f5eff5" stroke-width="1.5"/><line x1="10" y1="110" x2="210" y2="110" stroke="#f5eff5" stroke-width="1.5"/></svg>`;
+      try {
+        hwWriter = HanziWriter.create('hanzi-target', char, {
+          width:220, height:220, padding:20, showOutline:true,
+          strokeColor:'#F13596', outlineColor:'#e8c0d8', radicalColor:'#C9A96E',
+          strokeAnimationSpeed:1, delayBetweenStrokes:400,
+          drawingColor:'#2D1A24', drawingWidth:4, showHintAfterMisses:2,
+        });
+      } catch(e) {}
+    }
+  }
+}
+
+function strokeQuizDone() {
+  const fb = document.getElementById('stroke-feedback');
+  if (!fb) return;
+  fb.innerHTML = `<div style="font-size:24px">🎉</div><div style="font-size:13px;font-weight:700;color:var(--green);margin-top:4px">เยี่ยม! เขียนครบทุกขีดแล้ว +5 XP</div>`;
+  if (state.user) { state.user.data.xp=(state.user.data.xp||0)+5; trackActivity(); saveState(); updateTopbar(); }
+}
+
+// ═══════════════════════════════════
+// GAME 2 — DAILY CHALLENGE
+// ═══════════════════════════════════
+const DAILY_POOL = [
+  {q:'你好 (nǐ hǎo) หมายความว่า?', opts:['ขอบคุณ','สวัสดี','ลาก่อน','ขอโทษ'], ans:1},
+  {q:'谢谢 (xièxiè) หมายความว่า?', opts:['ขอโทษ','ไม่เป็นไร','ขอบคุณ','สวัสดี'], ans:2},
+  {q:'我 (wǒ) หมายความว่า?', opts:['คุณ','เขา','ฉัน','เรา'], ans:2},
+  {q:'你 (nǐ) หมายความว่า?', opts:['ฉัน','คุณ','เขา','เธอ'], ans:1},
+  {q:'他 (tā) หมายความว่า?', opts:['ฉัน','คุณ','เขา (ผู้ชาย)','เธอ'], ans:2},
+  {q:'好 (hǎo) หมายความว่า?', opts:['ไม่ดี','ดี/โอเค','ขอบคุณ','ลาก่อน'], ans:1},
+  {q:'是 (shì) หมายความว่า?', opts:['ไม่ใช่','มี','เป็น/ใช่','ไม่มี'], ans:2},
+  {q:'不 (bù) หมายความว่า?', opts:['ใช่','ไม่','มาก','น้อย'], ans:1},
+  {q:'大 (dà) หมายความว่า?', opts:['เล็ก','ยาว','ใหญ่','สูง'], ans:2},
+  {q:'小 (xiǎo) หมายความว่า?', opts:['ใหญ่','เล็ก','สูง','เตี้ย'], ans:1},
+  {q:'水 (shuǐ) หมายความว่า?', opts:['ไฟ','ลม','น้ำ','ดิน'], ans:2},
+  {q:'吃 (chī) หมายความว่า?', opts:['ดื่ม','นอน','กิน','พูด'], ans:2},
+  {q:'喝 (hē) หมายความว่า?', opts:['กิน','ดื่ม','ซื้อ','ขาย'], ans:1},
+  {q:'来 (lái) หมายความว่า?', opts:['ไป','มา','อยู่','กลับ'], ans:1},
+  {q:'去 (qù) หมายความว่า?', opts:['มา','อยู่','ไป','กลับ'], ans:2},
+  {q:'今天 (jīntiān) หมายความว่า?', opts:['เมื่อวาน','พรุ่งนี้','วันนี้','ทุกวัน'], ans:2},
+  {q:'明天 (míngtiān) หมายความว่า?', opts:['วันนี้','เมื่อวาน','พรุ่งนี้','อาทิตย์หน้า'], ans:2},
+  {q:'朋友 (péngyǒu) หมายความว่า?', opts:['ครอบครัว','เพื่อน','เพื่อนบ้าน','คนรัก'], ans:1},
+  {q:'多少钱 (duōshǎo qián) หมายความว่า?', opts:['อยู่ที่ไหน','กี่โมง','ราคาเท่าไหร่','ชื่ออะไร'], ans:2},
+  {q:'在哪里 (zài nǎlǐ) หมายความว่า?', opts:['เวลาไหน','อยู่ที่ไหน','ชื่ออะไร','ราคาเท่าไหร่'], ans:1},
+  {q:'什么时候 (shénme shíhòu) หมายความว่า?', opts:['เวลาไหน / เมื่อไหร่','ที่ไหน','ชื่ออะไร','อย่างไร'], ans:0},
+  {q:'再见 (zàijiàn) หมายความว่า?', opts:['สวัสดี','ขอบคุณ','ลาก่อน','ขอโทษ'], ans:2},
+  {q:'对不起 (duìbuqǐ) หมายความว่า?', opts:['ขอบคุณ','ไม่เป็นไร','ขอโทษ','สวัสดี'], ans:2},
+  {q:'没关系 (méiguānxi) หมายความว่า?', opts:['ขอโทษ','ไม่เป็นไร','ขอบคุณ','ยินดี'], ans:1},
+  {q:'请问 (qǐngwèn) หมายความว่า?', opts:['ขอโทษ','ขอถามหน่อย','ขอบคุณ','ยินดี'], ans:1},
+  {q:'一 (yī) อ่านว่า?', opts:['èr','sān','yī','sì'], ans:2},
+  {q:'五 (wǔ) หมายถึงตัวเลขใด?', opts:['3','4','5','6'], ans:2},
+  {q:'十 (shí) หมายถึงตัวเลขใด?', opts:['8','9','10','11'], ans:2},
+  {q:'很 (hěn) มักใช้คู่กับส่วนใดของประโยค?', opts:['คำนาม','คำกริยา','คำคุณศัพท์','คำสรรพนาม'], ans:2},
+  {q:'中国 (Zhōngguó) หมายความว่า?', opts:['ญี่ปุ่น','เกาหลี','ไทย','จีน'], ans:3},
 ];
 
-let chatHistory = [];
-let chatInited = false;
-let isSpeakingChat = false;
-let micActive = false;
-let recognition = null;
+let dailyQIdx=0, dailyScore=0, dailyDone=false, dailyQuestions=[];
 
-function initChat() {
-  const msgs = document.getElementById('chat-messages');
-  // เช็ค premium ก่อน
-  if (!isPremium()) {
-    if (msgs) msgs.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center;gap:12px">
-      <div style="font-size:48px">🦊</div>
-      <div style="font-size:16px;font-weight:700;color:var(--ink)">แชทกับ AI สำหรับสมาชิก Premium</div>
-      <div style="font-size:13px;color:var(--ink3);line-height:1.6">ฝึกภาษาจีนกับ AI แบบ 1:1<br>ตอบคำถาม อธิบายไวยากรณ์ และฝึกสนทนาได้ตลอดเวลา</div>
-      <button onclick="showPaymentModal()" style="margin-top:8px;padding:12px 28px;background:var(--red);color:white;border:none;border-radius:20px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">🔓 สมัคร Premium</button>
+function getDailyDateSeed() {
+  const d=new Date(); return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate();
+}
+function seededShuffle(arr,seed) {
+  const a=[...arr]; let s=seed;
+  for(let i=a.length-1;i>0;i--){s=(s*9301+49297)%233280;const j=Math.floor(s/233280*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function updateDailyBadge() {
+  const badge=document.getElementById('daily-hub-badge'); if(!badge) return;
+  const today=new Date().toISOString().split('T')[0];
+  const done=state.user?.data?.dailyDone===today;
+  badge.textContent=done?'✅ ทำแล้ววันนี้':'วันนี้ยังไม่ได้ทำ';
+  badge.style.color=done?'var(--green)':'#e67e22';
+  badge.style.background=done?'var(--green-light)':'#fef3e2';
+}
+function initDailyGame() {
+  const today=new Date().toISOString().split('T')[0];
+  const alreadyDone=state.user?.data?.dailyDone===today;
+  dailyQuestions=seededShuffle(DAILY_POOL,getDailyDateSeed()).slice(0,5);
+  dailyQIdx=0; dailyScore=0; dailyDone=alreadyDone;
+  if(alreadyDone) renderDailyDone(true); else renderDailyQ();
+}
+function renderDailyQ() {
+  const box=document.getElementById('daily-content'); if(!box) return;
+  if(dailyDone){renderDailyDone();return;}
+  const q=dailyQuestions[dailyQIdx];
+  const letters=['A','B','C','D'];
+  const pct=Math.round(dailyQIdx/dailyQuestions.length*100);
+  box.innerHTML=`
+    <div style="background:var(--amber-light);border:1px solid #DFC090;border-radius:var(--r);padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:12px;font-weight:700;color:var(--amber)">📅 Daily Challenge</div>
+      <div style="font-size:13px;font-weight:700;color:var(--amber)">${dailyQIdx+1}/5</div>
+    </div>
+    <div style="height:6px;background:var(--paper3);border-radius:3px;overflow:hidden;margin-bottom:20px">
+      <div style="height:100%;width:${pct}%;background:#e67e22;border-radius:3px;transition:width .4s ease"></div>
+    </div>
+    <div style="background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:18px;margin-bottom:16px;box-shadow:var(--shadow)">
+      <div style="font-size:15px;font-weight:700;color:var(--ink);line-height:1.5">${q.q}</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px" id="daily-opts">
+      ${q.opts.map((o,i)=>`
+        <button id="dopt-${i}" onclick="answerDaily(${i})" style="display:flex;align-items:center;gap:12px;padding:13px 14px;border:1.5px solid var(--paper3);border-radius:var(--r);background:white;text-align:left;font-size:14px;font-family:inherit;cursor:pointer;transition:.15s">
+          <span style="width:28px;height:28px;border-radius:50%;background:var(--paper2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">${letters[i]}</span>${o}
+        </button>`).join('')}
     </div>`;
-    // ซ่อน input area
-    const inputArea = document.getElementById('chat-input-area');
-    if (inputArea) inputArea.style.display = 'none';
-    return;
-  }
-  // แสดง input area
-  const inputArea = document.getElementById('chat-input-area');
-  if (inputArea) inputArea.style.display = 'flex';
-  if (chatInited) return;
-  chatInited = true;
-  chatHistory = [];
-  if (msgs) msgs.innerHTML = '';
-
-  // Suggestion chips in header
-  const sh = document.getElementById('chat-suggestions-header');
-  if (sh) {
-    sh.innerHTML = CHAT_SUGGESTIONS.map(s =>
-      `<button onclick="useSuggestion('${s.prompt}')" style="display:flex;align-items:center;gap:5px;padding:5px 12px;border:1px solid var(--paper3);border-radius:20px;background:white;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;color:var(--ink2);transition:.15s;white-space:nowrap" onmouseover="this.style.background='#FBF3E8'" onmouseout="this.style.background='white'">
-        <span style="font-family:'Noto Serif SC',serif;font-size:13px;color:var(--red)">${s.zh}</span>
-        <span>${s.th}</span>
-      </button>`
-    ).join('');
-  }
-
-  // Welcome message
-  appendChatMsg('bot', 'สวัสดี! 你好 (nǐ hǎo) ฉันชื่อ Tangtang 🦊 พร้อมช่วยให้คุณฝึกภาษาจีนแล้ว! วันนี้อยากฝึกเรื่องอะไรดี? กดหัวข้อด้านบนได้เลย หรือจะพิมพ์คุยก็ได้นะ 😊 ลองพูดว่า 你好 (nǐ hǎo) = สวัสดี มาดูสิ!', true);
+}
+function answerDaily(chosen) {
+  const q=dailyQuestions[dailyQIdx]; const correct=chosen===q.ans;
+  document.querySelectorAll('[id^="dopt-"]').forEach((b,i)=>{
+    b.disabled=true;
+    if(i===q.ans){b.style.borderColor='var(--green)';b.style.background='var(--green-light)';b.querySelector('span').style.background='var(--green)';b.querySelector('span').style.color='white';}
+    else if(i===chosen&&!correct){b.style.borderColor='var(--red)';b.style.background='var(--red-light)';b.querySelector('span').style.background='var(--red)';b.querySelector('span').style.color='white';}
+  });
+  if(correct) dailyScore++;
+  setTimeout(()=>{
+    dailyQIdx++;
+    if(dailyQIdx>=dailyQuestions.length){
+      dailyDone=true;
+      const today=new Date().toISOString().split('T')[0];
+      if(state.user){
+        state.user.data.dailyDone=today;
+        state.user.data.xp=(state.user.data.xp||0)+dailyScore*10;
+        const lastDaily=state.user.data.lastDailyDate;
+        const yesterday=new Date(Date.now()-86400000).toISOString().split('T')[0];
+        state.user.data.dailyStreak=(lastDaily===yesterday)?(state.user.data.dailyStreak||0)+1:1;
+        state.user.data.lastDailyDate=today;
+        trackActivity(); saveState(); updateTopbar();
+      }
+      renderDailyDone();
+    } else renderDailyQ();
+  }, correct?600:900);
+}
+function renderDailyDone(alreadyDone=false) {
+  const box=document.getElementById('daily-content'); if(!box) return;
+  const streak=state.user?.data?.dailyStreak||1;
+  box.innerHTML=`
+    <div style="text-align:center;padding:24px 16px">
+      <div style="font-size:56px;margin-bottom:12px">${alreadyDone?'✅':dailyScore===5?'🏆':dailyScore>=3?'🎉':'💪'}</div>
+      <div style="font-size:20px;font-weight:800;color:var(--ink);margin-bottom:6px">${alreadyDone?'ทำแล้ววันนี้!':dailyScore===5?'เพอร์เฟกต์!':dailyScore>=3?'เยี่ยมมาก!':'พยายามต่อไป!'}</div>
+      ${!alreadyDone?`<div style="font-size:32px;font-weight:900;color:#e67e22;margin:8px 0">${dailyScore}/5</div>`:''}
+      <div style="display:inline-flex;align-items:center;gap:6px;background:var(--amber-light);border:1px solid #DFC090;border-radius:20px;padding:8px 18px;margin-bottom:20px">
+        <span style="font-size:20px">🔥</span><span style="font-size:16px;font-weight:700;color:var(--amber)">Streak ${streak} วัน!</span>
+      </div>
+      ${!alreadyDone?`<div style="font-size:13px;color:var(--green);font-weight:700;margin-bottom:20px">+${dailyScore*10} XP รับแล้ว! 🎊</div>`:''}
+      <div style="background:var(--paper2);border-radius:var(--r);padding:14px;font-size:13px;color:var(--ink3)">⏰ Challenge ใหม่มาทุกเที่ยงคืน</div>
+    </div>`;
 }
 
-function useSuggestion(prompt) {
-  const input = document.getElementById('chat-input');
-  if (input) { input.value = prompt; sendChat(); }
+// ═══════════════════════════════════
+// GAME 3 — SENTENCE BUILDER
+// ═══════════════════════════════════
+// 6 LEVELS × 10 sentences each
+const SENTENCE_LEVELS = [
+  { level:1, name:'HSK 1 — ทักทาย', color:'#F13596', bg:'#FFEDF6', icon:'⭐', sentences:[
+    {th:'ฉันเป็นคนไทย', words:['我','是','泰国人'], correct:'我是泰国人', py:'Wǒ shì Tàiguó rén'},
+    {th:'คุณดีไหม?', words:['你','好','吗'], correct:'你好吗', py:'Nǐ hǎo ma'},
+    {th:'ฉันชื่อ Xiaoming', words:['我','叫','小明'], correct:'我叫小明', py:'Wǒ jiào Xiǎomíng'},
+    {th:'เขาเป็นครู', words:['他','是','老师'], correct:'他是老师', py:'Tā shì lǎoshī'},
+    {th:'นี่คืออะไร?', words:['这','是','什么'], correct:'这是什么', py:'Zhè shì shénme'},
+    {th:'ฉันไม่ดีเลย', words:['我','不','好'], correct:'我不好', py:'Wǒ bù hǎo'},
+    {th:'คุณชื่ออะไร?', words:['你','叫','什么'], correct:'你叫什么', py:'Nǐ jiào shénme'},
+    {th:'เขาไม่ใช่นักเรียน', words:['他','不是','学生'], correct:'他不是学生', py:'Tā bú shì xuéshēng'},
+    {th:'ฉันมีเพื่อน', words:['我','有','朋友'], correct:'我有朋友', py:'Wǒ yǒu péngyǒu'},
+    {th:'ลาก่อน!', words:['再','见'], correct:'再见', py:'Zàijiàn'},
+  ]},
+  { level:2, name:'HSK 1 — ครอบครัว & ของ', color:'#8B5CF6', bg:'#EDE9FE', icon:'⭐⭐', sentences:[
+    {th:'แม่ของฉันเป็นครู', words:['我','妈妈','是','老师'], correct:'我妈妈是老师', py:'Wǒ māma shì lǎoshī'},
+    {th:'คุณมีน้องสาวไหม?', words:['你','有','妹妹','吗'], correct:'你有妹妹吗', py:'Nǐ yǒu mèimei ma'},
+    {th:'นี่เป็นหนังสือของฉัน', words:['这','是','我的','书'], correct:'这是我的书', py:'Zhè shì wǒ de shū'},
+    {th:'เขาชอบกินข้าว', words:['他','喜欢','吃饭'], correct:'他喜欢吃饭', py:'Tā xǐhuān chīfàn'},
+    {th:'ฉันอยากดื่มน้ำ', words:['我','要','喝水'], correct:'我要喝水', py:'Wǒ yào hēshuǐ'},
+    {th:'คนนั้นสูงมาก', words:['那个人','很','高'], correct:'那个人很高', py:'Nàgè rén hěn gāo'},
+    {th:'โต๊ะนั้นใหญ่', words:['那张桌子','很','大'], correct:'那张桌子很大', py:'Nà zhāng zhuōzi hěn dà'},
+    {th:'เธอไม่ชอบกิน', words:['她','不','喜欢','吃'], correct:'她不喜欢吃', py:'Tā bù xǐhuān chī'},
+    {th:'บ้านของเขาสวยมาก', words:['他的','家','很','漂亮'], correct:'他的家很漂亮', py:'Tā de jiā hěn piàoliang'},
+    {th:'หนังสือเล่มนั้นเล็กมาก', words:['那本书','很','小'], correct:'那本书很小', py:'Nà běn shū hěn xiǎo'},
+  ]},
+  { level:3, name:'HSK 1-2 — เวลา & กิจวัตร', color:'#1a6b3a', bg:'#e8f4ed', icon:'⭐⭐⭐', sentences:[
+    {th:'วันนี้อากาศร้อนมาก', words:['今天','很','热'], correct:'今天很热', py:'Jīntiān hěn rè'},
+    {th:'ฉันทุกวันไปทำงาน', words:['我','每天','去','上班'], correct:'我每天去上班', py:'Wǒ měitiān qù shàngbān'},
+    {th:'เขามาโรงเรียนทุกวัน', words:['他','每天','来','学校'], correct:'他每天来学校', py:'Tā měitiān lái xuéxiào'},
+    {th:'ฉันตื่นนอนตอนเจ็ดโมง', words:['我','七点','起床'], correct:'我七点起床', py:'Wǒ qī diǎn qǐchuáng'},
+    {th:'พรุ่งนี้ฉันไม่ไปทำงาน', words:['明天','我','不','上班'], correct:'明天我不上班', py:'Míngtiān wǒ bù shàngbān'},
+    {th:'เมื่อวานฉันกินข้าวที่บ้าน', words:['昨天','我','在家','吃饭'], correct:'昨天我在家吃饭', py:'Zuótiān wǒ zàijiā chīfàn'},
+    {th:'ตอนนี้กี่โมงแล้ว?', words:['现在','几点了'], correct:'现在几点了', py:'Xiànzài jǐ diǎn le'},
+    {th:'เขาชอบนอนตอนเที่ยง', words:['他','喜欢','中午','睡觉'], correct:'他喜欢中午睡觉', py:'Tā xǐhuān zhōngwǔ shuìjiào'},
+    {th:'ฉันจะกลับบ้านตอนหก', words:['我','六点','回家'], correct:'我六点回家', py:'Wǒ liù diǎn huíjiā'},
+    {th:'สัปดาห์นี้อากาศเย็นมาก', words:['这个星期','天气','很冷'], correct:'这个星期天气很冷', py:'Zhège xīngqī tiānqì hěn lěng'},
+  ]},
+  { level:4, name:'HSK 2 — การเดินทาง', color:'#1a4a8a', bg:'#e6f1fb', icon:'⭐⭐⭐⭐', sentences:[
+    {th:'ร้านอาหารอยู่ที่ไหน?', words:['餐厅','在','哪里'], correct:'餐厅在哪里', py:'Cāntīng zài nǎlǐ'},
+    {th:'ฉันอยากไปประเทศจีน', words:['我','想','去','中国'], correct:'我想去中国', py:'Wǒ xiǎng qù Zhōngguó'},
+    {th:'ต้องนั่งรถเมล์สาย 3', words:['要','坐','三路','公共汽车'], correct:'要坐三路公共汽车', py:'Yào zuò sān lù gōnggòng qìchē'},
+    {th:'สถานีรถไฟอยู่ไม่ไกล', words:['火车站','不','远'], correct:'火车站不远', py:'Huǒchē zhàn bù yuǎn'},
+    {th:'จากที่นี่ไปสนามบินนานแค่ไหน?', words:['从这里','到','机场','要多久'], correct:'从这里到机场要多久', py:'Cóng zhèlǐ dào jīchǎng yào duōjiǔ'},
+    {th:'ฉันต้องการตั๋วไปปักกิ่ง', words:['我要','一张','去北京的','票'], correct:'我要一张去北京的票', py:'Wǒ yào yī zhāng qù Běijīng de piào'},
+    {th:'โปรดไปทางซ้ายมือ', words:['请','向左','走'], correct:'请向左走', py:'Qǐng xiàng zuǒ zǒu'},
+    {th:'ฉันหลงทาง', words:['我','迷路了'], correct:'我迷路了', py:'Wǒ mílù le'},
+    {th:'ขอถามทางหน่อยได้ไหม?', words:['请问','可以','问路','吗'], correct:'请问可以问路吗', py:'Qǐngwèn kěyǐ wènlù ma'},
+    {th:'จากที่โรงแรมไปไม่นาน', words:['从','酒店','走','不远'], correct:'从酒店走不远', py:'Cóng jiǔdiàn zǒu bù yuǎn'},
+  ]},
+  { level:5, name:'HSK 2-3 — ช้อปปิ้ง & อาหาร', color:'#e67e22', bg:'#fef3e2', icon:'⭐⭐⭐⭐⭐', sentences:[
+    {th:'ราคาเท่าไหร่?', words:['这个','多少','钱'], correct:'这个多少钱', py:'Zhège duōshǎo qián'},
+    {th:'ถูกกว่านี้ได้ไหม?', words:['可以','便宜','一点','吗'], correct:'可以便宜一点吗', py:'Kěyǐ piányí yīdiǎn ma'},
+    {th:'ฉันอยากลองชุดนี้', words:['我','想','试试','这件衣服'], correct:'我想试试这件衣服', py:'Wǒ xiǎng shìshì zhè jiàn yīfu'},
+    {th:'ขอเมนูหน่อยได้ไหม?', words:['请','给我','菜单'], correct:'请给我菜单', py:'Qǐng gěi wǒ càidān'},
+    {th:'ฉันไม่กินเนื้อหมู', words:['我','不吃','猪肉'], correct:'我不吃猪肉', py:'Wǒ bù chī zhūròu'},
+    {th:'อาหารจานนี้อร่อยมาก', words:['这道菜','很','好吃'], correct:'这道菜很好吃', py:'Zhè dào cài hěn hǎochī'},
+    {th:'คิดเงินด้วยนะ', words:['请','结账'], correct:'请结账', py:'Qǐng jiézhàng'},
+    {th:'มีส่วนลดไหม?', words:['有','折扣','吗'], correct:'有折扣吗', py:'Yǒu zhékòu ma'},
+    {th:'ฉันจะจ่ายด้วย WeChat Pay', words:['我','用','微信支付'], correct:'我用微信支付', py:'Wǒ yòng Wēixìn Zhīfù'},
+    {th:'ห่อกลับบ้านด้วยได้ไหม?', words:['可以','打包','吗'], correct:'可以打包吗', py:'Kěyǐ dǎbāo ma'},
+  ]},
+  { level:6, name:'HSK 3 — ชีวิต & ความคิด', color:'#1a2a5a', bg:'#e0e4f0', icon:'🏆', sentences:[
+    {th:'ฉันคิดว่าการเรียนภาษาจีนสนุกมาก', words:['我觉得','学中文','很有意思'], correct:'我觉得学中文很有意思', py:'Wǒ juéde xué Zhōngwén hěn yǒuyìsi'},
+    {th:'ถึงแม้จะยากแต่ฉันก็ไม่ยอมแพ้', words:['虽然','很难','但是','我不放弃'], correct:'虽然很难但是我不放弃', py:'Suīrán hěn nán dànshì wǒ bù fàngqì'},
+    {th:'เพราะฉะนั้นฉันจึงเรียนทุกวัน', words:['所以','我','每天','学习'], correct:'所以我每天学习', py:'Suǒyǐ wǒ měitiān xuéxí'},
+    {th:'ถ้าคุณพยายาม คุณจะสำเร็จ', words:['如果','你努力','就会','成功'], correct:'如果你努力就会成功', py:'Rúguǒ nǐ nǔlì jiù huì chénggōng'},
+    {th:'เขาพูดภาษาจีนได้ดีมาก', words:['他','说','中文','说得很好'], correct:'他说中文说得很好', py:'Tā shuō Zhōngwén shuō de hěn hǎo'},
+    {th:'ฉันเพิ่งเรียนจบมหาวิทยาลัย', words:['我','刚刚','大学毕业'], correct:'我刚刚大学毕业', py:'Wǒ gānggāng dàxué bìyè'},
+    {th:'เธอกำลังเตรียมสอบ HSK', words:['她','正在','准备','HSK考试'], correct:'她正在准备HSK考试', py:'Tā zhèngzài zhǔnbèi HSK kǎoshì'},
+    {th:'การออกกำลังกายทำให้สุขภาพดี', words:['运动','对','身体','有好处'], correct:'运动对身体有好处', py:'Yùndòng duì shēntǐ yǒu hǎochù'},
+    {th:'ฉันหวังว่าจะได้ไปจีนสักครั้ง', words:['我希望','有机会','去','中国'], correct:'我希望有机会去中国', py:'Wǒ xīwàng yǒu jīhuì qù Zhōngguó'},
+    {th:'ยิ่งฝึกมาก ยิ่งพูดได้คล่อง', words:['练习得越多','说得','越流利'], correct:'练习得越多说得越流利', py:'Liànxí de yuè duō shuō de yuè liúlì'},
+  ]},
+];
+
+let sbLevel=0, sbLevelIdx=0, sbAnswer=[], sbWords=[], sbDone=false, sbScore=0;
+// Track unlocked levels (stored in user data)
+function getSBUnlocked() { return state.user?.data?.sbUnlocked || 1; }
+function setSBUnlocked(n) { if(state.user){ state.user.data.sbUnlocked=Math.max(n, getSBUnlocked()); saveState(); }}
+
+function initSentenceGame() {
+  sbLevel=0; sbLevelIdx=0; sbScore=0; sbDone=false;
+  renderSentenceLevelHub();
 }
 
-function appendChatMsg(role, text, autoSpeak = false) {
-  const msgs = document.getElementById('chat-messages');
-  if (!msgs) return;
-
-  const isBot = role === 'bot';
-  const id = 'msg-' + Date.now();
-  const div = document.createElement('div');
-  div.style.cssText = `display:flex;gap:8px;align-items:flex-start;${isBot ? '' : 'flex-direction:row-reverse'}`;
-
-  // Extract Chinese sentences for TTS
-  const zhMatches = text.match(/[一-鿿]+/g) || [];
-  const firstZh = zhMatches.join('');
-
-  const bubble = document.createElement('div');
-  bubble.id = id;
-  bubble.style.cssText = `
-    max-width:80%;
-    padding:12px 14px;
-    border-radius:${isBot ? '4px 16px 16px 16px' : '16px 4px 16px 16px'};
-    background:${isBot ? 'white' : 'var(--red)'};
-    border:${isBot ? '1px solid var(--paper3)' : 'none'};
-    color:${isBot ? 'var(--ink)' : 'white'};
-    font-size:14px;
-    line-height:1.7;
-    box-shadow:0 1px 6px rgba(0,0,0,.06);
-    white-space:pre-wrap;
-    word-break:break-word;`;
-
-  // Format text: highlight Chinese in red for bot messages
-  if (isBot) {
-    bubble.innerHTML = text
-      .replace(/[一-鿿]+/g, m => `<span style="font-family:'Noto Serif SC',serif;font-size:16px;color:var(--red);font-weight:600">${m}</span>`)
-      .replace(/\(([a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]+[0-9]?[a-z\s]*)\)/gi, m => `<span style="color:var(--blue);font-size:12px;font-weight:600">${m}</span>`);
-  } else {
-    bubble.textContent = text;
-  }
-
-  // Speaker icon for bot
-  const avatar = document.createElement('div');
-  avatar.style.cssText = `width:32px;height:32px;border-radius:50%;background:${isBot ? 'linear-gradient(135deg,#f9c74f,#f3722c)' : 'var(--red)'};display:flex;align-items:center;justify-content:center;font-size:${isBot ? '16px' : '13px'};flex-shrink:0;margin-top:2px;font-weight:700;color:white`;
-  avatar.textContent = isBot ? '🦊' : (state.user?.name?.charAt(0).toUpperCase() || 'U');
-
-  // Speak button for bot
-  if (isBot && firstZh) {
-    const speakRow = document.createElement('div');
-    speakRow.style.cssText = 'margin-top:8px;display:flex;align-items:center;gap:6px';
-    const speakBtnEl = document.createElement('button');
-    speakBtnEl.style.cssText = 'display:flex;align-items:center;gap:5px;padding:4px 12px;border:1px solid var(--paper3);border-radius:20px;background:var(--paper);font-size:11px;font-weight:600;font-family:inherit;cursor:pointer;color:var(--ink3)';
-    speakBtnEl.innerHTML = '🔊 ฟัง Tangtang พูด';
-    speakBtnEl.onclick = () => {
-      stopSpeech();
-      speak(firstZh, () => { speakBtnEl.style.background = 'var(--paper)'; speakBtnEl.innerHTML = '🔊 ฟัง Tangtang พูด'; });
-      speakBtnEl.style.background = 'var(--blue)';
-      speakBtnEl.style.color = 'white';
-      speakBtnEl.innerHTML = '🔊 กำลังพูด...';
-    };
-    bubble.appendChild(speakRow);
-    speakRow.appendChild(speakBtnEl);
-    if (autoSpeak && firstZh) {
-      setTimeout(() => { stopSpeech(); speak(firstZh); }, 600);
-    }
-  }
-
-  div.appendChild(avatar);
-  div.appendChild(bubble);
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
+function renderSentenceLevelHub() {
+  const box=document.getElementById('sentence-content'); if(!box) return;
+  const unlocked=getSBUnlocked();
+  box.innerHTML=`
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:28px;margin-bottom:6px">🧩</div>
+      <div style="font-size:17px;font-weight:800;color:var(--ink)">เรียงประโยค</div>
+      <div style="font-size:12px;color:var(--ink3);margin-top:4px">ไต่ระดับ HSK ทีละ 10 ข้อ</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      ${SENTENCE_LEVELS.map((lv,i)=>{
+        const done=state.user?.data?.[`sbLevel${i+1}Best`]||0;
+        const isLocked=(i+1>unlocked) || (!isPremium() && i>0);
+        const pct=Math.round(done/10*100);
+        return `<div onclick="${isLocked?`showToast('จบ Level ${i} ก่อนเพื่อปลดล็อค!')`:`startSentenceLevel(${i})`}" style="background:${isLocked?'var(--paper2)':'white'};border:1.5px solid ${isLocked?'var(--paper3)':lv.color+'40'};border-radius:14px;padding:14px 16px;cursor:pointer;transition:.15s;opacity:${isLocked?.55:1}">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="font-size:22px">${isLocked?'🔒':lv.icon}</div>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:${isLocked?'var(--ink3)':lv.color}">${lv.name}</div>
+                <div style="font-size:11px;color:var(--ink3)">10 ประโยค</div>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:16px;font-weight:900;color:${lv.color}">${done}/10</div>
+              <div style="font-size:10px;color:var(--ink3)">ดีที่สุด</div>
+            </div>
+          </div>
+          <div style="height:5px;background:${lv.color}22;border-radius:3px;overflow:hidden">
+            <div style="height:100%;width:${pct}%;background:${lv.color};border-radius:3px;transition:width .5s ease"></div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
 }
 
-function showTyping() {
-  const msgs = document.getElementById('chat-messages');
-  if (!msgs) return;
-  const div = document.createElement('div');
-  div.id = 'typing-indicator';
-  div.style.cssText = 'display:flex;gap:8px;align-items:flex-start';
-  div.innerHTML = `
-    <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#f9c74f,#f3722c);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🦊</div>
-    <div style="padding:12px 16px;background:white;border:1px solid var(--paper3);border-radius:4px 16px 16px 16px;box-shadow:0 1px 6px rgba(0,0,0,.06)">
-      <div style="display:flex;gap:4px;align-items:center">
-        <span style="width:7px;height:7px;border-radius:50%;background:var(--ink3);animation:bounce-dot .8s ease-in-out infinite"></span>
-        <span style="width:7px;height:7px;border-radius:50%;background:var(--ink3);animation:bounce-dot .8s ease-in-out infinite .15s"></span>
-        <span style="width:7px;height:7px;border-radius:50%;background:var(--ink3);animation:bounce-dot .8s ease-in-out infinite .3s"></span>
+function startSentenceLevel(levelIdx) {
+  sbLevel=levelIdx; sbLevelIdx=0; sbScore=0; sbDone=false;
+  renderSentenceQ();
+}
+
+function renderSentenceQ() {
+  const box=document.getElementById('sentence-content'); if(!box) return;
+  if(sbDone){renderSentenceDone();return;}
+  const lv=SENTENCE_LEVELS[sbLevel];
+  const s=lv.sentences[sbLevelIdx];
+  sbAnswer=[]; sbWords=[...s.words].sort(()=>Math.random()-.5);
+  const pct=Math.round(sbLevelIdx/lv.sentences.length*100);
+  box.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <button onclick="renderSentenceLevelHub()" style="background:var(--paper2);border:none;border-radius:20px;padding:6px 12px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;color:var(--ink2)">← เลือก Level</button>
+      <div style="font-size:12px;font-weight:700;color:${lv.color}">${lv.name}</div>
+      <div style="font-size:12px;font-weight:700;color:var(--ink3)">${sbLevelIdx+1}/10</div>
+    </div>
+    <div style="height:6px;background:${lv.color}22;border-radius:3px;overflow:hidden;margin-bottom:18px">
+      <div style="height:100%;width:${pct}%;background:${lv.color};border-radius:3px;transition:width .4s ease"></div>
+    </div>
+    <div style="background:${lv.bg};border:1px solid ${lv.color}30;border-radius:var(--r);padding:16px;margin-bottom:16px;text-align:center">
+      <div style="font-size:11px;font-weight:700;color:${lv.color};margin-bottom:6px">แปลเป็นภาษาจีน</div>
+      <div style="font-size:18px;font-weight:700;color:var(--ink)">${s.th}</div>
+    </div>
+    <div id="sb-answer-area" style="min-height:58px;background:white;border:2px dashed var(--paper3);border-radius:var(--r);padding:12px;margin-bottom:8px;display:flex;flex-wrap:wrap;gap:8px;align-items:center"></div>
+    <div style="text-align:right;margin-bottom:12px">
+      <button onclick="sbClear()" style="font-size:11px;color:var(--ink3);background:none;border:none;cursor:pointer;font-family:inherit;text-decoration:underline">ล้าง</button>
+    </div>
+    <div id="sb-word-area" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px"></div>
+    <div id="sb-feedback" style="min-height:40px;text-align:center;margin-bottom:16px"></div>
+    <button id="sb-check-btn" onclick="checkSentence()" style="width:100%;padding:14px;background:${lv.color};color:white;border:none;border-radius:var(--r);font-size:15px;font-weight:700;font-family:inherit;cursor:pointer">✅ ตรวจคำตอบ</button>`;
+  renderSentenceWords();
+}
+
+function renderSentenceWords() {
+  const wa=document.getElementById('sb-word-area');
+  const aa=document.getElementById('sb-answer-area');
+  if(!wa||!aa) return;
+  const lv=SENTENCE_LEVELS[sbLevel];
+  const s=lv.sentences[sbLevelIdx];
+  const used=[...sbAnswer];
+  const remaining=s.words.filter(w=>{const idx=used.indexOf(w);if(idx>-1){used.splice(idx,1);return false;}return true;});
+  const avail=sbWords.filter(w=>remaining.includes(w));
+  wa.innerHTML=avail.map(w=>
+    `<button onclick="sbSelect('${w.replace(/'/g,"\'")}','${encodeURIComponent(w)}')" style="padding:10px 16px;background:white;border:2px solid var(--paper3);border-radius:12px;font-family:'Noto Serif SC',serif;font-size:18px;color:var(--ink);cursor:pointer;box-shadow:var(--shadow)">${w}</button>`
+  ).join('');
+  aa.innerHTML=sbAnswer.length===0
+    ?'<span style="color:var(--ink3);font-size:12px">แตะคำด้านล่างเพื่อเรียง</span>'
+    :sbAnswer.map((w,i)=>`<button onclick="sbRemove(${i})" style="padding:10px 14px;background:${lv.color};color:white;border:none;border-radius:12px;font-family:'Noto Serif SC',serif;font-size:18px;cursor:pointer;box-shadow:0 2px 6px ${lv.color}40">${w}</button>`).join('');
+}
+
+function sbSelect(w,enc){ sbAnswer.push(decodeURIComponent(enc)); renderSentenceWords(); }
+function sbRemove(i){sbAnswer.splice(i,1);renderSentenceWords();}
+function sbClear(){sbAnswer=[];renderSentenceWords();}
+
+function checkSentence() {
+  const lv=SENTENCE_LEVELS[sbLevel];
+  const s=lv.sentences[sbLevelIdx];
+  const ans=sbAnswer.join(''); const correct=ans===s.correct;
+  const fb=document.getElementById('sb-feedback');
+  if(fb) fb.innerHTML=correct
+    ?`<div style="color:var(--green);font-weight:700;font-size:14px">🎉 ถูกต้อง! +15 XP</div><div style="font-size:12px;color:var(--ink3);margin-top:4px">${s.py}</div>`
+    :`<div style="color:var(--red);font-weight:700;font-size:14px">❌ เฉลย: ${s.correct}</div><div style="font-size:12px;color:var(--ink3);margin-top:4px">${s.py}</div>`;
+  if(correct){sbScore++;if(state.user){state.user.data.xp=(state.user.data.xp||0)+15;trackActivity();saveState();updateTopbar();}}
+  const btn=document.getElementById('sb-check-btn');
+  if(btn){
+    btn.textContent=sbLevelIdx+1>=lv.sentences.length?'🏁 ดูผลลัพธ์':'ถัดไป →';
+    btn.style.background='var(--green)';
+    btn.onclick=()=>{sbLevelIdx++;if(sbLevelIdx>=lv.sentences.length){sbDone=true;}renderSentenceQ();};
+  }
+}
+
+function renderSentenceDone() {
+  const lv=SENTENCE_LEVELS[sbLevel]; const box=document.getElementById('sentence-content');
+  const prev=state.user?.data?.[`sbLevel${sbLevel+1}Best`]||0;
+  if(sbScore>prev&&state.user){state.user.data[`sbLevel${sbLevel+1}Best`]=sbScore;saveState();}
+  if(sbScore>=7) setSBUnlocked(sbLevel+2); // unlock next level
+  box.innerHTML=`
+    <div style="text-align:center;padding:28px 16px">
+      <div style="font-size:52px;margin-bottom:12px">${sbScore===10?'🏆':sbScore>=7?'🎉':'💪'}</div>
+      <div style="font-size:20px;font-weight:800;color:var(--ink);margin-bottom:4px">${lv.name}</div>
+      <div style="font-size:36px;font-weight:900;color:${lv.color};margin:12px 0">${sbScore}/10</div>
+      ${sbScore>=7&&sbLevel<5?`<div style="background:${SENTENCE_LEVELS[sbLevel+1].bg};border:1px solid ${SENTENCE_LEVELS[sbLevel+1].color}30;border-radius:12px;padding:12px;margin-bottom:16px;font-size:13px;font-weight:700;color:${SENTENCE_LEVELS[sbLevel+1].color}">🔓 ปลดล็อค Level ${sbLevel+2} แล้ว!</div>`:''}
+      ${sbScore<7?'<div style="font-size:13px;color:var(--ink3);margin-bottom:16px">ต้องได้ 7/10 ขึ้นไปเพื่อปลดล็อค Level ถัดไป</div>':''}
+      <div style="display:flex;gap:10px;margin-top:8px">
+        <button onclick="startSentenceLevel(${sbLevel})" style="flex:1;padding:12px;background:var(--paper2);border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">🔄 เล่นใหม่</button>
+        <button onclick="renderSentenceLevelHub()" style="flex:1;padding:12px;background:${lv.color};color:white;border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">← เลือก Level</button>
       </div>
     </div>`;
-  msgs.appendChild(div);
-  msgs.scrollTop = msgs.scrollHeight;
 }
 
-function hideTyping() {
-  const t = document.getElementById('typing-indicator');
-  if (t) t.remove();
-}
 
-async function sendChat() {
-  const input = document.getElementById('chat-input');
-  const text = input?.value?.trim();
-  if (!text) return;
-  input.value = '';
-  input.style.height = 'auto';
 
-  appendChatMsg('user', text);
-  chatHistory.push({ role: 'user', content: text });
+// ═══════════════════════════════════
+// GAME 4 — ACTIVITY HEATMAP
+// ═══════════════════════════════════
+function renderHeatmap() {
+  const box=document.getElementById('heatmap-content'); if(!box) return;
+  const d=state.user?.data||{};
+  const log=d.activityLog||{};
+  const today=new Date();
+  const totalDays=112;
+  const days=[];
+  for(let i=totalDays-1;i>=0;i--){
+    const dt=new Date(today); dt.setDate(dt.getDate()-i);
+    const key=dt.toISOString().split('T')[0];
+    days.push({key,count:log[key]||0,date:dt});
+  }
+  const maxCount=Math.max(1,...days.map(d=>d.count));
+  const dayNames=['อา','จ','อ','พ','พฤ','ศ','ส'];
+  const totalActive=days.filter(d=>d.count>0).length;
+  const currentStreak=d.streak||0;
+  const totalXP=d.xp||0;
+  const totalDone=(d.completed||[]).length;
+  const monthLabels=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
 
-  showTyping();
+  const weeks=[];
+  let week=[];
+  const firstDay=days[0].date.getDay();
+  for(let i=0;i<firstDay;i++) week.push(null);
+  days.forEach(day=>{
+    week.push(day);
+    if(week.length===7){weeks.push(week);week=[];}
+  });
+  if(week.length){while(week.length<7)week.push(null);weeks.push(week);}
 
-  const btn = document.getElementById('send-btn');
-  if (btn) { btn.disabled = true; btn.style.opacity = '.5'; }
-
-  try {
-    const GEMINI_KEY = 'AIzaSyBW6MzG0eHsBKh62wiJWngh9CznzQhgi9k';
-    const geminiMessages = [];
-    // Add system as first user message
-    geminiMessages.push({ role: 'user', parts: [{ text: TANGTANG_SYSTEM }] });
-    geminiMessages.push({ role: 'model', parts: [{ text: 'เข้าใจแล้วค่ะ พร้อมช่วยฝึกภาษาจีนแล้ว!' }] });
-    // Add chat history
-    chatHistory.slice(-8).forEach(m => {
-      geminiMessages.push({
-        role: m.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: m.content }]
-      });
-    });
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${GEMINI_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: geminiMessages,
-        generationConfig: { maxOutputTokens: 400, temperature: 0.7 }
-      })
-    });
-    const data = await res.json();
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'ขอโทษนะ ลองใหม่อีกครั้งได้เลย 😊';
-    hideTyping();
-    chatHistory.push({ role: 'assistant', content: reply });
-    appendChatMsg('bot', reply, true);
-
-    // XP reward for chatting
-    if (state.user) {
-      state.user.data.xp = (state.user.data.xp || 0) + 2;
-      saveState();
-      updateTopbar();
-    }
-  } catch (e) {
-    hideTyping();
-    appendChatMsg('bot', 'ขอโทษนะ เชื่อมต่อไม่ได้ตอนนี้ ลองอีกครั้งได้เลย! 🙏');
+  function cellColor(count){
+    if(!count) return '#f0f0f0';
+    const intensity=Math.min(1,count/maxCount);
+    if(intensity<.25) return '#b7e4c7';
+    if(intensity<.5) return '#52b788';
+    if(intensity<.75) return '#2d6a4f';
+    return '#1b4332';
   }
 
-  if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
-}
-
-// ── Mic (Web Speech Recognition)
-function toggleMic() {
-  const btn = document.getElementById('mic-btn');
-  if (micActive) {
-    stopMic();
-    return;
-  }
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) {
-    showToast('เบราว์เซอร์นี้ไม่รองรับ Speech Recognition ใช้ Chrome นะ!');
-    return;
-  }
-  recognition = new SR();
-  recognition.lang = 'zh-CN';
-  recognition.continuous = false;
-  recognition.interimResults = false;
-  recognition.onstart = () => {
-    micActive = true;
-    if (btn) { btn.style.background = 'var(--red)'; btn.style.color = 'white'; btn.textContent = '🔴'; }
-    showToast('🎤 กำลังฟัง... พูดภาษาจีนได้เลย');
-  };
-  recognition.onresult = (e) => {
-    const transcript = e.results[0][0].transcript;
-    const input = document.getElementById('chat-input');
-    if (input) { input.value = transcript; }
-    stopMic();
-    setTimeout(sendChat, 300);
-  };
-  recognition.onerror = () => { stopMic(); showToast('ฟังไม่ได้ยิน ลองอีกครั้ง!'); };
-  recognition.onend = () => stopMic();
-  recognition.start();
-}
-
-function stopMic() {
-  micActive = false;
-  if (recognition) { try { recognition.stop(); } catch(e) {} recognition = null; }
-  const btn = document.getElementById('mic-btn');
-  if (btn) { btn.style.background = 'var(--paper)'; btn.style.color = 'var(--ink3)'; btn.textContent = '🎤'; }
+  box.innerHTML=`
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px">
+      <div style="background:var(--red-light);border:1px solid var(--paper3);border-radius:var(--r);padding:14px;text-align:center">
+        <div style="font-size:28px;font-weight:900;color:var(--red)">${totalXP}</div>
+        <div style="font-size:11px;color:var(--ink3);margin-top:2px">XP รวม</div>
+      </div>
+      <div style="background:var(--amber-light);border:1px solid var(--paper3);border-radius:var(--r);padding:14px;text-align:center">
+        <div style="font-size:28px;font-weight:900;color:var(--amber)">🔥 ${currentStreak}</div>
+        <div style="font-size:11px;color:var(--ink3);margin-top:2px">วัน Streak</div>
+      </div>
+      <div style="background:var(--green-light);border:1px solid var(--paper3);border-radius:var(--r);padding:14px;text-align:center">
+        <div style="font-size:28px;font-weight:900;color:var(--green)">${totalDone}</div>
+        <div style="font-size:11px;color:var(--ink3);margin-top:2px">บทที่จบแล้ว</div>
+      </div>
+      <div style="background:var(--blue-light);border:1px solid var(--paper3);border-radius:var(--r);padding:14px;text-align:center">
+        <div style="font-size:28px;font-weight:900;color:var(--blue)">${totalActive}</div>
+        <div style="font-size:11px;color:var(--ink3);margin-top:2px">วันที่เรียน</div>
+      </div>
+    </div>
+    <div style="background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);overflow-x:auto">
+      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px">📅 16 สัปดาห์ที่ผ่านมา</div>
+      <div style="display:flex;gap:3px;margin-bottom:4px;margin-left:22px">
+        ${weeks.map(w=>{const fn=w.find(x=>x);const label=fn&&fn.date.getDate()<=7?monthLabels[fn.date.getMonth()]:'';return `<div style="width:16px;flex-shrink:0;font-size:8px;color:var(--ink3);text-align:center">${label}</div>`;}).join('')}
+      </div>
+      <div style="display:flex;gap:2px">
+        <div style="display:flex;flex-direction:column;gap:2px;margin-right:4px">
+          ${dayNames.map(n=>`<div style="width:18px;height:16px;font-size:8px;color:var(--ink3);display:flex;align-items:center;justify-content:center">${n}</div>`).join('')}
+        </div>
+        ${weeks.map(w=>`<div style="display:flex;flex-direction:column;gap:2px">${w.map(day=>day?`<div style="width:16px;height:16px;border-radius:3px;background:${cellColor(day.count)}"></div>`:`<div style="width:16px;height:16px"></div>`).join('')}</div>`).join('')}
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:10px;justify-content:flex-end">
+        <span style="font-size:10px;color:var(--ink3)">น้อย</span>
+        ${['#f0f0f0','#b7e4c7','#52b788','#2d6a4f','#1b4332'].map(c=>`<div style="width:14px;height:14px;border-radius:2px;background:${c}"></div>`).join('')}
+        <span style="font-size:10px;color:var(--ink3)">มาก</span>
+      </div>
+    </div>
+    <div style="margin-top:14px;background:var(--paper2);border-radius:var(--r);padding:12px 14px;font-size:12px;color:var(--ink3);text-align:center">
+      💡 Activity map จะเก็บข้อมูลตั้งแต่วันนี้เป็นต้นไป
+    </div>`;
 }
 
 // ═══════════════════════════════════
@@ -9601,17 +9973,27 @@ function initMainQuiz() {
 function renderQuizModeCards() {
   const el = document.getElementById('quiz-mode-cards');
   if (!el) return;
-  el.innerHTML = QUIZ_MODES.map((m, i) => `
-    <div onclick="startQuizMode(${i})" style="display:flex;align-items:center;gap:14px;padding:16px;background:white;border:1.5px solid var(--paper3);border-radius:var(--r);cursor:pointer;transition:.2s;box-shadow:0 1px 4px rgba(0,0,0,.06)"
-      onmouseover="this.style.borderColor='${m.color}';this.style.background='${m.bg}'"
-      onmouseout="this.style.borderColor='var(--paper3)';this.style.background='white'">
-      <div style="width:48px;height:48px;border-radius:var(--r);background:${m.bg};border:1.5px solid ${m.color}30;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${m.icon}</div>
+
+  // Free banner
+  const freeBanner = !isPremium() ? `<div style="background:var(--amber-light);border:1px solid #DFC090;border-radius:var(--r);padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--amber);font-weight:600">
+    🔓 ฟรี: ลอง HSK 1 ได้ 10 ข้อ · Premium: ทุกข้อสอบ + ทุก Level
+    <button onclick="showPaymentModal()" style="margin-left:8px;padding:3px 10px;background:var(--red);color:white;border:none;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">อัปเกรด</button>
+  </div>` : '';
+
+  el.innerHTML = freeBanner + QUIZ_MODES.map((m, i) => {
+    const locked = !isPremium() && i > 0;
+    return `
+    <div onclick="${locked ? 'showPaymentModal()' : `startQuizMode(${i})`}" style="display:flex;align-items:center;gap:14px;padding:16px;background:${locked?'var(--paper2)':'white'};border:1.5px solid var(--paper3);border-radius:var(--r);cursor:pointer;transition:.2s;box-shadow:0 1px 4px rgba(0,0,0,.06);opacity:${locked?.6:1}"
+      onmouseover="this.style.borderColor='${locked?'var(--paper3)':m.color}';this.style.background='${locked?'var(--paper2)':m.bg}'"
+      onmouseout="this.style.borderColor='var(--paper3)';this.style.background='${locked?'var(--paper2)':'white'}'">
+      <div style="width:48px;height:48px;border-radius:var(--r);background:${m.bg};border:1.5px solid ${m.color}30;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${locked?'🔒':m.icon}</div>
       <div style="flex:1">
-        <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px">${m.title}</div>
-        <div style="font-size:12px;color:var(--ink3)">${m.desc}</div>
+        <div style="font-size:14px;font-weight:700;color:${locked?'var(--ink3)':'var(--ink)'};margin-bottom:3px">${m.title}</div>
+        <div style="font-size:12px;color:var(--ink3)">${locked?'Premium เท่านั้น 🔒':m.desc}</div>
       </div>
-      <div style="font-size:18px;color:var(--ink3)">›</div>
-    </div>`).join('');
+      ${locked?`<span style="font-size:10px;font-weight:700;color:var(--red);background:#fff5f9;padding:3px 8px;border-radius:20px;border:1px solid #f0c0d8">Premium</span>`:`<div style="font-size:18px;color:var(--ink3)">›</div>`}
+    </div>`;
+  }).join('');
 
   // Add lesson picker for by-lesson mode
   el.innerHTML += `<div id="lesson-picker" style="display:none;margin-top:4px;padding:14px;background:var(--paper2);border-radius:var(--r)">
@@ -9633,6 +10015,8 @@ function renderQuizModeCards() {
 
 function startQuizMode(modeIdx) {
   const mode = QUIZ_MODES[modeIdx];
+  // Free users: only HSK1 first 10 questions
+  if (!isPremium() && modeIdx > 0) { showPaymentModal(); return; }
   currentQuizMode = mode;
   if (mode.id === 'by-lesson') {
     const picker = document.getElementById('lesson-picker');
@@ -10312,6 +10696,288 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/tangtang/sw.js');
   });
 }
+
+// ═══════════════════════════════════
+// JOURNAL — Learning Notes + Calendar
+// ═══════════════════════════════════
+function getJournal() { return state.user?.data?.journal || {}; }
+
+function saveJournalEntry(dateKey, text) {
+  if (!state.user) return;
+  if (!state.user.data.journal) state.user.data.journal = {};
+  if (text.trim()) {
+    state.user.data.journal[dateKey] = { text: text.trim(), ts: Date.now() };
+  } else {
+    delete state.user.data.journal[dateKey];
+  }
+  trackActivity();
+  saveState();
+}
+
+let journalViewYear = new Date().getFullYear();
+let journalViewMonth = new Date().getMonth();
+
+function renderJournalHub() {
+  const box = document.getElementById('journal-content');
+  if (!box) return;
+  const today = new Date().toISOString().split('T')[0];
+  const journal = getJournal();
+  const todayEntry = journal[today];
+
+  const year = journalViewYear;
+  const month = journalViewMonth;
+  const monthNames = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+  const dayNames = ['อา','จ','อ','พ','พฤ','ศ','ส'];
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  const nowRef = new Date();
+  const todayDate = (year === nowRef.getFullYear() && month === nowRef.getMonth()) ? nowRef.getDate() : -1;
+
+  let calCells = '';
+  for (let i=0;i<firstDay;i++) calCells += `<div></div>`;
+  for (let d=1;d<=daysInMonth;d++) {
+    const key = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const hasEntry = !!journal[key];
+    const isToday = d===todayDate;
+    calCells += `<div onclick="openJournalDay('${key}')" style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;font-size:13px;font-weight:${isToday?'800':'500'};background:${isToday?'var(--red)':hasEntry?'var(--amber-light)':'transparent'};color:${isToday?'white':hasEntry?'var(--amber)':'var(--ink)'};border:${isToday?'none':hasEntry?'1.5px solid #DFC090':'1.5px solid transparent'};position:relative;transition:.15s" onmouseover="if(!${isToday})this.style.background='var(--paper2)'" onmouseout="this.style.background='${isToday?'var(--red)':hasEntry?'var(--amber-light)':'transparent'}'">
+      ${d}${hasEntry?'<span style="position:absolute;top:2px;right:3px;font-size:7px">📓</span>':''}
+    </div>`;
+  }
+
+  const recentEntries = Object.entries(journal)
+    .sort((a,b) => (b[1].ts||0)-(a[1].ts||0))
+    .slice(0,5);
+
+  box.innerHTML = `
+    <div style="background:linear-gradient(135deg,#C9A96E20,#FBF3E8);border:1px solid #DFC090;border-radius:var(--r);padding:16px;margin-bottom:20px">
+      <div style="font-size:11px;font-weight:700;color:var(--amber);letter-spacing:.05em;margin-bottom:8px">📓 บันทึกวันนี้ — ${new Date().toLocaleDateString('th-TH',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div>
+      <textarea id="journal-today-input" placeholder="เขียนบันทึกถึงตัวเองวันนี้... เรียนอะไรไปบ้าง? รู้สึกยังไง? จดคำศัพท์ที่ชอบ..." rows="4" style="width:100%;border:1px solid #DFC090;border-radius:var(--r-sm);padding:12px;font-size:13px;font-family:inherit;color:var(--ink);background:white;resize:vertical;outline:none;line-height:1.6">${todayEntry?.text||''}</textarea>
+      <button onclick="saveJournalToday()" style="width:100%;margin-top:10px;padding:12px;background:var(--amber);color:white;border:none;border-radius:var(--r-sm);font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">💾 บันทึก</button>
+      <div id="journal-save-msg" style="text-align:center;font-size:12px;color:var(--green);min-height:18px;margin-top:6px"></div>
+    </div>
+
+    <div style="background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:16px;margin-bottom:16px;box-shadow:var(--shadow)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <button onclick="journalViewMonth--;if(journalViewMonth<0){journalViewMonth=11;journalViewYear--;}renderJournalHub()" style="width:32px;height:32px;border-radius:50%;border:1px solid var(--paper3);background:var(--paper);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center">‹</button>
+        <div style="text-align:center">
+          <div style="font-size:15px;font-weight:800;color:var(--ink)">${monthNames[month]}</div>
+          <div style="font-size:12px;color:var(--ink3)">${year} · ${Object.keys(journal).filter(k=>k.startsWith(`${year}-${String(month+1).padStart(2,'0')}`)).length} วันที่มีบันทึก</div>
+        </div>
+        <button onclick="journalViewMonth++;if(journalViewMonth>11){journalViewMonth=0;journalViewYear++;}renderJournalHub()" style="width:32px;height:32px;border-radius:50%;border:1px solid var(--paper3);background:var(--paper);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center">›</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:8px">
+        ${dayNames.map(d=>`<div style="text-align:center;font-size:10px;font-weight:700;color:var(--ink3);padding:4px 0">${d}</div>`).join('')}
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px">${calCells}</div>
+    </div>
+
+    ${recentEntries.length > 0 ? `
+    <div style="background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)">
+      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:12px">🕐 บันทึกล่าสุด</div>
+      ${recentEntries.map(([key,entry])=>`
+        <div onclick="openJournalDay('${key}')" style="padding:10px 12px;border:1px solid var(--paper3);border-radius:var(--r-sm);margin-bottom:8px;cursor:pointer;transition:.15s" onmouseover="this.style.borderColor='var(--amber)'" onmouseout="this.style.borderColor='var(--paper3)'">
+          <div style="font-size:11px;font-weight:700;color:var(--amber);margin-bottom:4px">${new Date(key).toLocaleDateString('th-TH',{weekday:'short',year:'numeric',month:'short',day:'numeric'})}</div>
+          <div style="font-size:13px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${entry.text}</div>
+        </div>`).join('')}
+    </div>` : ''}`;
+}
+
+function saveJournalToday() {
+  const today = new Date().toISOString().split('T')[0];
+  const text = document.getElementById('journal-today-input')?.value || '';
+  saveJournalEntry(today, text);
+  const msg = document.getElementById('journal-save-msg');
+  if (msg) { msg.textContent = '✅ บันทึกแล้ว!'; setTimeout(()=>{ msg.textContent=''; }, 2000); }
+}
+
+function openJournalDay(dateKey) {
+  const journal = getJournal();
+  const entry = journal[dateKey];
+  const existing = document.getElementById('journal-day-modal');
+  if (existing) existing.remove();
+
+  const displayDate = new Date(dateKey+'T00:00:00').toLocaleDateString('th-TH',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const modal = document.createElement('div');
+  modal.id = 'journal-day-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.5);display:flex;align-items:flex-end';
+  modal.innerHTML = `
+    <div style="background:white;border-radius:24px 24px 0 0;padding:24px;width:100%;max-height:80vh;overflow-y:auto">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--amber)">📓 บันทึกการเรียนรู้</div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-top:2px">${displayDate}</div>
+        </div>
+        <button onclick="document.getElementById('journal-day-modal').remove()" style="background:var(--paper2);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+      </div>
+      <textarea id="journal-day-input" rows="6" placeholder="เขียนบันทึกวันนี้..." style="width:100%;border:1.5px solid #DFC090;border-radius:var(--r-sm);padding:12px;font-size:14px;font-family:inherit;color:var(--ink);background:var(--amber-light);resize:vertical;outline:none;line-height:1.7">${entry?.text||''}</textarea>
+      <div style="display:flex;gap:10px;margin-top:14px">
+        ${entry?`<button onclick="saveJournalEntry('${dateKey}','');document.getElementById('journal-day-modal').remove();renderJournalHub()" style="flex:1;padding:12px;background:#fee2e2;color:#dc2626;border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">🗑 ลบ</button>`:''}
+        <button onclick="saveJournalEntry('${dateKey}',document.getElementById('journal-day-input').value);document.getElementById('journal-day-modal').remove();renderJournalHub()" style="flex:2;padding:12px;background:var(--amber);color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">💾 บันทึก</button>
+      </div>
+    </div>`;
+  modal.addEventListener('click', e => { if(e.target===modal) modal.remove(); });
+  document.body.appendChild(modal);
+}
+
+
+// ═══════════════════════════════════
+// SPEED QUIZ — Time Attack (Premium)
+// ═══════════════════════════════════
+const SPEED_POOL = [
+  {q:'我',opts:['ฉัน','คุณ','เขา','เธอ'],ans:0},
+  {q:'你',opts:['ฉัน','คุณ','เขา','เธอ'],ans:1},
+  {q:'他',opts:['ฉัน','คุณ','เขา(ผู้ชาย)','เธอ'],ans:2},
+  {q:'好',opts:['ไม่ดี','ดี','ขอบคุณ','ลาก่อน'],ans:1},
+  {q:'是',opts:['ไม่ใช่','มี','เป็น','ไม่มี'],ans:2},
+  {q:'不',opts:['ใช่','ไม่','มาก','น้อย'],ans:1},
+  {q:'吃',opts:['ดื่ม','นอน','กิน','พูด'],ans:2},
+  {q:'喝',opts:['กิน','ดื่ม','ซื้อ','ขาย'],ans:1},
+  {q:'大',opts:['เล็ก','ยาว','ใหญ่','สูง'],ans:2},
+  {q:'小',opts:['ใหญ่','เล็ก','สูง','เตี้ย'],ans:1},
+  {q:'来',opts:['ไป','มา','อยู่','กลับ'],ans:1},
+  {q:'去',opts:['มา','อยู่','ไป','กลับ'],ans:2},
+  {q:'水',opts:['ไฟ','ลม','น้ำ','ดิน'],ans:2},
+  {q:'火',opts:['น้ำ','ไฟ','ลม','ดิน'],ans:1},
+  {q:'人',opts:['สัตว์','คน','บ้าน','รถ'],ans:1},
+  {q:'日',opts:['เดือน','วัน/ดวงอาทิตย์','ปี','สัปดาห์'],ans:1},
+  {q:'月',opts:['วัน','สัปดาห์','เดือน/พระจันทร์','ปี'],ans:2},
+  {q:'山',opts:['ทะเล','แม่น้ำ','ภูเขา','ทุ่งนา'],ans:2},
+  {q:'今天',opts:['เมื่อวาน','พรุ่งนี้','วันนี้','ทุกวัน'],ans:2},
+  {q:'明天',opts:['วันนี้','เมื่อวาน','พรุ่งนี้','อาทิตย์หน้า'],ans:2},
+  {q:'朋友',opts:['ครอบครัว','เพื่อน','ครู','นักเรียน'],ans:1},
+  {q:'学校',opts:['โรงพยาบาล','ร้านอาหาร','โรงเรียน','สนามบิน'],ans:2},
+  {q:'老师',opts:['นักเรียน','หมอ','ครู','พ่อครัว'],ans:2},
+  {q:'谢谢',opts:['ขอโทษ','ไม่เป็นไร','ขอบคุณ','สวัสดี'],ans:2},
+  {q:'对不起',opts:['ขอบคุณ','ไม่เป็นไร','ขอโทษ','สวัสดี'],ans:2},
+  {q:'再见',opts:['สวัสดี','ขอบคุณ','ลาก่อน','ขอโทษ'],ans:2},
+  {q:'多少钱',opts:['อยู่ที่ไหน','กี่โมง','เท่าไหร่','ชื่ออะไร'],ans:2},
+  {q:'喜欢',opts:['เกลียด','ชอบ','รัก','กลัว'],ans:1},
+  {q:'漂亮',opts:['น่าเกลียด','สวย','ใหญ่','เล็ก'],ans:1},
+  {q:'很',opts:['ไม่','มาก','น้อย','บาง'],ans:1},
+  {q:'也',opts:['แต่','และ','ด้วย/ก็','เพราะ'],ans:2},
+  {q:'都',opts:['บางคน','ทั้งหมด','ไม่มีเลย','บางครั้ง'],ans:1},
+  {q:'在',opts:['มี','อยู่ที่','เป็น','ไป'],ans:1},
+  {q:'有',opts:['ไม่มี','เป็น','มี','อยู่'],ans:2},
+  {q:'上',opts:['ล่าง','หน้า','บน','หลัง'],ans:2},
+  {q:'下',opts:['บน','หน้า','ล่าง','หลัง'],ans:2},
+];
+
+let speedTimer = null, speedTimeLeft = 10, speedIdx = 0;
+let speedScore = 0, speedCombo = 0, speedDone = false, speedQuestions = [];
+
+function initSpeedQuiz() {
+  if (!isPremium()) {
+    document.getElementById('speed-content').innerHTML = `
+      <div style="text-align:center;padding:40px 20px">
+        <div style="font-size:52px;margin-bottom:12px">⚡</div>
+        <div style="font-size:18px;font-weight:800;color:var(--ink);margin-bottom:8px">Speed Quiz</div>
+        <div style="font-size:13px;color:var(--ink3);margin-bottom:20px">ตอบให้เร็วที่สุด! ยิ่งเร็วยิ่งได้ Bonus XP<br>มี Combo Multiplier สูงสุด x3!</div>
+        <div style="background:var(--red-light);border:1px solid var(--paper3);border-radius:var(--r);padding:16px;margin-bottom:20px;font-size:13px;color:var(--ink2)">🔒 ฟีเจอร์นี้สำหรับสมาชิก Premium เท่านั้น</div>
+        <button onclick="showPaymentModal()" style="padding:14px 28px;background:var(--red);color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer">🔓 สมัคร Premium</button>
+      </div>`;
+    return;
+  }
+  speedDone = false; speedScore = 0; speedCombo = 0; speedIdx = 0;
+  speedQuestions = [...SPEED_POOL].sort(()=>Math.random()-.5).slice(0,20);
+  renderSpeedQ();
+}
+
+function renderSpeedQ() {
+  const box = document.getElementById('speed-content'); if (!box) return;
+  if (speedDone || speedIdx >= speedQuestions.length) { renderSpeedDone(); return; }
+  const q = speedQuestions[speedIdx];
+  const letters = ['A','B','C','D'];
+  speedTimeLeft = 10;
+  if (speedTimer) clearInterval(speedTimer);
+
+  box.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div style="font-size:12px;font-weight:700;color:var(--ink3)">${speedIdx+1}/20</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        ${speedCombo>=2?`<div style="background:linear-gradient(135deg,#e67e22,#f39c12);color:white;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700">🔥 x${speedCombo>=5?3:speedCombo>=3?2:1.5} Combo!</div>`:''}
+        <div style="font-size:14px;font-weight:700;color:#e67e22">⭐ ${speedScore}</div>
+      </div>
+    </div>
+    <div style="height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;margin-bottom:20px">
+      <div id="speed-progress" style="height:100%;width:${speedIdx/20*100}%;background:linear-gradient(90deg,#6b1a6b,#F13596);border-radius:3px;transition:width .3s ease"></div>
+    </div>
+    <div style="background:linear-gradient(135deg,#6b1a6b,#F13596);border-radius:16px;padding:24px;text-align:center;margin-bottom:16px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:8px;right:12px;display:flex;align-items:center;gap:4px">
+        <div id="speed-timer-circle" style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:white" id="speed-timer">${speedTimeLeft}</div>
+      </div>
+      <div style="font-family:'Noto Serif SC',serif;font-size:64px;color:white;font-weight:700;line-height:1;margin-bottom:8px">${q.q}</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.6)">ความหมายคืออะไร?</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="speed-opts">
+      ${q.opts.map((o,i)=>`
+        <button id="so-${i}" onclick="answerSpeed(${i})" style="padding:14px 10px;background:white;border:2px solid var(--paper3);border-radius:12px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:.1s;line-height:1.3">
+          <span style="display:block;font-size:10px;font-weight:700;color:var(--ink3);margin-bottom:3px">${letters[i]}</span>${o}
+        </button>`).join('')}
+    </div>
+    <div id="speed-feedback" style="text-align:center;min-height:32px;margin-top:12px;font-size:13px;font-weight:700"></div>`;
+
+  // Start countdown
+  speedTimer = setInterval(() => {
+    speedTimeLeft--;
+    const tc = document.getElementById('speed-timer-circle');
+    if (tc) {
+      tc.textContent = speedTimeLeft;
+      if (speedTimeLeft <= 3) { tc.style.background = 'rgba(255,80,80,.5)'; tc.style.transform = 'scale(1.1)'; }
+    }
+    if (speedTimeLeft <= 0) {
+      clearInterval(speedTimer);
+      // Time out
+      const fb = document.getElementById('speed-feedback');
+      if (fb) fb.innerHTML = `<span style="color:var(--red)">⏰ หมดเวลา! เฉลย: ${speedQuestions[speedIdx].opts[speedQuestions[speedIdx].ans]}</span>`;
+      speedCombo = 0;
+      document.querySelectorAll('[id^="so-"]').forEach(b => b.disabled = true);
+      const ans = speedQuestions[speedIdx].ans;
+      const ab = document.getElementById('so-'+ans);
+      if (ab) { ab.style.borderColor='var(--green)'; ab.style.background='var(--green-light)'; }
+      setTimeout(() => { speedIdx++; renderSpeedQ(); }, 1200);
+    }
+  }, 1000);
+}
+
+function answerSpeed(chosen) {
+  if (speedTimer) clearInterval(speedTimer);
+  const q = speedQuestions[speedIdx];
+  const correct = chosen === q.ans;
+  document.querySelectorAll('[id^="so-"]').forEach((b,i) => {
+    b.disabled = true;
+    if (i===q.ans) { b.style.borderColor='var(--green)'; b.style.background='var(--green-light)'; }
+    else if (i===chosen&&!correct) { b.style.borderColor='var(--red)'; b.style.background='var(--red-light)'; }
+  });
+  const fb = document.getElementById('speed-feedback');
+  if (correct) {
+    speedCombo++;
+    const mult = speedCombo>=5?3:speedCombo>=3?2:speedCombo>=2?1.5:1;
+    const timeBonus = Math.max(0, speedTimeLeft);
+    const xp = Math.round((5 + timeBonus) * mult);
+    speedScore += xp;
+    if (fb) fb.innerHTML = `<span style="color:var(--green)">✅ ถูก! +${xp} XP${mult>1?' (x'+mult+' Combo!)':''}</span>`;
+    if (state.user) { state.user.data.xp=(state.user.data.xp||0)+xp; trackActivity(); saveState(); updateTopbar(); }
+  } else {
+    speedCombo = 0;
+    if (fb) fb.innerHTML = `<span style="color:var(--red)">❌ เฉลย: ${q.opts[q.ans]}</span>`;
+  }
+  setTimeout(() => { speedIdx++; renderSpeedQ(); }, correct?700:1000);
+}
+
+function renderSpeedDone() {
+  if (speedTimer) clearInterval(speedTimer);
+  const box = document.getElementById('speed-content');
+  const pct = Math.round(speedIdx>0?speedScore/(speedIdx*15)*100:0);
+  box.innerHTML = `
+    <div style="text-align:center;padding:28px 16px">
+      <div style="font-size:52px;margin-bottom:12px">${speedScore>=200?'🏆':speedScore>=100?'⚡':'💪'}</div>
+      <div style="font-size:20px;font-weight:800;color:var(--ink);margin-bottom:8px">${speedScore>=200?'เร็วสุดๆ!':speedScore>=100?'ดีมาก!':'ฝึกต่อไปนะ!'}</div>
+      <div style="font-size:42px;font-weight:900;background:linear-gradient(135deg,#6b1a6b,#F13596);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:10px 0">${speedScore} XP</div>
+      <div style="font-size:13px;color:var(--ink3);margin-bottom:20px">ตอบถูก ${speedIdx} ข้อ จาก 20</div>
+      <button onclick="initSpeedQuiz()" style="width:100%;padding:14px;background:linear-gradient(135deg,#6b1a6b,#F13596);color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer">⚡ เล่นอีกครั้ง</button>
+    </div>`;
+}
+
 </script>
 </body>
 </html>
