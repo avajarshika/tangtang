@@ -1746,9 +1746,9 @@ body {
     <div id="hub-pane-lessons" style="padding:0">
       <!-- HSK level sub-tabs -->
       <div style="display:flex;gap:8px;padding:12px 16px 0;background:var(--paper);border-bottom:1px solid var(--paper3)">
-        <button id="hub-hsk1-btn" onclick="switchHubHSK(1)" style="padding:7px 20px;border-radius:20px;border:1.5px solid var(--red);background:var(--red);color:white;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s">HSK 1</button>
-        <button id="hub-hsk2-btn" onclick="switchHubHSK(2)" style="padding:7px 20px;border-radius:20px;border:1.5px solid var(--paper3);background:white;color:var(--ink3);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s">HSK 2</button>
-        <button id="hub-hsk3-btn" onclick="switchHubHSK(3)" style="padding:7px 20px;border-radius:20px;border:1.5px solid var(--paper3);background:white;color:var(--ink3);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s">HSK 3</button>
+        <button id="hub-hsk1-btn" onclick="switchHubHSK(1)" style="padding:7px 20px;border-radius:20px;border:1.5px solid var(--red);background:var(--red);color:white;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s">ระดับ 1</button>
+        <button id="hub-hsk2-btn" onclick="switchHubHSK(2)" style="padding:7px 20px;border-radius:20px;border:1.5px solid var(--paper3);background:white;color:var(--ink3);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s">ระดับ 2</button>
+        <button id="hub-hsk3-btn" onclick="switchHubHSK(3)" style="padding:7px 20px;border-radius:20px;border:1.5px solid var(--paper3);background:white;color:var(--ink3);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s">ระดับ 3</button>
         <button id="hub-hsk4-btn" onclick="switchHubHSK(4)" style="padding:7px 20px;border-radius:20px;border:1.5px solid var(--paper3);background:white;color:var(--ink3);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s">HSK 4</button>
         <button id="hub-hsk5-btn" onclick="switchHubHSK(5)" style="padding:7px 20px;border-radius:20px;border:1.5px solid var(--paper3);background:white;color:var(--ink3);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s">HSK 5</button>
         <button id="hub-hsk6-btn" onclick="switchHubHSK(6)" style="padding:7px 20px;border-radius:20px;border:1.5px solid var(--paper3);background:white;color:var(--ink3);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.2s">HSK 6</button>
@@ -1839,17 +1839,17 @@ body {
       <div class="hsk-progress-section">
         <div class="hsk-title">HSK Progress</div>
         <div class="hsk-row">
-          <div class="hsk-lbl">HSK 1</div>
+          <div class="hsk-lbl">ระดับ 1</div>
           <div class="hsk-bar"><div class="hsk-fill" id="hsk1-bar" style="width:0%;background:var(--red)"></div></div>
           <div class="hsk-pct" id="hsk1-pct">0%</div>
         </div>
         <div class="hsk-row" style="opacity:.4">
-          <div class="hsk-lbl">HSK 2</div>
+          <div class="hsk-lbl">ระดับ 2</div>
           <div class="hsk-bar"><div class="hsk-fill" style="width:0%;background:var(--amber)"></div></div>
           <div class="hsk-pct">เร็วๆนี้</div>
         </div>
         <div class="hsk-row" style="opacity:.25">
-          <div class="hsk-lbl">HSK 3</div>
+          <div class="hsk-lbl">ระดับ 3</div>
           <div class="hsk-bar"><div class="hsk-fill" style="width:0%;background:var(--blue)"></div></div>
           <div class="hsk-pct">เร็วๆนี้</div>
         </div>
@@ -7999,7 +7999,7 @@ function renderDailyDone(alreadyDone=false) {
 // ═══════════════════════════════════
 // 6 LEVELS × 10 sentences each
 const SENTENCE_LEVELS = [
-  { level:1, name:'HSK 1 — ทักทาย', color:'#F13596', bg:'#FFEDF6', icon:'⭐', sentences:[
+  { level:1, name:'ด่านที่ 1 — ทักทาย', color:'#F13596', bg:'#FFEDF6', icon:'⭐', sentences:[
     {th:'ฉันเป็นคนไทย', words:['我','是','泰国人'], correct:'我是泰国人', py:'Wǒ shì Tàiguó rén'},
     {th:'คุณสบายดีไหม?', words:['你','好','吗'], correct:'你好吗', py:'Nǐ hǎo ma'},
     {th:'ฉันชื่อเสี่ยวหมิง (小明)', words:['我','叫','小明'], correct:'我叫小明', py:'Wǒ jiào Xiǎomíng'},
@@ -8011,7 +8011,7 @@ const SENTENCE_LEVELS = [
     {th:'ฉันมีเพื่อน', words:['我','有','朋友'], correct:'我有朋友', py:'Wǒ yǒu péngyǒu'},
     {th:'ลาก่อน!', words:['再','见'], correct:'再见', py:'Zàijiàn'},
   ]},
-  { level:2, name:'HSK 1 — ครอบครัว & ของ', color:'#8B5CF6', bg:'#EDE9FE', icon:'⭐⭐', sentences:[
+  { level:2, name:'ด่านที่ 2 — ครอบครัว & ของ', color:'#8B5CF6', bg:'#EDE9FE', icon:'⭐⭐', sentences:[
     {th:'แม่ของฉันเป็นครู', words:['我','妈妈','是','老师'], correct:'我妈妈是老师', py:'Wǒ māma shì lǎoshī'},
     {th:'คุณมีน้องสาวไหม?', words:['你','有','妹妹','吗'], correct:'你有妹妹吗', py:'Nǐ yǒu mèimei ma'},
     {th:'นี่เป็นหนังสือของฉัน', words:['这','是','我的','书'], correct:'这是我的书', py:'Zhè shì wǒ de shū'},
@@ -8023,7 +8023,7 @@ const SENTENCE_LEVELS = [
     {th:'บ้านของเขาสวยมาก', words:['他的','家','很','漂亮'], correct:'他的家很漂亮', py:'Tā de jiā hěn piàoliang'},
     {th:'หนังสือเล่มนั้นเล็กมาก', words:['那本书','很','小'], correct:'那本书很小', py:'Nà běn shū hěn xiǎo'},
   ]},
-  { level:3, name:'HSK 1-2 — เวลา & กิจวัตร', color:'#1a6b3a', bg:'#e8f4ed', icon:'⭐⭐⭐', sentences:[
+  { level:3, name:'ด่านที่ 3 — เวลา & กิจวัตร', color:'#1a6b3a', bg:'#e8f4ed', icon:'⭐⭐⭐', sentences:[
     {th:'วันนี้อากาศร้อนมาก', words:['今天','很','热'], correct:'今天很热', py:'Jīntiān hěn rè'},
     {th:'ฉันไปทำงานทุกวัน', words:['我','每天','去','上班'], correct:'我每天去上班', py:'Wǒ měitiān qù shàngbān'},
     {th:'เขามาโรงเรียนทุกวัน', words:['他','每天','来','学校'], correct:'他每天来学校', py:'Tā měitiān lái xuéxiào'},
@@ -8035,7 +8035,7 @@ const SENTENCE_LEVELS = [
     {th:'ฉันกลับบ้านตอนหกโมง', words:['我','六点','回家'], correct:'我六点回家', py:'Wǒ liù diǎn huíjiā'},
     {th:'สัปดาห์นี้อากาศเย็นมาก', words:['这个星期','天气','很冷'], correct:'这个星期天气很冷', py:'Zhège xīngqī tiānqì hěn lěng'},
   ]},
-  { level:4, name:'HSK 2 — การเดินทาง', color:'#1a4a8a', bg:'#e6f1fb', icon:'⭐⭐⭐⭐', sentences:[
+  { level:4, name:'ด่านที่ 4 — การเดินทาง', color:'#1a4a8a', bg:'#e6f1fb', icon:'⭐⭐⭐⭐', sentences:[
     {th:'ร้านอาหารอยู่ที่ไหน?', words:['餐厅','在','哪里'], correct:'餐厅在哪里', py:'Cāntīng zài nǎlǐ'},
     {th:'ฉันอยากไปประเทศจีน', words:['我','想','去','中国'], correct:'我想去中国', py:'Wǒ xiǎng qù Zhōngguó'},
     {th:'ต้องนั่งรถเมล์สาย 3', words:['要','坐','三路','公共汽车'], correct:'要坐三路公共汽车', py:'Yào zuò sān lù gōnggòng qìchē'},
@@ -8047,7 +8047,7 @@ const SENTENCE_LEVELS = [
     {th:'ขอโทษนะ ถามทางหน่อยได้ไหม?', words:['请问','可以','问路','吗'], correct:'请问可以问路吗', py:'Qǐngwèn kěyǐ wènlù ma'},
     {th:'เดินจากโรงแรมไม่ไกล', words:['从','酒店','走','不远'], correct:'从酒店走不远', py:'Cóng jiǔdiàn zǒu bù yuǎn'},
   ]},
-  { level:5, name:'HSK 2-3 — ช้อปปิ้ง & อาหาร', color:'#e67e22', bg:'#fef3e2', icon:'⭐⭐⭐⭐⭐', sentences:[
+  { level:5, name:'ด่านที่ 5 — ช้อปปิ้ง & อาหาร', color:'#e67e22', bg:'#fef3e2', icon:'⭐⭐⭐⭐⭐', sentences:[
     {th:'ราคาเท่าไหร่?', words:['这个','多少','钱'], correct:'这个多少钱', py:'Zhège duōshǎo qián'},
     {th:'ลดราคาหน่อยได้ไหม?', words:['可以','便宜','一点','吗'], correct:'可以便宜一点吗', py:'Kěyǐ piányí yīdiǎn ma'},
     {th:'ฉันอยากลองเสื้อตัวนี้', words:['我','想','试试','这件衣服'], correct:'我想试试这件衣服', py:'Wǒ xiǎng shìshì zhè jiàn yīfu'},
@@ -8059,7 +8059,7 @@ const SENTENCE_LEVELS = [
     {th:'ฉันจ่ายด้วย WeChat Pay', words:['我','用','微信支付'], correct:'我用微信支付', py:'Wǒ yòng Wēixìn Zhīfù'},
     {th:'ห่อกลับบ้านด้วยได้ไหม?', words:['可以','打包','吗'], correct:'可以打包吗', py:'Kěyǐ dǎbāo ma'},
   ]},
-  { level:6, name:'HSK 3 — ชีวิต & ความคิด', color:'#1a2a5a', bg:'#e0e4f0', icon:'🏆', sentences:[
+  { level:6, name:'ด่านที่ 6 — ชีวิต & ความคิด', color:'#1a2a5a', bg:'#e0e4f0', icon:'🏆', sentences:[
     {th:'ฉันคิดว่าการเรียนภาษาจีนน่าสนใจมาก', words:['我觉得','学中文','很有意思'], correct:'我觉得学中文很有意思', py:'Wǒ juéde xué Zhōngwén hěn yǒuyìsi'},
     {th:'แม้ว่าจะยากแต่ฉันก็ไม่ยอมแพ้', words:['虽然','很难','但是','我不放弃'], correct:'虽然很难但是我不放弃', py:'Suīrán hěn nán dànshì wǒ bù fàngqì'},
     {th:'เพราะฉะนั้นฉันจึงเรียนทุกวัน', words:['所以','我','每天','学习'], correct:'所以我每天学习', py:'Suǒyǐ wǒ měitiān xuéxí'},
@@ -9402,7 +9402,7 @@ function renderLessonsHub() {
           <div class="lesson-title">${l.title}</div>
           <div class="lesson-sub">${l.sub}</div>
           <div class="lesson-pills">
-            <span class="pill pill-red">HSK 1</span>
+            <span class="pill pill-red">ระดับ 1</span>
             <span class="pill pill-gray">${l.theme}</span>
             ${isDone?'<span class="pill pill-green">จบแล้ว</span>':''}
             ${locked?'<span class="pill" style="background:#fff5f9;color:var(--red)">Premium</span>':''}
@@ -9425,7 +9425,7 @@ function renderLessonsHub() {
           <div class="lesson-title">${l.title}</div>
           <div class="lesson-sub">${l.sub}</div>
           <div class="lesson-pills">
-            <span class="pill" style="background:#e6f1fb;color:var(--blue);border:1px solid var(--blue)">HSK 2</span>
+            <span class="pill" style="background:#e6f1fb;color:var(--blue);border:1px solid var(--blue)">ระดับ 2</span>
             <span class="pill pill-gray">${l.theme}</span>
             ${isDone?'<span class="pill pill-green">จบแล้ว</span>':''}
             ${locked?'<span class="pill" style="background:#fff5f9;color:var(--red)">Premium</span>':''}
@@ -9446,7 +9446,7 @@ function renderLessonsHub() {
             <div class="lesson-title">${l.title}</div>
             <div class="lesson-sub">${l.sub}</div>
             <div class="lesson-pills">
-              <span class="pill" style="background:#e8f4ed;color:#1a6b3a;border:1px solid #1a6b3a">HSK 3</span>
+              <span class="pill" style="background:#e8f4ed;color:#1a6b3a;border:1px solid #1a6b3a">ระดับ 3</span>
               <span class="pill pill-gray">${l.theme}</span>
               <span class="pill" style="background:#fff5f9;color:var(--red)">Premium</span>
             </div>
@@ -9463,7 +9463,7 @@ function renderLessonsHub() {
           <div class="lesson-title">${l.title}</div>
           <div class="lesson-sub">${l.sub}</div>
           <div class="lesson-pills">
-            <span class="pill" style="background:#e8f4ed;color:#1a6b3a;border:1px solid #1a6b3a">HSK 3</span>
+            <span class="pill" style="background:#e8f4ed;color:#1a6b3a;border:1px solid #1a6b3a">ระดับ 3</span>
             <span class="pill pill-gray">${l.theme}</span>
             ${isDone?'<span class="pill pill-green">จบแล้ว</span>':''}
           </div>
@@ -11068,7 +11068,7 @@ function openJournalDay(dateKey) {
 
 // ── คลังคำศัพท์แบ่งตาม Level ──
 const SPEED_LEVELS = {
-  1: { name:'ระดับ 1 — HSK 1 พื้นฐาน', timeLimit:10, questions:[
+  1: { name:'ระดับ 1 — ผู้เริ่มต้น', timeLimit:10, questions:[
     {q:'我',opts:['ฉัน','คุณ','เขา','เธอ'],ans:0},
     {q:'你',opts:['ฉัน','คุณ','เขา','เธอ'],ans:1},
     {q:'他',opts:['ฉัน','คุณ','เขา(ผู้ชาย)','เธอ'],ans:2},
@@ -11090,7 +11090,7 @@ const SPEED_LEVELS = {
     {q:'再见',opts:['สวัสดี','ขอบคุณ','ลาก่อน','ขอโทษ'],ans:2},
     {q:'朋友',opts:['ครอบครัว','เพื่อน','ครู','นักเรียน'],ans:1},
   ]},
-  2: { name:'ระดับ 2 — HSK 1 ขยาย', timeLimit:9, questions:[
+  2: { name:'ระดับ 2 — พื้นฐาน', timeLimit:9, questions:[
     {q:'学校',opts:['โรงพยาบาล','ร้านอาหาร','โรงเรียน','สนามบิน'],ans:2},
     {q:'老师',opts:['นักเรียน','หมอ','ครู','พ่อครัว'],ans:2},
     {q:'多少钱',opts:['อยู่ที่ไหน','กี่โมง','เท่าไหร่','ชื่ออะไร'],ans:2},
@@ -11112,7 +11112,7 @@ const SPEED_LEVELS = {
     {q:'家',opts:['โรงเรียน','บ้าน','ร้าน','ออฟฟิศ'],ans:1},
     {q:'钱',opts:['เวลา','เงิน','ทอง','ของ'],ans:1},
   ]},
-  3: { name:'ระดับ 3 — HSK 2 พื้นฐาน', timeLimit:8, questions:[
+  3: { name:'ระดับ 3 — กลางต้น', timeLimit:8, questions:[
     {q:'工作',opts:['เรียน','ทำงาน','เล่น','นอน'],ans:1},
     {q:'医院',opts:['โรงเรียน','ร้านอาหาร','โรงพยาบาล','สนามบิน'],ans:2},
     {q:'商店',opts:['ธนาคาร','ร้านค้า','โรงแรม','สวนสาธารณะ'],ans:1},
@@ -11134,7 +11134,7 @@ const SPEED_LEVELS = {
     {q:'方便',opts:['ยุ่งยาก','สะดวก','อันตราย','ปลอดภัย'],ans:1},
     {q:'重要',opts:['ไม่สำคัญ','สำคัญ','ธรรมดา','พิเศษ'],ans:1},
   ]},
-  4: { name:'ระดับ 4 — HSK 2 ขยาย', timeLimit:7, questions:[
+  4: { name:'ระดับ 4 — กลาง', timeLimit:7, questions:[
     {q:'经常',opts:['นานๆครั้ง','บางครั้ง','บ่อย/ประจำ','ไม่เคย'],ans:2},
     {q:'突然',opts:['ค่อยๆ','ทันที/กะทันหัน','ช้าๆ','นาน'],ans:1},
     {q:'继续',opts:['หยุด','เริ่มใหม่','ทำต่อ','ยกเลิก'],ans:2},
@@ -11156,7 +11156,7 @@ const SPEED_LEVELS = {
     {q:'建议',opts:['บังคับ','แนะนำ/เสนอแนะ','ปฏิเสธ','วิจารณ์'],ans:1},
     {q:'负担',opts:['สิทธิ์','ภาระ/ความรับผิดชอบ','รางวัล','ของขวัญ'],ans:1},
   ]},
-  5: { name:'ระดับ 5 — HSK 3 พื้นฐาน', timeLimit:6, questions:[
+  5: { name:'ระดับ 5 — กลางสูง', timeLimit:6, questions:[
     {q:'根据',opts:['ไม่เกี่ยวกับ','ตามที่/อ้างอิง','แทนที่','นอกจาก'],ans:1},
     {q:'尽管',opts:['เพราะ','เนื่องจาก','แม้ว่า','ถ้าหาก'],ans:2},
     {q:'否则',opts:['ดังนั้น','มิฉะนั้น','อีกทั้ง','กล่าวคือ'],ans:1},
@@ -11178,7 +11178,7 @@ const SPEED_LEVELS = {
     {q:'主观',opts:['เป็นกลาง','ปรนัย','อัตนัย/ส่วนตัว','ข้อเท็จจริง'],ans:2},
     {q:'适当',opts:['เกินพอดี','ไม่เพียงพอ','เหมาะสม/พอดี','ผิดปกติ'],ans:2},
   ]},
-  6: { name:'ระดับ 6 — HSK 3 ขั้นสูง', timeLimit:5, questions:[
+  6: { name:'ระดับ 6 — ขั้นสูง', timeLimit:5, questions:[
     {q:'相互',opts:['ฝ่ายเดียว','ซึ่งกันและกัน','ตามลำดับ','สลับกัน'],ans:1},
     {q:'逻辑',opts:['อารมณ์','ตรรกะ','สัญชาตญาณ','จินตนาการ'],ans:1},
     {q:'理性',opts:['อารมณ์','ไร้เหตุผล','มีเหตุมีผล','สัญชาตญาณ'],ans:2},
