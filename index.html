@@ -10691,7 +10691,7 @@ async function loadAffiliateAdmin() {
   listEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink3)">⏳ กำลังโหลด...</div>';
 
   const { data, error } = await sb.from('user_progress')
-    .select('user_id, data, referral_code, affiliate_earnings, affiliate_count, bank_name, bank_account, bank_owner')
+    .select('user_id, data, referral_code, affiliate_earnings, affiliate_count, bank_name, bank_account, bank_owner, last_paid_at, last_paid_amount')
     .not('referral_code', 'is', null)
     .order('affiliate_earnings', { ascending: false });
 
@@ -10736,11 +10736,11 @@ async function loadAffiliateAdmin() {
       <div style="background:var(--red-light);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--red);margin-bottom:10px">
         ⚠️ ยังไม่มีข้อมูลบัญชี
       </div>`}
-      ${earnings > 0 ? `
-      <button onclick="markAffiliatePaid('${a.user_id}', ${earnings})" style="width:100%;padding:10px;background:var(--green);color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">
-        ✅ จ่ายแล้ว ฿${earnings} — ตัดยอดเป็น ฿0
-      </button>` : `
-      <div style="text-align:center;font-size:12px;color:var(--ink3);padding:6px">✅ จ่ายแล้วเดือนนี้</div>`}
+      <button onclick="markAffiliatePaid('${a.user_id}', ${earnings})" 
+        style="width:100%;padding:10px;background:${earnings > 0 ? 'var(--green)' : '#94a3b8'};color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">
+        ✅ จ่ายแล้ว${earnings > 0 ? ' ฿'+earnings : ''} — บันทึกการจ่ายเงิน
+      </button>
+      ${a.last_paid_at ? `<div style="text-align:center;font-size:11px;color:var(--ink3);margin-top:6px">📅 จ่ายล่าสุด: ${new Date(a.last_paid_at).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'})}</div>` : ''}
     </div>`;
   }).join('');
 }
@@ -10752,14 +10752,17 @@ async function markAffiliatePaid(userId, amount) {
   const now = new Date().toISOString();
   const month = new Date().toLocaleDateString('th-TH', { month: 'long', year: 'numeric' });
 
-  // Reset earnings to 0 + save payment history
+  // บันทึกประวัติการจ่ายลง data โดยไม่ overwrite bank info
   const { data: existing } = await sb.from('user_progress').select('data').eq('user_id', userId).single();
   const userData = existing?.data || {};
   if (!userData.affiliateHistory) userData.affiliateHistory = [];
   userData.affiliateHistory.push({ amount, date: now, month });
 
+  // update เฉพาะ field ที่ต้องการ ไม่แตะ bank_name/bank_account/bank_owner
   const { error } = await sb.from('user_progress').update({
     affiliate_earnings: 0,
+    last_paid_at: now,
+    last_paid_amount: amount,
     data: userData
   }).eq('user_id', userId);
 
@@ -10770,11 +10773,11 @@ async function markAffiliatePaid(userId, amount) {
 
   if (error) {
     showToast('❌ เกิดข้อผิดพลาด: ' + error.message);
-    if (btn) { btn.disabled = false; btn.textContent = `✅ จ่ายแล้ว ฿${amount} — ตัดยอดเป็น ฿0`; }
+    if (btn) { btn.disabled = false; btn.textContent = `✅ จ่ายแล้ว ฿${amount} — บันทึกการจ่ายเงิน`; }
     return;
   }
 
-  showToast(`✅ บันทึกแล้ว! จ่าย ฿${amount} ให้ Affiliate แล้ว`);
+  showToast(`✅ บันทึกแล้ว! จ่าย ฿${amount > 0 ? amount : 0} ให้ Affiliate เดือน ${month}`);
   loadAffiliateAdmin();
 }
 
