@@ -7862,7 +7862,7 @@ function speakWithGoogleTTS(text, onEnd) {
   audio.play().catch(() => { if (onEnd) onEnd(); });
 }
 
-function speak(text, onEnd, rate=0.85, pitch=1.05) {
+function speak(text, onEnd, rate=0.9, pitch=1.0) {
   // ลอง Web Speech API ก่อน ถ้าไม่มีเสียงจีนให้ใช้ Google TTS
   if (synth && zhVoice) {
     synth.cancel();
@@ -7877,10 +7877,12 @@ function speak(text, onEnd, rate=0.85, pitch=1.05) {
   }
 }
 
-// เสียง 2 คนสำหรับบทสนทนา: A = เสียงสูง (หญิง), B = เสียงต่ำ (ชาย)
-function speakDialog(text, sp, onEnd, rate=0.82) {
-  const pitch = sp === 'A' ? 1.0 : 0.75;
-  speak(text, onEnd, rate, pitch);
+// เสียง 2 คนสำหรับบทสนทนา
+// pitch ห่างกันแค่นิดเดียว ไม่บิดเบี้ยวบน iOS/Android
+// A = เสียงสูงเล็กน้อย, B = เสียงปกติ/ต่ำเล็กน้อย
+function speakDialog(text, sp, onEnd) {
+  const pitch = sp === 'A' ? 1.15 : 0.9;
+  speak(text, onEnd, 0.9, pitch);
 }
 
 function stopSpeech() { if (synth) synth.cancel(); }
