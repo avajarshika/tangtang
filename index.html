@@ -1336,7 +1336,7 @@ body {
 <div id="auth-screen">
   <div class="auth-card">
     <div class="auth-logo">
-      <img src="https://avajarshika.github.io/tangtang/tangtang.png" alt="TangTang" style="width:120px;height:120px;object-fit:contain;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.25));animation:float 3s ease-in-out infinite">
+      <img src="https://avajarshika.github.io/tangtang/tangtang-wow.png" alt="TangTang" style="width:120px;height:120px;object-fit:contain;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.25));animation:float 3s ease-in-out infinite">
       <span class="auth-logo-zh">糖糖中文</span>
       <span class="auth-logo-en">Tangtang Chinese</span>
     </div>
@@ -1880,7 +1880,7 @@ body {
 
       <div class="hsk-progress-section">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
-          <img src="https://avajarshika.github.io/tangtang/tangtang.png" alt="TangTang" style="width:56px;height:56px;object-fit:contain;filter:drop-shadow(0 3px 8px rgba(241,53,150,0.2));animation:float 3s ease-in-out infinite">
+          <img src="https://avajarshika.github.io/tangtang/tangtang-happy.png" alt="TangTang" style="width:56px;height:56px;object-fit:contain;filter:drop-shadow(0 3px 8px rgba(241,53,150,0.2));animation:float 3s ease-in-out infinite">
           <div>
             <div class="hsk-title" style="margin-bottom:2px">HSK Progress</div>
             <div style="font-size:11px;color:var(--red);font-weight:600;">ขยันเรียนนะคะ ถังถังเชียร์อยู่! 🦊</div>
@@ -1900,6 +1900,21 @@ body {
           <div class="hsk-lbl">HSK 3</div>
           <div class="hsk-bar"><div class="hsk-fill" style="width:0%;background:var(--blue)"></div></div>
           <div class="hsk-pct">เร็วๆนี้</div>
+        </div>
+        <div class="hsk-row" style="opacity:.2">
+          <div class="hsk-lbl">HSK 4</div>
+          <div class="hsk-bar"><div class="hsk-fill" id="hsk4-bar" style="width:0%;background:#8b5cf6"></div></div>
+          <div class="hsk-pct" id="hsk4-pct">เร็วๆนี้</div>
+        </div>
+        <div class="hsk-row" style="opacity:.15">
+          <div class="hsk-lbl">HSK 5</div>
+          <div class="hsk-bar"><div class="hsk-fill" id="hsk5-bar" style="width:0%;background:#e67e22"></div></div>
+          <div class="hsk-pct" id="hsk5-pct">เร็วๆนี้</div>
+        </div>
+        <div class="hsk-row" style="opacity:.1">
+          <div class="hsk-lbl">HSK 6</div>
+          <div class="hsk-bar"><div class="hsk-fill" id="hsk6-bar" style="width:0%;background:#c0186e"></div></div>
+          <div class="hsk-pct" id="hsk6-pct">เร็วๆนี้</div>
         </div>
       </div>
 
@@ -11086,7 +11101,13 @@ async function loadAdminUsers() {
     return;
   }
   // function ส่งมาเป็น JSON array ต้อง parse แต่ละ row
-  const data = (rawData || []).map(row => { const val = (row && row.admin_list_users) ? row.admin_list_users : row; return typeof val === 'string' ? JSON.parse(val) : val; });
+  const data = (rawData || []).map(row => {
+    const val = row && typeof row === 'object'
+      ? (row.admin_list_users || Object.values(row)[0] || row)
+      : row;
+    try { return typeof val === 'string' ? JSON.parse(val) : val; }
+    catch(e) { return val; }
+  });
 
   const total = data.length;
   const premiumCount = data.filter(u => u.is_premium).length;
@@ -11162,8 +11183,8 @@ async function togglePremium(userId, currentStatus) {
 setTimeout(() => {
   if (!window.speechSynthesis) showToast('⚠️ เบราว์เซอร์นี้ไม่รองรับเสียง');
 }, 1200);
-</script>
-<script>
+
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/tangtang/sw.js');
@@ -12166,7 +12187,14 @@ async function previewExportData() {
     // ดึงข้อมูลจาก admin_list_users RPC
     const { data: rawData, error } = await sb.rpc('admin_list_users');
     if (error) throw error;
-    let users = (rawData || []).map(row => { const val = (row && row.admin_list_users) ? row.admin_list_users : row; return typeof val === 'string' ? JSON.parse(val) : val; });
+    let users = (rawData || []).map(row => {
+      // RPC returns { admin_list_users: '{"user_id":...}' }
+      const val = row && typeof row === 'object'
+        ? (row.admin_list_users || Object.values(row)[0] || row)
+        : row;
+      try { return typeof val === 'string' ? JSON.parse(val) : val; }
+      catch(e) { return val; }
+    });
 
     // ดึง affiliate data
     const { data: affData } = await sb.from('user_progress')
@@ -12180,8 +12208,8 @@ async function previewExportData() {
     if (exportType === 'premium') users = users.filter(u => u.is_premium);
 
     // filter ตามวันที่
-    if (dateFrom) users = users.filter(u => u.created_at && u.created_at >= dateFrom);
-    if (dateTo) users = users.filter(u => u.created_at && u.created_at <= dateTo + 'T23:59:59');
+    if (dateFrom) users = users.filter(u => !u.created_at || u.created_at >= dateFrom);
+    if (dateTo) users = users.filter(u => !u.created_at || u.created_at <= dateTo + 'T23:59:59');
 
     // เตรียม exportData
     exportData = users.map(u => {
@@ -12756,5 +12784,6 @@ function showListenDone(){
 }
 
 </script>
+
 </body>
 </html>
