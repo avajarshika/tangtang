@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#F13596">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="TangTang">
@@ -2025,6 +2026,7 @@ body {
           <div id="export-count" style="font-size:12px;color:var(--ink3)"></div>
         </div>
         <div id="export-preview-table" style="overflow-x:auto;font-size:12px"></div>
+        <div id="export-debug" style="display:none;margin-top:10px;padding:10px;background:#f5f5f5;border-radius:8px;font-size:11px;color:#333;word-break:break-all;font-family:monospace"></div>
         <button onclick="downloadExcel()" id="export-download-btn" style="width:100%;margin-top:14px;padding:13px;background:var(--green);color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">
           📥 ดาวน์โหลด Excel
         </button>
@@ -12219,15 +12221,13 @@ async function previewExportData() {
       const uid = u.user_id || u.id;
       const prog = progressMap[uid] || {};
       const progData = prog.data || {};
-      const createdAt = prog.updated_at || u.updated_at || u.created_at;
+      const updatedAt = u.updated_at || prog.updated_at;
       return {
-        'ชื่อ': progData.name || u.name || '-',
         'Email': u.email || '-',
-        'อัปเดตล่าสุด': createdAt ? new Date(createdAt).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'}) : '-',
+        'ชื่อ': progData.name || u.name || u.email || '-',
+        'อัปเดตล่าสุด': updatedAt ? new Date(updatedAt).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'}) : '-',
         'สถานะ': u.is_premium ? '⭐ Premium' : 'ฟรี',
-        'XP': u.xp || progData.xp || 0,
-        'Streak': progData.streak || 0,
-        'บทที่จบแล้ว': (progData.completed || []).length,
+        'XP': u.xp || 0,
         'Referral Code': prog.referral_code || '-',
         'ชวนสำเร็จ (คน)': prog.affiliate_count || 0,
         'ค่าคอมรอจ่าย (฿)': prog.affiliate_earnings || 0,
