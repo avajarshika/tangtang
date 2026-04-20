@@ -12170,13 +12170,13 @@ async function previewExportData() {
 
     // ดึง affiliate data
     const { data: affData } = await sb.from('user_progress')
-      .select('user_id, referral_code, affiliate_earnings, affiliate_count, bank_name, bank_account, bank_owner, last_paid_at, last_paid_amount')
+      .select('user_id, referral_code, affiliate_earnings, affiliate_count, bank_name, bank_account, bank_owner')
       .not('referral_code', 'is', null);
     const affMap = {};
     (affData || []).forEach(a => { affMap[a.user_id] = a; });
 
-    // filter ตามประเภท
-    if (exportType === 'affiliate') users = users.filter(u => affMap[u.id]);
+    // filter ตามประเภท (ใช้ user_id ให้ถูกต้อง)
+    if (exportType === 'affiliate') users = users.filter(u => affMap[u.user_id || u.id]);
     if (exportType === 'premium') users = users.filter(u => u.is_premium);
 
     // filter ตามวันที่
@@ -12185,13 +12185,14 @@ async function previewExportData() {
 
     // เตรียม exportData
     exportData = users.map(u => {
-      const aff = affMap[u.id] || {};
+      const uid = u.user_id || u.id;
+      const aff = affMap[uid] || {};
       return {
-        'ชื่อ': u.name || '-',
+        'ชื่อ': u.name || u.data?.name || '-',
         'Email': u.email || '-',
         'วันที่สมัคร': u.created_at ? new Date(u.created_at).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'}) : '-',
         'สถานะ': u.is_premium ? 'Premium' : 'ฟรี',
-        'XP': u.xp || 0,
+        'XP': u.xp || u.data?.xp || 0,
         'Referral Code': aff.referral_code || '-',
         'ชวนสำเร็จ (คน)': aff.affiliate_count || 0,
         'ค่าคอมรอจ่าย (฿)': aff.affiliate_earnings || 0,
