@@ -7130,6 +7130,7 @@ function srsRate(r) {
   const v = l.vocab[state.fcIdx];
   const d = state.user.data;
   if (!d.srsData) d.srsData = {};
+  if (!d.knownWords) d.knownWords = [];
   const s = d.srsData[v.zh] || { interval:0, ease:2.5, nextReview:0, reps:0 };
 
   if (r === 'easy') {
