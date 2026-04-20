@@ -1639,6 +1639,13 @@ body {
           <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:10px">จีน ↔ ไทย จับให้ครบก่อนหมดเวลา!</div>
           <span style="font-size:10px;font-weight:700;color:#e91e8c;background:#fce4f3;padding:3px 10px;border-radius:20px">ฟรี ด่าน 1 ✨</span>
         </div>
+        <!-- Listen Game -->
+        <div onclick="openGame('listen')" style="background:white;border:1.5px solid var(--paper3);border-radius:16px;padding:18px 14px;cursor:pointer;transition:.2s;box-shadow:var(--shadow)" onmouseover="this.style.borderColor='#0097a7';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--paper3)';this.style.transform='none'">
+          <div style="font-size:38px;margin-bottom:10px">🔊</div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">ฟังแล้วเดา</div>
+          <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:10px">ฟังเสียงจีน แล้วเลือกคำที่ถูก!</div>
+          <span style="font-size:10px;font-weight:700;color:#0097a7;background:#e0f7fa;padding:3px 10px;border-radius:20px">ฟรี ด่าน 1 ✨</span>
+        </div>
         <!-- Journal — full width -->
         <div onclick="openGame('journal')" style="grid-column:1/-1;background:white;border:1.5px solid var(--paper3);border-radius:16px;padding:18px;cursor:pointer;transition:.2s;box-shadow:var(--shadow);display:flex;align-items:center;gap:16px" onmouseover="this.style.borderColor='#C9A96E';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--paper3)';this.style.transform='none'">
           <div style="font-size:42px;flex-shrink:0">📓</div>
@@ -1659,6 +1666,15 @@ body {
         <div style="font-size:15px;font-weight:700;color:var(--ink)">🃏 จับคู่คำศัพท์</div>
       </div>
       <div id="match-content" style="padding:16px"></div>
+    </div>
+
+    <!-- Game: Listen -->
+    <div id="game-listen" style="display:none">
+      <div style="padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--paper3);background:white;position:sticky;top:56px;z-index:30">
+        <button onclick="closeGame()" style="background:var(--paper2);border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center">←</button>
+        <div style="font-size:15px;font-weight:700;color:var(--ink)">🔊 ฟังแล้วเดา</div>
+      </div>
+      <div id="listen-content" style="padding:16px"></div>
     </div>
 
     <!-- Game: Stroke Order -->
@@ -7196,10 +7212,16 @@ function answerQuiz(chosen) {
     else if (i === chosen && !correct) b.classList.add('wrong');
   });
   if (correct) {
+    playCorrectSound();
+    // พูดคำจีนที่ถูกต้องออกมาด้วย
+    if (q.q && q.q.match(/[一-鿿]/)) {
+      const zhMatch = q.q.match(/[一-鿿]+/g);
+      if (zhMatch) setTimeout(() => speak(zhMatch[0]), 300);
+    }
     state.quizScore++;
     state.user.data.xp = (state.user.data.xp || 0) + 10;
     saveState();
-  }
+  } else { playWrongSound(); }
   setTimeout(() => {
     state.quizIdx++;
     if (state.quizIdx >= l.quiz.length) state.quizDone = true;
@@ -7877,6 +7899,39 @@ function speakVocab(zh, btn) {
 
 function speakWord(zh) { stopSpeech(); speak(zh); }
 
+function playCorrectSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(523, ctx.currentTime);
+    osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+    osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.5);
+  } catch(e) {}
+}
+
+function playWrongSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(200, ctx.currentTime);
+    osc.frequency.setValueAtTime(150, ctx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.3);
+  } catch(e) {}
+}
+
 function speakFC() {
   if (!state.curLesson) return;
   stopSpeech();
@@ -7901,7 +7956,7 @@ function updateSpeedBadge() {
 
 function openGame(name) {
   document.getElementById('play-hub').style.display = 'none';
-  ['stroke','daily','sentence','speed','journal','match'].forEach(g => {
+  ['stroke','daily','sentence','speed','journal','match','listen'].forEach(g => {
     document.getElementById('game-'+g).style.display = g===name ? 'block' : 'none';
   });
   window.scrollTo(0,0);
@@ -7911,10 +7966,11 @@ function openGame(name) {
   else if (name==='speed') initSpeedQuiz();
   else if (name==='journal') renderJournalHub();
   else if (name==='match') initMatchGame();
+  else if (name==='listen') initListenGame();
 }
 
 function closeGame() {
-  ['stroke','daily','sentence','speed','journal','match'].forEach(g => {
+  ['stroke','daily','sentence','speed','journal','match','listen'].forEach(g => {
     document.getElementById('game-'+g).style.display = 'none';
   });
   document.getElementById('play-hub').style.display = 'block';
@@ -12417,6 +12473,7 @@ function checkMatch() {
   const correct = leftZh && rightZh && leftZh === rightZh;
 
   if (correct) {
+    playCorrectSound();
     [leftEl, rightEl].forEach(el => {
       if (el) { el.style.background='#e8f5e9'; el.style.borderColor='var(--green)'; el.style.opacity='.5'; el.style.pointerEvents='none'; }
     });
@@ -12426,6 +12483,7 @@ function checkMatch() {
     matchSelected = null; matchRightSelected = null;
     if (matchMatched.length === lv.pairs.length) { clearInterval(matchTimer); setTimeout(() => showMatchDone(lv), 500); }
   } else {
+    playWrongSound();
     [leftEl, rightEl].forEach(el => {
       if (el) { el.style.background='#ffebee'; el.style.borderColor='#f44336'; el.style.animation='shake .4s ease'; }
     });
@@ -12460,6 +12518,242 @@ function showMatchDone(lv) {
     +'<button onclick="renderMatchHub()" style="padding:13px;background:var(--paper2);color:var(--ink3);border:none;border-radius:12px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer">← เลือกด่าน</button>'
     +'</div></div>';
 }
+// ══════════════════════════════════════════════════════
+// 🔊 LISTEN GAME — ฟังแล้วเดา
+// ══════════════════════════════════════════════════════
+
+const LISTEN_LEVELS = [
+  {name:'ด่าน 1 — ทักทาย & พื้นฐาน',icon:'👋',color:'#0097a7',free:true,words:[
+    {zh:'你好',th:'สวัสดี',opts:['สวัสดี','ขอบคุณ','ลาก่อน','ขอโทษ']},
+    {zh:'谢谢',th:'ขอบคุณ',opts:['ขอโทษ','ขอบคุณ','สวัสดี','ไม่เป็นไร']},
+    {zh:'再见',th:'ลาก่อน',opts:['สวัสดี','ขอบคุณ','ลาก่อน','ขอโทษ']},
+    {zh:'对不起',th:'ขอโทษ',opts:['ขอโทษ','ยินดี','สวัสดี','ขอบคุณ']},
+    {zh:'我爱你',th:'ฉันรักคุณ',opts:['ฉันชอบคุณ','ฉันรักคุณ','คิดถึงคุณ','ขอบคุณ']},
+    {zh:'没关系',th:'ไม่เป็นไร',opts:['ขอโทษ','ขอบคุณ','ไม่เป็นไร','สวัสดี']},
+    {zh:'好的',th:'โอเค/ดีค่ะ',opts:['ไม่ดี','โอเค/ดีค่ะ','ขอบคุณ','ลาก่อน']},
+    {zh:'不客气',th:'ยินดีค่ะ',opts:['ขอโทษ','ยินดีค่ะ','ขอบคุณ','สวัสดี']}
+  ]},
+  {name:'ด่าน 2 — ความรู้สึก',icon:'❤️',color:'#e91e8c',free:false,words:[
+    {zh:'开心',th:'มีความสุข',opts:['เศร้า','โกรธ','มีความสุข','กลัว']},
+    {zh:'难过',th:'เศร้า',opts:['มีความสุข','เศร้า','โกรธ','เหนื่อย']},
+    {zh:'生气',th:'โกรธ',opts:['กลัว','เศร้า','โกรธ','มีความสุข']},
+    {zh:'害怕',th:'กลัว',opts:['กลัว','โกรธ','เหนื่อย','เบื่อ']},
+    {zh:'累',th:'เหนื่อย',opts:['มีความสุข','เหนื่อย','กลัว','เศร้า']},
+    {zh:'想你',th:'คิดถึงคุณ',opts:['รักคุณ','คิดถึงคุณ','อยากเจอ','กลัว']},
+    {zh:'幸福',th:'มีความสุขมาก',opts:['เศร้ามาก','มีความสุขมาก','โกรธมาก','เหนื่อยมาก']},
+    {zh:'期待',th:'ตั้งตารอ',opts:['ผิดหวัง','ตั้งตารอ','กังวล','กลัว']}
+  ]},
+  {name:'ด่าน 3 — กริยา',icon:'🏃',color:'#7b1fa2',free:false,words:[
+    {zh:'吃',th:'กิน',opts:['ดื่ม','กิน','เดิน','วิ่ง']},
+    {zh:'喝',th:'ดื่ม',opts:['กิน','ดื่ม','นอน','เล่น']},
+    {zh:'走',th:'เดิน',opts:['วิ่ง','เดิน','กระโดด','นั่ง']},
+    {zh:'跑',th:'วิ่ง',opts:['เดิน','วิ่ง','กระโดด','นั่ง']},
+    {zh:'睡觉',th:'นอนหลับ',opts:['ตื่นนอน','นอนหลับ','อาบน้ำ','กินข้าว']},
+    {zh:'工作',th:'ทำงาน',opts:['เรียน','ทำงาน','เล่น','พัก']},
+    {zh:'学习',th:'เรียน',opts:['สอน','เรียน','ทำงาน','เล่น']},
+    {zh:'玩',th:'เล่น',opts:['ทำงาน','เรียน','เล่น','พัก']}
+  ]},
+  {name:'ด่าน 4 — อาหาร & เครื่องดื่ม',icon:'🍜',color:'#e65100',free:false,words:[
+    {zh:'米饭',th:'ข้าวสวย',opts:['ก๋วยเตี๋ยว','ข้าวสวย','เกี๊ยว','ซาลาเปา']},
+    {zh:'面条',th:'ก๋วยเตี๋ยว',opts:['ข้าวสวย','ก๋วยเตี๋ยว','ข้าวผัด','หม้อไฟ']},
+    {zh:'火锅',th:'หม้อไฟ',opts:['เกี๊ยว','ก๋วยเตี๋ยว','หม้อไฟ','ข้าวผัด']},
+    {zh:'茶',th:'ชา',opts:['น้ำ','กาแฟ','ชา','เบียร์']},
+    {zh:'咖啡',th:'กาแฟ',opts:['ชา','น้ำ','กาแฟ','นม']},
+    {zh:'好吃',th:'อร่อย',opts:['ไม่อร่อย','อร่อย','หวาน','เผ็ด']},
+    {zh:'饿',th:'หิว',opts:['อิ่ม','หิว','อร่อย','กิน']},
+    {zh:'饱',th:'อิ่ม',opts:['หิว','อิ่ม','กิน','ดื่ม']}
+  ]},
+  {name:'ด่าน 5 — สถานที่ & เวลา',icon:'📍',color:'#1565c0',free:false,words:[
+    {zh:'今天',th:'วันนี้',opts:['เมื่อวาน','วันนี้','พรุ่งนี้','สัปดาห์นี้']},
+    {zh:'明天',th:'พรุ่งนี้',opts:['วันนี้','พรุ่งนี้','เมื่อวาน','อาทิตย์หน้า']},
+    {zh:'医院',th:'โรงพยาบาล',opts:['โรงเรียน','โรงพยาบาล','สนามบิน','ตลาด']},
+    {zh:'学校',th:'โรงเรียน',opts:['โรงพยาบาล','โรงเรียน','ห้าง','สนามบิน']},
+    {zh:'机场',th:'สนามบิน',opts:['สถานีรถไฟ','สนามบิน','ท่าเรือ','โรงแรม']},
+    {zh:'超市',th:'ซูเปอร์มาร์เก็ต',opts:['ตลาด','ห้าง','ซูเปอร์มาร์เก็ต','ร้านอาหาร']},
+    {zh:'早上',th:'ตอนเช้า',opts:['ตอนเย็น','ตอนเช้า','กลางคืน','เที่ยง']},
+    {zh:'晚上',th:'ตอนเย็น/กลางคืน',opts:['ตอนเช้า','เที่ยง','ตอนเย็น/กลางคืน','บ่าย']}
+  ]},
+  {name:'ด่าน 6 — ช้อปปิ้ง & ตัวเลข',icon:'🛒',color:'#2e7d32',free:false,words:[
+    {zh:'多少钱',th:'เท่าไหร่',opts:['แพงมาก','เท่าไหร่','ลดราคา','จ่ายเงิน']},
+    {zh:'贵',th:'แพง',opts:['ถูก','แพง','ลดราคา','ฟรี']},
+    {zh:'便宜',th:'ถูก',opts:['แพง','ถูก','ฟรี','ลดราคา']},
+    {zh:'一',th:'หนึ่ง',opts:['สอง','หนึ่ง','สาม','สี่']},
+    {zh:'十',th:'สิบ',opts:['ร้อย','พัน','สิบ','ยี่สิบ']},
+    {zh:'百',th:'ร้อย',opts:['สิบ','ร้อย','พัน','หมื่น']},
+    {zh:'打折',th:'ลดราคา',opts:['แพง','ถูก','ลดราคา','จ่ายเงิน']},
+    {zh:'付钱',th:'จ่ายเงิน',opts:['รับเงิน','จ่ายเงิน','ลดราคา','ฟรี']}
+  ]},
+  {name:'ด่าน 7 — ครอบครัว & คน',icon:'👨‍👩‍👧',color:'#4a148c',free:false,words:[
+    {zh:'爸爸',th:'พ่อ',opts:['แม่','พ่อ','พี่ชาย','น้องสาว']},
+    {zh:'妈妈',th:'แม่',opts:['พ่อ','แม่','ย่า/ยาย','น้องสาว']},
+    {zh:'哥哥',th:'พี่ชาย',opts:['น้องชาย','พี่ชาย','พี่สาว','เพื่อน']},
+    {zh:'妹妹',th:'น้องสาว',opts:['น้องชาย','พี่สาว','น้องสาว','แม่']},
+    {zh:'朋友',th:'เพื่อน',opts:['แฟน','เพื่อน','เพื่อนร่วมงาน','ครอบครัว']},
+    {zh:'男朋友',th:'แฟนผู้ชาย',opts:['แฟนผู้หญิง','แฟนผู้ชาย','สามี','เพื่อน']},
+    {zh:'女朋友',th:'แฟนผู้หญิง',opts:['แฟนผู้ชาย','แฟนผู้หญิง','ภรรยา','เพื่อน']},
+    {zh:'老师',th:'ครู',opts:['แพทย์','ครู','วิศวกร','ตำรวจ']}
+  ]},
+  {name:'ด่าน 8 — สุขภาพ & ร่างกาย',icon:'🏥',color:'#b71c1c',free:false,words:[
+    {zh:'头疼',th:'ปวดหัว',opts:['ปวดท้อง','ปวดหัว','มีไข้','เป็นหวัด']},
+    {zh:'发烧',th:'มีไข้',opts:['ปวดหัว','มีไข้','เป็นหวัด','ไม่สบาย']},
+    {zh:'感冒',th:'เป็นหวัด',opts:['มีไข้','ปวดหัว','เป็นหวัด','ปวดท้อง']},
+    {zh:'医生',th:'แพทย์',opts:['พยาบาล','แพทย์','คนไข้','เภสัชกร']},
+    {zh:'药',th:'ยา',opts:['น้ำ','ยา','อาหาร','วิตามิน']},
+    {zh:'不舒服',th:'ไม่สบาย',opts:['สบายดี','ไม่สบาย','เหนื่อย','เครียด']},
+    {zh:'休息',th:'พักผ่อน',opts:['ทำงาน','เรียน','พักผ่อน','เล่น']},
+    {zh:'没事',th:'ไม่เป็นไร/โอเค',opts:['ไม่สบาย','ไม่เป็นไร/โอเค','ช่วยด้วย','อันตราย']}
+  ]},
+  {name:'ด่าน 9 — บทสนทนา: ทักทาย',icon:'💬',color:'#006064',free:false,words:[
+    {zh:'你好吗？',th:'คุณสบายดีไหม?',opts:['คุณชื่ออะไร?','คุณสบายดีไหม?','คุณมาจากไหน?','คุณกินข้าวหรือยัง?']},
+    {zh:'我很好，谢谢！',th:'ฉันสบายดีมาก ขอบคุณ!',opts:['ฉันไม่สบาย','ฉันสบายดีมาก ขอบคุณ!','ฉันเหนื่อยมาก','ฉันหิวมาก']},
+    {zh:'你叫什么名字？',th:'คุณชื่ออะไร?',opts:['คุณอายุเท่าไหร่?','คุณสบายดีไหม?','คุณชื่ออะไร?','คุณมาจากไหน?']},
+    {zh:'我叫小明。',th:'ฉันชื่อเสี่ยวหมิง',opts:['ฉันไม่มีชื่อ','ฉันชื่อเสี่ยวหมิง','ฉันลืมชื่อ','ฉันชื่อหลี่']},
+    {zh:'你是哪国人？',th:'คุณเป็นคนชาติอะไร?',opts:['คุณอยู่ที่ไหน?','คุณเป็นคนชาติอะไร?','คุณทำอาชีพอะไร?','คุณอายุเท่าไหร่?']},
+    {zh:'我是泰国人。',th:'ฉันเป็นคนไทย',opts:['ฉันเป็นคนจีน','ฉันเป็นคนไทย','ฉันเป็นคนญี่ปุ่น','ฉันเป็นคนเกาหลี']},
+    {zh:'很高兴认识你！',th:'ยินดีที่ได้รู้จักคุณ!',opts:['ลาก่อน!','ขอบคุณมาก!','ยินดีที่ได้รู้จักคุณ!','แล้วพบกันใหม่!']},
+    {zh:'我也是！',th:'ฉันก็เหมือนกัน!',opts:['ฉันไม่ใช่','ฉันก็เหมือนกัน!','ฉันไม่เห็นด้วย','ฉันไม่รู้']},
+  ]},
+  {name:'ด่าน 10 — บทสนทนา: สั่งอาหาร',icon:'🍽️',color:'#e65100',free:false,words:[
+    {zh:'你要吃什么？',th:'คุณจะกินอะไร?',opts:['คุณหิวไหม?','คุณจะกินอะไร?','อาหารอร่อยไหม?','คุณชอบกินอะไร?']},
+    {zh:'我要一碗米饭。',th:'ฉันขอข้าวสวยหนึ่งชาม',opts:['ฉันไม่หิว','ฉันขอข้าวสวยหนึ่งชาม','ฉันขอก๋วยเตี๋ยว','ฉันขอน้ำ']},
+    {zh:'好吃吗？',th:'อร่อยไหม?',opts:['แพงไหม?','อร่อยไหม?','เผ็ดไหม?','หวานไหม?']},
+    {zh:'非常好吃！',th:'อร่อยมากเลย!',opts:['ไม่อร่อยเลย','อร่อยมากเลย!','แค่พอใช้','หวานเกินไป']},
+    {zh:'再来一碗！',th:'ขออีกชามนึง!',opts:['พอแล้วค่ะ','เก็บเงินด้วย','ขออีกชามนึง!','ขอบิลด้วย']},
+    {zh:'多少钱？',th:'เท่าไหร่คะ?',opts:['อร่อยไหม?','เท่าไหร่คะ?','มีเมนูอะไรบ้าง?','ขอโทษนะ']},
+    {zh:'一共五十块。',th:'รวมห้าสิบบาท',opts:['ฟรีเลย','รวมห้าสิบบาท','แพงมาก','ลดราคาได้ไหม']},
+    {zh:'谢谢，好吃！',th:'ขอบคุณ อร่อยมาก!',opts:['ไม่ขอบคุณ','ขอบคุณ อร่อยมาก!','ไม่อร่อยเลย','แพงไปหน่อย']}
+  ]},
+  {name:'ด่าน 11 — บทสนทนา: ถามทาง',icon:'🗺️',color:'#1a237e',free:false,words:[
+    {zh:'请问，地铁站在哪里？',th:'ขอโทษนะ สถานีรถไฟฟ้าอยู่ที่ไหน?',opts:['ห้องน้ำอยู่ที่ไหน?','สถานีรถไฟฟ้าอยู่ที่ไหน?','โรงแรมอยู่ที่ไหน?','สนามบินอยู่ที่ไหน?']},
+    {zh:'往左走。',th:'เดินไปทางซ้าย',opts:['เดินไปทางขวา','เดินตรงไป','เดินไปทางซ้าย','อยู่ข้างหลัง']},
+    {zh:'往右走。',th:'เดินไปทางขวา',opts:['เดินไปทางซ้าย','เดินไปทางขวา','หยุดตรงนี้','กลับไป']},
+    {zh:'走路要多久？',th:'เดินนานแค่ไหน?',opts:['ไกลไหม?','เดินนานแค่ไหน?','มีรถเมล์ไหม?','เสียค่าใช้จ่ายไหม?']},
+    {zh:'大概十分钟。',th:'ประมาณสิบนาที',opts:['ไกลมาก','ประมาณสิบนาที','สักครู่','ครึ่งชั่วโมง']},
+    {zh:'谢谢你！',th:'ขอบคุณมากค่ะ!',opts:['ไม่เป็นไร','ขอบคุณมากค่ะ!','ขอโทษ','ลาก่อน']},
+    {zh:'不客气！',th:'ยินดีค่ะ!',opts:['ขอโทษ','ยินดีค่ะ!','ขอบคุณ','แล้วเจอกัน']},
+    {zh:'迷路了。',th:'หลงทางแล้ว',opts:['ถึงแล้ว','หลงทางแล้ว','รู้จักทาง','ใกล้แล้ว']}
+  ]},
+  {name:'ด่าน 12 — บทสนทนา: นัดหมาย',icon:'📅',color:'#880e4f',free:false,words:[
+    {zh:'你有空吗？',th:'คุณว่างไหม?',opts:['คุณยุ่งไหม?','คุณว่างไหม?','คุณไปไหน?','คุณทำอะไรอยู่?']},
+    {zh:'我有空！',th:'ฉันว่างค่ะ!',opts:['ฉันยุ่งมาก','ฉันว่างค่ะ!','ฉันไม่แน่ใจ','ฉันมีนัด']},
+    {zh:'我们一起去吃饭吧！',th:'ไปกินข้าวด้วยกันเถอะ!',opts:['ไปดูหนังด้วยกันเถอะ!','ไปกินข้าวด้วยกันเถอะ!','อยู่บ้านดีกว่า','ไม่ว่างแล้ว']},
+    {zh:'好啊！几点？',th:'ได้เลย! กี่โมง?',opts:['ไม่ไป','ได้เลย! กี่โมง?','ยังไม่รู้','คิดดูก่อน']},
+    {zh:'下午两点怎么样？',th:'บ่ายสองโมงเป็นไงบ้าง?',opts:['เช้าสิบโมง','บ่ายสองโมงเป็นไงบ้าง?','เย็นหกโมง','กลางคืน']},
+    {zh:'好的，不见不散！',th:'โอเค ไม่มาไม่แยกกัน!',opts:['โอเค แล้วค่อยคุย','โอเค ไม่มาไม่แยกกัน!','ยกเลิกดีกว่า','ขอเลื่อนได้ไหม']},
+    {zh:'期待见到你！',th:'ตั้งตารอที่จะเจอคุณ!',opts:['ไม่อยากเจอเลย','ตั้งตารอที่จะเจอคุณ!','ลืมไปแล้ว','ยังไม่พร้อม']},
+    {zh:'我也是，再见！',th:'ฉันก็เหมือนกัน ลาก่อน!',opts:['ฉันไม่ไป ลาก่อน!','ฉันก็เหมือนกัน ลาก่อน!','เจอกันพรุ่งนี้','โทรหาทีหลัง']}
+  ]}
+];
+
+let listenLevel=0,listenIdx=0,listenScore=0,listenAnswered=false;
+
+function initListenGame(){listenLevel=0;listenIdx=0;listenScore=0;renderListenHub();}
+
+function renderListenHub(){
+  const box=document.getElementById('listen-content');if(!box)return;
+  let html='<div style="text-align:center;margin-bottom:20px">'
+    +'<img src="https://avajarshika.github.io/tangtang/tangtang-study.png" alt="TangTang" style="width:80px;height:80px;object-fit:contain;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 4px 12px rgba(241,53,150,0.25))">'
+    +'<div style="font-size:17px;font-weight:800;color:var(--ink);margin-top:8px">🔊 ฟังแล้วเดา</div>'
+    +'<div style="font-size:12px;color:var(--ink3);margin-top:4px">กดฟังเสียงจีน แล้วเลือกความหมายที่ถูกต้อง!</div>'
+    +'</div><div style="display:flex;flex-direction:column;gap:10px">';
+  LISTEN_LEVELS.forEach(function(lv,i){
+    const locked=!lv.free&&!isPremium();
+    const best=state.user&&state.user.data?state.user.data['listenLevel'+(i+1)+'Best']||0:0;
+    html+='<div onclick="'+(locked?'showPaymentModal()':'startListenLevel('+i+')')+'" style="background:'+(locked?'var(--paper2)':'white')+';border:1.5px solid '+(locked?'var(--paper3)':lv.color+'50')+';border-radius:14px;padding:14px 16px;cursor:pointer;opacity:'+(locked?0.6:1)+';transition:.15s">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between">'
+      +'<div style="display:flex;align-items:center;gap:10px">'
+      +'<div style="font-size:22px">'+(locked?'🔒':lv.icon)+'</div>'
+      +'<div><div style="font-size:13px;font-weight:700;color:'+(locked?'var(--ink3)':lv.color)+'">'+lv.name+'</div>'
+      +'<div style="font-size:11px;color:var(--ink3)">8 คำ · '+(lv.free?'ฟรี':'Premium')+'</div></div></div>'
+      +'<div style="text-align:right"><div style="font-size:15px;font-weight:900;color:'+lv.color+'">'+(best>0?'⭐ '+best+'/8':'—')+'</div>'
+      +'<div style="font-size:10px;color:var(--ink3)">ดีที่สุด</div></div></div></div>';
+  });
+  html+='</div>';
+  box.innerHTML=html;
+}
+
+function startListenLevel(lvIdx){
+  listenLevel=lvIdx;listenIdx=0;listenScore=0;listenAnswered=false;
+  renderListenQ();
+}
+
+function renderListenQ(){
+  const box=document.getElementById('listen-content');
+  const lv=LISTEN_LEVELS[listenLevel];
+  if(listenIdx>=lv.words.length){showListenDone();return;}
+  const w=lv.words[listenIdx];
+  const pct=Math.round(listenIdx/lv.words.length*100);
+  listenAnswered=false;
+  const opts=[].concat(w.opts).sort(function(){return Math.random()-.5;});
+  let optsHtml='';
+  opts.forEach(function(o,i){
+    optsHtml+='<button id="lopt-'+i+'" data-val="'+o+'" data-correct="'+w.th+'" onclick="answerListen(this)" '
+      +'style="padding:14px 10px;background:white;border:2px solid var(--paper3);border-radius:14px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:.2s;color:var(--ink)">'+o+'</button>';
+  });
+  box.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">'
+    +'<button onclick="renderListenHub()" style="background:var(--paper2);border:none;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">← เลือกด่าน</button>'
+    +'<div style="font-size:12px;font-weight:700;color:'+lv.color+'">'+lv.name+'</div>'
+    +'<div style="font-size:12px;font-weight:700;color:var(--ink3)">'+(listenIdx+1)+'/'+lv.words.length+'</div>'
+    +'</div>'
+    +'<div style="height:6px;background:'+lv.color+'22;border-radius:3px;overflow:hidden;margin-bottom:20px">'
+    +'<div style="height:100%;width:'+pct+'%;background:'+lv.color+';border-radius:3px;transition:width .4s ease"></div></div>'
+    +'<div style="text-align:center;margin-bottom:28px">'
+    +'<button id="listen-play-btn" onclick="playCurrentListenWord()" style="width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,'+lv.color+','+lv.color+'cc);border:none;color:white;font-size:48px;cursor:pointer;box-shadow:0 8px 24px '+lv.color+'50;transition:.2s;display:flex;align-items:center;justify-content:center;margin:0 auto">🔊</button>'
+    +'<div style="font-size:12px;color:var(--ink3);margin-top:12px">กดเพื่อฟังเสียง</div>'
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">'+optsHtml+'</div>'
+    +'<div id="listen-feedback" style="text-align:center;margin-top:16px;min-height:28px"></div>';
+  setTimeout(function(){playListenWord(w.zh);},500);
+}
+
+function playCurrentListenWord(){
+  var lv=LISTEN_LEVELS[listenLevel];
+  if(listenIdx<lv.words.length) playListenWord(lv.words[listenIdx].zh);
+}
+function playListenWord(zh){
+  var btn=document.getElementById('listen-play-btn');
+  if(btn){btn.style.transform='scale(0.9)';setTimeout(function(){btn.style.transform='scale(1)';},200);}
+  stopSpeech();speak(zh);
+}
+
+function answerListen(el){
+  var correct=el.getAttribute('data-correct');
+  if(listenAnswered)return;
+  listenAnswered=true;
+  const lv=LISTEN_LEVELS[listenLevel];
+  const chosen=el.getAttribute('data-val');
+  const isCorrect=chosen===correct;
+  document.querySelectorAll('[id^="lopt-"]').forEach(function(btn){
+    btn.disabled=true;
+    if(btn.getAttribute('data-val')===correct){btn.style.background='#e8f5e9';btn.style.borderColor='var(--green)';btn.style.color='var(--green)';}
+    else if(btn===el&&!isCorrect){btn.style.background='#ffebee';btn.style.borderColor='#f44336';btn.style.color='#f44336';}
+  });
+  var fb=document.getElementById('listen-feedback');
+  if(isCorrect){playCorrectSound();listenScore++;if(fb)fb.innerHTML='<span style="color:var(--green);font-size:16px">✅ ถูกต้อง!</span>';}
+  else{playWrongSound();if(fb)fb.innerHTML='<span style="color:#f44336;font-size:16px">❌ ตอบ: '+correct+'</span>';}
+  setTimeout(function(){listenIdx++;renderListenQ();},1200);
+}
+
+function showListenDone(){
+  const box=document.getElementById('listen-content');
+  const lv=LISTEN_LEVELS[listenLevel];
+  const key='listenLevel'+(listenLevel+1)+'Best';
+  const prev=state.user&&state.user.data?state.user.data[key]||0:0;
+  if(listenScore>prev&&state.user&&state.user.data){state.user.data[key]=listenScore;saveState();}
+  addXP(10);
+  const img=listenScore>=6?'tangtang-happy.png':listenScore>=4?'tangtang.png':'tangtang-sad.png';
+  box.innerHTML='<div style="text-align:center;padding:32px 16px">'
+    +'<img src="https://avajarshika.github.io/tangtang/'+img+'" alt="TangTang" style="width:100px;height:100px;object-fit:contain;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.3))">'
+    +'<div style="font-size:26px;font-weight:900;color:'+lv.color+';margin-top:12px">'+(listenScore>=6?'เก่งมากเลย! 🎉':listenScore>=4?'ดีมากค่ะ! 👍':'ลองอีกครั้งนะคะ 💪')+'</div>'
+    +'<div style="font-size:36px;font-weight:900;color:var(--ink);margin:16px 0">'+listenScore+' / '+lv.words.length+'</div>'
+    +'<div style="font-size:13px;color:var(--green);font-weight:700;margin-bottom:24px">+10 XP ได้รับแล้ว!</div>'
+    +'<div style="display:flex;flex-direction:column;gap:10px">'
+    +'<button onclick="startListenLevel('+listenLevel+')" style="padding:13px;background:'+lv.color+';color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">🔄 เล่นอีกครั้ง</button>'
+    +(listenLevel<LISTEN_LEVELS.length-1?'<button onclick="startListenLevel('+(listenLevel+1)+')" style="padding:13px;background:white;color:'+lv.color+';border:2px solid '+lv.color+';border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">➡️ ด่านถัดไป</button>':'')
+    +'<button onclick="renderListenHub()" style="padding:13px;background:var(--paper2);color:var(--ink3);border:none;border-radius:12px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer">← เลือกด่าน</button>'
+    +'</div></div>';
+}
+
 </script>
 </body>
 </html>
