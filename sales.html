@@ -334,20 +334,27 @@ footer { background:#1a1a2e; color:rgba(255,255,255,.6); padding:40px 24px; text
   <h2 class="section-title">TangTang Chinese<br>แก้ปัญหาได้ทั้งหมด</h2>
   <p class="section-sub">ออกแบบเฉพาะสำหรับคนไทย เรียนได้ทุกที่ทุกเวลา สนุกเหมือนเล่นเกม</p>
 
-  <!-- VIDEO DEMO แนวตั้ง -->
-  <div style="display:flex;justify-content:center;margin-bottom:32px;">
-    <div style="position:relative;width:100%;max-width:360px;border-radius:32px;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,.2);background:#111;">
-      <video
-        src="https://avajarshika.github.io/tangtang/app-demo.mp4"
-        poster="https://avajarshika.github.io/tangtang/app-demo-thumb.png"
-        controls
-        playsinline
-        loop
-        style="width:100%;display:block;object-fit:cover;border-radius:32px;"
-        onerror="this.parentElement.innerHTML='<div style=\'background:linear-gradient(135deg,#1a0020,#2d0035);padding:80px 24px;text-align:center;border-radius:32px\'><div style=\'font-size:48px;margin-bottom:12px\'>▶️</div><div style=\'font-size:15px;font-weight:700;color:white;margin-bottom:6px\'>app-demo.mp4</div><div style=\'font-size:12px;color:rgba(255,255,255,.5);line-height:1.6\'>วิดีโอแนวตั้ง แสดงการใช้งานแอปจริง</div></div>'"
-      ></video>
-      <div style="position:absolute;top:14px;left:14px;background:rgba(241,53,150,.9);color:white;font-size:11px;font-weight:800;padding:5px 12px;border-radius:99px;">📱 ดูแอปจริง</div>
+  <!-- VIDEO DEMO แนวตั้ง 9:16 -->
+  <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:36px;">
+    <p style="font-size:14px;color:#888;margin-bottom:20px;text-align:center;">แค่ 60 วินาที รู้เลยว่าแอปนี้ต่างจากที่อื่นยังไง</p>
+    <div style="position:relative;width:100%;max-width:300px;">
+      <!-- 9:16 ratio box -->
+      <div style="position:relative;padding-bottom:177.78%;height:0;border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(241,53,150,0.25),0 4px 20px rgba(0,0,0,0.15);border:2px solid rgba(241,53,150,0.25);">
+        <video
+          src="app-demo.mp4"
+          poster="https://avajarshika.github.io/tangtang/app-demo-thumb.png"
+          controls
+          playsinline
+          loop
+          preload="metadata"
+          style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;background:#0d0d1a;">
+        </video>
+        <div style="position:absolute;top:12px;left:12px;background:rgba(241,53,150,.9);color:white;font-size:11px;font-weight:800;padding:4px 11px;border-radius:99px;pointer-events:none;">📱 ดูแอปจริง</div>
+      </div>
+      <!-- glow -->
+      <div style="position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);width:50%;height:32px;background:var(--red);filter:blur(24px);opacity:0.25;pointer-events:none;border-radius:50%;"></div>
     </div>
+    <p style="font-size:11px;color:#bbb;margin-top:24px;">🔇 กดเสียงได้ · 📱 รองรับทุกอุปกรณ์</p>
   </div>
 
   <!-- FEATURE GRID พร้อมรูปประกอบ -->
