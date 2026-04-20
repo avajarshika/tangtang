@@ -12197,7 +12197,7 @@ async function previewExportData() {
 
     // ดึง user_progress สำหรับข้อมูลเพิ่มเติม (ชื่อ, บัญชี, affiliate)
     const { data: progressData } = await sb.from('user_progress')
-      .select('user_id, data, referral_code, affiliate_earnings, affiliate_count, bank_name, bank_account, bank_owner, created_at');
+      .select('user_id, data, updated_at, referral_code, affiliate_earnings, affiliate_count, bank_name, bank_account, bank_owner');
     const progressMap = {};
     (progressData || []).forEach(p => { progressMap[p.user_id] = p; });
 
@@ -12217,11 +12217,11 @@ async function previewExportData() {
       const uid = u.user_id || u.id;
       const prog = progressMap[uid] || {};
       const progData = prog.data || {};
-      const createdAt = prog.created_at || u.created_at || u.updated_at;
+      const createdAt = prog.updated_at || u.updated_at || u.created_at;
       return {
         'ชื่อ': progData.name || u.name || '-',
         'Email': u.email || '-',
-        'วันที่สมัคร': createdAt ? new Date(createdAt).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'}) : '-',
+        'อัปเดตล่าสุด': createdAt ? new Date(createdAt).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'}) : '-',
         'สถานะ': u.is_premium ? '⭐ Premium' : 'ฟรี',
         'XP': u.xp || progData.xp || 0,
         'Streak': progData.streak || 0,
