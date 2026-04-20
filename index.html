@@ -12188,7 +12188,6 @@ async function previewExportData() {
     const { data: rawData, error } = await sb.rpc('admin_list_users');
     if (error) throw error;
     let users = (rawData || []).map(row => {
-      // RPC returns { admin_list_users: '{"user_id":...}' }
       const val = row && typeof row === 'object'
         ? (row.admin_list_users || Object.values(row)[0] || row)
         : row;
@@ -12196,12 +12195,14 @@ async function previewExportData() {
       catch(e) { return val; }
     });
 
+    // ดึง user_progress สำหรับข้อมูลเพิ่มเติม (ชื่อ, บัญชี, affiliate)
+    const { data: progressData } = await sb.from('user_progress')
+      .select('user_id, data, referral_code, affiliate_earnings, affiliate_count, bank_name, bank_account, bank_owner, created_at');
+    const progressMap = {};
+    (progressData || []).forEach(p => { progressMap[p.user_id] = p; });
+
     // ดึง affiliate data
-    const { data: affData } = await sb.from('user_progress')
-      .select('user_id, referral_code, affiliate_earnings, affiliate_count, bank_name, bank_account, bank_owner')
-      .not('referral_code', 'is', null);
-    const affMap = {};
-    (affData || []).forEach(a => { affMap[a.user_id] = a; });
+    const affMap = progressMap;
 
     // filter ตามประเภท (ใช้ user_id ให้ถูกต้อง)
     if (exportType === 'affiliate') users = users.filter(u => affMap[u.user_id || u.id]);
@@ -12214,21 +12215,23 @@ async function previewExportData() {
     // เตรียม exportData
     exportData = users.map(u => {
       const uid = u.user_id || u.id;
-      const aff = affMap[uid] || {};
+      const prog = progressMap[uid] || {};
+      const progData = prog.data || {};
+      const createdAt = prog.created_at || u.created_at || u.updated_at;
       return {
-        'ชื่อ': u.name || u.data?.name || '-',
+        'ชื่อ': progData.name || u.name || '-',
         'Email': u.email || '-',
-        'วันที่สมัคร': u.created_at ? new Date(u.created_at).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'}) : '-',
-        'สถานะ': u.is_premium ? 'Premium' : 'ฟรี',
-        'XP': u.xp || u.data?.xp || 0,
-        'Referral Code': aff.referral_code || '-',
-        'ชวนสำเร็จ (คน)': aff.affiliate_count || 0,
-        'ค่าคอมรอจ่าย (฿)': aff.affiliate_earnings || 0,
-        'ธนาคาร': aff.bank_name || '-',
-        'เลขบัญชี': aff.bank_account || '-',
-        'ชื่อบัญชี': aff.bank_owner || '-',
-        'จ่ายล่าสุด': aff.last_paid_at ? new Date(aff.last_paid_at).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'}) : '-',
-        'จ่ายล่าสุด (฿)': aff.last_paid_amount || 0,
+        'วันที่สมัคร': createdAt ? new Date(createdAt).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'}) : '-',
+        'สถานะ': u.is_premium ? '⭐ Premium' : 'ฟรี',
+        'XP': u.xp || progData.xp || 0,
+        'Streak': progData.streak || 0,
+        'บทที่จบแล้ว': (progData.completed || []).length,
+        'Referral Code': prog.referral_code || '-',
+        'ชวนสำเร็จ (คน)': prog.affiliate_count || 0,
+        'ค่าคอมรอจ่าย (฿)': prog.affiliate_earnings || 0,
+        'ธนาคาร': prog.bank_name || '-',
+        'เลขบัญชี': prog.bank_account || '-',
+        'ชื่อบัญชี': prog.bank_owner || '-',
       };
     });
 
