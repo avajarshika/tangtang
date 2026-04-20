@@ -1643,7 +1643,7 @@ body {
         <!-- Listen Game -->
         <div onclick="openGame('listen')" style="background:white;border:1.5px solid var(--paper3);border-radius:16px;padding:18px 14px;cursor:pointer;transition:.2s;box-shadow:var(--shadow)" onmouseover="this.style.borderColor='#0097a7';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--paper3)';this.style.transform='none'">
           <div style="font-size:38px;margin-bottom:10px">🔊</div>
-          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">ฟังแล้วเดา</div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">ฟังแล้วตอบคำถาม</div>
           <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:10px">ฟังเสียงจีน แล้วเลือกคำที่ถูก!</div>
           <span style="font-size:10px;font-weight:700;color:#0097a7;background:#e0f7fa;padding:3px 10px;border-radius:20px">ฟรี ด่าน 1 ✨</span>
         </div>
@@ -1673,7 +1673,7 @@ body {
     <div id="game-listen" style="display:none">
       <div style="padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--paper3);background:white;position:sticky;top:56px;z-index:30">
         <button onclick="closeGame()" style="background:var(--paper2);border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center">←</button>
-        <div style="font-size:15px;font-weight:700;color:var(--ink)">🔊 ฟังแล้วเดา</div>
+        <div style="font-size:15px;font-weight:700;color:var(--ink)">🔊 ฟังแล้วตอบคำถาม</div>
       </div>
       <div id="listen-content" style="padding:16px"></div>
     </div>
@@ -12189,50 +12189,88 @@ async function previewExportData() {
 
   try {
     // ดึงข้อมูลจาก admin_list_users RPC
+    // ดึงจาก user_progress โดยตรง (มีข้อมูลครบกว่า)
+    const { data: progressData, error: progErr } = await sb
+      .from('user_progress')
+      .select('user_id, data, updated_at, is_premium, referral_code, referred_by, affiliate_earnings, affiliate_count, bank_name, bank_account, bank_owner');
+    if (progErr) throw progErr;
+
+    // ดึง auth users สำหรับ email
     const { data: rawData, error } = await sb.rpc('admin_list_users');
     if (error) throw error;
-    let users = (rawData || []).map(row => {
-      const val = row && typeof row === 'object'
-        ? (row.admin_list_users || Object.values(row)[0] || row)
-        : row;
-      try { return typeof val === 'string' ? JSON.parse(val) : val; }
-      catch(e) { return val; }
+
+    // parse RPC response
+    let authUsers = [];
+    (rawData || []).forEach(row => {
+      try {
+        // RPC อาจ return แบบ {admin_list_users: '...'} หรือ array โดยตรง
+        const val = row && row.admin_list_users
+          ? row.admin_list_users
+          : row;
+        const parsed = typeof val === 'string' ? JSON.parse(val) : val;
+        if (Array.isArray(parsed)) authUsers = authUsers.concat(parsed);
+        else if (parsed && parsed.id) authUsers.push(parsed);
+      } catch(e) { 
+        if (row && row.id) authUsers.push(row);
+      }
     });
 
-    // ดึง user_progress สำหรับข้อมูลเพิ่มเติม (ชื่อ, บัญชี, affiliate)
-    const { data: progressData } = await sb.from('user_progress')
-      .select('user_id, data, updated_at, referral_code, affiliate_earnings, affiliate_count, bank_name, bank_account, bank_owner');
-    const progressMap = {};
-    (progressData || []).forEach(p => { progressMap[p.user_id] = p; });
+    // ถ้า RPC ให้ข้อมูลมาตรงๆ เป็น array
+    if (authUsers.length === 0 && Array.isArray(rawData)) {
+      authUsers = rawData;
+    }
 
-    // ดึง affiliate data
-    const affMap = progressMap;
+    // สร้าง map email จาก auth users
+    const emailMap = {};
+    const nameMap = {};
+    authUsers.forEach(u => {
+      if (u.id) {
+        emailMap[u.id] = u.email || '';
+        nameMap[u.id] = u.name || (u.user_metadata && u.user_metadata.name) || '';
+      }
+    });
 
-    // filter ตามประเภท (ใช้ user_id ให้ถูกต้อง)
-    if (exportType === 'affiliate') users = users.filter(u => affMap[u.user_id || u.id]);
+    // merge ข้อมูล
+    let users = (progressData || []).map(p => {
+      const d = p.data || {};
+      return {
+        user_id: p.user_id,
+        email: emailMap[p.user_id] || d.email || '-',
+        name: nameMap[p.user_id] || d.name || '-',
+        updated_at: p.updated_at,
+        is_premium: p.is_premium || false,
+        xp: d.xp || 0,
+        referral_code: p.referral_code || '-',
+        affiliate_count: p.affiliate_count || 0,
+        affiliate_earnings: p.affiliate_earnings || 0,
+        bank_name: p.bank_name || '-',
+        bank_account: p.bank_account || '-',
+        bank_owner: p.bank_owner || '-',
+      };
+    });
+
+    // filter ตามประเภท
+    if (exportType === 'affiliate') users = users.filter(u => u.referral_code && u.referral_code !== '-');
     if (exportType === 'premium') users = users.filter(u => u.is_premium);
 
     // filter ตามวันที่
-    if (dateFrom) users = users.filter(u => !u.created_at || u.created_at >= dateFrom);
-    if (dateTo) users = users.filter(u => !u.created_at || u.created_at <= dateTo + 'T23:59:59');
+    if (dateFrom) users = users.filter(u => !u.updated_at || u.updated_at >= dateFrom);
+    if (dateTo) users = users.filter(u => !u.updated_at || u.updated_at <= dateTo + 'T23:59:59');
 
     // เตรียม exportData
-    exportData = users.map(u => {
-      const updatedAt = u.updated_at;
-      return {
-        'Email': u.email || '-',
-        'ชื่อ': u.name || '-',
-        'อัปเดตล่าสุด': updatedAt ? new Date(updatedAt).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'}) : '-',
-        'สถานะ': u.is_premium ? '⭐ Premium' : 'ฟรี',
-        'XP': u.xp || 0,
-        'Referral Code': u.referral_code || '-',
-        'ชวนสำเร็จ (คน)': u.affiliate_count || 0,
-        'ค่าคอมรอจ่าย (฿)': u.affiliate_earnings || 0,
-        'ธนาคาร': u.bank_name || '-',
-        'เลขบัญชี': u.bank_account || '-',
-        'ชื่อบัญชี': u.bank_owner || '-',
-      };
-    });
+    exportData = users.map(u => ({
+      'Email': u.email,
+      'ชื่อ': u.name,
+      'อัปเดตล่าสุด': u.updated_at ? new Date(u.updated_at).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'}) : '-',
+      'สถานะ': u.is_premium ? '⭐ Premium' : 'ฟรี',
+      'XP': u.xp,
+      'Referral Code': u.referral_code,
+      'ชวนสำเร็จ (คน)': u.affiliate_count,
+      'ค่าคอมรอจ่าย (฿)': u.affiliate_earnings,
+      'ธนาคาร': u.bank_name,
+      'เลขบัญชี': u.bank_account,
+      'ชื่อบัญชี': u.bank_owner,
+    }));
 
     // แสดง preview table
     const typeLabel = exportType === 'all' ? 'สมาชิกทั้งหมด' : exportType === 'affiliate' ? 'Affiliate' : 'Premium';
@@ -12550,7 +12588,7 @@ function showMatchDone(lv) {
     +'</div></div>';
 }
 // ══════════════════════════════════════════════════════
-// 🔊 LISTEN GAME — ฟังแล้วเดา
+// 🔊 LISTEN GAME — ฟังแล้วตอบคำถาม
 // ══════════════════════════════════════════════════════
 
 const LISTEN_LEVELS = [
@@ -12684,7 +12722,7 @@ function renderListenHub(){
   const box=document.getElementById('listen-content');if(!box)return;
   let html='<div style="text-align:center;margin-bottom:20px">'
     +'<img src="https://avajarshika.github.io/tangtang/tangtang-study.png" alt="TangTang" style="width:80px;height:80px;object-fit:contain;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 4px 12px rgba(241,53,150,0.25))">'
-    +'<div style="font-size:17px;font-weight:800;color:var(--ink);margin-top:8px">🔊 ฟังแล้วเดา</div>'
+    +'<div style="font-size:17px;font-weight:800;color:var(--ink);margin-top:8px">🔊 ฟังแล้วตอบคำถาม</div>'
     +'<div style="font-size:12px;color:var(--ink3);margin-top:4px">กดฟังเสียงจีน แล้วเลือกความหมายที่ถูกต้อง!</div>'
     +'</div><div style="display:flex;flex-direction:column;gap:10px">';
   LISTEN_LEVELS.forEach(function(lv,i){
