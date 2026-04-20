@@ -7862,12 +7862,12 @@ function speakWithGoogleTTS(text, onEnd) {
   audio.play().catch(() => { if (onEnd) onEnd(); });
 }
 
-function speak(text, onEnd, rate=0.9, pitch=1.0) {
+function speak(text, onEnd, rate=0.85) {
   // ลอง Web Speech API ก่อน ถ้าไม่มีเสียงจีนให้ใช้ Google TTS
   if (synth && zhVoice) {
     synth.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'zh-CN'; u.rate = rate; u.pitch = pitch;
+    u.lang = 'zh-CN'; u.rate = rate; u.pitch = 1.05;
     u.voice = zhVoice;
     u.onend = () => { if (onEnd) onEnd(); };
     u.onerror = () => { speakWithGoogleTTS(text, onEnd); };
@@ -7877,14 +7877,6 @@ function speak(text, onEnd, rate=0.9, pitch=1.0) {
   }
 }
 
-// เสียง 2 คนสำหรับบทสนทนา
-// pitch ห่างกันแค่นิดเดียว ไม่บิดเบี้ยวบน iOS/Android
-// A = เสียงสูงเล็กน้อย, B = เสียงปกติ/ต่ำเล็กน้อย
-function speakDialog(text, sp, onEnd) {
-  const pitch = sp === 'A' ? 1.15 : 0.9;
-  speak(text, onEnd, 0.9, pitch);
-}
-
 function stopSpeech() { if (synth) synth.cancel(); }
 
 function speakLine(idx, btn) {
@@ -7892,8 +7884,7 @@ function speakLine(idx, btn) {
   stopSpeech();
   document.querySelectorAll('.speak-btn').forEach(b => { b.classList.remove('playing'); b.textContent = '🔊'; });
   btn.classList.add('playing');
-  const line = state.curLesson.dialog[idx];
-  speakDialog(line.cn, line.sp, () => { btn.classList.remove('playing'); btn.textContent = '🔊'; });
+  speak(state.curLesson.dialog[idx].cn, () => { btn.classList.remove('playing'); btn.textContent = '🔊'; });
 }
 
 let dlQueue = [], dlQIdx = 0, dlPlaying = false;
@@ -7910,12 +7901,11 @@ function playNextDL() {
   const i = dlQueue[dlQIdx];
   const btn = document.getElementById('dlbtn-' + i);
   if (btn) { btn.classList.add('playing'); }
-  const line = state.curLesson.dialog[i];
-  speakDialog(line.cn, line.sp, () => {
+  speak(state.curLesson.dialog[i].cn, () => {
     if (btn) { btn.classList.remove('playing'); btn.textContent = '🔊'; }
     dlQIdx++;
     setTimeout(playNextDL, 350);
-  });
+  }, 0.8);
 }
 
 function speakVocab(zh, btn) {
@@ -7927,85 +7917,37 @@ function speakVocab(zh, btn) {
 
 function speakWord(zh) { stopSpeech(); speak(zh); }
 
-// ── AUDIO CONTEXT SINGLETON (iOS + Android compatible) ──────────────────
-// iOS Safari requires AudioContext to be created/resumed inside a user gesture.
-// We keep one shared context and resume() it before every sound.
-let _sfxCtx = null;
-function _getSfxCtx() {
+function playCorrectSound() {
   try {
-    if (!_sfxCtx) _sfxCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (_sfxCtx.state === 'suspended') _sfxCtx.resume();
-    return _sfxCtx;
-  } catch(e) { return null; }
-}
-// Unlock AudioContext on first touch/click (required by iOS)
-(function() {
-  function _unlockAudio() {
-    _getSfxCtx();
-    document.removeEventListener('touchstart', _unlockAudio, true);
-    document.removeEventListener('mousedown', _unlockAudio, true);
-  }
-  document.addEventListener('touchstart', _unlockAudio, true);
-  document.addEventListener('mousedown', _unlockAudio, true);
-})();
-
-function _playTone(notes, type) {
-  // notes = [{freq, start, dur}], type = oscillator type
-  try {
-    const ctx = _getSfxCtx(); if (!ctx) return;
-    const masterGain = ctx.createGain();
-    masterGain.connect(ctx.destination);
-    notes.forEach(n => {
-      const osc = ctx.createOscillator();
-      const g = ctx.createGain();
-      osc.connect(g); g.connect(masterGain);
-      osc.type = n.type || type || 'sine';
-      osc.frequency.setValueAtTime(n.freq, ctx.currentTime + n.start);
-      g.gain.setValueAtTime(n.vol || 0.25, ctx.currentTime + n.start);
-      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + n.start + n.dur);
-      osc.start(ctx.currentTime + n.start);
-      osc.stop(ctx.currentTime + n.start + n.dur + 0.01);
-    });
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(523, ctx.currentTime);
+    osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+    osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.5);
   } catch(e) {}
 }
 
-function playCorrectSound() {
-  _playTone([
-    {freq:523, start:0,   dur:0.18},
-    {freq:659, start:0.1, dur:0.18},
-    {freq:784, start:0.2, dur:0.28},
-  ], 'sine');
-}
-
 function playWrongSound() {
-  _playTone([
-    {freq:200, start:0,   dur:0.15, type:'sawtooth', vol:0.2},
-    {freq:150, start:0.1, dur:0.2,  type:'sawtooth', vol:0.2},
-  ], 'sawtooth');
-}
-
-function playWinSound() {
-  _playTone([
-    {freq:523,  start:0,    dur:0.18},
-    {freq:659,  start:0.13, dur:0.18},
-    {freq:784,  start:0.26, dur:0.18},
-    {freq:1047, start:0.39, dur:0.4},
-  ], 'sine');
-}
-
-function playLoseSound() {
-  _playTone([
-    {freq:392, start:0,    dur:0.2,  type:'sawtooth', vol:0.2},
-    {freq:330, start:0.18, dur:0.2,  type:'sawtooth', vol:0.2},
-    {freq:262, start:0.36, dur:0.3,  type:'sawtooth', vol:0.2},
-  ], 'sawtooth');
-}
-
-function playStartSound() {
-  _playTone([
-    {freq:440, start:0,   dur:0.12},
-    {freq:550, start:0.1, dur:0.18},
-  ], 'sine');
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(200, ctx.currentTime);
+    osc.frequency.setValueAtTime(150, ctx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.3);
+  } catch(e) {}
 }
 
 function speakFC() {
@@ -8031,7 +7973,6 @@ function updateSpeedBadge() {
 }
 
 function openGame(name) {
-  playStartSound();
   document.getElementById('play-hub').style.display = 'none';
   ['stroke','daily','sentence','speed','journal','match','listen'].forEach(g => {
     document.getElementById('game-'+g).style.display = g===name ? 'block' : 'none';
@@ -8171,7 +8112,6 @@ function renderStrokeGame() {
 function strokeQuizDone() {
   const fb = document.getElementById('stroke-feedback');
   if (!fb) return;
-  playWinSound();
   fb.innerHTML = `<div style="font-size:24px">🎉</div><div style="font-size:13px;font-weight:700;color:var(--green);margin-top:4px">เยี่ยม! เขียนครบทุกขีดแล้ว +5 XP</div>`;
   if (state.user) { state.user.data.xp=(state.user.data.xp||0)+5; trackActivity(); saveState(); updateTopbar(); }
 }
@@ -8268,8 +8208,7 @@ function answerDaily(chosen) {
     if(i===q.ans){b.style.borderColor='var(--green)';b.style.background='var(--green-light)';b.querySelector('span').style.background='var(--green)';b.querySelector('span').style.color='white';}
     else if(i===chosen&&!correct){b.style.borderColor='var(--red)';b.style.background='var(--red-light)';b.querySelector('span').style.background='var(--red)';b.querySelector('span').style.color='white';}
   });
-  if(correct) { playCorrectSound(); dailyScore++; }
-  else { playWrongSound(); }
+  if(correct) dailyScore++;
   setTimeout(()=>{
     dailyQIdx++;
     if(dailyQIdx>=dailyQuestions.length){
@@ -8285,7 +8224,6 @@ function answerDaily(chosen) {
         trackActivity(); saveState(); updateTopbar();
       }
       renderDailyDone();
-      setTimeout(() => { if(dailyScore >= 3) playWinSound(); else playLoseSound(); }, 200);
     } else renderDailyQ();
   }, correct?600:900);
 }
@@ -8494,8 +8432,7 @@ function checkSentence() {
   if(fb) fb.innerHTML=correct
     ?`<div style="color:var(--green);font-weight:700;font-size:14px">🎉 ถูกต้อง! +15 XP</div><div style="font-size:12px;color:var(--ink3);margin-top:4px">${s.py}</div>`
     :`<div style="color:var(--red);font-weight:700;font-size:14px">❌ เฉลย: ${s.correct}</div><div style="font-size:12px;color:var(--ink3);margin-top:4px">${s.py}</div>`;
-  if(correct){playCorrectSound();sbScore++;if(state.user){state.user.data.xp=(state.user.data.xp||0)+15;trackActivity();saveState();updateTopbar();}}
-  else{playWrongSound();}
+  if(correct){sbScore++;if(state.user){state.user.data.xp=(state.user.data.xp||0)+15;trackActivity();saveState();updateTopbar();}}
   const btn=document.getElementById('sb-check-btn');
   if(btn){
     btn.textContent=sbLevelIdx+1>=lv.sentences.length?'🏁 ดูผลลัพธ์':'ถัดไป →';
@@ -8509,7 +8446,6 @@ function renderSentenceDone() {
   const prev=state.user?.data?.[`sbLevel${sbLevel+1}Best`]||0;
   if(sbScore>prev&&state.user){state.user.data[`sbLevel${sbLevel+1}Best`]=sbScore;saveState();}
   if(sbScore>=7) setSBUnlocked(sbLevel+2); // unlock next level
-  setTimeout(() => { if(sbScore>=7) playWinSound(); else playLoseSound(); }, 200);
   box.innerHTML=`
     <div style="text-align:center;padding:28px 16px">
       <div style="font-size:52px;margin-bottom:12px">${sbScore===10?'🏆':sbScore>=7?'🎉':'💪'}</div>
@@ -10519,8 +10455,6 @@ function renderMainQuizBody(title) {
     const pass = pct >= 60;
     const isFinal = currentQuizMode && ['hsk1-final','hsk2-final','hsk3-final','hsk4-final','hsk5-final','hsk6-final'].includes(currentQuizMode.id);
     const xpEarned = quizXpThisSession || (isFinal ? mainQuizScore * 15 : mainQuizScore * 10);
-    // Play win/lose sound
-    setTimeout(() => { if (pass) playWinSound(); else playLoseSound(); }, 200);
     // XP already awarded per-question via awardXP(); just record final stats
     if (state.user) {
       const d = state.user.data;
@@ -10904,7 +10838,6 @@ function answerMainQuiz(chosen, title) {
     quizMaxCombo = Math.max(quizMaxCombo, quizCombo);
     if (elapsed <= 3) _speedStreakCount++; else _speedStreakCount = 0;
   } else {
-    playWrongSound();
     quizCombo = 0;
     _speedStreakCount = 0;
     updateComboDisplay();
@@ -10926,7 +10859,6 @@ function answerMainQuiz(chosen, title) {
   });
 
   if (correct) {
-    playCorrectSound();
     mainQuizScore++;
     // XP with multiplier
     const isFinal = currentQuizMode && ['hsk1-final','hsk2-final','hsk3-final','hsk4-final','hsk5-final','hsk6-final'].includes(currentQuizMode.id);
@@ -11668,7 +11600,6 @@ function answerSpeed(chosen) {
   });
   const fb = document.getElementById('speed-feedback');
   if (correct) {
-    playCorrectSound();
     speedCombo++;
     speedCorrectInLevel++;
     const mult = speedCombo>=5?3:speedCombo>=3?2:speedCombo>=2?1.5:1;
@@ -11678,7 +11609,6 @@ function answerSpeed(chosen) {
     if (fb) fb.innerHTML = `<span style="color:var(--green)">✅ ถูก! +${xp} XP${mult>1?' 🔥 x'+mult+' Combo!':''}</span>`;
     if (state.user) { state.user.data.xp=(state.user.data.xp||0)+xp; trackActivity(); saveState(); updateTopbar(); }
   } else {
-    playWrongSound();
     speedCombo = 0;
     if (fb) fb.innerHTML = `<span style="color:var(--red)">❌ เฉลย: ${q.opts[q.ans]}</span>`;
   }
@@ -11689,7 +11619,6 @@ function renderSpeedLevelDone() {
   if (speedTimer) clearInterval(speedTimer);
   const box = document.getElementById('speed-content');
   const passed = speedCorrectInLevel >= SPEED_PASS_SCORE;
-  setTimeout(() => { if(passed) playWinSound(); else playLoseSound(); }, 200);
   const maxLevel = Object.keys(SPEED_LEVELS).length;
   const nextLevel = speedLevel + 1;
   const hasNext = nextLevel <= maxLevel;
@@ -12647,7 +12576,6 @@ function showMatchDone(lv) {
   const prev = state.user?.data?.[key] || 999999;
   if (matchTime < prev && state.user?.data) { state.user.data[key] = matchTime; saveState(); }
   addXP(15);
-  playWinSound();
   box.innerHTML = '<div style="text-align:center;padding:32px 16px">'
     +'<img src="https://avajarshika.github.io/tangtang/tangtang-happy.png" alt="TangTang" style="width:100px;height:100px;object-fit:contain;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.3))">'
     +'<div style="font-size:26px;font-weight:900;color:'+lv.color+';margin-top:12px">เก่งมากเลย! 🎉</div>'
@@ -12883,7 +12811,6 @@ function showListenDone(){
   const prev=state.user&&state.user.data?state.user.data[key]||0:0;
   if(listenScore>prev&&state.user&&state.user.data){state.user.data[key]=listenScore;saveState();}
   addXP(10);
-  setTimeout(() => { if(listenScore>=6) playWinSound(); else if(listenScore<4) playLoseSound(); else playCorrectSound(); }, 200);
   const img=listenScore>=6?'tangtang-happy.png':listenScore>=4?'tangtang.png':'tangtang-sad.png';
   box.innerHTML='<div style="text-align:center;padding:32px 16px">'
     +'<img src="https://avajarshika.github.io/tangtang/'+img+'" alt="TangTang" style="width:100px;height:100px;object-fit:contain;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.3))">'
