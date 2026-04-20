@@ -7862,12 +7862,12 @@ function speakWithGoogleTTS(text, onEnd) {
   audio.play().catch(() => { if (onEnd) onEnd(); });
 }
 
-function speak(text, onEnd, rate=0.85) {
+function speak(text, onEnd, rate=0.85, pitch=1.05) {
   // ลอง Web Speech API ก่อน ถ้าไม่มีเสียงจีนให้ใช้ Google TTS
   if (synth && zhVoice) {
     synth.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'zh-CN'; u.rate = rate; u.pitch = 1.05;
+    u.lang = 'zh-CN'; u.rate = rate; u.pitch = pitch;
     u.voice = zhVoice;
     u.onend = () => { if (onEnd) onEnd(); };
     u.onerror = () => { speakWithGoogleTTS(text, onEnd); };
@@ -7877,6 +7877,12 @@ function speak(text, onEnd, rate=0.85) {
   }
 }
 
+// เสียง 2 คนสำหรับบทสนทนา: A = เสียงสูง (หญิง), B = เสียงต่ำ (ชาย)
+function speakDialog(text, sp, onEnd, rate=0.82) {
+  const pitch = sp === 'A' ? 1.0 : 0.75;
+  speak(text, onEnd, rate, pitch);
+}
+
 function stopSpeech() { if (synth) synth.cancel(); }
 
 function speakLine(idx, btn) {
@@ -7884,7 +7890,8 @@ function speakLine(idx, btn) {
   stopSpeech();
   document.querySelectorAll('.speak-btn').forEach(b => { b.classList.remove('playing'); b.textContent = '🔊'; });
   btn.classList.add('playing');
-  speak(state.curLesson.dialog[idx].cn, () => { btn.classList.remove('playing'); btn.textContent = '🔊'; });
+  const line = state.curLesson.dialog[idx];
+  speakDialog(line.cn, line.sp, () => { btn.classList.remove('playing'); btn.textContent = '🔊'; });
 }
 
 let dlQueue = [], dlQIdx = 0, dlPlaying = false;
@@ -7901,11 +7908,12 @@ function playNextDL() {
   const i = dlQueue[dlQIdx];
   const btn = document.getElementById('dlbtn-' + i);
   if (btn) { btn.classList.add('playing'); }
-  speak(state.curLesson.dialog[i].cn, () => {
+  const line = state.curLesson.dialog[i];
+  speakDialog(line.cn, line.sp, () => {
     if (btn) { btn.classList.remove('playing'); btn.textContent = '🔊'; }
     dlQIdx++;
     setTimeout(playNextDL, 350);
-  }, 0.8);
+  });
 }
 
 function speakVocab(zh, btn) {
