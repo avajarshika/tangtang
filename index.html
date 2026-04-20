@@ -11102,11 +11102,13 @@ async function loadAdminUsers() {
   }
   // function ส่งมาเป็น JSON array ต้อง parse แต่ละ row
   const data = (rawData || []).map(row => {
-    const val = row && typeof row === 'object'
-      ? (row.admin_list_users || Object.values(row)[0] || row)
-      : row;
+    if (!row) return {};
+    // Already parsed object with expected fields
+    if (row.user_id || row.email) return row;
+    // Wrapped in admin_list_users key as JSON string
+    const val = row.admin_list_users || (typeof row === 'string' ? row : JSON.stringify(row));
     try { return typeof val === 'string' ? JSON.parse(val) : val; }
-    catch(e) { return val; }
+    catch(e) { return row; }
   });
 
   const total = data.length;
