@@ -24,6 +24,7 @@
   --radius: 16px;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
+img { max-width:100%; height:auto; }
 html { scroll-behavior: smooth; }
 body {
   background: #ffffff;
@@ -334,7 +335,7 @@ footer { background:#1a1a2e; color:rgba(255,255,255,.6); padding:40px 24px; text
       poster="app-demo-thumb.png"
       controls
       playsinline
-      style="width:100%;display:block;max-height:500px;object-fit:cover;"
+      style="width:100%;display:block;max-height:300px;object-fit:contain;border-radius:16px;background:#fff0f8;"
       onerror="this.parentElement.innerHTML='<div style=\'background:linear-gradient(135deg,#1a0020,#2d0035);padding:48px 24px;text-align:center;border-radius:20px\'><div style=\'font-size:48px;margin-bottom:12px\'>▶️</div><div style=\'font-size:15px;font-weight:700;color:white;margin-bottom:6px\'>app-demo.mp4</div><div style=\'font-size:12px;color:rgba(255,255,255,.5);line-height:1.6\'>วิดีโอ Screen Recording แสดงการใช้งานแอปจริง<br>บทเรียน → Quiz → Flashcard → เสียง → XP<br>ความยาว 30-60 วินาที</div></div>'"
     ></video>
     <div style="position:absolute;top:12px;left:12px;background:rgba(241,53,150,.9);color:white;font-size:11px;font-weight:800;padding:4px 10px;border-radius:99px;">📱 ดูแอปจริง</div>
@@ -345,10 +346,10 @@ footer { background:#1a1a2e; color:rgba(255,255,255,.6); padding:40px 24px; text
 
     <!-- Feature 1: Road Map -->
     <div style="background:white;border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .2s;" onmouseover="this.style.borderColor='#F13596'" onmouseout="this.style.borderColor='#e8e8f0'">
-      <!-- เปลี่ยน src="screen-roadmap.png" เป็นรูป Screenshot หน้า Road Map ในแอป -->
-      <img src="screen-roadmap.png" alt="Road Map ชัดเจน" style="width:100%;height:180px;object-fit:cover;display:block;background:#f8f8fc;"
+      <!-- เปลี่ยน src="https://avajarshika.github.io/tangtang/screen-roadmap.png" เป็นรูป Screenshot หน้า Road Map ในแอป -->
+      <img src="https://avajarshika.github.io/tangtang/screen-roadmap.png" alt="Road Map ชัดเจน" style="width:100%;max-height:400px;width:100%;object-fit:contain;display:block;border-radius:8px;background:#f8f8fc;"
         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div style="display:none;height:180px;background:linear-gradient(135deg,#fff0f8,#ffedf6);align-items:center;justify-content:center;flex-direction:column;gap:8px;">
+      <div style="display:none;height:220px;background:linear-gradient(135deg,#fff0f8,#ffedf6);align-items:center;justify-content:center;flex-direction:column;gap:8px;">
         <div style="font-size:32px;">🗺️</div>
         <div style="font-size:12px;font-weight:700;color:#F13596;">screen-roadmap.png</div>
         <div style="font-size:11px;color:#aaa;">Screenshot หน้า Road Map ในแอป</div>
@@ -362,10 +363,10 @@ footer { background:#1a1a2e; color:rgba(255,255,255,.6); padding:40px 24px; text
 
     <!-- Feature 2: ภาษาไทย -->
     <div style="background:white;border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .2s;" onmouseover="this.style.borderColor='#F13596'" onmouseout="this.style.borderColor='#e8e8f0'">
-      <!-- เปลี่ยน src="screen-lesson.png" เป็นรูป Screenshot หน้าบทเรียนที่มีคำอธิบายภาษาไทย -->
-      <img src="screen-lesson.png" alt="บทเรียนภาษาไทย" style="width:100%;height:180px;object-fit:cover;display:block;background:#f8f8fc;"
+      <!-- เปลี่ยน src="https://avajarshika.github.io/tangtang/screen-lesson.png" เป็นรูป Screenshot หน้าบทเรียนที่มีคำอธิบายภาษาไทย -->
+      <img src="https://avajarshika.github.io/tangtang/screen-lesson.png" alt="บทเรียนภาษาไทย" style="width:100%;max-height:400px;width:100%;object-fit:contain;display:block;border-radius:8px;background:#f8f8fc;"
         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div style="display:none;height:180px;background:linear-gradient(135deg,#f0fff4,#e8f4ed);align-items:center;justify-content:center;flex-direction:column;gap:8px;">
+      <div style="display:none;height:220px;background:linear-gradient(135deg,#f0fff4,#e8f4ed);align-items:center;justify-content:center;flex-direction:column;gap:8px;">
         <div style="font-size:32px;">🇹🇭</div>
         <div style="font-size:12px;font-weight:700;color:#1a6b3a;">screen-lesson.png</div>
         <div style="font-size:11px;color:#aaa;">Screenshot บทเรียน + คำอธิบายภาษาไทย</div>
@@ -379,10 +380,10 @@ footer { background:#1a1a2e; color:rgba(255,255,255,.6); padding:40px 24px; text
 
     <!-- Feature 3: Quiz สนุก -->
     <div style="background:white;border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .2s;" onmouseover="this.style.borderColor='#F13596'" onmouseout="this.style.borderColor='#e8e8f0'">
-      <!-- เปลี่ยน src="screen-quiz.png" เป็นรูป Screenshot หน้า Quiz -->
-      <img src="screen-quiz.png" alt="Quiz สนุก" style="width:100%;height:180px;object-fit:cover;display:block;background:#f8f8fc;"
+      <!-- เปลี่ยน src="https://avajarshika.github.io/tangtang/screen-quiz.png" เป็นรูป Screenshot หน้า Quiz -->
+      <img src="https://avajarshika.github.io/tangtang/screen-quiz.png" alt="Quiz สนุก" style="width:100%;max-height:400px;width:100%;object-fit:contain;display:block;border-radius:8px;background:#f8f8fc;"
         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div style="display:none;height:180px;background:linear-gradient(135deg,#eef5ff,#dce8ff);align-items:center;justify-content:center;flex-direction:column;gap:8px;">
+      <div style="display:none;height:220px;background:linear-gradient(135deg,#eef5ff,#dce8ff);align-items:center;justify-content:center;flex-direction:column;gap:8px;">
         <div style="font-size:32px;">🎮</div>
         <div style="font-size:12px;font-weight:700;color:#185FA5;">screen-quiz.png</div>
         <div style="font-size:11px;color:#aaa;">Screenshot หน้า Quiz / ตอบคำถาม</div>
@@ -396,10 +397,10 @@ footer { background:#1a1a2e; color:rgba(255,255,255,.6); padding:40px 24px; text
 
     <!-- Feature 4: เสียง -->
     <div style="background:white;border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .2s;" onmouseover="this.style.borderColor='#F13596'" onmouseout="this.style.borderColor='#e8e8f0'">
-      <!-- เปลี่ยน src="screen-sound.png" เป็นรูป Screenshot กำลังกดปุ่มฟังเสียง -->
-      <img src="screen-sound.png" alt="ระบบเสียง" style="width:100%;height:180px;object-fit:cover;display:block;background:#f8f8fc;"
+      <!-- เปลี่ยน src="https://avajarshika.github.io/tangtang/screen-sound.png" เป็นรูป Screenshot กำลังกดปุ่มฟังเสียง -->
+      <img src="https://avajarshika.github.io/tangtang/screen-sound.png" alt="ระบบเสียง" style="width:100%;max-height:400px;width:100%;object-fit:contain;display:block;border-radius:8px;background:#f8f8fc;"
         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div style="display:none;height:180px;background:linear-gradient(135deg,#fff8e6,#fdf0d0);align-items:center;justify-content:center;flex-direction:column;gap:8px;">
+      <div style="display:none;height:220px;background:linear-gradient(135deg,#fff8e6,#fdf0d0);align-items:center;justify-content:center;flex-direction:column;gap:8px;">
         <div style="font-size:32px;">🔊</div>
         <div style="font-size:12px;font-weight:700;color:#854F0B;">screen-sound.png</div>
         <div style="font-size:11px;color:#aaa;">Screenshot กดปุ่ม 🔊 ฟังเสียงภาษาจีน</div>
@@ -412,10 +413,10 @@ footer { background:#1a1a2e; color:rgba(255,255,255,.6); padding:40px 24px; text
 
     <!-- Feature 5: Flashcard -->
     <div style="background:white;border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .2s;" onmouseover="this.style.borderColor='#F13596'" onmouseout="this.style.borderColor='#e8e8f0'">
-      <!-- เปลี่ยน src="screen-flashcard.png" เป็นรูป Screenshot หน้า Flashcard -->
-      <img src="screen-flashcard.png" alt="Flashcard" style="width:100%;height:180px;object-fit:cover;display:block;background:#f8f8fc;"
+      <!-- เปลี่ยน src="https://avajarshika.github.io/tangtang/screen-flashcard.png" เป็นรูป Screenshot หน้า Flashcard -->
+      <img src="https://avajarshika.github.io/tangtang/screen-flashcard.png" alt="Flashcard" style="width:100%;max-height:400px;width:100%;object-fit:contain;display:block;border-radius:8px;background:#f8f8fc;"
         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div style="display:none;height:180px;background:linear-gradient(135deg,#fbeaf0,#f4c0d1);align-items:center;justify-content:center;flex-direction:column;gap:8px;">
+      <div style="display:none;height:220px;background:linear-gradient(135deg,#fbeaf0,#f4c0d1);align-items:center;justify-content:center;flex-direction:column;gap:8px;">
         <div style="font-size:32px;">🃏</div>
         <div style="font-size:12px;font-weight:700;color:#993556;">screen-flashcard.png</div>
         <div style="font-size:11px;color:#aaa;">Screenshot หน้า Flashcard ท่องคำศัพท์</div>
@@ -428,9 +429,9 @@ footer { background:#1a1a2e; color:rgba(255,255,255,.6); padding:40px 24px; text
 
     <!-- Feature 6: Login & หน้าแรก -->
     <div style="background:white;border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .2s;" onmouseover="this.style.borderColor='#F13596'" onmouseout="this.style.borderColor='#e8e8f0'">
-      <img src="screen-login.png" alt="หน้า Login" style="width:100%;height:180px;object-fit:cover;display:block;background:#fff0f8;"
+      <img src="https://avajarshika.github.io/tangtang/screen-login.png" alt="หน้า Login" style="width:100%;max-height:400px;width:100%;object-fit:contain;display:block;border-radius:8px;background:#f8f8fc;"
         onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-      <div style="display:none;height:180px;background:linear-gradient(135deg,#fff0f8,#fce4f3);align-items:center;justify-content:center;flex-direction:column;gap:8px;">
+      <div style="display:none;height:220px;background:linear-gradient(135deg,#fff0f8,#fce4f3);align-items:center;justify-content:center;flex-direction:column;gap:8px;">
         <div style="font-size:32px;">🦊</div>
         <div style="font-size:12px;font-weight:700;color:#F13596;">screen-login.png</div>
         <div style="font-size:11px;color:#aaa;">หน้า Login + ถังถัง + ปุ่มฟรี/Premium</div>
@@ -450,7 +451,7 @@ footer { background:#1a1a2e; color:rgba(255,255,255,.6); padding:40px 24px; text
       <div style="font-size:clamp(20px,4vw,28px);font-weight:900;color:#111;margin-bottom:8px;line-height:1.3;">เรียนแบบเล่นเกม<br><span style="color:var(--red)">6 เกม ไม่มีที่ไหนเหมือน!</span></div>
       <div style="font-size:14px;color:#666;line-height:1.6;">ฟีเจอร์สุดพิเศษที่แอปสอนจีนอื่นไม่มี<br>เรียนไปโดยไม่รู้สึกว่ากำลังเรียนอยู่</div>
       <!-- ภาพรวมเกม -->
-      <img src="screen-games.png" alt="รวมเกมทั้งหมด" style="width:100%;max-width:480px;border-radius:16px;margin-top:20px;display:block;margin-left:auto;margin-right:auto;box-shadow:0 8px 32px rgba(241,53,150,.15);background:#fff0f8;"
+      <img src="https://avajarshika.github.io/tangtang/screen-games.png" alt="รวมเกมทั้งหมด" style="width:auto;max-width:100%;border-radius:16px;margin-top:20px;display:block;margin-left:auto;margin-right:auto;box-shadow:0 8px 32px rgba(241,53,150,.15);object-fit:contain;"
         onerror="this.style.display='none'">
     </div>
 
@@ -464,9 +465,9 @@ footer { background:#1a1a2e; color:rgba(255,255,255,.6); padding:40px 24px; text
         </div>
         <div style="font-size:13px;color:#555;line-height:1.7;">ดู <strong>Animation ลำดับขีดตัวอักษรจีน</strong> แบบช้าๆ ทีละขีด แล้ว<strong>วาดตามบนหน้าจอ</strong>ได้เลย ระบบตรวจสอบความถูกต้องให้อัตโนมัติ — ไม่มีที่เรียนจีนออนไลน์ไหนทำแบบนี้!</div>
         <!-- IMAGE PLACEHOLDER -->
-        <img src="screen-stroke.png" alt="ลำดับขีด" style="margin-top:14px;width:100%;height:160px;object-fit:cover;border-radius:12px;display:block;"
+        <img src="https://avajarshika.github.io/tangtang/screen-stroke.png" alt="ลำดับขีด" style="margin-top:14px;width:100%;max-height:380px;object-fit:contain;border-radius:12px;display:block;background:#f8f8fc;"
           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div style="display:none;margin-top:14px;width:100%;height:160px;background:#f8f8f8;border:2px dashed #ddd;border-radius:12px;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;">
+        <div style="display:none;margin-top:14px;width:100%;min-height:120px;background:#f8f8f8;border:2px dashed #ddd;border-radius:12px;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;">
           <div style="font-size:28px;">✍️</div>
           <div style="font-size:11px;font-weight:700;color:#6b1a6b;">screen-stroke.png</div>
         </div>
@@ -483,9 +484,9 @@ footer { background:#1a1a2e; color:rgba(255,255,255,.6); padding:40px 24px; text
         </div>
         <div style="font-size:13px;color:#555;line-height:1.7;">โจทย์ 5 ข้อใหม่<strong>ทุกเที่ยงคืน</strong> เปลี่ยนทุกวัน ทำจนครบ 5/5 ได้ <strong>Streak 🔥</strong> สะสม เพิ่ม XP และ <strong>กระตุ้นให้เปิดแอปทุกวัน</strong> ไม่หยุดเรียนกลางคัน</div>
         <!-- IMAGE PLACEHOLDER -->
-        <img src="screen-daily.png" alt="Daily Challenge" style="margin-top:14px;width:100%;height:160px;object-fit:cover;border-radius:12px;display:block;"
+        <img src="https://avajarshika.github.io/tangtang/screen-daily.png" alt="Daily Challenge" style="margin-top:14px;width:100%;max-height:380px;object-fit:contain;border-radius:12px;display:block;background:#f8f8fc;"
           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div style="display:none;margin-top:14px;width:100%;height:160px;background:#f8f8f8;border:2px dashed #ddd;border-radius:12px;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;">
+        <div style="display:none;margin-top:14px;width:100%;min-height:120px;background:#f8f8f8;border:2px dashed #ddd;border-radius:12px;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;">
           <div style="font-size:28px;">🎯</div>
           <div style="font-size:11px;font-weight:700;color:#e67e22;">screen-daily.png</div>
         </div>
@@ -502,9 +503,9 @@ footer { background:#1a1a2e; color:rgba(255,255,255,.6); padding:40px 24px; text
         </div>
         <div style="font-size:13px;color:#555;line-height:1.7;"><strong>แตะคำจีนแล้วเรียงให้ถูกประโยค</strong> เล่นสนุกเหมือน Wordle ฝึกไวยากรณ์โดยไม่รู้ตัว มี <strong>6 ด่าน</strong> ต้องได้ 7/10 ถึงจะปลดล็อคด่านถัดไป — ยิ่งเล่นยิ่งเก่ง!</div>
         <!-- IMAGE PLACEHOLDER -->
-        <img src="screen-sentence.png" alt="เรียงประโยค" style="margin-top:14px;width:100%;height:160px;object-fit:cover;border-radius:12px;display:block;"
+        <img src="https://avajarshika.github.io/tangtang/screen-sentence.png" alt="เรียงประโยค" style="margin-top:14px;width:100%;max-height:380px;object-fit:contain;border-radius:12px;display:block;background:#f8f8fc;"
           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div style="display:none;margin-top:14px;width:100%;height:160px;background:#f8f8f8;border:2px dashed #ddd;border-radius:12px;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;">
+        <div style="display:none;margin-top:14px;width:100%;min-height:120px;background:#f8f8f8;border:2px dashed #ddd;border-radius:12px;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;">
           <div style="font-size:28px;">🧩</div>
           <div style="font-size:11px;font-weight:700;color:#1a4a8a;">screen-sentence.png</div>
         </div>
@@ -521,9 +522,9 @@ footer { background:#1a1a2e; color:rgba(255,255,255,.6); padding:40px 24px; text
         </div>
         <div style="font-size:13px;color:rgba(255,255,255,.75);line-height:1.7;">ตอบ 20 ข้อ <strong style="color:white;">มีนับเวลาถอยหลัง 10 วินาที/ข้อ</strong> ตอบเร็วได้ <strong style="color:var(--red)">Bonus XP</strong> เพิ่ม มี <strong style="color:var(--red)">Combo Multiplier x3</strong> ยิ่ง Hot Streak ยิ่งได้แต้มเยอะ — ทดสอบตัวเองว่าจำได้จริงไหม!</div>
         <!-- IMAGE PLACEHOLDER -->
-        <img src="screen-speed.png" alt="Speed Quiz" style="margin-top:14px;width:100%;height:160px;object-fit:cover;border-radius:12px;display:block;"
+        <img src="https://avajarshika.github.io/tangtang/screen-speed.png" alt="Speed Quiz" style="margin-top:14px;width:100%;max-height:380px;object-fit:contain;border-radius:12px;display:block;background:#f8f8fc;"
           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div style="display:none;margin-top:14px;width:100%;height:160px;background:#f8f8f8;border:2px dashed #ddd;border-radius:12px;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;">
+        <div style="display:none;margin-top:14px;width:100%;min-height:120px;background:#f8f8f8;border:2px dashed #ddd;border-radius:12px;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;">
           <div style="font-size:28px;">⚡</div>
           <div style="font-size:11px;font-weight:700;color:#F13596;">screen-speed.png</div>
         </div>
@@ -539,7 +540,7 @@ footer { background:#1a1a2e; color:rgba(255,255,255,.6); padding:40px 24px; text
           <span style="font-size:10px;font-weight:800;color:#e91e8c;background:rgba(233,30,140,.1);padding:2px 8px;border-radius:99px;border:1px solid rgba(233,30,140,.2);">ใหม่! 🃏</span>
         </div>
         <div style="font-size:13px;color:#555;line-height:1.7;"><strong>แตะภาษาจีนซ้าย → จับคู่ความหมายขวา</strong> ให้ครบก่อนหมดเวลา มี <strong>12 ด่าน</strong> ตั้งแต่ทักทาย ความรู้สึก กริยา อาหาร การเดินทาง — จำคำศัพท์ได้แบบไม่รู้ตัว!</div>
-        <img src="screen-match.png" alt="จับคู่คำศัพท์" style="margin-top:14px;width:100%;height:160px;object-fit:cover;border-radius:12px;display:block;background:#fce4f3;"
+        <img src="https://avajarshika.github.io/tangtang/screen-match.png" alt="จับคู่คำศัพท์" style="margin-top:14px;width:100%;height:160px;object-fit:cover;border-radius:12px;display:block;background:#fce4f3;"
           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
         <div style="display:none;margin-top:14px;width:100%;height:160px;background:linear-gradient(135deg,#fce4f3,#f8bbd9);border:2px dashed #f48fb1;border-radius:12px;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;">
           <div style="font-size:28px;">🃏</div>
@@ -559,7 +560,7 @@ footer { background:#1a1a2e; color:rgba(255,255,255,.6); padding:40px 24px; text
         </div>
         <div style="font-size:13px;color:#555;line-height:1.7;"><strong>กดปุ่มฟังเสียงภาษาจีน</strong> แล้วเลือกความหมายที่ถูกต้อง เริ่มจากคำง่ายๆ ไปถึง <strong>บทสนทนาจริง</strong> 12 ด่าน — ฝึกฟังจีนได้ทุกที่ทุกเวลา!</div>
         <!-- IMAGE PLACEHOLDER -->
-        <img src="screen-listen.png" alt="ฟังแล้วเดา" style="margin-top:14px;width:100%;height:160px;object-fit:cover;border-radius:12px;display:block;background:#e0f7fa;"
+        <img src="https://avajarshika.github.io/tangtang/screen-listen.png" alt="ฟังแล้วเดา" style="margin-top:14px;width:100%;height:160px;object-fit:cover;border-radius:12px;display:block;background:#e0f7fa;"
           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
         <div style="display:none;margin-top:14px;width:100%;height:160px;background:linear-gradient(135deg,#e0f7fa,#b2ebf2);border:2px dashed #80deea;border-radius:12px;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;">
           <div style="font-size:28px;">🔊</div>
@@ -578,9 +579,9 @@ footer { background:#1a1a2e; color:rgba(255,255,255,.6); padding:40px 24px; text
           <span style="font-size:10px;font-weight:800;color:#b8860b;background:rgba(184,134,11,.1);padding:2px 8px;border-radius:99px;border:1px solid rgba(184,134,11,.2);">ฟรี ทุกคน</span>
         </div>
         <div style="font-size:13px;color:#555;line-height:1.7;"><strong>เขียนบันทึกถึงตัวเองทุกวัน</strong> จดคำศัพท์ที่ชอบ บันทึกความรู้สึก ดูย้อนหลังได้ผ่าน <strong>ปฏิทิน</strong> เห็นพัฒนาการตัวเองชัดเจน — เหมือนมีไดอารี่เรียนจีนส่วนตัว</div>
-        <img src="screen-journal.png" alt="Journal" style="margin-top:14px;width:100%;height:160px;object-fit:cover;border-radius:12px;display:block;"
+        <img src="https://avajarshika.github.io/tangtang/screen-journal.png" alt="Journal" style="margin-top:14px;width:100%;max-height:380px;object-fit:contain;border-radius:12px;display:block;background:#f8f8fc;"
           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div style="display:none;margin-top:14px;width:100%;height:160px;background:#f8f8f8;border:2px dashed #ddd;border-radius:12px;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;">
+        <div style="display:none;margin-top:14px;width:100%;min-height:120px;background:#f8f8f8;border:2px dashed #ddd;border-radius:12px;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;">
           <div style="font-size:28px;">📓</div>
           <div style="font-size:11px;font-weight:700;color:#b8860b;">screen-journal.png</div>
         </div>
