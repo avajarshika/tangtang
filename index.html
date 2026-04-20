@@ -7950,6 +7950,58 @@ function playWrongSound() {
   } catch(e) {}
 }
 
+function playWinSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [523, 659, 784, 1047];
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.12);
+      gain.gain.setValueAtTime(0.25, ctx.currentTime + i * 0.12);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 0.3);
+      osc.start(ctx.currentTime + i * 0.12);
+      osc.stop(ctx.currentTime + i * 0.12 + 0.3);
+    });
+  } catch(e) {}
+}
+
+function playLoseSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [400, 300, 200];
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.15);
+      gain.gain.setValueAtTime(0.15, ctx.currentTime + i * 0.15);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 0.25);
+      osc.start(ctx.currentTime + i * 0.15);
+      osc.stop(ctx.currentTime + i * 0.15 + 0.25);
+    });
+  } catch(e) {}
+}
+
+function playStartSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(440, ctx.currentTime);
+    osc.frequency.setValueAtTime(550, ctx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.3);
+  } catch(e) {}
+}
+
 function speakFC() {
   if (!state.curLesson) return;
   stopSpeech();
@@ -7973,6 +8025,7 @@ function updateSpeedBadge() {
 }
 
 function openGame(name) {
+  playStartSound();
   document.getElementById('play-hub').style.display = 'none';
   ['stroke','daily','sentence','speed','journal','match','listen'].forEach(g => {
     document.getElementById('game-'+g).style.display = g===name ? 'block' : 'none';
@@ -8112,6 +8165,7 @@ function renderStrokeGame() {
 function strokeQuizDone() {
   const fb = document.getElementById('stroke-feedback');
   if (!fb) return;
+  playWinSound();
   fb.innerHTML = `<div style="font-size:24px">🎉</div><div style="font-size:13px;font-weight:700;color:var(--green);margin-top:4px">เยี่ยม! เขียนครบทุกขีดแล้ว +5 XP</div>`;
   if (state.user) { state.user.data.xp=(state.user.data.xp||0)+5; trackActivity(); saveState(); updateTopbar(); }
 }
@@ -8203,6 +8257,7 @@ function renderDailyQ() {
 }
 function answerDaily(chosen) {
   const q=dailyQuestions[dailyQIdx]; const correct=chosen===q.ans;
+  if(correct) playCorrectSound(); else playWrongSound();
   document.querySelectorAll('[id^="dopt-"]').forEach((b,i)=>{
     b.disabled=true;
     if(i===q.ans){b.style.borderColor='var(--green)';b.style.background='var(--green-light)';b.querySelector('span').style.background='var(--green)';b.querySelector('span').style.color='white';}
@@ -8223,6 +8278,7 @@ function answerDaily(chosen) {
         state.user.data.lastDailyDate=today;
         trackActivity(); saveState(); updateTopbar();
       }
+      if(dailyScore>=3) playWinSound(); else playLoseSound();
       renderDailyDone();
     } else renderDailyQ();
   }, correct?600:900);
@@ -8429,10 +8485,11 @@ function checkSentence() {
   const s=lv.sentences[sbLevelIdx];
   const ans=sbAnswer.join(''); const correct=ans===s.correct;
   const fb=document.getElementById('sb-feedback');
+  if(correct) playCorrectSound(); else playWrongSound();
   if(fb) fb.innerHTML=correct
     ?`<div style="color:var(--green);font-weight:700;font-size:14px">🎉 ถูกต้อง! +15 XP</div><div style="font-size:12px;color:var(--ink3);margin-top:4px">${s.py}</div>`
     :`<div style="color:var(--red);font-weight:700;font-size:14px">❌ เฉลย: ${s.correct}</div><div style="font-size:12px;color:var(--ink3);margin-top:4px">${s.py}</div>`;
-  if(correct){sbScore++;if(state.user){state.user.data.xp=(state.user.data.xp||0)+15;trackActivity();saveState();updateTopbar();}}
+  if(correct){playCorrectSound();sbScore++;if(state.user){state.user.data.xp=(state.user.data.xp||0)+15;trackActivity();saveState();updateTopbar();}}
   const btn=document.getElementById('sb-check-btn');
   if(btn){
     btn.textContent=sbLevelIdx+1>=lv.sentences.length?'🏁 ดูผลลัพธ์':'ถัดไป →';
@@ -8442,6 +8499,7 @@ function checkSentence() {
 }
 
 function renderSentenceDone() {
+  if(sbScore>=7) playWinSound(); else playLoseSound();
   const lv=SENTENCE_LEVELS[sbLevel]; const box=document.getElementById('sentence-content');
   const prev=state.user?.data?.[`sbLevel${sbLevel+1}Best`]||0;
   if(sbScore>prev&&state.user){state.user.data[`sbLevel${sbLevel+1}Best`]=sbScore;saveState();}
@@ -10858,6 +10916,7 @@ function answerMainQuiz(chosen, title) {
     }
   });
 
+  if (correct) { playCorrectSound(); } else { playWrongSound(); }
   if (correct) {
     mainQuizScore++;
     // XP with multiplier
@@ -10876,7 +10935,7 @@ function answerMainQuiz(chosen, title) {
   setTimeout(() => {
     mainQuizIdx++;
     const done = mainQuizIdx >= qs.length;
-    if (done) mainQuizDone = true;
+    if (done) { mainQuizDone = true; const pct2=Math.round(mainQuizScore/qs.length*100); if(pct2>=60) playWinSound(); else playLoseSound(); }
     renderMainQuizBody(title);
   }, delay);
 }
@@ -11599,6 +11658,7 @@ function answerSpeed(chosen) {
     else if (i===chosen&&!correct) { b.style.borderColor='var(--red)'; b.style.background='var(--red-light)'; }
   });
   const fb = document.getElementById('speed-feedback');
+  if (correct) { playCorrectSound(); } else { playWrongSound(); }
   if (correct) {
     speedCombo++;
     speedCorrectInLevel++;
@@ -11619,6 +11679,7 @@ function renderSpeedLevelDone() {
   if (speedTimer) clearInterval(speedTimer);
   const box = document.getElementById('speed-content');
   const passed = speedCorrectInLevel >= SPEED_PASS_SCORE;
+  if (passed) playWinSound(); else playLoseSound();
   const maxLevel = Object.keys(SPEED_LEVELS).length;
   const nextLevel = speedLevel + 1;
   const hasNext = nextLevel <= maxLevel;
@@ -12811,6 +12872,7 @@ function showListenDone(){
   const prev=state.user&&state.user.data?state.user.data[key]||0:0;
   if(listenScore>prev&&state.user&&state.user.data){state.user.data[key]=listenScore;saveState();}
   addXP(10);
+  if(listenScore>=6) playWinSound(); else if(listenScore<3) playLoseSound();
   const img=listenScore>=6?'tangtang-happy.png':listenScore>=4?'tangtang.png':'tangtang-sad.png';
   box.innerHTML='<div style="text-align:center;padding:32px 16px">'
     +'<img src="https://avajarshika.github.io/tangtang/'+img+'" alt="TangTang" style="width:100px;height:100px;object-fit:contain;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.3))">'
