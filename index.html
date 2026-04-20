@@ -11127,7 +11127,7 @@ async function loadAdminUsers() {
       <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
         <div style="flex:1;min-width:0">
           <div style="font-size:13px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.email}</div>
-          <div style="font-size:11px;color:var(--ink3);margin-top:2px">⭐ ${u.xp} XP · อัปเดต ${new Date(u.updated_at).toLocaleDateString('th-TH')}</div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:2px">👤 ${u.name || ''} · ⭐ ${u.xp || 0} XP · อัปเดต ${u.updated_at ? new Date(u.updated_at).toLocaleDateString('th-TH') : '-'}</div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
           <span id="badge-${u.user_id}" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;${u.is_premium ? 'background:#fff5f9;color:var(--red);border:1px solid var(--red)' : 'background:var(--paper2);color:var(--ink3);border:1px solid var(--paper3)'}">${u.is_premium ? '⭐ Premium' : 'ฟรี'}</span>
@@ -12218,22 +12218,19 @@ async function previewExportData() {
 
     // เตรียม exportData
     exportData = users.map(u => {
-      const uid = u.user_id || u.id;
-      const prog = progressMap[uid] || {};
-      const progData = prog.data || {};
-      const updatedAt = u.updated_at || prog.updated_at;
+      const updatedAt = u.updated_at;
       return {
         'Email': u.email || '-',
-        'ชื่อ': progData.name || u.name || u.email || '-',
+        'ชื่อ': u.name || '-',
         'อัปเดตล่าสุด': updatedAt ? new Date(updatedAt).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'}) : '-',
         'สถานะ': u.is_premium ? '⭐ Premium' : 'ฟรี',
         'XP': u.xp || 0,
-        'Referral Code': prog.referral_code || '-',
-        'ชวนสำเร็จ (คน)': prog.affiliate_count || 0,
-        'ค่าคอมรอจ่าย (฿)': prog.affiliate_earnings || 0,
-        'ธนาคาร': prog.bank_name || '-',
-        'เลขบัญชี': prog.bank_account || '-',
-        'ชื่อบัญชี': prog.bank_owner || '-',
+        'Referral Code': u.referral_code || '-',
+        'ชวนสำเร็จ (คน)': u.affiliate_count || 0,
+        'ค่าคอมรอจ่าย (฿)': u.affiliate_earnings || 0,
+        'ธนาคาร': u.bank_name || '-',
+        'เลขบัญชี': u.bank_account || '-',
+        'ชื่อบัญชี': u.bank_owner || '-',
       };
     });
 
