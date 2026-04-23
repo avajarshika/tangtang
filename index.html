@@ -922,7 +922,7 @@ body {
   box-shadow: var(--shadow);
 }
 
-.quiz-opt:hover:not(:disabled) { border-color: var(--red); background: var(--red-light); transform: translateX(4px); }
+.quiz-opt:hover:not(:disabled) { border-color: var(--ink2); background: var(--paper); transform: translateX(4px); }
 .quiz-opt:disabled { cursor: default; }
 
 .quiz-opt.correct { border-color: var(--green); background: var(--green-light); color: var(--green); }
@@ -1729,17 +1729,19 @@ body {
     <div class="detail-header">
       <button class="back-btn" onclick="goScreen('home')">← กลับ</button>
       <div class="detail-title">🔤 บทที่ 0 — พินอิน</div>
-      <div class="detail-sub">วรรณยุกต์ · พยัญชนะ · สระ · เสียงยาก · ทดสอบ</div>
+      <div class="detail-sub">บทนำ · วรรณยุกต์ · พยัญชนะ · สระ · เสียงยาก · ทดสอบ</div>
       <div class="prog-bar" style="margin-top:10px"><div class="prog-fill" id="pinyin-prog" style="width:0%"></div></div>
     </div>
     <div class="tab-bar" style="overflow-x:auto;scrollbar-width:none">
-      <button class="tab-btn active" onclick="switchPinyinTab('tones',this)" style="min-width:72px"><span class="tab-ico">🎵</span>วรรณยุกต์</button>
+      <button class="tab-btn active" onclick="switchPinyinTab('intro',this)" style="min-width:64px"><span class="tab-ico">📖</span>บทนำ</button>
+      <button class="tab-btn" onclick="switchPinyinTab('tones',this)" style="min-width:72px"><span class="tab-ico">🎵</span>วรรณยุกต์</button>
       <button class="tab-btn" onclick="switchPinyinTab('consonants',this)" style="min-width:72px"><span class="tab-ico">🔡</span>พยัญชนะ</button>
       <button class="tab-btn" onclick="switchPinyinTab('vowels',this)" style="min-width:56px"><span class="tab-ico">🔤</span>สระ</button>
       <button class="tab-btn" onclick="switchPinyinTab('tricky',this)" style="min-width:68px"><span class="tab-ico">⚠️</span>เสียงยาก</button>
       <button class="tab-btn" onclick="switchPinyinTab('pinyin-quiz',this)" style="min-width:64px"><span class="tab-ico">🎯</span>ทดสอบ</button>
     </div>
-    <div id="ptab-tones" class="tab-pane active" style="padding:16px"></div>
+    <div id="ptab-intro" class="tab-pane active" style="padding:16px"></div>
+    <div id="ptab-tones" class="tab-pane" style="padding:16px"></div>
     <div id="ptab-consonants" class="tab-pane" style="padding:16px"></div>
     <div id="ptab-vowels" class="tab-pane" style="padding:16px"></div>
     <div id="ptab-tricky" class="tab-pane" style="padding:16px"></div>
@@ -2110,7 +2112,8 @@ const LESSONS = [
       {sp:'A',spName:'นักเรียน', cn:'我叫小红，很高兴认识你！', py:'Wǒ jiào Xiǎohóng, hěn gāoxìng rènshi nǐ!', th:'ฉันชื่อ Xiaohong ยินดีที่ได้รู้จัก!'},
       {sp:'B',spName:'เพื่อน', cn:'我也很高兴认识你！你是哪国人？', py:'Wǒ yě hěn gāoxìng rènshi nǐ! Nǐ shì nǎ guó rén?', th:'ยินดีเช่นกัน! คุณเป็นคนชาติไหน?'},
       {sp:'A',spName:'นักเรียน', cn:'我是泰国人，我在学习中文。', py:'Wǒ shì Tàiguó rén, wǒ zài xuéxí Zhōngwén.', th:'ฉันเป็นคนไทย กำลังเรียนภาษาจีนอยู่'},
-      {sp:'B',spName:'เพื่อน', cn:'哇，你的中文很好！再见！', py:'Wā, nǐ de Zhōngwén hěn hǎo! Zàijiàn!', th:'ว้าว ภาษาจีนของคุณเก่งมาก! ลาก่อน!'},
+      {sp:'B',spName:'เพื่อน', cn:'哇，你的中文很好！你在哪里学的？', py:'Wā, nǐde Zhōngwén hěn hǎo! Nǐ zài nǎlǐ xué de?', th:'ว้าว ภาษาจีนของคุณเก่งมาก! เรียนที่ไหน?'},
+      {sp:'A',spName:'นักเรียน', cn:'我用手机APP学习，很方便！再见！', py:'Wǒ yòng shǒujī APP xuéxí, hěn fāngbiàn! Zàijiàn!', th:'ฉันเรียนผ่านแอปมือถือ สะดวกมาก! ลาก่อน!'},
     ],
     vocab:[
       {zh:'你好',py:'nǐ hǎo',th:'สวัสดี',en:'Hello',em:'👋'},
@@ -2133,6 +2136,10 @@ const LESSONS = [
       {zh:'人',py:'rén',th:'คน',en:'Person',em:'🧑'},
       {zh:'中文',py:'Zhōngwén',th:'ภาษาจีน',en:'Chinese language',em:'🇨🇳'},
       {zh:'学习',py:'xuéxí',th:'เรียน / ศึกษา',en:'To study',em:'📚'},
+      {zh:'高兴',py:'gāoxìng',th:'ดีใจ / ยินดี',en:'Happy / Glad',em:'😊'},
+      {zh:'认识',py:'rènshi',th:'รู้จัก',en:'To know / Meet',em:'🤝'},
+      {zh:'哪国人',py:'nǎ guó rén',th:'คนชาติไหน',en:'What nationality',em:'🌍'},
+      {zh:'呢',py:'ne',th:'(คำถามย้อนกลับ) แล้ว...ล่ะ?',en:'What about...?',em:'❓'},
     ],
     quiz:[
       {type:'mc',q:'你好 (nǐ hǎo) แปลว่า?',opts:['ขอบคุณ','ขอโทษ','ลาก่อน','สวัสดี'],ans:3},
@@ -2145,17 +2152,63 @@ const LESSONS = [
     ]
   },
   {
+    id:5, icon:'👨‍👩‍👧', theme:'ครอบครัว', hsk:1,
+    title:'家人 — ครอบครัว', sub:'สมาชิกครอบครัว · บอกอายุ · อาชีพ',
+    dialog:[
+      {sp:'A',spName:'นักเรียน', cn:'你有兄弟姐妹吗？', py:'Nǐ yǒu xiōngdì jiěmèi ma?', th:'คุณมีพี่น้องไหม?'},
+      {sp:'B',spName:'เพื่อน', cn:'有，我有一个哥哥和一个妹妹。你呢？', py:'Yǒu, wǒ yǒu yī gè gēgē hé yī gè mèimei. Nǐ ne?', th:'มีครับ ฉันมีพี่ชายหนึ่งคนและน้องสาวหนึ่งคน แล้วคุณล่ะ?'},
+      {sp:'A',spName:'นักเรียน', cn:'我没有兄弟姐妹，我是独生子。你哥哥多大了？', py:'Wǒ méiyǒu xiōngdì jiěmèi, wǒ shì dúshēngzǐ. Nǐ gēgē duō dà le?', th:'ฉันไม่มีพี่น้อง ฉันเป็นลูกคนเดียว พี่ชายคุณอายุเท่าไหร่แล้ว?'},
+      {sp:'B',spName:'เพื่อน', cn:'你爸爸妈妈做什么工作？', py:'Nǐ bàba māmā zuò shénme gōngzuò?', th:'พ่อแม่คุณทำงานอะไร?'},
+      {sp:'A',spName:'นักเรียน', cn:'我爸爸是医生，妈妈是老师。你呢？', py:'Wǒ bàba shì yīshēng, māmā shì lǎoshī. Nǐ ne?', th:'พ่อฉันเป็นหมอ แม่เป็นครู แล้วคุณล่ะ?'},
+      {sp:'B',spName:'เพื่อน', cn:'我爸爸是商人，今年五十岁了。', py:'Wǒ bàba shì shāngrén, jīnnián wǔshí suì le.', th:'พ่อฉันเป็นนักธุรกิจ ปีนี้อายุห้าสิบปีแล้ว'},
+    ],
+    vocab:[
+      {zh:'爸爸',py:'bàba',th:'พ่อ',en:'Father',em:'👨'},
+      {zh:'妈妈',py:'māmā',th:'แม่',en:'Mother',em:'👩'},
+      {zh:'哥哥',py:'gēgē',th:'พี่ชาย',en:'Older brother',em:'👦'},
+      {zh:'姐姐',py:'jiějie',th:'พี่สาว',en:'Older sister',em:'👧'},
+      {zh:'弟弟',py:'dìdi',th:'น้องชาย',en:'Younger brother',em:'🧒'},
+      {zh:'妹妹',py:'mèimei',th:'น้องสาว',en:'Younger sister',em:'👶'},
+      {zh:'儿子',py:'érzi',th:'ลูกชาย',en:'Son',em:'🧑'},
+      {zh:'女儿',py:'nǚér',th:'ลูกสาว',en:'Daughter',em:'👧'},
+      {zh:'丈夫',py:'zhàngfu',th:'สามี',en:'Husband',em:'💍'},
+      {zh:'妻子',py:'qīzi',th:'ภรรยา',en:'Wife',em:'💍'},
+      {zh:'爷爷',py:'yéye',th:'ปู่',en:'Grandfather (paternal)',em:'👴'},
+      {zh:'奶奶',py:'nǎinai',th:'ย่า',en:'Grandmother (paternal)',em:'👵'},
+      {zh:'有',py:'yǒu',th:'มี',en:'Have',em:'✅'},
+      {zh:'没有',py:'méiyǒu',th:'ไม่มี',en:"Don't have",em:'❌'},
+      {zh:'岁',py:'suì',th:'ปี (อายุ)',en:'Years old',em:'🎂'},
+      {zh:'今年',py:'jīnnián',th:'ปีนี้',en:'This year',em:'📅'},
+      {zh:'工作',py:'gōngzuò',th:'ทำงาน / งาน',en:'Work / Job',em:'💼'},
+      {zh:'医生',py:'yīshēng',th:'แพทย์ / หมอ',en:'Doctor',em:'👨‍⚕️'},
+      {zh:'老师',py:'lǎoshī',th:'ครู / อาจารย์',en:'Teacher',em:'👨‍🏫'},
+      {zh:'学生',py:'xuéshēng',th:'นักเรียน',en:'Student',em:'🎒'},
+      {zh:'商人',py:'shāngrén',th:'นักธุรกิจ',en:'Businessman',em:'💼'},
+      {zh:'家',py:'jiā',th:'บ้าน / ครอบครัว',en:'Home / Family',em:'🏠'},
+      {zh:'个',py:'gè',th:'คน / ชิ้น (ลักษณะนาม)',en:'(General counter)',em:'🔢'},
+    ],
+    quiz:[
+      {type:'mc',q:'妈妈 (māmā) แปลว่า?',opts:['พ่อ','พี่สาว','แม่','น้องสาว'],ans:2},
+      {type:'mc',q:'"พี่ชาย" ภาษาจีนคือ?',opts:['哥哥','妹妹','弟弟','姐姐'],ans:0},
+      {type:'mc',q:'没有 (méiyǒu) หมายถึง?',opts:['มี','เป็น','อยู่','ไม่มี'],ans:3},
+      {type:'mc',q:'岁 (suì) ใช้สำหรับ?',opts:['บอกเวลา','บอกอายุ','บอกราคา','บอกจำนวน'],ans:1},
+      {type:'mc',q:'医生 (yīshēng) คืออาชีพใด?',opts:['ครู','นักธุรกิจ','แพทย์','นักเรียน'],ans:2},
+      {type:'mc',q:'个 (gè) คืออะไร?',opts:['ลักษณะนาม','ตัวเลข','คำกริยา','คำวิเศษณ์'],ans:0},
+      {type:'mc',q:'"ฉันไม่มีพี่น้อง" ภาษาจีนคือ?',opts:['我有兄弟姐妹。','我有哥哥。','我是独生子。','我没有兄弟姐妹。'],ans:3},
+    ]
+  },
+  {
     id:2, icon:'🔢', theme:'ตัวเลข', hsk:1,
     title:'一二三 — ตัวเลขและเวลา', sub:'ตัวเลข 0–10,000 · เวลา · ราคา · เงินทอน',
     dialog:[
-      {sp:'A',spName:'ลูกค้า', cn:'你好！这个多少钱？', py:'Nǐ hǎo! Zhège duōshǎo qián?', th:'สวัสดี! อันนี้ราคาเท่าไหร่?'},
-      {sp:'B',spName:'แม่ค้า', cn:'五十块钱。你要几个？', py:'Wǔshí kuài qián. Nǐ yào jǐ gè?', th:'50 หยวนครับ ต้องการกี่ชิ้น?'},
-      {sp:'A',spName:'ลูกค้า', cn:'我要两个。一共多少钱？', py:'Wǒ yào liǎng gè. Yīgòng duōshǎo qián?', th:'เอาสองชิ้น รวมทั้งหมดเท่าไหร่?'},
-      {sp:'B',spName:'แม่ค้า', cn:'一共一百块。', py:'Yīgòng yī bǎi kuài.', th:'รวมทั้งหมด 100 หยวน'},
-      {sp:'A',spName:'ลูกค้า', cn:'给你两百块。', py:'Gěi nǐ liǎng bǎi kuài.', th:'นี่ 200 หยวน'},
-      {sp:'B',spName:'แม่ค้า', cn:'找你一百块。谢谢！', py:'Zhǎo nǐ yī bǎi kuài. Xièxie!', th:'ทอนให้ 100 หยวน ขอบคุณ!'},
-      {sp:'A',spName:'ลูกค้า', cn:'现在几点？', py:'Xiànzài jǐ diǎn?', th:'ตอนนี้กี่โมงแล้ว?'},
-      {sp:'B',spName:'แม่ค้า', cn:'现在下午三点半。', py:'Xiànzài xiàwǔ sān diǎn bàn.', th:'ตอนนี้บ่ายสามครึ่งครับ'},
+      {sp:'A',spName:'ลูกค้า', cn:'你好！请问这件衣服多少钱？', py:'Nǐ hǎo! Qǐngwèn zhè jiàn yīfu duōshǎo qián?', th:'สวัสดี! ขอโทษ เสื้อตัวนี้ราคาเท่าไหร่?'},
+      {sp:'B',spName:'พ่อค้า', cn:'一百二十块钱。你要几件？', py:'Yī bǎi èrshí kuài qián. Nǐ yào jǐ jiàn?', th:'120 หยวนครับ ต้องการกี่ตัว?'},
+      {sp:'A',spName:'ลูกค้า', cn:'我要两件。一共多少钱？', py:'Wǒ yào liǎng jiàn. Yīgòng duōshǎo qián?', th:'เอาสองตัว รวมทั้งหมดเท่าไหร่?'},
+      {sp:'B',spName:'พ่อค้า', cn:'一共两百四十块。', py:'Yīgòng liǎng bǎi sìshí kuài.', th:'รวมทั้งหมด 240 หยวนครับ'},
+      {sp:'A',spName:'ลูกค้า', cn:'可以便宜一点吗？两百块怎么样？', py:'Kěyǐ piányí yīdiǎn ma? Liǎng bǎi kuài zěnmeyàng?', th:'ลดราคาได้ไหม? 200 หยวนได้ไหม?'},
+      {sp:'B',spName:'พ่อค้า', cn:'好吧，两百二十块，最低了！', py:'Hǎo ba, liǎng bǎi èrshí kuài, zuì dī le!', th:'โอเคแล้วกัน 220 หยวน ราคาต่ำสุดแล้วนะ!'},
+      {sp:'A',spName:'ลูกค้า', cn:'给你两百五十块。', py:'Gěi nǐ liǎng bǎi wǔshí kuài.', th:'นี่ 250 หยวน'},
+      {sp:'B',spName:'พ่อค้า', cn:'找你三十块。谢谢光临！', py:'Zhǎo nǐ sānshí kuài. Xièxie guānglín!', th:'ทอนให้ 30 หยวน ขอบคุณที่มาใช้บริการ!'},
     ],
     vocab:[
       {zh:'零',py:'líng',th:'ศูนย์',en:'Zero',em:'0️⃣'},
@@ -2203,6 +2256,57 @@ const LESSONS = [
       {type:'mc',q:'五十 (wǔshí) แปลว่า?',opts:['ห้า','สิบห้า','ห้าร้อย','ห้าสิบ'],ans:3},
       {type:'mc',q:'两 (liǎng) ต่างจาก 二 (èr) อย่างไร?',opts:['สองเท่ากัน','两ใช้กับนาม','二ใช้กับนาม','ความหมายต่างกัน'],ans:1},
       {type:'mc',q:'"ตอนนี้บ่ายสามครึ่ง" ในภาษาจีนมีคำว่า?',opts:['上午三点半','今天三点','现在三点','下午三点半'],ans:3},
+    ]
+  },
+  {
+    id:6, icon:'🕐', theme:'เวลา', hsk:1,
+    title:'时间 — วันและเวลา', sub:'วัน · เดือน · ปี · วันสัปดาห์ · นัดหมาย',
+    dialog:[
+      {sp:'A',spName:'นักเรียน', cn:'今天几号？今天星期几？', py:'Jīntiān jǐ hào? Jīntiān xīngqī jǐ?', th:'วันนี้วันที่เท่าไหร่? วันอะไร?'},
+      {sp:'B',spName:'เพื่อน', cn:'今天十五号，星期三。明天是星期四。', py:'Jīntiān shíwǔ hào, xīngqīsān. Míngtiān shì xīngqīsì.', th:'วันนี้วันที่ 15 วันพุธ พรุ่งนี้วันพฤหัสบดี'},
+      {sp:'A',spName:'นักเรียน', cn:'你有空吗？我们下周一起吃饭？', py:'Nǐ yǒu kòng ma? Wǒmen xià zhōu yīqǐ chīfàn?', th:'คุณว่างไหม? สัปดาห์หน้าไปกินข้าวด้วยกันไหม?'},
+      {sp:'B',spName:'เพื่อน', cn:'好啊！星期六下午两点怎么样？', py:'Hǎo a! Xīngqīliù xiàwǔ liǎng diǎn zěnmeyàng?', th:'โอเค! วันเสาร์บ่ายสองโมงเป็นยังไง?'},
+      {sp:'A',spName:'นักเรียน', cn:'可以！你生日是几月几号？', py:'Kěyǐ! Nǐ shēngrì shì jǐ yuè jǐ hào?', th:'ได้เลย! วันเกิดคุณเดือนอะไร วันที่เท่าไหร่?'},
+      {sp:'B',spName:'เพื่อน', cn:'我生日是三月八号，下个月就到了！', py:'Wǒ shēngrì shì sān yuè bā hào, xià gè yuè jiù dào le!', th:'วันเกิดฉันวันที่ 8 มีนาคม อีกเดือนก็ถึงแล้ว!'},
+    ],
+    vocab:[
+      {zh:'今天',py:'jīntiān',th:'วันนี้',en:'Today',em:'📅'},
+      {zh:'明天',py:'míngtiān',th:'พรุ่งนี้',en:'Tomorrow',em:'➡️'},
+      {zh:'昨天',py:'zuótiān',th:'เมื่อวาน',en:'Yesterday',em:'⬅️'},
+      {zh:'后天',py:'hòutiān',th:'มะรืน',en:'Day after tomorrow',em:'⏩'},
+      {zh:'星期一',py:'xīngqīyī',th:'วันจันทร์',en:'Monday',em:'📅'},
+      {zh:'星期二',py:'xīngqīèr',th:'วันอังคาร',en:'Tuesday',em:'📅'},
+      {zh:'星期三',py:'xīngqīsān',th:'วันพุธ',en:'Wednesday',em:'📅'},
+      {zh:'星期四',py:'xīngqīsì',th:'วันพฤหัสบดี',en:'Thursday',em:'📅'},
+      {zh:'星期五',py:'xīngqīwǔ',th:'วันศุกร์',en:'Friday',em:'📅'},
+      {zh:'星期六',py:'xīngqīliù',th:'วันเสาร์',en:'Saturday',em:'📅'},
+      {zh:'星期天',py:'xīngqītiān',th:'วันอาทิตย์',en:'Sunday',em:'📅'},
+      {zh:'月',py:'yuè',th:'เดือน',en:'Month',em:'🌙'},
+      {zh:'年',py:'nián',th:'ปี',en:'Year',em:'🎊'},
+      {zh:'号',py:'hào',th:'วันที่',en:'Date of month',em:'🔢'},
+      {zh:'生日',py:'shēngrì',th:'วันเกิด',en:'Birthday',em:'🎂'},
+      {zh:'上午',py:'shàngwǔ',th:'ช่วงเช้า (AM)',en:'Morning / AM',em:'🌅'},
+      {zh:'下午',py:'xiàwǔ',th:'ช่วงบ่าย (PM)',en:'Afternoon / PM',em:'🌇'},
+      {zh:'晚上',py:'wǎnshang',th:'ตอนเย็น / กลางคืน',en:'Evening / Night',em:'🌙'},
+      {zh:'周',py:'zhōu',th:'สัปดาห์',en:'Week',em:'📆'},
+      {zh:'上周',py:'shàng zhōu',th:'สัปดาห์ที่แล้ว',en:'Last week',em:'⬅️'},
+      {zh:'下周',py:'xià zhōu',th:'สัปดาห์หน้า',en:'Next week',em:'➡️'},
+      {zh:'有空',py:'yǒu kòng',th:'มีเวลาว่าง',en:'Have free time',em:'🆓'},
+      {zh:'可以',py:'kěyǐ',th:'ได้ / สามารถ',en:'Can / May / OK',em:'✅'},
+      {zh:'怎么样',py:'zěnmeyàng',th:'เป็นยังไง / ได้ไหม',en:'How about it?',em:'🤷'},
+      {zh:'一起',py:'yīqǐ',th:'ด้วยกัน',en:'Together',em:'👫'},
+      {zh:'下个月',py:'xià gè yuè',th:'เดือนหน้า',en:'Next month',em:'📅'},
+      {zh:'好啊',py:'hǎo a',th:'โอเคเลย / ดีเลย',en:'Great! / Sure!',em:'👍'},
+      {zh:'几号',py:'jǐ hào',th:'วันที่เท่าไหร่',en:'What date?',em:'🔢'},
+    ],
+    quiz:[
+      {type:'mc',q:'今天 (jīntiān) แปลว่า?',opts:['เมื่อวาน','วันนี้','พรุ่งนี้','สัปดาห์'],ans:1},
+      {type:'mc',q:'"วันเกิด" ภาษาจีนคือ?',opts:['号','月','年','生日'],ans:3},
+      {type:'mc',q:'星期六 (xīngqīliù) คือวันอะไร?',opts:['วันเสาร์','วันศุกร์','วันอาทิตย์','วันจันทร์'],ans:0},
+      {type:'mc',q:'可以 (kěyǐ) หมายถึง?',opts:['ไม่ได้','ต้องการ','ได้ / สามารถ','ไม่มี'],ans:2},
+      {type:'mc',q:'有空 (yǒu kòng) แปลว่า?',opts:['มีเงิน','มีเวลาว่าง','มีงาน','มีบ้าน'],ans:1},
+      {type:'mc',q:'下周 (xià zhōu) คือ?',opts:['สัปดาห์ที่แล้ว','สัปดาห์หน้า','สัปดาห์นี้','เดือนหน้า'],ans:1},
+      {type:'mc',q:'怎么样 (zěnmeyàng) ใช้ทำอะไร?',opts:['ถามทาง','ถามความเห็น/เสนอ','ถามราคา','ถามชื่อ'],ans:1},
     ]
   },
   {
@@ -2262,6 +2366,8 @@ const LESSONS = [
       {sp:'B',spName:'คนท้องถิ่น', cn:'坐地铁二号线，在前门站下车。', py:'Zuò dìtiě èr hào xiàn, zài Qiánmén zhàn xià chē.', th:'นั่งรถไฟฟ้าสาย 2 ลงที่สถานีเฉียนเหมิน'},
       {sp:'A',spName:'นักท่องเที่ยว', cn:'谢谢！医院在哪里？我不舒服。', py:'Xièxie! Yīyuàn zài nǎlǐ? Wǒ bù shūfu.', th:'ขอบคุณ! โรงพยาบาลอยู่ที่ไหน? ฉันไม่สบาย'},
       {sp:'B',spName:'คนท้องถิ่น', cn:'在右边，不远，大概十分钟。你还好吗？', py:'Zài yòubiān, bù yuǎn, dàgài shí fēnzhōng. Nǐ hái hǎo ma?', th:'อยู่ทางขวา ไม่ไกล ประมาณสิบนาที คุณโอเคไหม?'},
+      {sp:'A',spName:'นักท่องเที่ยว', cn:'我没事了，谢谢你！', py:'Wǒ méishì le, xièxie nǐ!', th:'ฉันโอเคแล้ว ขอบคุณมากนะ!'},
+      {sp:'B',spName:'คนท้องถิ่น', cn:'不客气！祝你旅途愉快！', py:'Bú kèqì! Zhù nǐ lǚtú yúkuài!', th:'ไม่เป็นไร ขอให้เดินทางสนุกนะ!'},
     ],
     vocab:[
       {zh:'哪里',py:'nǎlǐ',th:'ที่ไหน',en:'Where',em:'❓'},
@@ -2289,6 +2395,14 @@ const LESSONS = [
       {zh:'远',py:'yuǎn',th:'ไกล',en:'Far',em:'🔭'},
       {zh:'近',py:'jìn',th:'ใกล้',en:'Near / Close',em:'🎯'},
       {zh:'怎么走',py:'zěnme zǒu',th:'ไปยังไง',en:'How to get there',em:'🗺️'},
+      {zh:'没事',py:'méishì',th:'ไม่เป็นไร / โอเค',en:'No problem / OK',em:'🆗'},
+      {zh:'不客气',py:'bú kèqì',th:'ไม่เป็นไร (ตอบขอบคุณ)',en:'You are welcome',em:'🤝'},
+      {zh:'大概',py:'dàgài',th:'ประมาณ',en:'About / Approximately',em:'🔄'},
+      {zh:'分钟',py:'fēnzhōng',th:'นาที',em:'⏱️',en:'Minutes'},
+      {zh:'号线',py:'hào xiàn',th:'สายที่... (รถไฟฟ้า)',en:'Line number',em:'🚇'},
+      {zh:'下车',py:'xià chē',th:'ลงรถ',en:'Get off (vehicle)',em:'🚪'},
+      {zh:'站',py:'zhàn',th:'สถานี / หยุด',en:'Station / Stop',em:'🚉'},
+      {zh:'请问',py:'qǐngwèn',th:'ขอโทษนะ / ขอถามหน่อย',en:'Excuse me / May I ask',em:'🙋'},
     ],
     quiz:[
       {type:'mc',q:'哪里 (nǎlǐ) แปลว่า?',opts:['ที่นี่','ที่นั่น','ที่ไหน','ข้างหน้า'],ans:2},
@@ -2298,99 +2412,6 @@ const LESSONS = [
       {type:'mc',q:'远 (yuǎn) ↔ ตรงข้ามคือ?',opts:['前','后','近','左'],ans:2},
       {type:'mc',q:'"ข้างๆ" ภาษาจีนคือ?',opts:['上面','下面','前面','旁边'],ans:3},
       {type:'mc',q:'怎么走 (zěnme zǒu) แปลว่า?',opts:['ไปยังไง','ไปไกลไหม','ไปกี่นาที','ไปด้วยอะไร'],ans:0},
-    ]
-  },
-  {
-    id:5, icon:'👨‍👩‍👧', theme:'ครอบครัว', hsk:1,
-    title:'家人 — ครอบครัว', sub:'สมาชิกครอบครัว · บอกอายุ · อาชีพ',
-    dialog:[
-      {sp:'A',spName:'นักเรียน', cn:'你有兄弟姐妹吗？', py:'Nǐ yǒu xiōngdì jiěmèi ma?', th:'คุณมีพี่น้องไหม?'},
-      {sp:'B',spName:'เพื่อน', cn:'有，我有一个哥哥和一个妹妹。你呢？', py:'Yǒu, wǒ yǒu yī gè gēgē hé yī gè mèimei. Nǐ ne?', th:'มีครับ ฉันมีพี่ชายหนึ่งคนและน้องสาวหนึ่งคน แล้วคุณล่ะ?'},
-      {sp:'A',spName:'นักเรียน', cn:'我没有兄弟姐妹，我是独生子。', py:'Wǒ méiyǒu xiōngdì jiěmèi, wǒ shì dúshēngzǐ.', th:'ฉันไม่มีพี่น้อง ฉันเป็นลูกคนเดียว'},
-      {sp:'B',spName:'เพื่อน', cn:'你爸爸妈妈做什么工作？', py:'Nǐ bàba māmā zuò shénme gōngzuò?', th:'พ่อแม่คุณทำงานอะไร?'},
-      {sp:'A',spName:'นักเรียน', cn:'我爸爸是医生，妈妈是老师。你呢？', py:'Wǒ bàba shì yīshēng, māmā shì lǎoshī. Nǐ ne?', th:'พ่อฉันเป็นหมอ แม่เป็นครู แล้วคุณล่ะ?'},
-      {sp:'B',spName:'เพื่อน', cn:'我爸爸是商人，今年五十岁了。', py:'Wǒ bàba shì shāngrén, jīnnián wǔshí suì le.', th:'พ่อฉันเป็นนักธุรกิจ ปีนี้อายุห้าสิบปีแล้ว'},
-    ],
-    vocab:[
-      {zh:'爸爸',py:'bàba',th:'พ่อ',en:'Father',em:'👨'},
-      {zh:'妈妈',py:'māmā',th:'แม่',en:'Mother',em:'👩'},
-      {zh:'哥哥',py:'gēgē',th:'พี่ชาย',en:'Older brother',em:'👦'},
-      {zh:'姐姐',py:'jiějie',th:'พี่สาว',en:'Older sister',em:'👧'},
-      {zh:'弟弟',py:'dìdi',th:'น้องชาย',en:'Younger brother',em:'🧒'},
-      {zh:'妹妹',py:'mèimei',th:'น้องสาว',en:'Younger sister',em:'👶'},
-      {zh:'儿子',py:'érzi',th:'ลูกชาย',en:'Son',em:'🧑'},
-      {zh:'女儿',py:'nǚér',th:'ลูกสาว',en:'Daughter',em:'👧'},
-      {zh:'丈夫',py:'zhàngfu',th:'สามี',en:'Husband',em:'💍'},
-      {zh:'妻子',py:'qīzi',th:'ภรรยา',en:'Wife',em:'💍'},
-      {zh:'爷爷',py:'yéye',th:'ปู่',en:'Grandfather (paternal)',em:'👴'},
-      {zh:'奶奶',py:'nǎinai',th:'ย่า',en:'Grandmother (paternal)',em:'👵'},
-      {zh:'有',py:'yǒu',th:'มี',en:'Have',em:'✅'},
-      {zh:'没有',py:'méiyǒu',th:'ไม่มี',en:"Don't have",em:'❌'},
-      {zh:'岁',py:'suì',th:'ปี (อายุ)',en:'Years old',em:'🎂'},
-      {zh:'今年',py:'jīnnián',th:'ปีนี้',en:'This year',em:'📅'},
-      {zh:'工作',py:'gōngzuò',th:'ทำงาน / งาน',en:'Work / Job',em:'💼'},
-      {zh:'医生',py:'yīshēng',th:'แพทย์ / หมอ',en:'Doctor',em:'👨‍⚕️'},
-      {zh:'老师',py:'lǎoshī',th:'ครู / อาจารย์',en:'Teacher',em:'👨‍🏫'},
-      {zh:'学生',py:'xuéshēng',th:'นักเรียน',en:'Student',em:'🎒'},
-      {zh:'商人',py:'shāngrén',th:'นักธุรกิจ',en:'Businessman',em:'💼'},
-      {zh:'家',py:'jiā',th:'บ้าน / ครอบครัว',en:'Home / Family',em:'🏠'},
-      {zh:'个',py:'gè',th:'คน / ชิ้น (ลักษณะนาม)',en:'(General counter)',em:'🔢'},
-    ],
-    quiz:[
-      {type:'mc',q:'妈妈 (māmā) แปลว่า?',opts:['พ่อ','พี่สาว','แม่','น้องสาว'],ans:2},
-      {type:'mc',q:'"พี่ชาย" ภาษาจีนคือ?',opts:['哥哥','妹妹','弟弟','姐姐'],ans:0},
-      {type:'mc',q:'没有 (méiyǒu) หมายถึง?',opts:['มี','เป็น','อยู่','ไม่มี'],ans:3},
-      {type:'mc',q:'岁 (suì) ใช้สำหรับ?',opts:['บอกเวลา','บอกอายุ','บอกราคา','บอกจำนวน'],ans:1},
-      {type:'mc',q:'医生 (yīshēng) คืออาชีพใด?',opts:['ครู','นักธุรกิจ','แพทย์','นักเรียน'],ans:2},
-      {type:'mc',q:'个 (gè) คืออะไร?',opts:['ลักษณะนาม','ตัวเลข','คำกริยา','คำวิเศษณ์'],ans:0},
-      {type:'mc',q:'"ฉันไม่มีพี่น้อง" ภาษาจีนคือ?',opts:['我有兄弟姐妹。','我有哥哥。','我是独生子。','我没有兄弟姐妹。'],ans:3},
-    ]
-  },
-  {
-    id:6, icon:'🕐', theme:'เวลา', hsk:1,
-    title:'时间 — วันและเวลา', sub:'วัน · เดือน · ปี · วันสัปดาห์ · นัดหมาย',
-    dialog:[
-      {sp:'A',spName:'นักเรียน', cn:'今天几号？今天星期几？', py:'Jīntiān jǐ hào? Jīntiān xīngqī jǐ?', th:'วันนี้วันที่เท่าไหร่? วันอะไร?'},
-      {sp:'B',spName:'เพื่อน', cn:'今天十五号，星期三。明天是星期四。', py:'Jīntiān shíwǔ hào, xīngqīsān. Míngtiān shì xīngqīsì.', th:'วันนี้วันที่ 15 วันพุธ พรุ่งนี้วันพฤหัสบดี'},
-      {sp:'A',spName:'นักเรียน', cn:'你有空吗？我们下周一起吃饭？', py:'Nǐ yǒu kòng ma? Wǒmen xià zhōu yīqǐ chīfàn?', th:'คุณว่างไหม? สัปดาห์หน้าไปกินข้าวด้วยกันไหม?'},
-      {sp:'B',spName:'เพื่อน', cn:'好啊！星期六下午两点怎么样？', py:'Hǎo a! Xīngqīliù xiàwǔ liǎng diǎn zěnmeyàng?', th:'โอเค! วันเสาร์บ่ายสองโมงเป็นยังไง?'},
-      {sp:'A',spName:'นักเรียน', cn:'可以！你生日是几月几号？', py:'Kěyǐ! Nǐ shēngrì shì jǐ yuè jǐ hào?', th:'ได้เลย! วันเกิดคุณเดือนอะไร วันที่เท่าไหร่?'},
-      {sp:'B',spName:'เพื่อน', cn:'我生日是三月八号，下个月就到了！', py:'Wǒ shēngrì shì sān yuè bā hào, xià gè yuè jiù dào le!', th:'วันเกิดฉันวันที่ 8 มีนาคม อีกเดือนก็ถึงแล้ว!'},
-    ],
-    vocab:[
-      {zh:'今天',py:'jīntiān',th:'วันนี้',en:'Today',em:'📅'},
-      {zh:'明天',py:'míngtiān',th:'พรุ่งนี้',en:'Tomorrow',em:'➡️'},
-      {zh:'昨天',py:'zuótiān',th:'เมื่อวาน',en:'Yesterday',em:'⬅️'},
-      {zh:'后天',py:'hòutiān',th:'มะรืน',en:'Day after tomorrow',em:'⏩'},
-      {zh:'星期一',py:'xīngqīyī',th:'วันจันทร์',en:'Monday',em:'📅'},
-      {zh:'星期二',py:'xīngqīèr',th:'วันอังคาร',en:'Tuesday',em:'📅'},
-      {zh:'星期三',py:'xīngqīsān',th:'วันพุธ',en:'Wednesday',em:'📅'},
-      {zh:'星期四',py:'xīngqīsì',th:'วันพฤหัสบดี',en:'Thursday',em:'📅'},
-      {zh:'星期五',py:'xīngqīwǔ',th:'วันศุกร์',en:'Friday',em:'📅'},
-      {zh:'星期六',py:'xīngqīliù',th:'วันเสาร์',en:'Saturday',em:'📅'},
-      {zh:'星期天',py:'xīngqītiān',th:'วันอาทิตย์',en:'Sunday',em:'📅'},
-      {zh:'月',py:'yuè',th:'เดือน',en:'Month',em:'🌙'},
-      {zh:'年',py:'nián',th:'ปี',en:'Year',em:'🎊'},
-      {zh:'号',py:'hào',th:'วันที่',en:'Date of month',em:'🔢'},
-      {zh:'生日',py:'shēngrì',th:'วันเกิด',en:'Birthday',em:'🎂'},
-      {zh:'上午',py:'shàngwǔ',th:'ช่วงเช้า (AM)',en:'Morning / AM',em:'🌅'},
-      {zh:'下午',py:'xiàwǔ',th:'ช่วงบ่าย (PM)',en:'Afternoon / PM',em:'🌇'},
-      {zh:'晚上',py:'wǎnshang',th:'ตอนเย็น / กลางคืน',en:'Evening / Night',em:'🌙'},
-      {zh:'周',py:'zhōu',th:'สัปดาห์',en:'Week',em:'📆'},
-      {zh:'上周',py:'shàng zhōu',th:'สัปดาห์ที่แล้ว',en:'Last week',em:'⬅️'},
-      {zh:'下周',py:'xià zhōu',th:'สัปดาห์หน้า',en:'Next week',em:'➡️'},
-      {zh:'有空',py:'yǒu kòng',th:'มีเวลาว่าง',en:'Have free time',em:'🆓'},
-      {zh:'可以',py:'kěyǐ',th:'ได้ / สามารถ',en:'Can / May / OK',em:'✅'},
-      {zh:'怎么样',py:'zěnmeyàng',th:'เป็นยังไง / ได้ไหม',en:'How about it?',em:'🤷'},
-    ],
-    quiz:[
-      {type:'mc',q:'今天 (jīntiān) แปลว่า?',opts:['เมื่อวาน','วันนี้','พรุ่งนี้','สัปดาห์'],ans:1},
-      {type:'mc',q:'"วันเกิด" ภาษาจีนคือ?',opts:['号','月','年','生日'],ans:3},
-      {type:'mc',q:'星期六 (xīngqīliù) คือวันอะไร?',opts:['วันเสาร์','วันศุกร์','วันอาทิตย์','วันจันทร์'],ans:0},
-      {type:'mc',q:'可以 (kěyǐ) หมายถึง?',opts:['ไม่ได้','ต้องการ','ได้ / สามารถ','ไม่มี'],ans:2},
-      {type:'mc',q:'有空 (yǒu kòng) แปลว่า?',opts:['มีเงิน','มีเวลาว่าง','มีงาน','มีบ้าน'],ans:1},
-      {type:'mc',q:'下周 (xià zhōu) คือ?',opts:['สัปดาห์ที่แล้ว','สัปดาห์หน้า','สัปดาห์นี้','เดือนหน้า'],ans:1},
-      {type:'mc',q:'怎么样 (zěnmeyàng) ใช้ทำอะไร?',opts:['ถามทาง','ถามความเห็น/เสนอ','ถามราคา','ถามชื่อ'],ans:1},
     ]
   },
   {
@@ -2441,49 +2462,91 @@ const LESSONS = [
     ]
   },
   {
-    id:8, icon:'🐼', theme:'สัตว์และธรรมชาติ', hsk:1,
-    title:'动物自然 — สัตว์และธรรมชาติ', sub:'สัตว์ · สภาพอากาศ · ธรรมชาติ',
+    id:11, icon:'⏰', theme:'กิจวัตรประจำวัน', hsk:1,
+    title:'日常生活 — กิจวัตรประจำวัน', sub:'ตื่นนอน · ทำงาน · กินข้าว · นอน',
     dialog:[
-      {sp:'A',spName:'เด็ก', cn:'妈妈，动物园里有什么动物？', py:'Māmā, dòngwùyuán lǐ yǒu shénme dòngwù?', th:'แม่ ในสวนสัตว์มีสัตว์อะไรบ้าง?'},
-      {sp:'B',spName:'แม่', cn:'有很多！有大象、老虎、熊猫，还有猴子。', py:'Yǒu hěn duō! Yǒu dàxiàng, lǎohǔ, xióngmāo, hái yǒu hóuzi.', th:'มีเยอะมาก! มีช้าง เสือ แพนด้า และลิงด้วย'},
-      {sp:'A',spName:'เด็ก', cn:'熊猫好可爱！今天天气怎么样？', py:'Xióngmāo hǎo kěài! Jīntiān tiānqì zěnmeyàng?', th:'แพนด้าน่ารักมาก! วันนี้อากาศเป็นยังไง?'},
-      {sp:'B',spName:'แม่', cn:'今天天气很好，不冷也不热，适合出去玩。', py:'Jīntiān tiānqì hěn hǎo, bù lěng yě bù rè, shìhé chūqù wán.', th:'วันนี้อากาศดีมาก ไม่หนาวไม่ร้อน เหมาะกับการออกไปเที่ยว'},
-      {sp:'A',spName:'เด็ก', cn:'太好了！我最喜欢小狗，家里可以养吗？', py:'Tài hǎo le! Wǒ zuì xǐhuān xiǎo gǒu, jiā lǐ kěyǐ yǎng ma?', th:'ดีมาก! ฉันชอบหมาตัวเล็กที่สุด ที่บ้านเลี้ยงได้ไหม?'},
-      {sp:'B',spName:'แม่', cn:'可以，但是要好好照顾它。', py:'Kěyǐ, dànshì yào hǎohǎo zhàogù tā.', th:'ได้ แต่ต้องดูแลมันดีๆ นะ'},
+      {sp:'A',spName:'เพื่อน', cn:'你每天几点起床？', py:'Nǐ měitiān jǐ diǎn qǐchuáng?', th:'คุณตื่นนอนกี่โมงทุกวัน?'},
+      {sp:'B',spName:'เพื่อน', cn:'我一般六点半起床，七点吃早饭。', py:'Wǒ yībān liù diǎn bàn qǐchuáng, qī diǎn chī zǎofàn.', th:'ฉันปกติตื่นหกโมงครึ่ง เจ็ดโมงกินข้าวเช้า'},
+      {sp:'A',spName:'เพื่อน', cn:'你几点上班？上班怎么去？', py:'Nǐ jǐ diǎn shàngbān? Shàngbān zěnme qù?', th:'คุณเริ่มงานกี่โมง? ไปทำงานยังไง?'},
+      {sp:'B',spName:'เพื่อน', cn:'八点上班，坐地铁去，大概四十分钟。', py:'Bā diǎn shàngbān, zuò dìtiě qù, dàgài sìshí fēnzhōng.', th:'แปดโมงเริ่มงาน นั่งรถไฟฟ้าไป ประมาณสี่สิบนาที'},
+      {sp:'A',spName:'เพื่อน', cn:'下班以后你做什么？', py:'Xiàbān yǐhòu nǐ zuò shénme?', th:'หลังเลิกงานคุณทำอะไร?'},
+      {sp:'B',spName:'เพื่อน', cn:'我先做饭，吃完饭看一会儿电视，然后十一点睡觉。', py:'Wǒ xiān zuò fàn, chī wán fàn kàn yīhuìr diànshì, ránhòu shíyī diǎn shuìjiào.', th:'ฉันทำอาหารก่อน กินข้าวเสร็จก็ดูทีวีสักพัก แล้วก็นอนตีสิบเอ็ด'},
     ],
     vocab:[
-      {zh:'动物',py:'dòngwù',th:'สัตว์',en:'Animal',em:'🐾'},
-      {zh:'猫',py:'māo',th:'แมว',en:'Cat',em:'🐱'},
-      {zh:'狗',py:'gǒu',th:'สุนัข',en:'Dog',em:'🐶'},
-      {zh:'鸟',py:'niǎo',th:'นก',en:'Bird',em:'🐦'},
-      {zh:'鱼',py:'yú',th:'ปลา',en:'Fish',em:'🐟'},
-      {zh:'熊猫',py:'xióngmāo',th:'แพนด้า',en:'Panda',em:'🐼'},
-      {zh:'老虎',py:'lǎohǔ',th:'เสือ',en:'Tiger',em:'🐯'},
-      {zh:'大象',py:'dàxiàng',th:'ช้าง',en:'Elephant',em:'🐘'},
-      {zh:'猴子',py:'hóuzi',th:'ลิง',en:'Monkey',em:'🐒'},
-      {zh:'天气',py:'tiānqì',th:'อากาศ / สภาพอากาศ',en:'Weather',em:'⛅'},
-      {zh:'热',py:'rè',th:'ร้อน',en:'Hot',em:'🔥'},
-      {zh:'冷',py:'lěng',th:'หนาว / เย็น',en:'Cold',em:'❄️'},
-      {zh:'晴天',py:'qíngtiān',th:'ฟ้าแจ่มใส',en:'Sunny day',em:'☀️'},
-      {zh:'下雨',py:'xià yǔ',th:'ฝนตก',en:'It rains',em:'🌧️'},
-      {zh:'下雪',py:'xià xuě',th:'หิมะตก',en:'It snows',em:'❄️'},
-      {zh:'风',py:'fēng',th:'ลม',en:'Wind',em:'💨'},
-      {zh:'可爱',py:'kěài',th:'น่ารัก',en:'Cute / Adorable',em:'🥰'},
-      {zh:'最',py:'zuì',th:'ที่สุด',en:'Most',em:'🏆'},
-      {zh:'养',py:'yǎng',th:'เลี้ยง (สัตว์)',en:'Keep / Raise',em:'🏠'},
-      {zh:'照顾',py:'zhàogù',th:'ดูแล',en:'Take care of',em:'🤲'},
-      {zh:'但是',py:'dànshì',th:'แต่',en:'But / However',em:'↔️'},
-      {zh:'还有',py:'hái yǒu',th:'และยังมี / อีก',en:'Also have / Also',em:'➕'},
-      {zh:'出去',py:'chūqù',th:'ออกไป',en:'Go out',em:'🚪'},
+      {zh:'每天',py:'měitiān',th:'ทุกวัน',en:'Every day',em:'📅'},
+      {zh:'一般',py:'yībān',th:'ปกติ / โดยทั่วไป',en:'Usually / Generally',em:'🔄'},
+      {zh:'起床',py:'qǐchuáng',th:'ตื่นนอน',en:'Get up',em:'⏰'},
+      {zh:'睡觉',py:'shuìjiào',th:'นอนหลับ',en:'Sleep',em:'😴'},
+      {zh:'早饭',py:'zǎofàn',th:'อาหารเช้า',en:'Breakfast',em:'🍳'},
+      {zh:'午饭',py:'wǔfàn',th:'อาหารกลางวัน',en:'Lunch',em:'🍱'},
+      {zh:'晚饭',py:'wǎnfàn',th:'อาหารเย็น',en:'Dinner',em:'🍽️'},
+      {zh:'做饭',py:'zuò fàn',th:'ทำอาหาร',en:'Cook',em:'👨‍🍳'},
+      {zh:'上班',py:'shàngbān',th:'ไปทำงาน',en:'Go to work',em:'💼'},
+      {zh:'下班',py:'xiàbān',th:'เลิกงาน',en:'Finish work',em:'🏠'},
+      {zh:'上学',py:'shàngxué',th:'ไปโรงเรียน',en:'Go to school',em:'🎒'},
+      {zh:'洗澡',py:'xǐzǎo',th:'อาบน้ำ',en:'Take a shower/bath',em:'🚿'},
+      {zh:'刷牙',py:'shuā yá',th:'แปรงฟัน',en:'Brush teeth',em:'🪥'},
+      {zh:'锻炼',py:'duànliàn',th:'ออกกำลังกาย',en:'Exercise',em:'🏃'},
+      {zh:'先',py:'xiān',th:'ก่อน',en:'First / Before',em:'1️⃣'},
+      {zh:'然后',py:'ránhòu',th:'จากนั้น / แล้วก็',en:'Then / After that',em:'➡️'},
+      {zh:'以后',py:'yǐhòu',th:'หลังจาก / ต่อไป',en:'After / In the future',em:'⏩'},
+      {zh:'以前',py:'yǐqián',th:'ก่อนหน้า / ก่อน',en:'Before / In the past',em:'⏪'},
+      {zh:'大概',py:'dàgài',th:'ประมาณ',en:'Approximately',em:'≈'},
+      {zh:'一会儿',py:'yīhuìr',th:'สักครู่',en:'For a while',em:'⏱️'},
     ],
     quiz:[
-      {type:'mc',q:'可爱 (kěài) แปลว่า?',opts:['น่ากลัว','น่าเบื่อ','น่าสนใจ','น่ารัก'],ans:3},
-      {type:'mc',q:'"อากาศ" ภาษาจีนคือ?',opts:['动物','季节','颜色','天气'],ans:3},
-      {type:'mc',q:'最 (zuì) ใช้ทำอะไร?',opts:['บอกว่ามากสุด/ที่สุด','บอกว่าน้อยสุด','ถามคำถาม','ปฏิเสธ'],ans:0},
-      {type:'mc',q:'下雨 (xià yǔ) หมายถึง?',opts:['ฟ้าร้อง','ลมแรง','หิมะตก','ฝนตก'],ans:3},
-      {type:'mc',q:'"แมว" ภาษาจีนคือ?',opts:['猫','鸟','狗','鱼'],ans:0},
-      {type:'mc',q:'但是 (dànshì) แปลว่า?',opts:['และ','แต่','หรือ','เพราะ'],ans:1},
-      {type:'mc',q:'养 (yǎng) หมายถึง?',opts:['กิน','เดิน','เลี้ยง(สัตว์)','ซื้อ'],ans:2},
+      {type:'mc',q:'每天 (měitiān) แปลว่า?',opts:['ทุกวัน','วันนี้','บางวัน','เมื่อวาน'],ans:0},
+      {type:'mc',q:'"อาหารเช้า" ภาษาจีนคือ?',opts:['午饭','早饭','晚饭','做饭'],ans:1},
+      {type:'mc',q:'先...然后... หมายถึง?',opts:['ทั้ง...และ...','ก่อน...แล้วก็...','หรือ...หรือ...','ถ้า...ก็...'],ans:1},
+      {type:'mc',q:'以后 (yǐhòu) แปลว่า?',opts:['ก่อนหน้า','ระหว่าง','ตอนนี้','หลังจาก'],ans:3},
+      {type:'mc',q:'锻炼 (duànliàn) หมายถึง?',opts:['ออกกำลังกาย','นอนหลับ','ทำอาหาร','อาบน้ำ'],ans:0},
+      {type:'mc',q:'一般 (yībān) แปลว่า?',opts:['ปกติ/โดยทั่วไป','ไม่เคย','เสมอ','บางครั้ง'],ans:0},
+      {type:'mc',q:'大概 (dàgài) หมายถึง?',opts:['ประมาณ','แน่นอน','ทั้งหมด','ไม่มี'],ans:0},
+    ]
+  },
+  {
+    id:10, icon:'🏠', theme:'บ้านและข้าวของ', hsk:1,
+    title:'家和东西 — บ้านและข้าวของ', sub:'ห้องต่างๆ · เฟอร์นิเจอร์ · อุปกรณ์',
+    dialog:[
+      {sp:'A',spName:'เพื่อน', cn:'你家在哪里？住得远吗？', py:'Nǐ jiā zài nǎlǐ? Zhù de yuǎn ma?', th:'บ้านคุณอยู่ที่ไหน? อยู่ไกลไหม?'},
+      {sp:'B',spName:'เจ้าของบ้าน', cn:'住在北京，离公司不远，骑自行车十分钟。', py:'Zhù zài Běijīng, lí gōngsī bù yuǎn, qí zìxíngchē shí fēnzhōng.', th:'อยู่ที่ปักกิ่ง ไม่ไกลจากบริษัท ปั่นจักรยานสิบนาที'},
+      {sp:'A',spName:'เพื่อน', cn:'你家有几个房间？', py:'Nǐ jiā yǒu jǐ gè fángjiān?', th:'บ้านคุณมีกี่ห้อง?'},
+      {sp:'B',spName:'เจ้าของบ้าน', cn:'有三个房间，一个客厅，一个厨房，两个卫生间。', py:'Yǒu sān gè fángjiān, yī gè kètīng, yī gè chúfáng, liǎng gè wèishēngjiān.', th:'มีสามห้องนอน ห้องนั่งเล่นหนึ่งห้อง ครัวหนึ่งห้อง ห้องน้ำสองห้อง'},
+      {sp:'A',spName:'เพื่อน', cn:'很宽敞啊！客厅里有什么家具？', py:'Hěn kuānchǎng a! Kètīng lǐ yǒu shénme jiājù?', th:'กว้างมากเลย! ในห้องนั่งเล่นมีเฟอร์นิเจอร์อะไรบ้าง?'},
+      {sp:'B',spName:'เจ้าของบ้าน', cn:'有沙发、桌子、电视，还有一个大书柜。', py:'Yǒu shāfā, zhuōzi, diànshì, hái yǒu yī gè dà shūguì.', th:'มีโซฟา โต๊ะ ทีวี และตู้หนังสือใบใหญ่ด้วย'},
+    ],
+    vocab:[
+      {zh:'家',py:'jiā',th:'บ้าน / ครอบครัว',en:'Home / Family',em:'🏠'},
+      {zh:'房间',py:'fángjiān',th:'ห้อง',en:'Room',em:'🚪'},
+      {zh:'客厅',py:'kètīng',th:'ห้องนั่งเล่น',en:'Living room',em:'🛋️'},
+      {zh:'厨房',py:'chúfáng',th:'ห้องครัว',en:'Kitchen',em:'🍳'},
+      {zh:'卫生间',py:'wèishēngjiān',th:'ห้องน้ำ',en:'Bathroom',em:'🚽'},
+      {zh:'卧室',py:'wòshì',th:'ห้องนอน',en:'Bedroom',em:'🛏️'},
+      {zh:'床',py:'chuáng',th:'เตียง',en:'Bed',em:'🛏️'},
+      {zh:'桌子',py:'zhuōzi',th:'โต๊ะ',en:'Table / Desk',em:'🪑'},
+      {zh:'椅子',py:'yǐzi',th:'เก้าอี้',en:'Chair',em:'🪑'},
+      {zh:'沙发',py:'shāfā',th:'โซฟา',en:'Sofa',em:'🛋️'},
+      {zh:'电视',py:'diànshì',th:'โทรทัศน์',en:'Television',em:'📺'},
+      {zh:'电脑',py:'diànnǎo',th:'คอมพิวเตอร์',en:'Computer',em:'💻'},
+      {zh:'手机',py:'shǒujī',th:'โทรศัพท์มือถือ',en:'Mobile phone',em:'📱'},
+      {zh:'冰箱',py:'bīngxiāng',th:'ตู้เย็น',en:'Refrigerator',em:'🧊'},
+      {zh:'洗衣机',py:'xǐyījī',th:'เครื่องซักผ้า',en:'Washing machine',em:'🫧'},
+      {zh:'空调',py:'kōngtiáo',th:'แอร์',en:'Air conditioner',em:'❄️'},
+      {zh:'书柜',py:'shūguì',th:'ตู้หนังสือ',en:'Bookshelf',em:'📚'},
+      {zh:'家具',py:'jiājù',th:'เฟอร์นิเจอร์',en:'Furniture',em:'🛋️'},
+      {zh:'宽敞',py:'kuānchǎng',th:'กว้างขวาง',en:'Spacious',em:'🌅'},
+      {zh:'住',py:'zhù',th:'อาศัยอยู่',en:'Live / Stay',em:'🏠'},
+      {zh:'离',py:'lí',th:'ห่างจาก',en:'Away from / From',em:'📏'},
+      {zh:'骑',py:'qí',th:'ขี่ (จักรยาน/มอเตอร์ไซค์)',en:'Ride',em:'🚲'},
+    ],
+    quiz:[
+      {type:'mc',q:'"ห้องนั่งเล่น" ภาษาจีนคือ?',opts:['卧室','客厅','厨房','卫生间'],ans:1},
+      {type:'mc',q:'离 (lí) แปลว่า?',opts:['ไปถึง','ไกล','ใกล้','ห่างจาก'],ans:3},
+      {type:'mc',q:'空调 (kōngtiáo) คืออะไร?',opts:['ทีวี','พัดลม','แอร์','ตู้เย็น'],ans:2},
+      {type:'mc',q:'宽敞 (kuānchǎng) หมายถึง?',opts:['เล็กแคบ','ต่ำ','สูง','กว้างขวาง'],ans:3},
+      {type:'mc',q:'住 (zhù) หมายถึง?',opts:['ทำงาน','อาศัยอยู่','เรียน','เดินทาง'],ans:1},
+      {type:'mc',q:'"ห้องครัว" ภาษาจีนคือ?',opts:['卫生间','客厅','厨房','卧室'],ans:2},
+      {type:'mc',q:'骑自行车 หมายถึง?',opts:['ขับรถ','นั่งรถบัส','นั่งรถไฟ','ปั่นจักรยาน'],ans:3},
     ]
   },
   {
@@ -2533,91 +2596,61 @@ const LESSONS = [
     ]
   },
   {
-    id:10, icon:'🏠', theme:'บ้านและข้าวของ', hsk:1,
-    title:'家和东西 — บ้านและข้าวของ', sub:'ห้องต่างๆ · เฟอร์นิเจอร์ · อุปกรณ์',
+    id:8, icon:'🐼', theme:'สัตว์และธรรมชาติ', hsk:1,
+    title:'动物自然 — สัตว์และธรรมชาติ', sub:'สัตว์ · สภาพอากาศ · ธรรมชาติ',
     dialog:[
-      {sp:'A',spName:'เพื่อน', cn:'你家在哪里？住得远吗？', py:'Nǐ jiā zài nǎlǐ? Zhù de yuǎn ma?', th:'บ้านคุณอยู่ที่ไหน? อยู่ไกลไหม?'},
-      {sp:'B',spName:'เจ้าของบ้าน', cn:'住在北京，离公司不远，骑自行车十分钟。', py:'Zhù zài Běijīng, lí gōngsī bù yuǎn, qí zìxíngchē shí fēnzhōng.', th:'อยู่ที่ปักกิ่ง ไม่ไกลจากบริษัท ปั่นจักรยานสิบนาที'},
-      {sp:'A',spName:'เพื่อน', cn:'你家有几个房间？', py:'Nǐ jiā yǒu jǐ gè fángjiān?', th:'บ้านคุณมีกี่ห้อง?'},
-      {sp:'B',spName:'เจ้าของบ้าน', cn:'有三个房间，一个客厅，一个厨房，两个卫生间。', py:'Yǒu sān gè fángjiān, yī gè kètīng, yī gè chúfáng, liǎng gè wèishēngjiān.', th:'มีสามห้องนอน ห้องนั่งเล่นหนึ่งห้อง ครัวหนึ่งห้อง ห้องน้ำสองห้อง'},
-      {sp:'A',spName:'เพื่อน', cn:'很宽敞啊！客厅里有什么家具？', py:'Hěn kuānchǎng a! Kètīng lǐ yǒu shénme jiājù?', th:'กว้างมากเลย! ในห้องนั่งเล่นมีเฟอร์นิเจอร์อะไรบ้าง?'},
-      {sp:'B',spName:'เจ้าของบ้าน', cn:'有沙发、桌子、电视，还有一个大书柜。', py:'Yǒu shāfā, zhuōzi, diànshì, hái yǒu yī gè dà shūguì.', th:'มีโซฟา โต๊ะ ทีวี และตู้หนังสือใบใหญ่ด้วย'},
+      {sp:'A',spName:'เด็ก', cn:'妈妈，动物园里有什么动物？', py:'Māmā, dòngwùyuán lǐ yǒu shénme dòngwù?', th:'แม่ ในสวนสัตว์มีสัตว์อะไรบ้าง?'},
+      {sp:'B',spName:'แม่', cn:'有很多！有大象、老虎、熊猫，还有猴子。', py:'Yǒu hěn duō! Yǒu dàxiàng, lǎohǔ, xióngmāo, hái yǒu hóuzi.', th:'มีเยอะมาก! มีช้าง เสือ แพนด้า และลิงด้วย'},
+      {sp:'A',spName:'เด็ก', cn:'熊猫好可爱！今天天气怎么样？', py:'Xióngmāo hǎo kěài! Jīntiān tiānqì zěnmeyàng?', th:'แพนด้าน่ารักมาก! วันนี้อากาศเป็นยังไง?'},
+      {sp:'B',spName:'แม่', cn:'今天天气很好，不冷也不热，适合出去玩。', py:'Jīntiān tiānqì hěn hǎo, bù lěng yě bù rè, shìhé chūqù wán.', th:'วันนี้อากาศดีมาก ไม่หนาวไม่ร้อน เหมาะกับการออกไปเที่ยว'},
+      {sp:'A',spName:'เด็ก', cn:'太好了！我最喜欢小狗，家里可以养吗？', py:'Tài hǎo le! Wǒ zuì xǐhuān xiǎo gǒu, jiā lǐ kěyǐ yǎng ma?', th:'ดีมาก! ฉันชอบหมาตัวเล็กที่สุด ที่บ้านเลี้ยงได้ไหม?'},
+      {sp:'B',spName:'แม่', cn:'可以，但是要好好照顾它。', py:'Kěyǐ, dànshì yào hǎohǎo zhàogù tā.', th:'ได้ แต่ต้องดูแลมันดีๆ นะ'},
     ],
     vocab:[
-      {zh:'家',py:'jiā',th:'บ้าน / ครอบครัว',en:'Home / Family',em:'🏠'},
-      {zh:'房间',py:'fángjiān',th:'ห้อง',en:'Room',em:'🚪'},
-      {zh:'客厅',py:'kètīng',th:'ห้องนั่งเล่น',en:'Living room',em:'🛋️'},
-      {zh:'厨房',py:'chúfáng',th:'ห้องครัว',en:'Kitchen',em:'🍳'},
-      {zh:'卫生间',py:'wèishēngjiān',th:'ห้องน้ำ',en:'Bathroom',em:'🚽'},
-      {zh:'卧室',py:'wòshì',th:'ห้องนอน',en:'Bedroom',em:'🛏️'},
-      {zh:'床',py:'chuáng',th:'เตียง',en:'Bed',em:'🛏️'},
-      {zh:'桌子',py:'zhuōzi',th:'โต๊ะ',en:'Table / Desk',em:'🪑'},
-      {zh:'椅子',py:'yǐzi',th:'เก้าอี้',en:'Chair',em:'🪑'},
-      {zh:'沙发',py:'shāfā',th:'โซฟา',en:'Sofa',em:'🛋️'},
-      {zh:'电视',py:'diànshì',th:'โทรทัศน์',en:'Television',em:'📺'},
-      {zh:'电脑',py:'diànnǎo',th:'คอมพิวเตอร์',en:'Computer',em:'💻'},
-      {zh:'手机',py:'shǒujī',th:'โทรศัพท์มือถือ',en:'Mobile phone',em:'📱'},
-      {zh:'冰箱',py:'bīngxiāng',th:'ตู้เย็น',en:'Refrigerator',em:'🧊'},
-      {zh:'洗衣机',py:'xǐyījī',th:'เครื่องซักผ้า',en:'Washing machine',em:'🫧'},
-      {zh:'空调',py:'kōngtiáo',th:'แอร์',en:'Air conditioner',em:'❄️'},
-      {zh:'书柜',py:'shūguì',th:'ตู้หนังสือ',en:'Bookshelf',em:'📚'},
-      {zh:'家具',py:'jiājù',th:'เฟอร์นิเจอร์',en:'Furniture',em:'🛋️'},
-      {zh:'宽敞',py:'kuānchǎng',th:'กว้างขวาง',en:'Spacious',em:'🌅'},
-      {zh:'住',py:'zhù',th:'อาศัยอยู่',en:'Live / Stay',em:'🏠'},
-      {zh:'离',py:'lí',th:'ห่างจาก',en:'Away from / From',em:'📏'},
-      {zh:'骑',py:'qí',th:'ขี่ (จักรยาน/มอเตอร์ไซค์)',en:'Ride',em:'🚲'},
+      {zh:'动物',py:'dòngwù',th:'สัตว์',en:'Animal',em:'🐾'},
+      {zh:'猫',py:'māo',th:'แมว',en:'Cat',em:'🐱'},
+      {zh:'狗',py:'gǒu',th:'สุนัข',en:'Dog',em:'🐶'},
+      {zh:'鸟',py:'niǎo',th:'นก',en:'Bird',em:'🐦'},
+      {zh:'鱼',py:'yú',th:'ปลา',en:'Fish',em:'🐟'},
+      {zh:'熊猫',py:'xióngmāo',th:'แพนด้า',en:'Panda',em:'🐼'},
+      {zh:'老虎',py:'lǎohǔ',th:'เสือ',en:'Tiger',em:'🐯'},
+      {zh:'大象',py:'dàxiàng',th:'ช้าง',en:'Elephant',em:'🐘'},
+      {zh:'猴子',py:'hóuzi',th:'ลิง',en:'Monkey',em:'🐒'},
+      {zh:'天气',py:'tiānqì',th:'อากาศ / สภาพอากาศ',en:'Weather',em:'⛅'},
+      {zh:'热',py:'rè',th:'ร้อน',en:'Hot',em:'🔥'},
+      {zh:'冷',py:'lěng',th:'หนาว / เย็น',en:'Cold',em:'❄️'},
+      {zh:'晴天',py:'qíngtiān',th:'ฟ้าแจ่มใส',en:'Sunny day',em:'☀️'},
+      {zh:'下雨',py:'xià yǔ',th:'ฝนตก',en:'It rains',em:'🌧️'},
+      {zh:'下雪',py:'xià xuě',th:'หิมะตก',en:'It snows',em:'❄️'},
+      {zh:'风',py:'fēng',th:'ลม',en:'Wind',em:'💨'},
+      {zh:'可爱',py:'kěài',th:'น่ารัก',en:'Cute / Adorable',em:'🥰'},
+      {zh:'最',py:'zuì',th:'ที่สุด',en:'Most',em:'🏆'},
+      {zh:'养',py:'yǎng',th:'เลี้ยง (สัตว์)',en:'Keep / Raise',em:'🏠'},
+      {zh:'照顾',py:'zhàogù',th:'ดูแล',en:'Take care of',em:'🤲'},
+      {zh:'但是',py:'dànshì',th:'แต่',en:'But / However',em:'↔️'},
+      {zh:'还有',py:'hái yǒu',th:'และยังมี / อีก',en:'Also have / Also',em:'➕'},
+      {zh:'出去',py:'chūqù',th:'ออกไป',en:'Go out',em:'🚪'},
+    ],
+    grammar:[
+      {
+        pattern:'S + 最喜欢 + V/N',
+        thai:'ประธาน + ชอบ...ที่สุด + กริยา/คำนาม',
+        examples:[
+          {cn:'我最喜欢猫。', py:'Wǒ zuì xǐhuān māo.', th:'ฉันชอบแมวที่สุด'},
+          {cn:'她最喜欢唱歌。', py:'Tā zuì xǐhuān chànggē.', th:'เธอชอบร้องเพลงที่สุด'},
+          {cn:'我最喜欢吃火锅。', py:'Wǒ zuì xǐhuān chī huǒguō.', th:'ฉันชอบกินหม้อไฟที่สุด'},
+        ],
+        tip:'💡 最 (zuì) = ที่สุด ใช้ก่อนคำกริยาหรือคุณศัพท์ เช่น 最好 (ดีที่สุด), 最大 (ใหญ่ที่สุด), 最喜欢 (ชอบที่สุด)'
+      }
     ],
     quiz:[
-      {type:'mc',q:'"ห้องนั่งเล่น" ภาษาจีนคือ?',opts:['卧室','客厅','厨房','卫生间'],ans:1},
-      {type:'mc',q:'离 (lí) แปลว่า?',opts:['ไปถึง','ไกล','ใกล้','ห่างจาก'],ans:3},
-      {type:'mc',q:'空调 (kōngtiáo) คืออะไร?',opts:['ทีวี','พัดลม','แอร์','ตู้เย็น'],ans:2},
-      {type:'mc',q:'宽敞 (kuānchǎng) หมายถึง?',opts:['เล็กแคบ','ต่ำ','สูง','กว้างขวาง'],ans:3},
-      {type:'mc',q:'住 (zhù) หมายถึง?',opts:['ทำงาน','อาศัยอยู่','เรียน','เดินทาง'],ans:1},
-      {type:'mc',q:'"ห้องครัว" ภาษาจีนคือ?',opts:['卫生间','客厅','厨房','卧室'],ans:2},
-      {type:'mc',q:'骑自行车 หมายถึง?',opts:['ขับรถ','นั่งรถบัส','นั่งรถไฟ','ปั่นจักรยาน'],ans:3},
-    ]
-  },
-  {
-    id:11, icon:'⏰', theme:'กิจวัตรประจำวัน', hsk:1,
-    title:'日常生活 — กิจวัตรประจำวัน', sub:'ตื่นนอน · ทำงาน · กินข้าว · นอน',
-    dialog:[
-      {sp:'A',spName:'เพื่อน', cn:'你每天几点起床？', py:'Nǐ měitiān jǐ diǎn qǐchuáng?', th:'คุณตื่นนอนกี่โมงทุกวัน?'},
-      {sp:'B',spName:'เพื่อน', cn:'我一般六点半起床，七点吃早饭。', py:'Wǒ yībān liù diǎn bàn qǐchuáng, qī diǎn chī zǎofàn.', th:'ฉันปกติตื่นหกโมงครึ่ง เจ็ดโมงกินข้าวเช้า'},
-      {sp:'A',spName:'เพื่อน', cn:'你几点上班？上班怎么去？', py:'Nǐ jǐ diǎn shàngbān? Shàngbān zěnme qù?', th:'คุณเริ่มงานกี่โมง? ไปทำงานยังไง?'},
-      {sp:'B',spName:'เพื่อน', cn:'八点上班，坐地铁去，大概四十分钟。', py:'Bā diǎn shàngbān, zuò dìtiě qù, dàgài sìshí fēnzhōng.', th:'แปดโมงเริ่มงาน นั่งรถไฟฟ้าไป ประมาณสี่สิบนาที'},
-      {sp:'A',spName:'เพื่อน', cn:'下班以后你做什么？', py:'Xiàbān yǐhòu nǐ zuò shénme?', th:'หลังเลิกงานคุณทำอะไร?'},
-      {sp:'B',spName:'เพื่อน', cn:'我先做饭，吃完饭看一会儿电视，然后十一点睡觉。', py:'Wǒ xiān zuò fàn, chī wán fàn kàn yīhuìr diànshì, ránhòu shíyī diǎn shuìjiào.', th:'ฉันทำอาหารก่อน กินข้าวเสร็จก็ดูทีวีสักพัก แล้วก็นอนตีสิบเอ็ด'},
-    ],
-    vocab:[
-      {zh:'每天',py:'měitiān',th:'ทุกวัน',en:'Every day',em:'📅'},
-      {zh:'一般',py:'yībān',th:'ปกติ / โดยทั่วไป',en:'Usually / Generally',em:'🔄'},
-      {zh:'起床',py:'qǐchuáng',th:'ตื่นนอน',en:'Get up',em:'⏰'},
-      {zh:'睡觉',py:'shuìjiào',th:'นอนหลับ',en:'Sleep',em:'😴'},
-      {zh:'早饭',py:'zǎofàn',th:'อาหารเช้า',en:'Breakfast',em:'🍳'},
-      {zh:'午饭',py:'wǔfàn',th:'อาหารกลางวัน',en:'Lunch',em:'🍱'},
-      {zh:'晚饭',py:'wǎnfàn',th:'อาหารเย็น',en:'Dinner',em:'🍽️'},
-      {zh:'做饭',py:'zuò fàn',th:'ทำอาหาร',en:'Cook',em:'👨‍🍳'},
-      {zh:'上班',py:'shàngbān',th:'ไปทำงาน',en:'Go to work',em:'💼'},
-      {zh:'下班',py:'xiàbān',th:'เลิกงาน',en:'Finish work',em:'🏠'},
-      {zh:'上学',py:'shàngxué',th:'ไปโรงเรียน',en:'Go to school',em:'🎒'},
-      {zh:'洗澡',py:'xǐzǎo',th:'อาบน้ำ',en:'Take a shower/bath',em:'🚿'},
-      {zh:'刷牙',py:'shuā yá',th:'แปรงฟัน',en:'Brush teeth',em:'🪥'},
-      {zh:'锻炼',py:'duànliàn',th:'ออกกำลังกาย',en:'Exercise',em:'🏃'},
-      {zh:'先',py:'xiān',th:'ก่อน',en:'First / Before',em:'1️⃣'},
-      {zh:'然后',py:'ránhòu',th:'จากนั้น / แล้วก็',en:'Then / After that',em:'➡️'},
-      {zh:'以后',py:'yǐhòu',th:'หลังจาก / ต่อไป',en:'After / In the future',em:'⏩'},
-      {zh:'以前',py:'yǐqián',th:'ก่อนหน้า / ก่อน',en:'Before / In the past',em:'⏪'},
-      {zh:'大概',py:'dàgài',th:'ประมาณ',en:'Approximately',em:'≈'},
-      {zh:'一会儿',py:'yīhuìr',th:'สักครู่',en:'For a while',em:'⏱️'},
-    ],
-    quiz:[
-      {type:'mc',q:'每天 (měitiān) แปลว่า?',opts:['ทุกวัน','วันนี้','บางวัน','เมื่อวาน'],ans:0},
-      {type:'mc',q:'"อาหารเช้า" ภาษาจีนคือ?',opts:['午饭','早饭','晚饭','做饭'],ans:1},
-      {type:'mc',q:'先...然后... หมายถึง?',opts:['ทั้ง...และ...','ก่อน...แล้วก็...','หรือ...หรือ...','ถ้า...ก็...'],ans:1},
-      {type:'mc',q:'以后 (yǐhòu) แปลว่า?',opts:['ก่อนหน้า','ระหว่าง','ตอนนี้','หลังจาก'],ans:3},
-      {type:'mc',q:'锻炼 (duànliàn) หมายถึง?',opts:['ออกกำลังกาย','นอนหลับ','ทำอาหาร','อาบน้ำ'],ans:0},
-      {type:'mc',q:'一般 (yībān) แปลว่า?',opts:['ปกติ/โดยทั่วไป','ไม่เคย','เสมอ','บางครั้ง'],ans:0},
-      {type:'mc',q:'大概 (dàgài) หมายถึง?',opts:['ประมาณ','แน่นอน','ทั้งหมด','ไม่มี'],ans:0},
+      {type:'mc',q:'可爱 (kěài) แปลว่า?',opts:['น่ากลัว','น่าเบื่อ','น่าสนใจ','น่ารัก'],ans:3},
+      {type:'mc',q:'"อากาศ" ภาษาจีนคือ?',opts:['动物','季节','颜色','天气'],ans:3},
+      {type:'mc',q:'最 (zuì) ใช้ทำอะไร?',opts:['บอกว่ามากสุด/ที่สุด','บอกว่าน้อยสุด','ถามคำถาม','ปฏิเสธ'],ans:0},
+      {type:'mc',q:'下雨 (xià yǔ) หมายถึง?',opts:['ฟ้าร้อง','ลมแรง','หิมะตก','ฝนตก'],ans:3},
+      {type:'mc',q:'"แมว" ภาษาจีนคือ?',opts:['猫','鸟','狗','鱼'],ans:0},
+      {type:'mc',q:'但是 (dànshì) แปลว่า?',opts:['และ','แต่','หรือ','เพราะ'],ans:1},
+      {type:'mc',q:'养 (yǎng) หมายถึง?',opts:['กิน','เดิน','เลี้ยง(สัตว์)','ซื้อ'],ans:2},
     ]
   },
   {
@@ -2668,7 +2701,8 @@ const LESSONS = [
     ]
   }
   ,{
-    id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
+    
+id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
     title:'购物讨价还价 — ซื้อของและต่อราคา', sub:'ต่อราคา · เปรียบเทียบสินค้า · การคืนของ',
     dialog:[
       {sp:'A',spName:'ลูกค้า', cn:'老板，这件衣服多少钱？', py:'Lǎobǎn, zhè jiàn yīfu duōshǎo qián?', th:'เจ้าของร้าน เสื้อตัวนี้เท่าไหร่?'},
@@ -7413,6 +7447,118 @@ function renderProfile() {
 }
 
 // ═══════════════════════════════════
+function renderPinyinIntro() {
+  const box = document.getElementById('ptab-intro');
+  if (!box) return;
+  box.innerHTML = `
+    <!-- Hero -->
+    <div style="background:linear-gradient(135deg,#1a0020,#2d0035);border-radius:16px;padding:24px 20px;text-align:center;margin-bottom:20px">
+      <div style="font-size:48px;margin-bottom:8px">🔤</div>
+      <div style="font-size:22px;font-weight:900;color:white;margin-bottom:8px">พินอิน (拼音) คืออะไร?</div>
+      <div style="font-size:14px;color:rgba(255,255,255,.75);line-height:1.7">รากฐานสำคัญที่สุดของการเรียนภาษาจีน<br>ข้ามไปไม่ได้เด็ดขาด!</div>
+    </div>
+
+    <!-- Section 1: คืออะไร -->
+    <div style="background:white;border:1px solid var(--paper3);border-radius:16px;padding:20px;margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="width:36px;height:36px;background:var(--red-light);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📌</div>
+        <div style="font-size:16px;font-weight:800;color:var(--ink)">พินอินคืออะไร?</div>
+      </div>
+      <p style="font-size:14px;color:#444;line-height:1.8;margin-bottom:12px">
+        <b>พินอิน (拼音 / Pīnyīn)</b> คือระบบเขียนเสียงภาษาจีนโดยใช้ตัวอักษรโรมัน (A-Z) พร้อมเครื่องหมายวรรณยุกต์
+      </p>
+      <div style="background:var(--paper2);border-radius:10px;padding:14px;font-size:14px;line-height:1.9">
+        ตัวอย่าง: <b style="color:var(--red)">你好</b> อ่านว่า <b>nǐ hǎo</b> (สวัสดี)<br>
+        ตัวอักษรจีน → พินอิน → ออกเสียงได้ถูกต้อง
+      </div>
+    </div>
+
+    <!-- Section 2: ทำไมต้องเรียน -->
+    <div style="background:white;border:1px solid var(--paper3);border-radius:16px;padding:20px;margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="width:36px;height:36px;background:#fff0f8;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">❓</div>
+        <div style="font-size:16px;font-weight:800;color:var(--ink)">ทำไมต้องเรียนพินอิน?</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <span style="font-size:20px;flex-shrink:0">1️⃣</span>
+          <div style="font-size:14px;color:#444;line-height:1.7"><b>อ่านคำใหม่ได้ทันที</b><br>ถ้ารู้พินอิน เจอคำใหม่ก็อ่านออกเสียงได้เลย ไม่ต้องเดา</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <span style="font-size:20px;flex-shrink:0">2️⃣</span>
+          <div style="font-size:14px;color:#444;line-height:1.7"><b>ออกเสียงถูกตั้งแต่ต้น</b><br>ภาษาจีนมี 4 วรรณยุกต์ ถ้าออกเสียงผิดตั้งแต่แรก แก้ทีหลังยากมาก</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <span style="font-size:20px;flex-shrink:0">3️⃣</span>
+          <div style="font-size:14px;color:#444;line-height:1.7"><b>พิมพ์ภาษาจีนในมือถือได้</b><br>คีย์บอร์ดจีนทุกแอปใช้พินอินพิมพ์ รู้พินอิน = พิมพ์จีนได้ทันที</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <span style="font-size:20px;flex-shrink:0">4️⃣</span>
+          <div style="font-size:14px;color:#444;line-height:1.7"><b>ฐานของทุกบทเรียน</b><br>ทุกคำศัพท์ในแอปนี้มีพินอินกำกับ — รู้พินอิน = ใช้แอปได้เต็มที่</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: ประกอบด้วยอะไร -->
+    <div style="background:white;border:1px solid var(--paper3);border-radius:16px;padding:20px;margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div style="width:36px;height:36px;background:#e8f4ed;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🧩</div>
+        <div style="font-size:16px;font-weight:800;color:var(--ink)">พินอินประกอบด้วยอะไรบ้าง?</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:var(--red-light);border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:24px;margin-bottom:4px">🎵</div>
+          <div style="font-size:13px;font-weight:800;color:var(--red);margin-bottom:4px">วรรณยุกต์</div>
+          <div style="font-size:11px;color:#666">4 เสียง + เสียงเบา<br>เปลี่ยนเสียง = เปลี่ยนความหมาย</div>
+        </div>
+        <div style="background:#e6f1fb;border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:24px;margin-bottom:4px">🔡</div>
+          <div style="font-size:13px;font-weight:800;color:var(--blue);margin-bottom:4px">พยัญชนะต้น</div>
+          <div style="font-size:11px;color:#666">21 ตัว<br>b p m f d t n l...</div>
+        </div>
+        <div style="background:#e8f4ed;border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:24px;margin-bottom:4px">🔤</div>
+          <div style="font-size:13px;font-weight:800;color:var(--green);margin-bottom:4px">สระ (韵母)</div>
+          <div style="font-size:11px;color:#666">35+ แบบ<br>a o e i u ü...</div>
+        </div>
+        <div style="background:#fff5e6;border-radius:12px;padding:14px;text-align:center">
+          <div style="font-size:24px;margin-bottom:4px">⚠️</div>
+          <div style="font-size:13px;font-weight:800;color:var(--amber);margin-bottom:4px">เสียงยาก</div>
+          <div style="font-size:11px;color:#666">zh ch sh r<br>เสียงต่างจากภาษาไทย</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Tips -->
+    <div style="background:linear-gradient(135deg,#FFF8F0,#FFF0F8);border:1.5px solid var(--paper3);border-radius:16px;padding:20px;margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="font-size:22px">💡</div>
+        <div style="font-size:16px;font-weight:800;color:var(--ink)">เคล็ดลับเรียนพินอินให้ได้ผล</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="background:white;border-radius:10px;padding:10px 14px;font-size:13px;color:#444;line-height:1.6">
+          ✅ <b>ฟังแล้วพูดตามทันที</b> — อย่าแค่อ่านในหัว กดปุ่มเสียงแล้วพูดตามเลย
+        </div>
+        <div style="background:white;border-radius:10px;padding:10px 14px;font-size:13px;color:#444;line-height:1.6">
+          ✅ <b>ใช้เวลา 1-2 สัปดาห์</b> — อย่าข้าม เรียนพินอินให้แม่นก่อนแล้วทุกอย่างจะง่ายขึ้น
+        </div>
+        <div style="background:white;border-radius:10px;padding:10px 14px;font-size:13px;color:#444;line-height:1.6">
+          ✅ <b>จำผ่านตัวอย่างจริง</b> — จำ mā = แม่ ดีกว่าจำ "เสียงที่ 1 สูงเรียบ" อย่างเดียว
+        </div>
+        <div style="background:white;border-radius:10px;padding:10px 14px;font-size:13px;color:#444;line-height:1.6">
+          ❌ <b>อย่าข้ามพินอินไปท่องคำศัพท์เลย</b> — ออกเสียงผิดตั้งแต่แรก แก้ทีหลังยากมาก!
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA ถัดไป -->
+    <button onclick="switchPinyinTab('tones', document.querySelectorAll('#screen-pinyin .tab-btn')[1])"
+      style="width:100%;padding:14px;background:var(--red);color:white;border:none;border-radius:14px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 4px 16px rgba(241,53,150,.3)">
+      เริ่มเรียนวรรณยุกต์ → 🎵
+    </button>
+  `;
+}
+
 // PINYIN LESSON 0 — ตารางพยัญชนะ สระ วรรณยุกต์
 // ═══════════════════════════════════
 
@@ -7524,21 +7670,74 @@ const TRICKY_DATA = [
 
 // ── Quiz
 const PINYIN_QUIZ = [
-  { q:'วรรณยุกต์ที่ 1 (mā) ชื่อวรรณยุกต์ไทยคือ?', opts:['จัตวา','สามัญ','เอก','โท'], ans:1 },
-  { q:'mā / má / mǎ / mà — ข้อใดเป็นเสียงที่ 3 (เอก)?', opts:['mā','má','mǎ','mà'], ans:2 },
-  { q:'เสียง "zh" ควรออกเสียงอย่างไร?', opts:['จ ปกติ','จรือ ม้วนลิ้น','ช ปกติ','ซ'], ans:1 },
-  { q:'เสียง "ü" คือเสียงใด?', opts:['อา','อี','อู ริมฝีปากห่อ','เออ'], ans:2 },
-  { q:'เสียงเบา (neutral tone) มีลักษณะอย่างไร?', opts:['สูงมาก','ออกยาว','สั้นและเบา','ลงแรง'], ans:2 },
-  { q:'"j" ในพินอินคือเสียงใด?', opts:['จ ปกติ','จี (ลิ้นชิดเพดาน)','ซ','ช'], ans:1 },
-  { q:'สระ "ei" ออกเสียงว่าอย่างไร?', opts:['อาย','เอย','โอว','อวน'], ans:1 },
-  { q:'พยัญชนะในรูป "q" ออกเสียงว่า?', opts:['กอ','คอ','ชี','จือ'], ans:2 },
+  {
+    type:'tone',
+    q:'🔊 ฟังแล้วเลือก — "mā" เป็นวรรณยุกต์ที่เท่าไหร่?',
+    cn:'妈', py:'mā', speak:'妈',
+    opts:['วรรณยุกต์ที่ 1 (สูงเรียบ ā)','วรรณยุกต์ที่ 2 (ขึ้น á)','วรรณยุกต์ที่ 3 (ลงขึ้น ǎ)','วรรณยุกต์ที่ 4 (ลงเร็ว à)'],
+    ans:0,
+    explain:'ā = เสียงสูงเรียบ ลากยาวในระดับเดียว'
+  },
+  {
+    type:'tone',
+    q:'🔊 คำว่า "马 (mǎ)" ออกเสียงวรรณยุกต์ไหน?',
+    cn:'马', py:'mǎ', speak:'马',
+    opts:['เสียงที่ 1 สูงเรียบ','เสียงที่ 2 ขึ้น','เสียงที่ 3 ลงแล้วขึ้น','เสียงที่ 4 ลงเร็ว'],
+    ans:2,
+    explain:'ǎ = ลงต่ำแล้วดีดขึ้น เหมือนเสียงลังเล "เอ่อ...""'
+  },
+  {
+    type:'read',
+    q:'📖 ฝึกอ่าน — เลือกคำที่อ่านว่า "nǐ hǎo"',
+    opts:['你好','你号','年好','你豪'],
+    ans:0,
+    explain:'你好 = nǐ hǎo = สวัสดี (เสียง 3 + เสียง 3)'
+  },
+  {
+    type:'tone',
+    q:'🔊 "骂 (mà)" แปลว่าอะไร และเป็นวรรณยุกต์ไหน?',
+    cn:'骂', py:'mà', speak:'骂',
+    opts:['แม่ เสียงที่ 1','งา เสียงที่ 2','ม้า เสียงที่ 3','ด่า เสียงที่ 4'],
+    ans:3,
+    explain:'à = เสียงลงเร็วแรง เหมือนตกใจ หรือออกคำสั่ง'
+  },
+  {
+    type:'read',
+    q:'📖 ฝึกอ่าน — ข้อใดอ่านว่า "wǒ shì Tàiguó rén"?',
+    opts:['我是泰国人','你是泰国人','我不泰国人','我是中国人'],
+    ans:0,
+    explain:'我是泰国人 = wǒ shì Tàiguó rén = ฉันเป็นคนไทย'
+  },
+  {
+    type:'sound',
+    q:'🎵 เสียง "zh" ออกเสียงอย่างไร?',
+    opts:['จ ปกติ (ปลายลิ้นแตะฟัน)','จ ม้วนลิ้น (ปลายลิ้นม้วนขึ้น)','ช ปกติ','ซ'],
+    ans:1,
+    explain:'zh = จรือ ม้วนลิ้นขึ้น เหมือน "dr" ในภาษาอังกฤษ'
+  },
+  {
+    type:'read',
+    q:'📖 ฝึกอ่าน — "谢谢" อ่านว่าอะไร?',
+    opts:['xièxie','xiāoxiao','xíxí','xiēxiē'],
+    ans:0,
+    explain:'谢谢 = xièxie = ขอบคุณ (เสียง 4 + เสียงเบา)'
+  },
+  {
+    type:'tone',
+    q:'🔊 "妈 má mǎ mà" — ข้อใดแปลว่า "แม่"?',
+    cn:'妈', py:'mā', speak:'妈',
+    opts:['mā (เสียง 1)','má (เสียง 2)','mǎ (เสียง 3)','mà (เสียง 4)'],
+    ans:0,
+    explain:'妈 mā เสียง 1 = แม่, 马 mǎ เสียง 3 = ม้า — วรรณยุกต์เปลี่ยน ความหมายเปลี่ยนทันที!'
+  },
 ];
 
 let pinyinQuizIdx = 0, pinyinQuizScore = 0, pinyinQuizDone = false;
 
 function openPinyin() {
   pinyinQuizIdx = 0; pinyinQuizScore = 0; pinyinQuizDone = false;
-  switchPinyinTab('tones', document.querySelector('#screen-pinyin .tab-btn'));
+  renderPinyinIntro();
+  switchPinyinTab('intro', document.querySelector('#screen-pinyin .tab-btn'));
   renderPinyinTones();
   renderPinyinConsonants();
   renderPinyinVowels();
@@ -7636,7 +7835,7 @@ function renderPinyinTones() {
     ${maExample}
     <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px">รายละเอียดแต่ละเสียง</div>
     ${details}
-    <button class="btn-sm" style="width:100%;margin-top:8px" onclick="switchPinyinTab('consonants', document.querySelectorAll('#screen-pinyin .tab-btn')[1])">ถัดไป: พยัญชนะ →</button>`;
+    <button class="btn-sm" style="width:100%;margin-top:8px" onclick="switchPinyinTab('consonants', document.querySelectorAll('#screen-pinyin .tab-btn')[2])">ถัดไป: พยัญชนะ →</button>`;
 }
 
 // ── RENDER: พยัญชนะ
@@ -7694,7 +7893,7 @@ function renderPinyinConsonants() {
       </div>
       <div style="font-size:11px;color:var(--ink3);margin-top:6px">ดูรายละเอียดที่แท็บ "เสียงยาก"</div>
     </div>
-    <button class="btn-sm" style="width:100%" onclick="switchPinyinTab('vowels', document.querySelectorAll('#screen-pinyin .tab-btn')[2])">ถัดไป: สระ →</button>`;
+    <button class="btn-sm" style="width:100%" onclick="switchPinyinTab('vowels', document.querySelectorAll('#screen-pinyin .tab-btn')[3])">ถัดไป: สระ →</button>`;
 }
 
 function renderPinyinVowels() {
@@ -7733,7 +7932,7 @@ function renderPinyinVowels() {
         <tbody>${rows}</tbody>
       </table>
     </div>
-    <button class="btn-sm" style="width:100%" onclick="switchPinyinTab('tricky', document.querySelectorAll('#screen-pinyin .tab-btn')[3])">ถัดไป: เสียงยาก →</button>`;
+    <button class="btn-sm" style="width:100%" onclick="switchPinyinTab('tricky', document.querySelectorAll('#screen-pinyin .tab-btn')[4])">ถัดไป: เสียงยาก →</button>`;
 }
 
 // ── RENDER: เสียงยาก
@@ -7768,7 +7967,7 @@ function renderPinyinTricky() {
       <div style="font-size:12px;color:var(--ink2)">เสียงเหล่านี้ไม่มีในภาษาไทย ต้องฝึกเป็นพิเศษ — กดกล่องเพื่อฟังเสียง</div>
     </div>
     ${cards}
-    <button class="btn-sm" style="width:100%;margin-top:8px" onclick="switchPinyinTab('pinyin-quiz', document.querySelectorAll('#screen-pinyin .tab-btn')[4])">ถัดไป: ทดสอบ →</button>`;
+    <button class="btn-sm" style="width:100%;margin-top:8px" onclick="switchPinyinTab('pinyin-quiz', document.querySelectorAll('#screen-pinyin .tab-btn')[5])">ถัดไป: ทดสอบ →</button>`;
 }
 
 // ── RENDER: Quiz
@@ -7950,58 +8149,6 @@ function playWrongSound() {
   } catch(e) {}
 }
 
-function playWinSound() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const notes = [523, 659, 784, 1047];
-    notes.forEach((freq, i) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.12);
-      gain.gain.setValueAtTime(0.25, ctx.currentTime + i * 0.12);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.12 + 0.3);
-      osc.start(ctx.currentTime + i * 0.12);
-      osc.stop(ctx.currentTime + i * 0.12 + 0.3);
-    });
-  } catch(e) {}
-}
-
-function playLoseSound() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const notes = [400, 300, 200];
-    notes.forEach((freq, i) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain); gain.connect(ctx.destination);
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.15);
-      gain.gain.setValueAtTime(0.15, ctx.currentTime + i * 0.15);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 0.25);
-      osc.start(ctx.currentTime + i * 0.15);
-      osc.stop(ctx.currentTime + i * 0.15 + 0.25);
-    });
-  } catch(e) {}
-}
-
-function playStartSound() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(440, ctx.currentTime);
-    osc.frequency.setValueAtTime(550, ctx.currentTime + 0.1);
-    gain.gain.setValueAtTime(0.2, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + 0.3);
-  } catch(e) {}
-}
-
 function speakFC() {
   if (!state.curLesson) return;
   stopSpeech();
@@ -8025,7 +8172,6 @@ function updateSpeedBadge() {
 }
 
 function openGame(name) {
-  playStartSound();
   document.getElementById('play-hub').style.display = 'none';
   ['stroke','daily','sentence','speed','journal','match','listen'].forEach(g => {
     document.getElementById('game-'+g).style.display = g===name ? 'block' : 'none';
@@ -8165,7 +8311,6 @@ function renderStrokeGame() {
 function strokeQuizDone() {
   const fb = document.getElementById('stroke-feedback');
   if (!fb) return;
-  playWinSound();
   fb.innerHTML = `<div style="font-size:24px">🎉</div><div style="font-size:13px;font-weight:700;color:var(--green);margin-top:4px">เยี่ยม! เขียนครบทุกขีดแล้ว +5 XP</div>`;
   if (state.user) { state.user.data.xp=(state.user.data.xp||0)+5; trackActivity(); saveState(); updateTopbar(); }
 }
@@ -8257,7 +8402,6 @@ function renderDailyQ() {
 }
 function answerDaily(chosen) {
   const q=dailyQuestions[dailyQIdx]; const correct=chosen===q.ans;
-  if(correct) playCorrectSound(); else playWrongSound();
   document.querySelectorAll('[id^="dopt-"]').forEach((b,i)=>{
     b.disabled=true;
     if(i===q.ans){b.style.borderColor='var(--green)';b.style.background='var(--green-light)';b.querySelector('span').style.background='var(--green)';b.querySelector('span').style.color='white';}
@@ -8278,7 +8422,6 @@ function answerDaily(chosen) {
         state.user.data.lastDailyDate=today;
         trackActivity(); saveState(); updateTopbar();
       }
-      if(dailyScore>=3) playWinSound(); else playLoseSound();
       renderDailyDone();
     } else renderDailyQ();
   }, correct?600:900);
@@ -8485,11 +8628,10 @@ function checkSentence() {
   const s=lv.sentences[sbLevelIdx];
   const ans=sbAnswer.join(''); const correct=ans===s.correct;
   const fb=document.getElementById('sb-feedback');
-  if(correct) playCorrectSound(); else playWrongSound();
   if(fb) fb.innerHTML=correct
     ?`<div style="color:var(--green);font-weight:700;font-size:14px">🎉 ถูกต้อง! +15 XP</div><div style="font-size:12px;color:var(--ink3);margin-top:4px">${s.py}</div>`
     :`<div style="color:var(--red);font-weight:700;font-size:14px">❌ เฉลย: ${s.correct}</div><div style="font-size:12px;color:var(--ink3);margin-top:4px">${s.py}</div>`;
-  if(correct){playCorrectSound();sbScore++;if(state.user){state.user.data.xp=(state.user.data.xp||0)+15;trackActivity();saveState();updateTopbar();}}
+  if(correct){sbScore++;if(state.user){state.user.data.xp=(state.user.data.xp||0)+15;trackActivity();saveState();updateTopbar();}}
   const btn=document.getElementById('sb-check-btn');
   if(btn){
     btn.textContent=sbLevelIdx+1>=lv.sentences.length?'🏁 ดูผลลัพธ์':'ถัดไป →';
@@ -8499,7 +8641,6 @@ function checkSentence() {
 }
 
 function renderSentenceDone() {
-  if(sbScore>=7) playWinSound(); else playLoseSound();
   const lv=SENTENCE_LEVELS[sbLevel]; const box=document.getElementById('sentence-content');
   const prev=state.user?.data?.[`sbLevel${sbLevel+1}Best`]||0;
   if(sbScore>prev&&state.user){state.user.data[`sbLevel${sbLevel+1}Best`]=sbScore;saveState();}
@@ -10916,7 +11057,6 @@ function answerMainQuiz(chosen, title) {
     }
   });
 
-  if (correct) { playCorrectSound(); } else { playWrongSound(); }
   if (correct) {
     mainQuizScore++;
     // XP with multiplier
@@ -10935,7 +11075,7 @@ function answerMainQuiz(chosen, title) {
   setTimeout(() => {
     mainQuizIdx++;
     const done = mainQuizIdx >= qs.length;
-    if (done) { mainQuizDone = true; const pct2=Math.round(mainQuizScore/qs.length*100); if(pct2>=60) playWinSound(); else playLoseSound(); }
+    if (done) mainQuizDone = true;
     renderMainQuizBody(title);
   }, delay);
 }
@@ -11658,7 +11798,6 @@ function answerSpeed(chosen) {
     else if (i===chosen&&!correct) { b.style.borderColor='var(--red)'; b.style.background='var(--red-light)'; }
   });
   const fb = document.getElementById('speed-feedback');
-  if (correct) { playCorrectSound(); } else { playWrongSound(); }
   if (correct) {
     speedCombo++;
     speedCorrectInLevel++;
@@ -11679,7 +11818,6 @@ function renderSpeedLevelDone() {
   if (speedTimer) clearInterval(speedTimer);
   const box = document.getElementById('speed-content');
   const passed = speedCorrectInLevel >= SPEED_PASS_SCORE;
-  if (passed) playWinSound(); else playLoseSound();
   const maxLevel = Object.keys(SPEED_LEVELS).length;
   const nextLevel = speedLevel + 1;
   const hasNext = nextLevel <= maxLevel;
@@ -12872,7 +13010,6 @@ function showListenDone(){
   const prev=state.user&&state.user.data?state.user.data[key]||0:0;
   if(listenScore>prev&&state.user&&state.user.data){state.user.data[key]=listenScore;saveState();}
   addXP(10);
-  if(listenScore>=6) playWinSound(); else if(listenScore<3) playLoseSound();
   const img=listenScore>=6?'tangtang-happy.png':listenScore>=4?'tangtang.png':'tangtang-sad.png';
   box.innerHTML='<div style="text-align:center;padding:32px 16px">'
     +'<img src="https://avajarshika.github.io/tangtang/'+img+'" alt="TangTang" style="width:100px;height:100px;object-fit:contain;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.3))">'
