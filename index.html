@@ -1729,7 +1729,7 @@ body {
     <div class="detail-header">
       <button class="back-btn" onclick="goScreen('home')">← กลับ</button>
       <div class="detail-title">🔤 บทที่ 0 — พินอิน</div>
-      <div class="detail-sub">บทนำ · วรรณยุกต์ · พยัญชนะ · สระ · เสียงยาก · ทดสอบ</div>
+      <div class="detail-sub">บทนำ · วรรณยุกต์ · พยัญชนะ · สระ · เสียงยาก · ฝึกอ่าน</div>
       <div class="prog-bar" style="margin-top:10px"><div class="prog-fill" id="pinyin-prog" style="width:0%"></div></div>
     </div>
     <div class="tab-bar" style="overflow-x:auto;scrollbar-width:none">
@@ -1738,7 +1738,7 @@ body {
       <button class="tab-btn" onclick="switchPinyinTab('consonants',this)" style="min-width:72px"><span class="tab-ico">🔡</span>พยัญชนะ</button>
       <button class="tab-btn" onclick="switchPinyinTab('vowels',this)" style="min-width:56px"><span class="tab-ico">🔤</span>สระ</button>
       <button class="tab-btn" onclick="switchPinyinTab('tricky',this)" style="min-width:68px"><span class="tab-ico">⚠️</span>เสียงยาก</button>
-      <button class="tab-btn" onclick="switchPinyinTab('pinyin-quiz',this)" style="min-width:64px"><span class="tab-ico">🎯</span>ทดสอบ</button>
+      <button class="tab-btn" onclick="switchPinyinTab('pinyin-quiz',this)" style="min-width:64px"><span class="tab-ico">📢</span>ฝึกอ่าน</button>
     </div>
     <div id="ptab-intro" class="tab-pane active" style="padding:16px"></div>
     <div id="ptab-tones" class="tab-pane" style="padding:16px"></div>
@@ -2688,7 +2688,12 @@ const LESSONS = [
       {zh:'周末',py:'zhōumò',th:'สุดสัปดาห์',en:'Weekend',em:'🎉'},
       {zh:'一起',py:'yīqǐ',th:'ด้วยกัน',en:'Together',em:'👫'},
       {zh:'主意',py:'zhǔyì',th:'ไอเดีย / ความคิด',en:'Idea',em:'💡'},
+      {zh:'好主意',py:'hǎo zhǔyì',th:'ไอเดียดี',en:'Good idea',em:'💡'},
       {zh:'平时',py:'píngshí',th:'ปกติ / โดยทั่วไป',en:'Usually / Normally',em:'🔄'},
+      {zh:'踢足球',py:'tī zúqiú',th:'เตะฟุตบอล',en:'Play football',em:'⚽'},
+      {zh:'打篮球',py:'dǎ lánqiú',th:'เล่นบาสเกตบอล',en:'Play basketball',em:'🏀'},
+      {zh:'还可以',py:'hái kěyǐ',th:'ก็ได้ / พอใช้',en:'Not bad / So-so',em:'👌'},
+      {zh:'会一点',py:'huì yīdiǎn',th:'ทำได้หน่อย / เป็นนิดหน่อย',en:'Know a little',em:'🤏'},
     ],
     quiz:[
       {type:'mc',q:'爱好 (àihào) แปลว่า?',opts:['ความรัก','งานอดิเรก','ความสนใจ','ความสุข'],ans:1},
@@ -7669,70 +7674,61 @@ const TRICKY_DATA = [
 ];
 
 // ── Quiz
-const PINYIN_QUIZ = [
-  {
-    type:'tone',
-    q:'🔊 ฟังแล้วเลือก — "mā" เป็นวรรณยุกต์ที่เท่าไหร่?',
-    cn:'妈', py:'mā', speak:'妈',
-    opts:['วรรณยุกต์ที่ 1 (สูงเรียบ ā)','วรรณยุกต์ที่ 2 (ขึ้น á)','วรรณยุกต์ที่ 3 (ลงขึ้น ǎ)','วรรณยุกต์ที่ 4 (ลงเร็ว à)'],
-    ans:0,
-    explain:'ā = เสียงสูงเรียบ ลากยาวในระดับเดียว'
-  },
-  {
-    type:'tone',
-    q:'🔊 คำว่า "马 (mǎ)" ออกเสียงวรรณยุกต์ไหน?',
-    cn:'马', py:'mǎ', speak:'马',
-    opts:['เสียงที่ 1 สูงเรียบ','เสียงที่ 2 ขึ้น','เสียงที่ 3 ลงแล้วขึ้น','เสียงที่ 4 ลงเร็ว'],
-    ans:2,
-    explain:'ǎ = ลงต่ำแล้วดีดขึ้น เหมือนเสียงลังเล "เอ่อ...""'
-  },
-  {
-    type:'read',
-    q:'📖 ฝึกอ่าน — เลือกคำที่อ่านว่า "nǐ hǎo"',
-    opts:['你好','你号','年好','你豪'],
-    ans:0,
-    explain:'你好 = nǐ hǎo = สวัสดี (เสียง 3 + เสียง 3)'
-  },
-  {
-    type:'tone',
-    q:'🔊 "骂 (mà)" แปลว่าอะไร และเป็นวรรณยุกต์ไหน?',
-    cn:'骂', py:'mà', speak:'骂',
-    opts:['แม่ เสียงที่ 1','งา เสียงที่ 2','ม้า เสียงที่ 3','ด่า เสียงที่ 4'],
-    ans:3,
-    explain:'à = เสียงลงเร็วแรง เหมือนตกใจ หรือออกคำสั่ง'
-  },
-  {
-    type:'read',
-    q:'📖 ฝึกอ่าน — ข้อใดอ่านว่า "wǒ shì Tàiguó rén"?',
-    opts:['我是泰国人','你是泰国人','我不泰国人','我是中国人'],
-    ans:0,
-    explain:'我是泰国人 = wǒ shì Tàiguó rén = ฉันเป็นคนไทย'
-  },
-  {
-    type:'sound',
-    q:'🎵 เสียง "zh" ออกเสียงอย่างไร?',
-    opts:['จ ปกติ (ปลายลิ้นแตะฟัน)','จ ม้วนลิ้น (ปลายลิ้นม้วนขึ้น)','ช ปกติ','ซ'],
-    ans:1,
-    explain:'zh = จรือ ม้วนลิ้นขึ้น เหมือน "dr" ในภาษาอังกฤษ'
-  },
-  {
-    type:'read',
-    q:'📖 ฝึกอ่าน — "谢谢" อ่านว่าอะไร?',
-    opts:['xièxie','xiāoxiao','xíxí','xiēxiē'],
-    ans:0,
-    explain:'谢谢 = xièxie = ขอบคุณ (เสียง 4 + เสียงเบา)'
-  },
-  {
-    type:'tone',
-    q:'🔊 "妈 má mǎ mà" — ข้อใดแปลว่า "แม่"?',
-    cn:'妈', py:'mā', speak:'妈',
-    opts:['mā (เสียง 1)','má (เสียง 2)','mǎ (เสียง 3)','mà (เสียง 4)'],
-    ans:0,
-    explain:'妈 mā เสียง 1 = แม่, 马 mǎ เสียง 3 = ม้า — วรรณยุกต์เปลี่ยน ความหมายเปลี่ยนทันที!'
-  },
+// ── ข้อมูลตารางฝึกอ่านพินอิน (จาก Ebook บท 0)
+const PINYIN_READING = [
+  { label:'สระ a (อา)', rows:[
+    ['b','bā','bá','bǎ','bà'],['p','pā','pá','pǎ','pà'],
+    ['m','mā','má','mǎ','mà'],['f','fā','fá','fǎ','fà'],
+  ]},
+  { label:'สระ o (อัว/โอ)', rows:[
+    ['b','bō','bó','bǒ','bò'],['p','pō','pó','pǒ','pò'],
+    ['m','mō','mó','mǒ','mò'],['f','fō','fó','fǒ','fò'],
+  ]},
+  { label:'สระ e (เออ)', rows:[
+    ['m','mē','mé','mě','mè'],['d','dē','dé','dě','dè'],
+    ['n','nē','né','ně','nè'],['g','gē','gé','gě','gè'],
+    ['h','hē','hé','hě','hè'],
+  ]},
+  { label:'สระ i (อี)', rows:[
+    ['b','bī','bí','bǐ','bì'],['p','pī','pí','pǐ','pì'],
+    ['m','mī','mí','mǐ','mì'],['d','dī','dí','dǐ','dì'],
+    ['t','tī','tí','tǐ','tì'],['n','nī','ní','nǐ','nì'],
+    ['l','lī','lí','lǐ','lì'],
+  ]},
+  { label:'สระ u (อู)', rows:[
+    ['b','bū','bú','bǔ','bù'],['p','pū','pú','pǔ','pù'],
+    ['m','mū','mú','mǔ','mù'],['f','fū','fú','fǔ','fù'],
+    ['d','dū','dú','dǔ','dù'],['t','tū','tú','tǔ','tù'],
+  ]},
+  { label:'สระผสม ai (ไอ)', rows:[
+    ['b','bāi','bái','bǎi','bài'],['p','pāi','pái','pǎi','pài'],
+    ['m','māi','mái','mǎi','mài'],['t','tāi','tái','tǎi','tài'],
+  ]},
+  { label:'สระผสม ao (เอา)', rows:[
+    ['b','bāo','báo','bǎo','bào'],['p','pāo','páo','pǎo','pào'],
+    ['m','māo','máo','mǎo','mào'],['h','hāo','háo','hǎo','hào'],
+  ]},
+  { label:'สระผสม an (อาน)', rows:[
+    ['b','bān','bán','bǎn','bàn'],['p','pān','pán','pǎn','pàn'],
+    ['m','mān','mán','mǎn','màn'],['f','fān','fán','fǎn','fàn'],
+  ]},
+  { label:'สระผสม ang (อาง)', rows:[
+    ['b','bāng','báng','bǎng','bàng'],['p','pāng','páng','pǎng','pàng'],
+    ['m','māng','máng','mǎng','màng'],['f','fāng','fáng','fǎng','fàng'],
+  ]},
+  { label:'สระผสม ei (เอย)', rows:[
+    ['b','bēi','béi','běi','bèi'],['p','pēi','péi','pěi','pèi'],
+    ['m','mēi','méi','měi','mèi'],['f','fēi','féi','fěi','fèi'],
+  ]},
+  { label:'สระผสม en (เอิน)', rows:[
+    ['b','bēn','bén','běn','bèn'],['p','pēn','pén','pěn','pèn'],
+    ['m','mēn','mén','měn','mèn'],['f','fēn','fén','fěn','fèn'],
+  ]},
+  { label:'สระผสม eng (เอิง)', rows:[
+    ['b','bēng','béng','běng','bèng'],['p','pēng','péng','pěng','pèng'],
+    ['m','mēng','méng','měng','mèng'],['f','fēng','féng','fěng','fèng'],
+  ]},
 ];
-
-let pinyinQuizIdx = 0, pinyinQuizScore = 0, pinyinQuizDone = false;
 
 function openPinyin() {
   pinyinQuizIdx = 0; pinyinQuizScore = 0; pinyinQuizDone = false;
@@ -7742,7 +7738,7 @@ function openPinyin() {
   renderPinyinConsonants();
   renderPinyinVowels();
   renderPinyinTricky();
-  renderPinyinQuiz();
+  renderPinyinQuiz(); // renders reading practice
   const d = state.user.data;
   const pinDone = (d.completed || []).includes(0);
   const prog = document.getElementById('pinyin-prog');
@@ -7967,60 +7963,62 @@ function renderPinyinTricky() {
       <div style="font-size:12px;color:var(--ink2)">เสียงเหล่านี้ไม่มีในภาษาไทย ต้องฝึกเป็นพิเศษ — กดกล่องเพื่อฟังเสียง</div>
     </div>
     ${cards}
-    <button class="btn-sm" style="width:100%;margin-top:8px" onclick="switchPinyinTab('pinyin-quiz', document.querySelectorAll('#screen-pinyin .tab-btn')[5])">ถัดไป: ทดสอบ →</button>`;
+    <button class="btn-sm" style="width:100%;margin-top:8px" onclick="switchPinyinTab('pinyin-quiz', document.querySelectorAll('#screen-pinyin .tab-btn')[5])">ถัดไป: ฝึกอ่าน →</button>`;
 }
 
-// ── RENDER: Quiz
+// ── RENDER: ฝึกอ่านพินอิน
 function renderPinyinQuiz() {
   const box = document.getElementById('ptab-pinyin-quiz');
   if (!box) return;
-  if (pinyinQuizDone) {
-    const pct = Math.round(pinyinQuizScore / PINYIN_QUIZ.length * 100);
-    const pass = pct >= 60;
-    box.innerHTML = `
-      <div class="quiz-result">
-        <img src="${pass ? 'https://avajarshika.github.io/tangtang/tangtang-happy.png' : 'https://avajarshika.github.io/tangtang/tangtang-sad.png'}" alt="TangTang" style="width:80px;height:80px;object-fit:contain;display:block;margin:0 auto 12px;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.25));animation:float 3s ease-in-out infinite">
-        <div class="result-score-ring" style="border-color:${pass?'var(--green)':'var(--red)'}">
-          <div class="result-pct" style="color:${pass?'var(--green)':'var(--red)'}">${pct}%</div>
-          <div class="result-pct-lbl">คะแนน</div>
-        </div>
-        <div class="result-title">${pass ? '🎉 เข้าใจพินอินแล้ว!' : '💪 ลองอ่านอีกครั้ง!'}</div>
-        <div class="result-sub">${pinyinQuizScore} / ${PINYIN_QUIZ.length} ข้อถูก</div>
-        ${pass ? '<button class="mark-done-btn" onclick="markPinyinDone()">✅ จบบทพินอิน — ปลดล็อคบทที่ 1!</button>' : ''}
-        <button class="retry-btn" style="margin-top:10px" onclick="pinyinQuizIdx=0;pinyinQuizScore=0;pinyinQuizDone=false;renderPinyinQuiz()">🔄 ทำใหม่</button>
-      </div>`;
-    return;
-  }
-  const q = PINYIN_QUIZ[pinyinQuizIdx];
-  const letters = ['A','B','C','D'];
-  box.innerHTML = `
-    <div class="quiz-wrap">
-      <div class="quiz-q-label">ข้อ ${pinyinQuizIdx+1} จาก ${PINYIN_QUIZ.length}</div>
-      <div class="prog-bar" style="margin-bottom:14px"><div class="prog-fill" style="width:${Math.round(pinyinQuizIdx/PINYIN_QUIZ.length*100)}%"></div></div>
-      <div class="quiz-q-card"><div class="quiz-q-text">${q.q}</div></div>
-      <div class="quiz-opts">
-        ${q.opts.map((o,i) => `
-          <button class="quiz-opt" id="pqo-${i}" onclick="answerPinyinQuiz(${i})">
-            <span class="quiz-opt-letter">${letters[i]}</span>${o}
-          </button>`).join('')}
-      </div>
-    </div>`;
-}
 
-function answerPinyinQuiz(chosen) {
-  const q = PINYIN_QUIZ[pinyinQuizIdx];
-  const correct = chosen === q.ans;
-  document.querySelectorAll('[id^="pqo-"]').forEach((b,i) => {
-    b.disabled = true;
-    if (i === q.ans) b.classList.add('correct');
-    else if (i === chosen && !correct) b.classList.add('wrong');
+  const toneColors = ['#c0186e','#1a6b9a','#1a6b3a','#8b1a1a'];
+  const toneLabels = ['เสียง 1','เสียง 2','เสียง 3','เสียง 4'];
+
+  let html = `
+    <div style="background:var(--paper2);border-radius:14px;padding:14px 16px;margin-bottom:18px;border-left:4px solid var(--red)">
+      <div style="font-size:14px;font-weight:800;color:var(--ink);margin-bottom:4px">📢 คำสั่ง: ฝึกอ่านออกเสียงดังๆ ทีละแถว</div>
+      <div style="font-size:12px;color:var(--ink3)">อ่านทีละเสียง จากซ้ายไปขวา — ฝึกทุกแถวให้คล่องก่อนไปบทถัดไป</div>
+    </div>
+
+    <!-- header สี -->
+    <div style="display:grid;grid-template-columns:40px 1fr 1fr 1fr 1fr;gap:4px;margin-bottom:6px;padding:0 4px">
+      <div></div>
+      ${toneLabels.map((l,i)=>`<div style="text-align:center;font-size:11px;font-weight:700;color:${toneColors[i]}">${l}</div>`).join('')}
+    </div>`;
+
+  PINYIN_READING.forEach((section, si) => {
+    html += `
+    <div style="margin-bottom:20px">
+      <div style="font-size:13px;font-weight:800;color:var(--ink);background:var(--red-light);border-radius:8px;padding:6px 12px;margin-bottom:8px;display:inline-block">
+        📖 ${section.label}
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px">`;
+
+    section.rows.forEach(row => {
+      const [cons, t1, t2, t3, t4] = row;
+      const tones = [t1,t2,t3,t4];
+      html += `
+        <div style="display:grid;grid-template-columns:40px 1fr 1fr 1fr 1fr;gap:4px;align-items:center;background:white;border:1px solid var(--paper3);border-radius:10px;padding:6px 4px">
+          <div style="text-align:center;font-size:13px;font-weight:800;color:var(--ink2)">${cons}-</div>
+          ${tones.map((t,i)=>`
+            <div style="display:flex;flex-direction:column;align-items:center;padding:8px 2px;background:${i===0?'#fff0f8':i===1?'#f0f6ff':i===2?'#f0fff4':'#fff5f0'};border:1.5px solid ${toneColors[i]}33;border-radius:8px;">
+              <span style="font-size:16px;font-weight:700;color:${toneColors[i]}">${t}</span>
+            </div>`).join('')}
+        </div>`;
+    });
+
+    html += `</div></div>`;
   });
-  if (correct) { pinyinQuizScore++; state.user.data.xp = (state.user.data.xp||0)+5; saveState(); }
-  setTimeout(() => {
-    pinyinQuizIdx++;
-    if (pinyinQuizIdx >= PINYIN_QUIZ.length) pinyinQuizDone = true;
-    renderPinyinQuiz();
-  }, 900);
+
+  html += `
+    <div style="margin-top:16px;padding:14px;background:var(--green-light);border-radius:12px;text-align:center">
+      <div style="font-size:14px;font-weight:700;color:var(--green);margin-bottom:8px">✅ ฝึกครบแล้วใช่ไหม?</div>
+      <button onclick="markPinyinDone()" style="padding:12px 24px;background:var(--green);color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">
+        จบบทพินอิน → ปลดล็อคบทที่ 1! 🎉
+      </button>
+    </div>`;
+
+  box.innerHTML = html;
 }
 
 function markPinyinDone() {
@@ -8059,6 +8057,97 @@ function speakWithGoogleTTS(text, onEnd) {
   audio.onended = () => { if (onEnd) onEnd(); };
   audio.onerror = () => { if (onEnd) onEnd(); };
   audio.play().catch(() => { if (onEnd) onEnd(); });
+}
+
+// Pinyin → Chinese character map ครบทุกเสียงในตารางฝึกอ่าน
+const PY_TO_HAN = {
+  // สระ a
+  'bā':'巴','bá':'拔','bǎ':'把','bà':'爸',
+  'pā':'趴','pá':'爬','pǎ':'怕','pà':'怕',
+  'mā':'妈','má':'麻','mǎ':'马','mà':'骂',
+  'fā':'发','fá':'乏','fǎ':'法','fà':'罚',
+  // สระ o
+  'bō':'波','bó':'博','bǒ':'驳','bò':'薄',
+  'pō':'坡','pó':'婆','pǒ':'颇','pò':'破',
+  'mō':'摸','mó':'磨','mǒ':'抹','mò':'墨',
+  'fō':'佛','fó':'佛','fǒ':'否','fò':'副',
+  // สระ e
+  'mē':'么','mé':'么','mě':'每','mè':'么',
+  'dē':'的','dé':'德','dě':'得','dè':'的',
+  'nē':'呢','né':'呢','ně':'哪','nè':'呢',
+  'gē':'哥','gé':'格','gě':'葛','gè':'个',
+  'hē':'喝','hé':'河','hě':'盒','hè':'贺',
+  // สระ i
+  'bī':'逼','bí':'鼻','bǐ':'比','bì':'必',
+  'pī':'批','pí':'皮','pǐ':'匹','pì':'屁',
+  'mī':'咪','mí':'迷','mǐ':'米','mì':'密',
+  'dī':'低','dí':'敌','dǐ':'底','dì':'地',
+  'tī':'踢','tí':'题','tǐ':'体','tì':'替',
+  'nī':'你','ní':'泥','nǐ':'你','nì':'逆',
+  'lī':'离','lí':'离','lǐ':'里','lì':'力',
+  // สระ u
+  'bū':'布','bú':'不','bǔ':'补','bù':'部',
+  'pū':'扑','pú':'葡','pǔ':'普','pù':'铺',
+  'mū':'母','mú':'模','mǔ':'母','mù':'木',
+  'fū':'夫','fú':'服','fǔ':'府','fù':'父',
+  'dū':'都','dú':'读','dǔ':'赌','dù':'度',
+  'tū':'秃','tú':'图','tǔ':'土','tù':'兔',
+  // สระผสม ai
+  'bāi':'百','bái':'白','bǎi':'百','bài':'拜',
+  'pāi':'拍','pái':'牌','pǎi':'派','pài':'派',
+  'māi':'买','mái':'埋','mǎi':'买','mài':'卖',
+  'tāi':'胎','tái':'台','tǎi':'太','tài':'太',
+  // สระผสม ao
+  'bāo':'包','báo':'薄','bǎo':'宝','bào':'报',
+  'pāo':'抛','páo':'袍','pǎo':'跑','pào':'泡',
+  'māo':'猫','máo':'毛','mǎo':'卯','mào':'帽',
+  'hāo':'好','háo':'好','hǎo':'好','hào':'号',
+  // สระผสม an
+  'bān':'班','bán':'板','bǎn':'板','bàn':'半',
+  'pān':'攀','pán':'盘','pǎn':'盼','pàn':'盼',
+  'mān':'慢','mán':'满','mǎn':'满','màn':'慢',
+  'fān':'番','fán':'烦','fǎn':'反','fàn':'饭',
+  // สระผสม ang
+  'bāng':'帮','báng':'磅','bǎng':'榜','bàng':'棒',
+  'pāng':'乓','páng':'旁','pǎng':'胖','pàng':'胖',
+  'māng':'忙','máng':'忙','mǎng':'莽','màng':'莽',
+  'fāng':'方','fáng':'房','fǎng':'访','fàng':'放',
+  // สระผสม ei
+  'bēi':'杯','béi':'北','běi':'北','bèi':'被',
+  'pēi':'胚','péi':'陪','pěi':'配','pèi':'配',
+  'mēi':'美','méi':'没','měi':'美','mèi':'妹',
+  'fēi':'飞','féi':'肥','fěi':'翡','fèi':'费',
+  // สระผสม en
+  'bēn':'奔','bén':'本','běn':'本','bèn':'笨',
+  'pēn':'喷','pén':'盆','pěn':'喷','pèn':'喷',
+  'mēn':'闷','mén':'门','měn':'们','mèn':'闷',
+  'fēn':'分','fén':'坟','fěn':'粉','fèn':'份',
+  // สระผสม eng
+  'bēng':'崩','béng':'绷','běng':'绷','bèng':'蹦',
+  'pēng':'烹','péng':'朋','pěng':'捧','pèng':'碰',
+  'mēng':'蒙','méng':'蒙','měng':'猛','mèng':'梦',
+  'fēng':'风','féng':'缝','fěng':'讽','fèng':'凤',
+};
+
+function speakPY(py) {
+  const han = PY_TO_HAN[py];
+  if (!han) { return; }
+  try {
+    window.speechSynthesis && window.speechSynthesis.cancel();
+    const audio = new Audio(
+      `https://translate.google.com/translate_tts?ie=UTF-8&tl=zh-CN&client=tw-ob&q=${encodeURIComponent(han)}`
+    );
+    audio.play().catch(() => {
+      const u = new SpeechSynthesisUtterance(han);
+      u.lang = 'zh-CN'; u.rate = 0.75;
+      if (window.speechSynthesis) {
+        const voices = window.speechSynthesis.getVoices();
+        const zh = voices.find(v=>v.lang==='zh-CN') || voices.find(v=>v.lang.startsWith('zh'));
+        if (zh) u.voice = zh;
+      }
+      window.speechSynthesis && window.speechSynthesis.speak(u);
+    });
+  } catch(e) {}
 }
 
 function speak(text, onEnd, rate=0.85) {
