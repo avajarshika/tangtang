@@ -770,14 +770,21 @@ async function updateAffiliateStats(code) {
   try {
     if (!code) return;
 
-    // หา user_id จาก referral_code — ใช้ maybeSingle() แทน single()
+    // หา user_id และ stats จาก referral_code
     const { data, error } = await sb.from('user_progress')
-      .select('user_id')
+      .select('user_id, affiliate_earnings, affiliate_count')
       .eq('referral_code', code)
       .maybeSingle();
 
     console.log('Affiliate lookup:', { code, data, error });
     if (!data || !data.user_id) return;
+
+    // อัพเดต affiliate_earnings และ affiliate_count ใน user_progress
+    const { error: updateErr } = await sb.from('user_progress').update({
+      affiliate_earnings: (data.affiliate_earnings || 0) + 193,
+      affiliate_count: (data.affiliate_count || 0) + 1
+    }).eq('user_id', data.user_id);
+    console.log('Affiliate update:', updateErr || 'success');
 
     // Insert into affiliate_earnings table
     const { error: insertErr } = await sb.from('affiliate_earnings').insert({
