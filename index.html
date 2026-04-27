@@ -8504,7 +8504,7 @@ function answerDaily(chosen) {
       const today=new Date().toISOString().split('T')[0];
       if(state.user){
         state.user.data.dailyDone=today;
-        state.user.data.xp=(state.user.data.xp||0)+dailyScore*10;
+        state.user.data.xp=Math.floor((state.user.data.xp||0)+dailyScore*10);
         const lastDaily=state.user.data.lastDailyDate;
         const yesterday=new Date(Date.now()-86400000).toISOString().split('T')[0];
         state.user.data.dailyStreak=(lastDaily===yesterday)?(state.user.data.dailyStreak||0)+1:1;
@@ -11085,8 +11085,8 @@ function awardXP(base, multiplier) {
   const d = state.user.data;
   const oldXP = d.xp || 0;
   const oldLv = getLevelFromXP(oldXP);
-  const earned = base * multiplier;
-  d.xp = oldXP + earned;
+  const earned = Math.floor(base * multiplier);
+  d.xp = Math.floor(oldXP + earned);
   quizXpThisSession += earned;
   saveState();
   // Update header
@@ -11895,7 +11895,7 @@ function answerSpeed(chosen) {
     const xp = Math.round((5 + timeBonus) * mult);
     speedScore += xp; speedLevelScore += xp;
     if (fb) fb.innerHTML = `<span style="color:var(--green)">✅ ถูก! +${xp} XP${mult>1?' 🔥 x'+mult+' Combo!':''}</span>`;
-    if (state.user) { state.user.data.xp=(state.user.data.xp||0)+xp; trackActivity(); saveState(); updateTopbar(); }
+    if (state.user) { state.user.data.xp=Math.floor((state.user.data.xp||0)+xp); trackActivity(); saveState(); updateTopbar(); }
   } else {
     speedCombo = 0;
     if (fb) fb.innerHTML = `<span style="color:var(--red)">❌ เฉลย: ${q.opts[q.ans]}</span>`;
