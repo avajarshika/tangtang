@@ -7477,6 +7477,18 @@ function renderPinyinIntro() {
   const box = document.getElementById('ptab-intro');
   if (!box) return;
   box.innerHTML = `
+    <!-- Video -->
+    <div style="border-radius:16px;overflow:hidden;margin-bottom:16px;position:relative;padding-top:56.25%;background:#000">
+      <iframe
+        src="https://www.youtube.com/embed/pmP3a_1SmUk"
+        title="พินอิน (Pinyin) คืออะไร? — TangTang Chinese"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        style="position:absolute;top:0;left:0;width:100%;height:100%"
+      ></iframe>
+    </div>
+
     <!-- Hero -->
     <div style="background:linear-gradient(135deg,#1a0020,#2d0035);border-radius:16px;padding:24px 20px;text-align:center;margin-bottom:20px">
       <div style="font-size:48px;margin-bottom:8px">🔤</div>
@@ -8073,84 +8085,6 @@ function loadVoices() {
 if (synth) { loadVoices(); synth.onvoiceschanged = loadVoices; }
 
 // ใช้ Google TTS เป็น fallback สำหรับ Android
-// ── SOUND EFFECTS SYSTEM ──
-const SFX = {
-  _ctx: null,
-  _get() {
-    if (!this._ctx) this._ctx = new (window.AudioContext || window.webkitAudioContext)();
-    return this._ctx;
-  },
-  click() {
-    try {
-      const ctx = this._get();
-      const o = ctx.createOscillator();
-      const g = ctx.createGain();
-      o.connect(g); g.connect(ctx.destination);
-      o.frequency.setValueAtTime(800, ctx.currentTime);
-      o.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.05);
-      g.gain.setValueAtTime(0.15, ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
-      o.start(ctx.currentTime);
-      o.stop(ctx.currentTime + 0.08);
-    } catch(e) {}
-  },
-  correct() {
-    try {
-      const ctx = this._get();
-      [523, 659, 784].forEach((freq, i) => {
-        const o = ctx.createOscillator();
-        const g = ctx.createGain();
-        o.connect(g); g.connect(ctx.destination);
-        o.type = 'sine';
-        o.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.1);
-        g.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.1);
-        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.1 + 0.2);
-        o.start(ctx.currentTime + i * 0.1);
-        o.stop(ctx.currentTime + i * 0.1 + 0.2);
-      });
-    } catch(e) {}
-  },
-  wrong() {
-    try {
-      const ctx = this._get();
-      const o = ctx.createOscillator();
-      const g = ctx.createGain();
-      o.connect(g); g.connect(ctx.destination);
-      o.type = 'sawtooth';
-      o.frequency.setValueAtTime(200, ctx.currentTime);
-      o.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.3);
-      g.gain.setValueAtTime(0.15, ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
-      o.start(ctx.currentTime);
-      o.stop(ctx.currentTime + 0.3);
-    } catch(e) {}
-  },
-  levelUp() {
-    try {
-      const ctx = this._get();
-      [400, 500, 600, 800].forEach((freq, i) => {
-        const o = ctx.createOscillator();
-        const g = ctx.createGain();
-        o.connect(g); g.connect(ctx.destination);
-        o.type = 'sine';
-        o.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.08);
-        g.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.08);
-        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.08 + 0.15);
-        o.start(ctx.currentTime + i * 0.08);
-        o.stop(ctx.currentTime + i * 0.08 + 0.15);
-      });
-    } catch(e) {}
-  }
-};
-
-// Add click sound to all buttons automatically
-document.addEventListener('click', function(e) {
-  const btn = e.target.closest('button, .lesson-card, .quiz-opt, .nav-btn, .tab-btn, .btn-sm, .vm-card, .fc-card');
-  if (btn && !btn.classList.contains('vocab-audio-btn') && !btn.classList.contains('vm-speak-btn')) {
-    SFX.click();
-  }
-}, true);
-
 function speakWithGoogleTTS(text, onEnd) {
   const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&tl=zh-CN&client=tw-ob&q=${encodeURIComponent(text)}`);
   audio.onended = () => { if (onEnd) onEnd(); };
@@ -8304,9 +8238,38 @@ function speakVocab(zh, btn) {
 
 function speakWord(zh) { stopSpeech(); speak(zh); }
 
-function playCorrectSound() { SFX.correct(); }
+function playCorrectSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(523, ctx.currentTime);
+    osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+    osc.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
+    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.5);
+  } catch(e) {}
+}
 
-function playWrongSound() { SFX.wrong(); }
+function playWrongSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(200, ctx.currentTime);
+    osc.frequency.setValueAtTime(150, ctx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.3);
+  } catch(e) {}
+}
 
 function speakFC() {
   if (!state.curLesson) return;
@@ -8566,7 +8529,7 @@ function answerDaily(chosen) {
     if(i===q.ans){b.style.borderColor='var(--green)';b.style.background='var(--green-light)';b.querySelector('span').style.background='var(--green)';b.querySelector('span').style.color='white';}
     else if(i===chosen&&!correct){b.style.borderColor='var(--red)';b.style.background='var(--red-light)';b.querySelector('span').style.background='var(--red)';b.querySelector('span').style.color='white';}
   });
-  if(correct) { dailyScore++; SFX.correct(); } else { SFX.wrong(); }
+  if(correct) dailyScore++;
   setTimeout(()=>{
     dailyQIdx++;
     if(dailyQIdx>=dailyQuestions.length){
@@ -8790,7 +8753,7 @@ function checkSentence() {
   if(fb) fb.innerHTML=correct
     ?`<div style="color:var(--green);font-weight:700;font-size:14px">🎉 ถูกต้อง! +15 XP</div><div style="font-size:12px;color:var(--ink3);margin-top:4px">${s.py}</div>`
     :`<div style="color:var(--red);font-weight:700;font-size:14px">❌ เฉลย: ${s.correct}</div><div style="font-size:12px;color:var(--ink3);margin-top:4px">${s.py}</div>`;
-  if(correct){sbScore++;SFX.correct();if(state.user){state.user.data.xp=(state.user.data.xp||0)+15;trackActivity();saveState();updateTopbar();}} else{SFX.wrong();}
+  if(correct){sbScore++;if(state.user){state.user.data.xp=(state.user.data.xp||0)+15;trackActivity();saveState();updateTopbar();}}
   const btn=document.getElementById('sb-check-btn');
   if(btn){
     btn.textContent=sbLevelIdx+1>=lv.sentences.length?'🏁 ดูผลลัพธ์':'ถัดไป →';
@@ -11163,7 +11126,7 @@ function awardXP(base, multiplier) {
   document.getElementById('top-xp').textContent = d.xp;
   // Level up?
   const newLv = getLevelFromXP(d.xp);
-  if (newLv > oldLv) { SFX.levelUp(); setTimeout(() => showLevelUp(oldLv, newLv), 400); }
+  if (newLv > oldLv) setTimeout(() => showLevelUp(oldLv, newLv), 400);
   return earned;
 }
 
@@ -11217,7 +11180,6 @@ function answerMainQuiz(chosen, title) {
   });
 
   if (correct) {
-    SFX.correct();
     mainQuizScore++;
     // XP with multiplier
     const isFinal = currentQuizMode && ['hsk1-final','hsk2-final','hsk3-final','hsk4-final','hsk5-final','hsk6-final'].includes(currentQuizMode.id);
@@ -11229,8 +11191,6 @@ function answerMainQuiz(chosen, title) {
     const popColor = mult >= 3 ? '#ee5a24' : mult >= 2 ? '#e84393' : mult >= 1.5 ? '#ff6b35' : '#C9A96E';
     popXP(earned, popColor, mult > 1 ? mult : 0);
     updateComboDisplay();
-  } else {
-    SFX.wrong();
   }
 
   const delay = correct ? 650 : 900;
@@ -11961,7 +11921,6 @@ function answerSpeed(chosen) {
   });
   const fb = document.getElementById('speed-feedback');
   if (correct) {
-    SFX.correct();
     speedCombo++;
     speedCorrectInLevel++;
     const mult = speedCombo>=5?3:speedCombo>=3?2:speedCombo>=2?1.5:1;
@@ -11971,7 +11930,6 @@ function answerSpeed(chosen) {
     if (fb) fb.innerHTML = `<span style="color:var(--green)">✅ ถูก! +${xp} XP${mult>1?' 🔥 x'+mult+' Combo!':''}</span>`;
     if (state.user) { state.user.data.xp=(state.user.data.xp||0)+xp; trackActivity(); saveState(); updateTopbar(); }
   } else {
-    SFX.wrong();
     speedCombo = 0;
     if (fb) fb.innerHTML = `<span style="color:var(--red)">❌ เฉลย: ${q.opts[q.ans]}</span>`;
   }
