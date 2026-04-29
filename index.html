@@ -7607,7 +7607,17 @@ function renderPlacementQuestion() {
   const pct = (placementIdx / PLACEMENT_QUESTIONS.length) * 100;
   prog.style.width = pct + '%';
 
-  const q = PLACEMENT_QUESTIONS[placementIdx];
+  // Shuffle options ถ้าเป็น translate/listen/fill
+  const rawQ = PLACEMENT_QUESTIONS[placementIdx];
+  let q = rawQ;
+  if (['translate','listen','fill'].includes(rawQ.type) && rawQ.opts) {
+    const correctAns = rawQ.opts[rawQ.ans];
+    const shuffled = [...rawQ.opts].sort(() => Math.random() - 0.5);
+    const newAns = shuffled.indexOf(correctAns);
+    q = { ...rawQ, opts: shuffled, ans: newAns };
+    PLACEMENT_QUESTIONS[placementIdx] = q;
+  }
+
   const qNum = placementIdx + 1;
 
   let html = `
