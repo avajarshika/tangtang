@@ -6630,7 +6630,7 @@ function goScreen(s) {
   document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
   document.getElementById('screen-' + s).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  const navMap = { home:'nav-home', 'lessons-hub':'nav-lessons', play:'nav-chat', chat:'nav-chat', quiz:'nav-quiz', profile:'nav-profile', lesson:'nav-home', pinyin:'nav-home', vocab:'nav-lessons' };
+  const navMap = { home:'nav-home', 'lessons-hub':'nav-lessons', play:'nav-chat', chat:'nav-chat', quiz:'nav-quiz', profile:'nav-profile', lesson:'nav-home', pinyin:'nav-home', vocab:'nav-lessons', placement:'nav-home' };
   const nb = document.getElementById(navMap[s]);
   if (nb) nb.classList.add('active');
   state.curScreen = s;
@@ -7770,15 +7770,6 @@ function showPlacementResult() {
         🔄 ทำแบบทดสอบอีกครั้ง
       </button>
     </div>`;
-}
-
-function openPlacementTest() {
-  placementIdx = 0;
-  placementScore = 0;
-  placementAnswers = [];
-  placementOrderSelected = [];
-  goScreen('placement');
-  renderPlacementQuestion();
 }
 
 function renderPinyinIntro() {
