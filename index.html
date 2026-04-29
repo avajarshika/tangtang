@@ -7000,7 +7000,7 @@ function showPaymentModal() {
         <div style="font-size:12px;color:#555;line-height:2;">
           🎯 บทเรียนครบทุกบท ทักทาย · อาหาร · เดินทาง และอื่นๆ<br>
           ⚡ มินิเกม Speed Quiz · เรียงประโยค · ลำดับขีด ทุก Level<br>
-          📚 คำศัพท์กว่า 5,000+ คำ พร้อม Flashcard SRS<br>
+          📚 คำศัพท์กว่า 2,000+ คำ พร้อม Flashcard SRS<br>
           🎮 แบบทดสอบและ Final Exam ครบทุกระดับ<br>
           🔄 อัปเดตเนื้อหาฟรีตลอด
         </div>
@@ -10135,7 +10135,7 @@ function renderLessonsHub() {
       }).join('');
       return;
     }
-    if (badge) badge.innerHTML = `HSK 6 — Mastery C2 &nbsp;·&nbsp; เรียนแล้ว ${done6}/${hsk6Lessons.length} บท &nbsp;·&nbsp; ~5000 คำ`;
+    if (badge) badge.innerHTML = `HSK 6 — Mastery C2 &nbsp;·&nbsp; เรียนแล้ว ${done6}/${hsk6Lessons.length} บท &nbsp;·&nbsp; ~2,000+ คำ`;
     hub.innerHTML = hsk6Lessons.map(l => {
       const isDone = (d.completed||[]).includes(l.id);
       return `<div class="lesson-card ${isDone?'done':''}" onclick="openLesson(${l.id})">
