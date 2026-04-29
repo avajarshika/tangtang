@@ -7514,6 +7514,33 @@ function renderProfile() {
 }
 
 // ═══════════════════════════════════
+// ── PLACEMENT TEST SOUND ──
+function playSFX(type) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    if (type === 'correct') {
+      [523, 659, 784].forEach((freq, i) => {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.connect(g); g.connect(ctx.destination);
+        o.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.1);
+        g.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.1);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.1 + 0.2);
+        o.start(ctx.currentTime + i * 0.1);
+        o.stop(ctx.currentTime + i * 0.1 + 0.2);
+      });
+    } else {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(200, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.3);
+      g.gain.setValueAtTime(0.15, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+      o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.3);
+    }
+  } catch(e) {}
+}
+
 // ── PLACEMENT TEST ──
 const PLACEMENT_QUESTIONS = [
   // HSK 1-2 (ข้อ 1-10)
@@ -7659,7 +7686,7 @@ function submitPlacementOrder() {
   const q = PLACEMENT_QUESTIONS[placementIdx];
   const userAnswer = placementOrderSelected.join('');
   const correct = userAnswer === q.correct;
-  if (correct) { placementScore++; SFX.correct(); } else { SFX.wrong(); }
+  if (correct) { placementScore++; playSFX('correct'); } else { playSFX('wrong'); }
   placementAnswers.push({ q, correct, userAnswer });
   showPlacementFeedback(correct, q.correct, q.meaning);
 }
@@ -7667,7 +7694,7 @@ function submitPlacementOrder() {
 function answerPlacement(chosen) {
   const q = PLACEMENT_QUESTIONS[placementIdx];
   const correct = chosen === q.ans;
-  if (correct) { placementScore++; SFX.correct(); } else { SFX.wrong(); }
+  if (correct) { placementScore++; playSFX('correct'); } else { playSFX('wrong'); }
   placementAnswers.push({ q, correct, chosen });
   showPlacementFeedback(correct, q.opts[q.ans], q.meaning || '');
 }
