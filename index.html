@@ -1987,18 +1987,6 @@ body {
         <div id="admin-summary" style="font-size:12px;color:var(--ink2)">กำลังโหลด...</div>
       </div>
       <div style="font-size:12px;font-weight:700;color:var(--ink3);letter-spacing:.05em;margin-bottom:10px">รายชื่อสมาชิกทั้งหมด</div>
-      <!-- Search Bar -->
-      <div style="position:relative;margin-bottom:12px">
-        <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:15px">🔍</span>
-        <input
-          id="admin-search-input"
-          type="text"
-          placeholder="ค้นหาด้วยอีเมล..."
-          oninput="filterAdminUsers(this.value)"
-          style="width:100%;padding:10px 12px 10px 36px;border:1.5px solid var(--paper3);border-radius:10px;font-size:13px;font-family:inherit;background:white;box-sizing:border-box;outline:none"
-        >
-        <button onclick="document.getElementById('admin-search-input').value='';filterAdminUsers('')" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:14px;cursor:pointer;color:var(--ink3)">✕</button>
-      </div>
       <div id="admin-user-list">
         <div style="text-align:center;padding:30px;color:var(--ink3)">⏳ กำลังโหลด...</div>
       </div>
@@ -2157,10 +2145,10 @@ const LESSONS = [
       {zh:'们',py:'men',th:'(พหูพจน์)',en:'Plural marker',em:'👥'},
       {zh:'叫',py:'jiào',th:'ชื่อ / เรียก',en:'To be called',em:'📛'},
       {zh:'名字',py:'míngzi',th:'ชื่อ',en:'Name',em:'🏷️'},
-      {zh:'谢谢',py:'xiè xie',th:'ขอบคุณ',en:'Thank you',em:'🙏'},
-      {zh:'对不起',py:'duì bu qǐ',th:'ขอโทษ',en:'Sorry',em:'😔'},
-      {zh:'没关系',py:'méi guān xi',th:'ไม่เป็นไร',en:"No worries",em:'🤝'},
-      {zh:'再见',py:'zài jiàn',th:'ลาก่อน',en:'Goodbye',em:'👋'},
+      {zh:'谢谢',py:'xièxie',th:'ขอบคุณ',en:'Thank you',em:'🙏'},
+      {zh:'对不起',py:'duìbuqǐ',th:'ขอโทษ',en:'Sorry',em:'😔'},
+      {zh:'没关系',py:'méi guānxi',th:'ไม่เป็นไร',en:"No worries",em:'🤝'},
+      {zh:'再见',py:'zàijiàn',th:'ลาก่อน',en:'Goodbye',em:'👋'},
       {zh:'是',py:'shì',th:'เป็น / ใช่',en:'To be / Yes',em:'✅'},
       {zh:'不是',py:'bú shì',th:'ไม่ใช่',en:'Is not',em:'❌'},
       {zh:'很',py:'hěn',th:'มาก / ดีมาก',en:'Very',em:'💯'},
@@ -2189,16 +2177,16 @@ const LESSONS = [
     title:'家人 — ครอบครัว', sub:'สมาชิกครอบครัว · บอกอายุ · อาชีพ',
     dialog:[
       {sp:'A',spName:'นักเรียน', cn:'你有兄弟姐妹吗？', py:'Nǐ yǒu xiōngdì jiěmèi ma?', th:'คุณมีพี่น้องไหม?'},
-      {sp:'B',spName:'เพื่อน', cn:'有，我有一个哥哥和一个妹妹。你呢？', py:'Yǒu, wǒ yǒu yī gè gēgē hé yī gè mèimei. Nǐ ne?', th:'มีครับ ฉันมีพี่ชายหนึ่งคนและน้องสาวหนึ่งคน แล้วคุณล่ะ?'},
-      {sp:'A',spName:'นักเรียน', cn:'我没有兄弟姐妹，我是独生子。你哥哥多大了？', py:'Wǒ méiyǒu xiōngdì jiěmèi, wǒ shì dúshēngzǐ. Nǐ gēgē duō dà le?', th:'ฉันไม่มีพี่น้อง ฉันเป็นลูกคนเดียว พี่ชายคุณอายุเท่าไหร่แล้ว?'},
-      {sp:'B',spName:'เพื่อน', cn:'你爸爸妈妈做什么工作？', py:'Nǐ bàba māmā zuò shénme gōngzuò?', th:'พ่อแม่คุณทำงานอะไร?'},
-      {sp:'A',spName:'นักเรียน', cn:'我爸爸是医生，妈妈是老师。你呢？', py:'Wǒ bàba shì yīshēng, māmā shì lǎoshī. Nǐ ne?', th:'พ่อฉันเป็นหมอ แม่เป็นครู แล้วคุณล่ะ?'},
+      {sp:'B',spName:'เพื่อน', cn:'有，我有一个哥哥和一个妹妹。你呢？', py:'Yǒu, wǒ yǒu yī gè gēge hé yī gè mèimei. Nǐ ne?', th:'มีครับ ฉันมีพี่ชายหนึ่งคนและน้องสาวหนึ่งคน แล้วคุณล่ะ?'},
+      {sp:'A',spName:'นักเรียน', cn:'我没有兄弟姐妹，我是独生子。你哥哥多大了？', py:'Wǒ méiyǒu xiōngdì jiěmèi, wǒ shì dúshēngzǐ. Nǐ gēge duō dà le?', th:'ฉันไม่มีพี่น้อง ฉันเป็นลูกคนเดียว พี่ชายคุณอายุเท่าไหร่แล้ว?'},
+      {sp:'B',spName:'เพื่อน', cn:'你爸爸妈妈做什么工作？', py:'Nǐ bàba māma zuò shénme gōngzuò?', th:'พ่อแม่คุณทำงานอะไร?'},
+      {sp:'A',spName:'นักเรียน', cn:'我爸爸是医生，妈妈是老师。你呢？', py:'Wǒ bàba shì yīshēng, māma shì lǎoshī. Nǐ ne?', th:'พ่อฉันเป็นหมอ แม่เป็นครู แล้วคุณล่ะ?'},
       {sp:'B',spName:'เพื่อน', cn:'我爸爸是商人，今年五十岁了。', py:'Wǒ bàba shì shāngrén, jīnnián wǔshí suì le.', th:'พ่อฉันเป็นนักธุรกิจ ปีนี้อายุห้าสิบปีแล้ว'},
     ],
     vocab:[
       {zh:'爸爸',py:'bàba',th:'พ่อ',en:'Father',em:'👨'},
-      {zh:'妈妈',py:'māmā',th:'แม่',en:'Mother',em:'👩'},
-      {zh:'哥哥',py:'gēgē',th:'พี่ชาย',en:'Older brother',em:'👦'},
+      {zh:'妈妈',py:'māma',th:'แม่',en:'Mother',em:'👩'},
+      {zh:'哥哥',py:'gēge',th:'พี่ชาย',en:'Older brother',em:'👦'},
       {zh:'姐姐',py:'jiějie',th:'พี่สาว',en:'Older sister',em:'👧'},
       {zh:'弟弟',py:'dìdi',th:'น้องชาย',en:'Younger brother',em:'🧒'},
       {zh:'妹妹',py:'mèimei',th:'น้องสาว',en:'Younger sister',em:'👶'},
@@ -2215,13 +2203,13 @@ const LESSONS = [
       {zh:'工作',py:'gōngzuò',th:'ทำงาน / งาน',en:'Work / Job',em:'💼'},
       {zh:'医生',py:'yīshēng',th:'แพทย์ / หมอ',en:'Doctor',em:'👨‍⚕️'},
       {zh:'老师',py:'lǎoshī',th:'ครู / อาจารย์',en:'Teacher',em:'👨‍🏫'},
-      {zh:'学生',py:'xuéshēng',th:'นักเรียน',en:'Student',em:'🎒'},
+      {zh:'学生',py:'xuésheng',th:'นักเรียน',en:'Student',em:'🎒'},
       {zh:'商人',py:'shāngrén',th:'นักธุรกิจ',en:'Businessman',em:'💼'},
       {zh:'家',py:'jiā',th:'บ้าน / ครอบครัว',en:'Home / Family',em:'🏠'},
       {zh:'个',py:'gè',th:'คน / ชิ้น (ลักษณะนาม)',en:'(General counter)',em:'🔢'},
     ],
     quiz:[
-      {type:'mc',q:'妈妈 (māmā) แปลว่า?',opts:['พ่อ','พี่สาว','แม่','น้องสาว'],ans:2},
+      {type:'mc',q:'妈妈 (māma) แปลว่า?',opts:['พ่อ','พี่สาว','แม่','น้องสาว'],ans:2},
       {type:'mc',q:'"พี่ชาย" ภาษาจีนคือ?',opts:['哥哥','妹妹','弟弟','姐姐'],ans:0},
       {type:'mc',q:'没有 (méiyǒu) หมายถึง?',opts:['มี','เป็น','อยู่','ไม่มี'],ans:3},
       {type:'mc',q:'岁 (suì) ใช้สำหรับ?',opts:['บอกเวลา','บอกอายุ','บอกราคา','บอกจำนวน'],ans:1},
@@ -2234,9 +2222,9 @@ const LESSONS = [
     id:2, icon:'🔢', theme:'ตัวเลข', hsk:1,
     title:'一二三 — ตัวเลขและเวลา', sub:'ตัวเลข 0–10,000 · เวลา · ราคา · เงินทอน',
     dialog:[
-      {sp:'A',spName:'ลูกค้า', cn:'你好！请问这件衣服多少钱？', py:'Nǐ hǎo! Qǐngwèn zhè jiàn yīfu duōshǎo qián?', th:'สวัสดี! ขอโทษ เสื้อตัวนี้ราคาเท่าไหร่?'},
+      {sp:'A',spName:'ลูกค้า', cn:'你好！请问这件衣服多少钱？', py:'Nǐ hǎo! Qǐngwèn zhè jiàn yīfu duōshao qián?', th:'สวัสดี! ขอโทษ เสื้อตัวนี้ราคาเท่าไหร่?'},
       {sp:'B',spName:'พ่อค้า', cn:'一百二十块钱。你要几件？', py:'Yī bǎi èrshí kuài qián. Nǐ yào jǐ jiàn?', th:'120 หยวนครับ ต้องการกี่ตัว?'},
-      {sp:'A',spName:'ลูกค้า', cn:'我要两件。一共多少钱？', py:'Wǒ yào liǎng jiàn. Yīgòng duōshǎo qián?', th:'เอาสองตัว รวมทั้งหมดเท่าไหร่?'},
+      {sp:'A',spName:'ลูกค้า', cn:'我要两件。一共多少钱？', py:'Wǒ yào liǎng jiàn. Yīgòng duōshao qián?', th:'เอาสองตัว รวมทั้งหมดเท่าไหร่?'},
       {sp:'B',spName:'พ่อค้า', cn:'一共两百四十块。', py:'Yīgòng liǎng bǎi sìshí kuài.', th:'รวมทั้งหมด 240 หยวนครับ'},
       {sp:'A',spName:'ลูกค้า', cn:'可以便宜一点吗？两百块怎么样？', py:'Kěyǐ piányí yīdiǎn ma? Liǎng bǎi kuài zěnmeyàng?', th:'ลดราคาได้ไหม? 200 หยวนได้ไหม?'},
       {sp:'B',spName:'พ่อค้า', cn:'好吧，两百二十块，最低了！', py:'Hǎo ba, liǎng bǎi èrshí kuài, zuì dī le!', th:'โอเคแล้วกัน 220 หยวน ราคาต่ำสุดแล้วนะ!'},
@@ -2267,7 +2255,7 @@ const LESSONS = [
       {zh:'万',py:'wàn',th:'หมื่น (10,000)',en:'Ten thousand',em:'💎'},
       {zh:'两',py:'liǎng',th:'สอง (ใช้กับนาม)',en:'Two (w/ nouns)',em:'2️⃣'},
       {zh:'几',py:'jǐ',th:'กี่ / เท่าไหร่',en:'How many',em:'❓'},
-      {zh:'多少',py:'duōshǎo',th:'เท่าไหร่',en:'How much/many',em:'🤔'},
+      {zh:'多少',py:'duōshao',th:'เท่าไหร่',en:'How much/many',em:'🤔'},
       {zh:'钱',py:'qián',th:'เงิน',en:'Money',em:'💵'},
       {zh:'块',py:'kuài',th:'หยวน (บาท)',en:'Yuan (unit)',em:'🪙'},
       {zh:'一共',py:'yīgòng',th:'รวมทั้งหมด',en:'In total',em:'🧮'},
@@ -2282,7 +2270,7 @@ const LESSONS = [
       {zh:'分钟',py:'fēnzhōng',th:'นาที',en:'Minute',em:'⏱️'},
     ],
     quiz:[
-      {type:'mc',q:'多少钱 (duōshǎo qián) หมายถึง?',opts:['ราคาเท่าไหร่','กี่โมง','มีกี่คน','นานเท่าไหร่'],ans:0},
+      {type:'mc',q:'多少钱 (duōshao qián) หมายถึง?',opts:['ราคาเท่าไหร่','กี่โมง','มีกี่คน','นานเท่าไหร่'],ans:0},
       {type:'mc',q:'"รวมทั้งหมด" ภาษาจีนคือ?',opts:['多少','几个','一共','找钱'],ans:2},
       {type:'mc',q:'找 (zhǎo) ในบริบทซื้อของ หมายถึง?',opts:['หา','ซื้อ','ให้','ทอนเงิน'],ans:3},
       {type:'mc',q:'万 (wàn) มีค่าเท่ากับ?',opts:['หมื่น','พัน','ร้อย','แสน'],ans:0},
@@ -2452,12 +2440,12 @@ const LESSONS = [
     title:'颜色大小 — สีและขนาด', sub:'สีต่างๆ · ขนาด · บรรยายสิ่งของ',
     dialog:[
       {sp:'A',spName:'ลูกค้า', cn:'你好！我想买一件衬衫。', py:'Nǐ hǎo! Wǒ xiǎng mǎi yī jiàn chènshān.', th:'สวัสดี ฉันอยากซื้อเสื้อเชิ้ตสักตัว'},
-      {sp:'B',spName:'พนักงาน', cn:'好的！你喜欢什么颜色？', py:'Hǎo de! Nǐ xǐhuān shénme yánsè?', th:'ได้เลยครับ คุณชอบสีอะไร?'},
-      {sp:'A',spName:'ลูกค้า', cn:'我喜欢蓝色或者白色。有没有大号的？', py:'Wǒ xǐhuān lánsè huòzhě báisè. Yǒu méiyǒu dà hào de?', th:'ฉันชอบสีน้ำเงินหรือสีขาว มีไซส์ใหญ่ไหม?'},
+      {sp:'B',spName:'พนักงาน', cn:'好的！你喜欢什么颜色？', py:'Hǎo de! Nǐ xǐhuan shénme yánsè?', th:'ได้เลยครับ คุณชอบสีอะไร?'},
+      {sp:'A',spName:'ลูกค้า', cn:'我喜欢蓝色或者白色。有没有大号的？', py:'Wǒ xǐhuan lánsè huòzhě báisè. Yǒu méiyǒu dà hào de?', th:'ฉันชอบสีน้ำเงินหรือสีขาว มีไซส์ใหญ่ไหม?'},
       {sp:'B',spName:'พนักงาน', cn:'有！这件蓝色的怎么样？大小合适吗？', py:'Yǒu! Zhè jiàn lánsè de zěnmeyàng? Dàxiǎo héshì ma?', th:'มีครับ! เสื้อสีน้ำเงินตัวนี้เป็นยังไง? ขนาดพอดีไหม?'},
       {sp:'A',spName:'ลูกค้า', cn:'太大了，有没有小一点的？', py:'Tài dà le, yǒu méiyǒu xiǎo yīdiǎn de?', th:'ใหญ่เกินไป มีเล็กกว่านี้หน่อยไหม?'},
       {sp:'B',spName:'พนักงาน', cn:'有，这件小号的，颜色也很好看。', py:'Yǒu, zhè jiàn xiǎo hào de, yánsè yě hěn hǎokàn.', th:'มีครับ ไซส์เล็กตัวนี้ สีก็สวยมาก'},
-      {sp:'A',spName:'ลูกค้า', cn:'好，我试试。这件红色的多少钱？', py:'Hǎo, wǒ shìshi. Zhè jiàn hóngsè de duōshǎo qián?', th:'โอเค ขอลองดู แล้วตัวสีแดงนี้เท่าไหร่?'},
+      {sp:'A',spName:'ลูกค้า', cn:'好，我试试。这件红色的多少钱？', py:'Hǎo, wǒ shìshi. Zhè jiàn hóngsè de duōshao qián?', th:'โอเค ขอลองดู แล้วตัวสีแดงนี้เท่าไหร่?'},
     ],
     vocab:[
       {zh:'颜色',py:'yánsè',th:'สี',en:'Color',em:'🎨'},
@@ -2478,7 +2466,7 @@ const LESSONS = [
       {zh:'一点',py:'yīdiǎn',th:'นิดหน่อย',en:'A little bit',em:'🤏'},
       {zh:'好看',py:'hǎokàn',th:'สวย / หล่อ',en:'Good-looking',em:'😍'},
       {zh:'合适',py:'héshì',th:'พอดี / เหมาะสม',en:'Suitable / Fitting',em:'✅'},
-      {zh:'喜欢',py:'xǐhuān',th:'ชอบ',en:'Like',em:'❤️'},
+      {zh:'喜欢',py:'xǐhuan',th:'ชอบ',en:'Like',em:'❤️'},
       {zh:'想',py:'xiǎng',th:'อยากจะ / คิดถึง',en:'Want to / Miss',em:'💭'},
       {zh:'试',py:'shì',th:'ลอง',en:'Try',em:'🔄'},
       {zh:'衬衫',py:'chènshān',th:'เสื้อเชิ้ต',en:'Shirt',em:'👔'},
@@ -2587,7 +2575,7 @@ const LESSONS = [
     title:'身体健康 — ร่างกายและสุขภาพ', sub:'อาการป่วย · พบแพทย์ · ร่างกาย',
     dialog:[
       {sp:'A',spName:'คนไข้', cn:'医生，我不舒服，头疼，还有点发烧。', py:'Yīshēng, wǒ bù shūfu, tóuténg, hái yǒudiǎn fāshāo.', th:'คุณหมอ ฉันไม่สบาย ปวดหัว แล้วก็มีไข้นิดหน่อย'},
-      {sp:'B',spName:'แพทย์', cn:'你发烧多少度？从什么时候开始？', py:'Nǐ fāshāo duōshǎo dù? Cóng shénme shíhou kāishǐ?', th:'ไข้กี่องศา? เริ่มตั้งแต่เมื่อไหร่?'},
+      {sp:'B',spName:'แพทย์', cn:'你发烧多少度？从什么时候开始？', py:'Nǐ fāshāo duōshao dù? Cóng shénme shíhou kāishǐ?', th:'ไข้กี่องศา? เริ่มตั้งแต่เมื่อไหร่?'},
       {sp:'A',spName:'คนไข้', cn:'三十八度，从昨天晚上开始的。咳嗽也很厉害。', py:'Sānshíbā dù, cóng zuótiān wǎnshang kāishǐ de. Késou yě hěn lìhai.', th:'38 องศา เริ่มตั้งแต่คืนเมื่อวาน ไอก็หนักมากด้วย'},
       {sp:'B',spName:'แพทย์', cn:'我看一下。张开嘴巴。你对什么药过敏吗？', py:'Wǒ kàn yīxià. Zhāng kāi zuǐbā. Nǐ duì shénme yào guòmǐn ma?', th:'ให้ดูหน่อยนะ อ้าปากหน่อย แพ้ยาอะไรไหม?'},
       {sp:'A',spName:'คนไข้', cn:'没有，我不过敏。需要吃什么药？', py:'Méiyǒu, wǒ bú guòmǐn. Xūyào chī shénme yào?', th:'ไม่มีครับ ฉันไม่แพ้อะไร ต้องกินยาอะไร?'},
@@ -2636,7 +2624,7 @@ const LESSONS = [
       {sp:'B',spName:'แม่', cn:'有很多！有大象、老虎、熊猫，还有猴子。', py:'Yǒu hěn duō! Yǒu dàxiàng, lǎohǔ, xióngmāo, hái yǒu hóuzi.', th:'มีเยอะมาก! มีช้าง เสือ แพนด้า และลิงด้วย'},
       {sp:'A',spName:'เด็ก', cn:'熊猫好可爱！今天天气怎么样？', py:'Xióngmāo hǎo kěài! Jīntiān tiānqì zěnmeyàng?', th:'แพนด้าน่ารักมาก! วันนี้อากาศเป็นยังไง?'},
       {sp:'B',spName:'แม่', cn:'今天天气很好，不冷也不热，适合出去玩。', py:'Jīntiān tiānqì hěn hǎo, bù lěng yě bù rè, shìhé chūqù wán.', th:'วันนี้อากาศดีมาก ไม่หนาวไม่ร้อน เหมาะกับการออกไปเที่ยว'},
-      {sp:'A',spName:'เด็ก', cn:'太好了！我最喜欢小狗，家里可以养吗？', py:'Tài hǎo le! Wǒ zuì xǐhuān xiǎo gǒu, jiā lǐ kěyǐ yǎng ma?', th:'ดีมาก! ฉันชอบหมาตัวเล็กที่สุด ที่บ้านเลี้ยงได้ไหม?'},
+      {sp:'A',spName:'เด็ก', cn:'太好了！我最喜欢小狗，家里可以养吗？', py:'Tài hǎo le! Wǒ zuì xǐhuan xiǎo gǒu, jiā lǐ kěyǐ yǎng ma?', th:'ดีมาก! ฉันชอบหมาตัวเล็กที่สุด ที่บ้านเลี้ยงได้ไหม?'},
       {sp:'B',spName:'แม่', cn:'可以，但是要好好照顾它。', py:'Kěyǐ, dànshì yào hǎohǎo zhàogù tā.', th:'ได้ แต่ต้องดูแลมันดีๆ นะ'},
     ],
     vocab:[
@@ -2669,9 +2657,9 @@ const LESSONS = [
         pattern:'S + 最喜欢 + V/N',
         thai:'ประธาน + ชอบ...ที่สุด + กริยา/คำนาม',
         examples:[
-          {cn:'我最喜欢猫。', py:'Wǒ zuì xǐhuān māo.', th:'ฉันชอบแมวที่สุด'},
-          {cn:'她最喜欢唱歌。', py:'Tā zuì xǐhuān chànggē.', th:'เธอชอบร้องเพลงที่สุด'},
-          {cn:'我最喜欢吃火锅。', py:'Wǒ zuì xǐhuān chī huǒguō.', th:'ฉันชอบกินหม้อไฟที่สุด'},
+          {cn:'我最喜欢猫。', py:'Wǒ zuì xǐhuan māo.', th:'ฉันชอบแมวที่สุด'},
+          {cn:'她最喜欢唱歌。', py:'Tā zuì xǐhuan chànggē.', th:'เธอชอบร้องเพลงที่สุด'},
+          {cn:'我最喜欢吃火锅。', py:'Wǒ zuì xǐhuan chī huǒguō.', th:'ฉันชอบกินหม้อไฟที่สุด'},
         ],
         tip:'💡 最 (zuì) = ที่สุด ใช้ก่อนคำกริยาหรือคุณศัพท์ เช่น 最好 (ดีที่สุด), 最大 (ใหญ่ที่สุด), 最喜欢 (ชอบที่สุด)'
       }
@@ -2690,9 +2678,9 @@ const LESSONS = [
     id:12, icon:'🎮', theme:'งานอดิเรกและความสนใจ', hsk:1,
     title:'兴趣爱好 — งานอดิเรก', sub:'กีฬา · ดนตรี · ภาพยนตร์ · การท่องเที่ยว',
     dialog:[
-      {sp:'A',spName:'เพื่อน', cn:'你平时喜欢做什么？', py:'Nǐ píngshí xǐhuān zuò shénme?', th:'ปกติคุณชอบทำอะไร?'},
-      {sp:'B',spName:'เพื่อน', cn:'我喜欢听音乐和看电影。你呢？', py:'Wǒ xǐhuān tīng yīnyuè hé kàn diànyǐng. Nǐ ne?', th:'ฉันชอบฟังเพลงและดูหนัง แล้วคุณล่ะ?'},
-      {sp:'A',spName:'เพื่อน', cn:'我喜欢运动，特别是踢足球和打篮球。', py:'Wǒ xǐhuān yùndòng, tèbié shì tī zúqiú hé dǎ lánqiú.', th:'ฉันชอบออกกำลังกาย โดยเฉพาะเตะฟุตบอลและเล่นบาสเกตบอล'},
+      {sp:'A',spName:'เพื่อน', cn:'你平时喜欢做什么？', py:'Nǐ píngshí xǐhuan zuò shénme?', th:'ปกติคุณชอบทำอะไร?'},
+      {sp:'B',spName:'เพื่อน', cn:'我喜欢听音乐和看电影。你呢？', py:'Wǒ xǐhuan tīng yīnyuè hé kàn diànyǐng. Nǐ ne?', th:'ฉันชอบฟังเพลงและดูหนัง แล้วคุณล่ะ?'},
+      {sp:'A',spName:'เพื่อน', cn:'我喜欢运动，特别是踢足球和打篮球。', py:'Wǒ xǐhuan yùndòng, tèbié shì tī zúqiú hé dǎ lánqiú.', th:'ฉันชอบออกกำลังกาย โดยเฉพาะเตะฟุตบอลและเล่นบาสเกตบอล'},
       {sp:'B',spName:'เพื่อน', cn:'哇！你踢足球踢得很好吗？', py:'Wā! Nǐ tī zúqiú tī de hěn hǎo ma?', th:'ว้าว! คุณเตะฟุตบอลเก่งไหม?'},
       {sp:'A',spName:'เพื่อน', cn:'还可以，不是很厉害。你会弹吉他吗？', py:'Hái kěyǐ, bú shì hěn lìhai. Nǐ huì tán jítā ma?', th:'ก็ได้นะ ไม่ได้เก่งมาก คุณเล่นกีตาร์เป็นไหม?'},
       {sp:'B',spName:'เพื่อน', cn:'会一点。我们周末一起去看足球比赛怎么样？', py:'Huì yīdiǎn. Wǒmen zhōumò yīqǐ qù kàn zúqiú bǐsài zěnmeyàng?', th:'เล่นได้หน่อย เสาร์อาทิตย์นี้ไปดูการแข่งขันฟุตบอลด้วยกันไหม?'},
@@ -2701,7 +2689,7 @@ const LESSONS = [
     vocab:[
       {zh:'兴趣',py:'xìngqù',th:'ความสนใจ',en:'Interest',em:'🎯'},
       {zh:'爱好',py:'àihào',th:'งานอดิเรก',en:'Hobby',em:'🎨'},
-      {zh:'喜欢',py:'xǐhuān',th:'ชอบ',en:'Like',em:'❤️'},
+      {zh:'喜欢',py:'xǐhuan',th:'ชอบ',en:'Like',em:'❤️'},
       {zh:'运动',py:'yùndòng',th:'กีฬา / ออกกำลังกาย',en:'Sport / Exercise',em:'⚽'},
       {zh:'足球',py:'zúqiú',th:'ฟุตบอล',en:'Football / Soccer',em:'⚽'},
       {zh:'篮球',py:'lánqiú',th:'บาสเกตบอล',en:'Basketball',em:'🏀'},
@@ -2743,7 +2731,7 @@ const LESSONS = [
 id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
     title:'购物讨价还价 — ซื้อของและต่อราคา', sub:'ต่อราคา · เปรียบเทียบสินค้า · การคืนของ',
     dialog:[
-      {sp:'A',spName:'ลูกค้า', cn:'老板，这件衣服多少钱？', py:'Lǎobǎn, zhè jiàn yīfu duōshǎo qián?', th:'เจ้าของร้าน เสื้อตัวนี้เท่าไหร่?'},
+      {sp:'A',spName:'ลูกค้า', cn:'老板，这件衣服多少钱？', py:'Lǎobǎn, zhè jiàn yīfu duōshao qián?', th:'เจ้าของร้าน เสื้อตัวนี้เท่าไหร่?'},
       {sp:'B',spName:'พ่อค้า', cn:'三百块，质量非常好。', py:'Sān bǎi kuài, zhìliàng fēicháng hǎo.', th:'สามร้อยหยวน คุณภาพดีมากครับ'},
       {sp:'A',spName:'ลูกค้า', cn:'太贵了，能不能便宜一点？两百五怎么样？', py:'Tài guì le, néng bu néng piányí yīdiǎn? Liǎng bǎi wǔ zěnmeyàng?', th:'แพงเกินไป ลดราคาได้ไหม? สองร้อยห้าเป็นยังไง?'},
       {sp:'B',spName:'พ่อค้า', cn:'最低两百八，不能再低了。', py:'Zuìdī liǎng bǎi bā, bù néng zài dī le.', th:'ต่ำสุดสองร้อยแปดสิบ ลดอีกไม่ได้แล้ว'},
@@ -2869,11 +2857,11 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
     dialog:[
       {sp:'A',spName:'เพื่อน', cn:'明天的天气怎么样？', py:'Míngtiān de tiānqì zěnmeyàng?', th:'พรุ่งนี้อากาศเป็นยังไง?'},
       {sp:'B',spName:'เพื่อน', cn:'天气预报说明天会下雨，而且有点冷。', py:'Tiānqì yùbào shuō míngtiān huì xià yǔ, érqiě yǒudiǎn lěng.', th:'พยากรณ์อากาศบอกว่าพรุ่งนี้จะฝนตก และค่อนข้างหนาวด้วย'},
-      {sp:'A',spName:'เพื่อน', cn:'那我要带伞了。现在多少度？', py:'Nà wǒ yào dài sǎn le. Xiànzài duōshǎo dù?', th:'งั้นฉันต้องพกร่มแล้ว ตอนนี้กี่องศา?'},
+      {sp:'A',spName:'เพื่อน', cn:'那我要带伞了。现在多少度？', py:'Nà wǒ yào dài sǎn le. Xiànzài duōshao dù?', th:'งั้นฉันต้องพกร่มแล้ว ตอนนี้กี่องศา?'},
       {sp:'B',spName:'เพื่อน', cn:'现在二十二度，明天最低只有十五度。', py:'Xiànzài èrshí èr dù, míngtiān zuìdī zhǐ yǒu shíwǔ dù.', th:'ตอนนี้ 22 องศา พรุ่งนี้ต่ำสุดแค่ 15 องศา'},
-      {sp:'A',spName:'เพื่อน', cn:'好冷啊！你最喜欢哪个季节？', py:'Hǎo lěng a! Nǐ zuì xǐhuān nǎ gè jìjié?', th:'หนาวมากเลย! คุณชอบฤดูไหนที่สุด?'},
-      {sp:'B',spName:'เพื่อน', cn:'我最喜欢秋天，不冷不热，而且风景很美。', py:'Wǒ zuì xǐhuān qiūtiān, bù lěng bù rè, érqiě fēngjǐng hěn měi.', th:'ฉันชอบฤดูใบไม้ร่วงที่สุด ไม่หนาวไม่ร้อน และวิวสวยมาก'},
-      {sp:'A',spName:'เพื่อน', cn:'我也喜欢秋天。泰国没有秋天，只有热季、雨季和凉季。', py:'Wǒ yě xǐhuān qiūtiān. Tàiguó méiyǒu qiūtiān, zhǐ yǒu rè jì, yǔ jì hé liáng jì.', th:'ฉันก็ชอบฤดูใบไม้ร่วงเหมือนกัน ไทยไม่มีฤดูใบไม้ร่วง มีแค่ฤดูร้อน ฤดูฝน และฤดูหนาว'},
+      {sp:'A',spName:'เพื่อน', cn:'好冷啊！你最喜欢哪个季节？', py:'Hǎo lěng a! Nǐ zuì xǐhuan nǎ gè jìjié?', th:'หนาวมากเลย! คุณชอบฤดูไหนที่สุด?'},
+      {sp:'B',spName:'เพื่อน', cn:'我最喜欢秋天，不冷不热，而且风景很美。', py:'Wǒ zuì xǐhuan qiūtiān, bù lěng bù rè, érqiě fēngjǐng hěn měi.', th:'ฉันชอบฤดูใบไม้ร่วงที่สุด ไม่หนาวไม่ร้อน และวิวสวยมาก'},
+      {sp:'A',spName:'เพื่อน', cn:'我也喜欢秋天。泰国没有秋天，只有热季、雨季和凉季。', py:'Wǒ yě xǐhuan qiūtiān. Tàiguó méiyǒu qiūtiān, zhǐ yǒu rè jì, yǔ jì hé liáng jì.', th:'ฉันก็ชอบฤดูใบไม้ร่วงเหมือนกัน ไทยไม่มีฤดูใบไม้ร่วง มีแค่ฤดูร้อน ฤดูฝน และฤดูหนาว'},
     ],
     reading:{
       title:'ฤดูกาลในประเทศจีน',
@@ -2931,8 +2919,8 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
       {sp:'A',spName:'นักเรียน', cn:'你在哪所大学读书？', py:'Nǐ zài nǎ suǒ dàxué dúshū?', th:'คุณเรียนที่มหาวิทยาลัยไหน?'},
       {sp:'B',spName:'นักศึกษา', cn:'我在北京大学读书，学的是汉语专业。你呢？', py:'Wǒ zài Běijīng Dàxué dúshū, xué de shì Hànyǔ zhuānyè. Nǐ ne?', th:'ฉันเรียนที่มหาวิทยาลัยปักกิ่ง สาขาภาษาจีน แล้วคุณล่ะ?'},
       {sp:'A',spName:'นักเรียน', cn:'我还在高中，下个月要参加高考。', py:'Wǒ hái zài gāozhōng, xià gè yuè yào cānjiā gāokǎo.', th:'ฉันยังอยู่มัธยมปลาย เดือนหน้าจะสอบเข้ามหาลัย'},
-      {sp:'B',spName:'นักศึกษา', cn:'加油！你最喜欢什么科目？', py:'Jiāyóu! Nǐ zuì xǐhuān shénme kēmù?', th:'สู้ๆ! คุณชอบวิชาอะไรที่สุด?'},
-      {sp:'A',spName:'นักเรียน', cn:'我喜欢数学和英语，不太喜欢历史。', py:'Wǒ xǐhuān shùxué hé Yīngyǔ, bú tài xǐhuān lìshǐ.', th:'ฉันชอบคณิตศาสตร์และภาษาอังกฤษ ไม่ค่อยชอบประวัติศาสตร์'},
+      {sp:'B',spName:'นักศึกษา', cn:'加油！你最喜欢什么科目？', py:'Jiāyóu! Nǐ zuì xǐhuan shénme kēmù?', th:'สู้ๆ! คุณชอบวิชาอะไรที่สุด?'},
+      {sp:'A',spName:'นักเรียน', cn:'我喜欢数学和英语，不太喜欢历史。', py:'Wǒ xǐhuan shùxué hé Yīngyǔ, bú tài xǐhuan lìshǐ.', th:'ฉันชอบคณิตศาสตร์และภาษาอังกฤษ ไม่ค่อยชอบประวัติศาสตร์'},
       {sp:'B',spName:'นักศึกษา', cn:'学中文有什么困难？', py:'Xué Zhōngwén yǒu shénme kùnnán?', th:'เรียนภาษาจีนมีอะไรที่ยากไหม?'},
       {sp:'A',spName:'นักเรียน', cn:'声调最难，写汉字也需要多练习。', py:'Shēngdiào zuì nán, xiě Hànzì yě xūyào duō liànxí.', th:'วรรณยุกต์ยากที่สุด การเขียนอักษรจีนก็ต้องฝึกเยอะ'},
     ],
@@ -2995,7 +2983,7 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
       {sp:'B',spName:'พนักงาน', cn:'哦，你会几种语言？', py:'Ó, nǐ huì jǐ zhǒng yǔyán?', th:'โอ้ คุณรู้กี่ภาษา?'},
       {sp:'A',spName:'คนรู้จัก', cn:'会三种，中文、英文和泰文。你们公司在招人吗？', py:'Huì sān zhǒng, Zhōngwén, Yīngwén hé Tàiwén. Nǐmen gōngsī zài zhāo rén ma?', th:'รู้สามภาษา จีน อังกฤษ และไทย บริษัทคุณกำลังรับสมัครไหม?'},
       {sp:'B',spName:'พนักงาน', cn:'好像在招翻译，你可以投一下简历。', py:'Hǎoxiàng zài zhāo fānyì, nǐ kěyǐ tóu yīxià jiǎnlì.', th:'ดูเหมือนกำลังรับนักแปล คุณลองส่ง resume ได้เลย'},
-      {sp:'A',spName:'คนรู้จัก', cn:'太好了！薪资大概是多少？', py:'Tài hǎo le! Xīnzī dàgài shì duōshǎo?', th:'ดีมากเลย! เงินเดือนประมาณเท่าไหร่?'},
+      {sp:'A',spName:'คนรู้จัก', cn:'太好了！薪资大概是多少？', py:'Tài hǎo le! Xīnzī dàgài shì duōshao?', th:'ดีมากเลย! เงินเดือนประมาณเท่าไหร่?'},
       {sp:'B',spName:'พนักงาน', cn:'看经验，一般是一万到一万五左右。', py:'Kàn jīngyàn, yībān shì yī wàn dào yī wàn wǔ zuǒyòu.', th:'ขึ้นอยู่กับประสบการณ์ ปกติประมาณ 10,000-15,000 หยวน'},
     ],
     reading:{
@@ -3054,8 +3042,8 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
       {sp:'B',spName:'สายเรียกเข้า', cn:'喂，你好！', py:'Wèi, nǐ hǎo!', th:'ฮัลโหล สวัสดี!'},
       {sp:'A',spName:'ผู้โทร', cn:'你好，我是小明。请问小红在吗？', py:'Nǐ hǎo, wǒ shì Xiǎomíng. Qǐngwèn Xiǎohóng zài ma?', th:'สวัสดี ฉันชื่อ Xiaoming ขอถามหน่อย Xiaohong อยู่ไหม?'},
       {sp:'B',spName:'สายเรียกเข้า', cn:'她现在不在，出去买东西了。你要留言吗？', py:'Tā xiànzài bú zài, chūqù mǎi dōngxi le. Nǐ yào liúyán ma?', th:'เธอไม่อยู่ตอนนี้ ออกไปซื้อของ อยากทิ้งข้อความไหม?'},
-      {sp:'A',spName:'ผู้โทร', cn:'好的，请告诉她我打过电话了，让她回电话给我。', py:'Hǎo de, qǐng gàosù tā wǒ dǎguo diànhuà le, ràng tā huí diànhuà gěi wǒ.', th:'ได้เลย โปรดบอกเธอว่าฉันโทรมาแล้ว ให้เธอโทรกลับมาหาฉันด้วย'},
-      {sp:'B',spName:'สายเรียกเข้า', cn:'好的，你的电话号码是多少？', py:'Hǎo de, nǐ de diànhuà hàomǎ shì duōshǎo?', th:'ได้เลย เบอร์โทรของคุณคือ?'},
+      {sp:'A',spName:'ผู้โทร', cn:'好的，请告诉她我打过电话了，让她回电话给我。', py:'Hǎo de, qǐng gàosu tā wǒ dǎguo diànhuà le, ràng tā huí diànhuà gěi wǒ.', th:'ได้เลย โปรดบอกเธอว่าฉันโทรมาแล้ว ให้เธอโทรกลับมาหาฉันด้วย'},
+      {sp:'B',spName:'สายเรียกเข้า', cn:'好的，你的电话号码是多少？', py:'Hǎo de, nǐ de diànhuà hàomǎ shì duōshao?', th:'ได้เลย เบอร์โทรของคุณคือ?'},
       {sp:'A',spName:'ผู้โทร', cn:'是一三八，零零一二，三四五六。', py:'Shì yāo sān bā, líng líng yāo èr, sān sì wǔ liù.', th:'138-0012-3456'},
       {sp:'B',spName:'สายเรียกเข้า', cn:'好的，我记下来了。她回来会通知她。', py:'Hǎo de, wǒ jì xiàlái le. Tā huílái huì tōngzhī tā.', th:'โอเค จดไว้แล้ว เธอกลับมาจะแจ้งให้ทราบ'},
     ],
@@ -3081,7 +3069,7 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
       {zh:'短信',py:'duǎnxìn',th:'ข้อความ SMS',en:'Text message',em:'💬'},
       {zh:'微信',py:'Wēixìn',th:'WeChat',en:'WeChat',em:'📱'},
       {zh:'通知',py:'tōngzhī',th:'แจ้ง / แจ้งเตือน',en:'Notify',em:'🔔'},
-      {zh:'告诉',py:'gàosù',th:'บอก / แจ้ง',en:'Tell',em:'💬'},
+      {zh:'告诉',py:'gàosu',th:'บอก / แจ้ง',en:'Tell',em:'💬'},
       {zh:'让',py:'ràng',th:'ให้ / อนุญาต',en:'Let / Allow',em:'👉'},
       {zh:'忙',py:'máng',th:'바쁘다 / ยุ่ง',en:'Busy',em:'😤'},
       {zh:'信号',py:'xìnhào',th:'สัญญาณ',en:'Signal',em:'📶'},
@@ -3100,7 +3088,7 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
       {type:'mc',q:'留言 (liúyán) หมายถึง?',opts:['รับสาย','โทรกลับ','ทิ้งข้อความ','วางสาย'],ans:2},
       {type:'mc',q:'占线 (zhàn xiàn) แปลว่า?',opts:['สัญญาณดี','โทรผิด','วางสาย','สายไม่ว่าง'],ans:3},
       {type:'mc',q:'让 (ràng) ในประโยค "让她回电话" หมายถึง?',opts:['ขอร้อง','ถาม','บังคับ','ให้/บอกให้'],ans:3},
-      {type:'mc',q:'告诉 (gàosù) แปลว่า?',opts:['ถาม','บอก/แจ้ง','ฟัง','เข้าใจ'],ans:1},
+      {type:'mc',q:'告诉 (gàosu) แปลว่า?',opts:['ถาม','บอก/แจ้ง','ฟัง','เข้าใจ'],ans:1},
       {type:'mc',q:'充电 (chōngdiàn) หมายถึง?',opts:['เปิดเครื่อง','ปิดเครื่อง','ซ่อมโทรศัพท์','ชาร์จแบตเตอรี่'],ans:3},
       {type:'mc',q:'"โทรกลับ" ภาษาจีนคือ?',opts:['打电话','接电话','回电话','挂电话'],ans:2},,
       {type:'mc',q:'กริยา + 过 (guò) ใช้บอกอะไร?',opts:['กำลังทำ','เคยมีประสบการณ์','ทำเสร็จแล้ว','จะทำ'],ans:1},
@@ -3233,9 +3221,9 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
     dialog:[
       {sp:'A',spName:'เพื่อน', cn:'你觉得这部电影怎么样？', py:'Nǐ juéde zhè bù diànyǐng zěnmeyàng?', th:'คุณคิดว่าหนังเรื่องนี้เป็นยังไง?'},
       {sp:'B',spName:'เพื่อน', cn:'我觉得很好看，故事情节很有意思，演员也演得很好。', py:'Wǒ juéde hěn hǎokàn, gùshi qíngjié hěn yǒu yìsi, yǎnyuán yě yǎn de hěn hǎo.', th:'ฉันว่าดูแล้วสนุก เนื้อเรื่องน่าสนใจมาก นักแสดงก็แสดงได้ดี'},
-      {sp:'A',spName:'เพื่อน', cn:'我不太喜欢，太长了，而且结局我不满意。', py:'Wǒ bú tài xǐhuān, tài cháng le, érqiě jiéjú wǒ bù mǎnyì.', th:'ฉันไม่ค่อยชอบ ยาวเกินไป และตอนจบก็ไม่พอใจ'},
-      {sp:'B',spName:'เพื่อน', cn:'哦，你比较喜欢什么类型的电影？', py:'Ó, nǐ bǐjiào xǐhuān shénme lèixíng de diànyǐng?', th:'โอ้ คุณค่อนข้างชอบหนังแบบไหน?'},
-      {sp:'A',spName:'เพื่อน', cn:'我喜欢喜剧片和动作片，不喜欢恐怖片。', py:'Wǒ xǐhuān xǐjù piàn hé dòngzuò piàn, bù xǐhuān kǒngbù piàn.', th:'ฉันชอบหนังตลกและหนังแอคชั่น ไม่ชอบหนังสยองขวัญ'},
+      {sp:'A',spName:'เพื่อน', cn:'我不太喜欢，太长了，而且结局我不满意。', py:'Wǒ bú tài xǐhuan, tài cháng le, érqiě jiéjú wǒ bù mǎnyì.', th:'ฉันไม่ค่อยชอบ ยาวเกินไป และตอนจบก็ไม่พอใจ'},
+      {sp:'B',spName:'เพื่อน', cn:'哦，你比较喜欢什么类型的电影？', py:'Ó, nǐ bǐjiào xǐhuan shénme lèixíng de diànyǐng?', th:'โอ้ คุณค่อนข้างชอบหนังแบบไหน?'},
+      {sp:'A',spName:'เพื่อน', cn:'我喜欢喜剧片和动作片，不喜欢恐怖片。', py:'Wǒ xǐhuan xǐjù piàn hé dòngzuò piàn, bù xǐhuan kǒngbù piàn.', th:'ฉันชอบหนังตลกและหนังแอคชั่น ไม่ชอบหนังสยองขวัญ'},
       {sp:'B',spName:'เพื่อน', cn:'我觉得你说的有道理。下次我们看喜剧片吧。', py:'Wǒ juéde nǐ shuō de yǒu dàolǐ. Xià cì wǒmen kàn xǐjù piàn ba.', th:'ฉันว่าที่คุณพูดก็มีเหตุผลนะ ครั้งหน้าเราดูหนังตลกกันเถอะ'},
       {sp:'A',spName:'เพื่อน', cn:'好主意！你有什么推荐的吗？', py:'Hǎo zhǔyì! Nǐ yǒu shénme tuījiàn de ma?', th:'ไอเดียดีมาก! คุณมีอะไรแนะนำไหม?'},
     ],
@@ -3252,8 +3240,8 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
     vocab:[
       {zh:'觉得',py:'juéde',th:'รู้สึกว่า / คิดว่า',en:'Feel / Think',em:'💭'},
       {zh:'认为',py:'rènwéi',th:'คิดว่า / เชื่อว่า',en:'Think / Believe',em:'🤔'},
-      {zh:'喜欢',py:'xǐhuān',th:'ชอบ',en:'Like',em:'❤️'},
-      {zh:'不喜欢',py:'bù xǐhuān',th:'ไม่ชอบ',en:"Don't like",em:'💔'},
+      {zh:'喜欢',py:'xǐhuan',th:'ชอบ',en:'Like',em:'❤️'},
+      {zh:'不喜欢',py:'bù xǐhuan',th:'ไม่ชอบ',en:"Don't like",em:'💔'},
       {zh:'满意',py:'mǎnyì',th:'พอใจ',en:'Satisfied',em:'😊'},
       {zh:'不满意',py:'bù mǎnyì',th:'ไม่พอใจ',en:'Unsatisfied',em:'😤'},
       {zh:'有意思',py:'yǒu yìsi',th:'น่าสนใจ',en:'Interesting',em:'🤩'},
@@ -3413,7 +3401,7 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
       {zh:'报警',py:'bàojǐng',th:'แจ้งความ',en:'Report to police',em:'👮'},
       {zh:'派出所',py:'pàichūsuǒ',th:'สถานีตำรวจ',en:'Police station',em:'🚔'},
       {zh:'紧急',py:'jǐnjí',th:'ฉุกเฉิน',en:'Emergency / Urgent',em:'🚨'},
-      {zh:'明白',py:'míngbái',th:'เข้าใจ',en:'Understand',em:'💡'},
+      {zh:'明白',py:'míngbai',th:'เข้าใจ',en:'Understand',em:'💡'},
       {zh:'感谢',py:'gǎnxiè',th:'ขอบคุณ (ทางการ)',en:'Thank you (formal)',em:'🙏'},
       {zh:'打扰',py:'dǎrǎo',th:'รบกวน',en:'Bother / Disturb',em:'😅'},
       {zh:'另外',py:'lìngwài',th:'นอกจากนี้ / อีกอย่าง',en:'In addition / Besides',em:'➕'},
@@ -3457,7 +3445,7 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
       {type:'mc',q:'找不到 (zhǎo bù dào) แปลว่า?',opts:['หาเจอ','กำลังหา','ไม่ต้องหา','หาไม่เจอ'],ans:3},
       {type:'mc',q:'报警 (bàojǐng) หมายถึง?',opts:['โทรหาเพื่อน','โทรหาโรงแรม','โทรหาหมอ','แจ้งความ'],ans:3},
       {type:'mc',q:'另外 (lìngwài) แปลว่า?',opts:['ดังนั้น','เพราะ','แต่','อีกอย่าง/นอกจากนี้'],ans:3},
-      {type:'mc',q:'明白 (míngbái) แปลว่า?',opts:['ลืม','เข้าใจ','สงสัย','ไม่รู้'],ans:1},
+      {type:'mc',q:'明白 (míngbai) แปลว่า?',opts:['ลืม','เข้าใจ','สงสัย','ไม่รู้'],ans:1},
       {type:'mc',q:'感谢 (gǎnxiè) ต่างจาก 谢谢 อย่างไร?',opts:['ความหมายต่างกัน','谢谢เป็นทางการกว่า','感谢เป็นทางการกว่า','ใช้ต่างสถานการณ์'],ans:2},
       {type:'mc',q:'紧急 (jǐnjí) แปลว่า?',opts:['สำคัญ','อันตราย','เร่งด่วน/ฉุกเฉิน','ยาก'],ans:2},
       {type:'mc',q:'容易 + กริยา ใช้บอกอะไร?',opts:['ทำยาก','ทำง่าย','ไม่ทำ','ทำเสร็จ'],ans:1},
@@ -3472,7 +3460,7 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
       {sp:'B',spName:'เพื่อน', cn:'他觉得我工作太忙，没时间陪他。我也很委屈。', py:'Tā juéde wǒ gōngzuò tài máng, méi shíjiān péi tā. Wǒ yě hěn wěiqū.', th:'เขาว่าฉันทำงานยุ่งเกินไป ไม่มีเวลาอยู่เป็นเพื่อน ฉันก็น้อยใจเหมือนกัน'},
       {sp:'A',spName:'เพื่อน', cn:'我理解你的心情。你们应该坐下来好好谈谈。', py:'Wǒ lǐjiě nǐ de xīnqíng. Nǐmen yīnggāi zuò xiàlái hǎohǎo tán tan.', th:'ฉันเข้าใจความรู้สึกของคุณ พวกคุณควรนั่งคุยกันดีๆ'},
       {sp:'B',spName:'เพื่อน', cn:'你说得对。我会尝试跟他沟通。谢谢你的支持。', py:'Nǐ shuō de duì. Wǒ huì chángshì gēn tā gōutōng. Xièxie nǐ de zhīchí.', th:'คุณพูดถูก ฉันจะลองคุยกับเขา ขอบคุณที่ซัพพอร์ตนะ'},
-      {sp:'A',spName:'เพื่อน', cn:'加油！有什么需要帮忙的，随时告诉我。', py:'Jiāyóu! Yǒu shénme xūyào bāngmáng de, suíshí gàosù wǒ.', th:'สู้ๆ! มีอะไรต้องการความช่วยเหลือ บอกฉันได้ตลอดเวลา'},
+      {sp:'A',spName:'เพื่อน', cn:'加油！有什么需要帮忙的，随时告诉我。', py:'Jiāyóu! Yǒu shénme xūyào bāngmáng de, suíshí gàosu wǒ.', th:'สู้ๆ! มีอะไรต้องการความช่วยเหลือ บอกฉันได้ตลอดเวลา'},
     ],
     reading:{
       title:'การดูแลสุขภาพจิต',
@@ -3527,7 +3515,7 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
           ], tip:'📊 ...起来 Pattern ทบทวน: 听起来(ฟังดู) 看起来(ดูเหมือน) 吃起来(กินแล้วรู้สึก) 用起来(ใช้แล้วรู้สึก)'},
         {pattern:'随时 + กริยา (suíshí)', meaning:'"ตลอดเวลา / เมื่อไหร่ก็ได้" ไม่จำกัดเวลา',color:'#8a5a1a',bg:'#FBF3E8',
           examples:[
-            {cn:'有问题随时告诉我。', py:'Yǒu wèntí suíshí gàosù wǒ.', th:'มีปัญหาบอกฉันได้ตลอด', breakdown:'随时(เมื่อไหร่ก็ได้) + กริยา'},
+            {cn:'有问题随时告诉我。', py:'Yǒu wèntí suíshí gàosu wǒ.', th:'มีปัญหาบอกฉันได้ตลอด', breakdown:'随时(เมื่อไหร่ก็ได้) + กริยา'},
             {cn:'我随时都在。', py:'Wǒ suíshí dōu zài.', th:'ฉันอยู่ตลอดเวลา', breakdown:'随时 + 都 + กริยา = ตลอดเวลาเสมอ'},
           ], tip:'💡 随时 = anytime | 随地 = anywhere | 随便 = casually / as you like'},
       ],
@@ -3880,7 +3868,7 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
     title:'商务基础 — ธุรกิจเบื้องต้น', sub:'การประชุม · ติดต่อธุรกิจ · การนำเสนอ',
     dialog:[
       {sp:'A',spName:'พนักงาน', cn:'李总，这是我们下季度的销售计划，请您过目。', py:'Lǐ Zǒng, zhè shì wǒmen xià jìdù de xiāoshòu jìhuà, qǐng nín guòmù.', th:'ผู้จัดการ Li นี่คือแผนการขายไตรมาสหน้า กรุณาตรวจสอบ'},
-      {sp:'B',spName:'ผู้จัดการ', cn:'好，我来看一下。你们预计销售额能增长多少？', py:'Hǎo, wǒ lái kàn yīxià. Nǐmen yùjì xiāoshòu é néng zēngzhǎng duōshǎo?', th:'โอเค ขอดูหน่อย คาดว่ายอดขายจะเพิ่มได้เท่าไหร่?'},
+      {sp:'B',spName:'ผู้จัดการ', cn:'好，我来看一下。你们预计销售额能增长多少？', py:'Hǎo, wǒ lái kàn yīxià. Nǐmen yùjì xiāoshòu é néng zēngzhǎng duōshao?', th:'โอเค ขอดูหน่อย คาดว่ายอดขายจะเพิ่มได้เท่าไหร่?'},
       {sp:'A',spName:'พนักงาน', cn:'根据市场调研，我们预计增长百分之二十。主要来自网络销售渠道。', py:'Gēnjù shìchǎng diàoyán, wǒmen yùjì zēngzhǎng bǎifēnzhī èrshí. Zhǔyào lái zì wǎngluò xiāoshòu qúdào.', th:'จากการวิจัยตลาด คาดว่าจะเติบโต 20% ส่วนใหญ่มาจากช่องทางการขายออนไลน์'},
       {sp:'B',spName:'ผู้จัดการ', cn:'分析得很全面，但是竞争对手那边怎么样？', py:'Fēnxī de hěn quánmiàn, dànshì jìngzhēng duìshǒu nà biān zěnmeyàng?', th:'วิเคราะห์ได้ครอบคลุมดี แต่ฝั่งคู่แข่งเป็นยังไง?'},
       {sp:'A',spName:'พนักงาน', cn:'竞争对手最近推出了新产品，这是我们面临的主要挑战。', py:'Jìngzhēng duìshǒu zuìjìn tuīchū le xīn chǎnpǐn, zhè shì wǒmen miànlín de zhǔyào tiǎozhàn.', th:'คู่แข่งเพิ่งออกสินค้าใหม่ นั่นคือความท้าทายหลักที่เราเผชิญ'},
@@ -3925,7 +3913,7 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
         {pattern:'根据 + แหล่งข้อมูล + ... (gēnjù)',meaning:'"ตามที่.../อ้างอิงจาก..." บอกแหล่งข้อมูล',color:'#1a4a8a',bg:'#e6f1fb',
           examples:[
             {cn:'根据市场调研，预计增长20%。', py:'Gēnjù shìchǎng diàoyán, yùjì zēngzhǎng 20%.', th:'ตามการวิจัยตลาด คาดว่าจะเติบโต 20%', breakdown:'根据(ตามที่/อ้างอิงจาก) + แหล่ง + ผลสรุป'},
-            {cn:'根据你说的，我明白了。', py:'Gēnjù nǐ shuō de, wǒ míngbái le.', th:'ตามที่คุณพูด ฉันเข้าใจแล้ว', breakdown:'根据 ใช้กับทั้งข้อมูล คำพูด และกฎ'},
+            {cn:'根据你说的，我明白了。', py:'Gēnjù nǐ shuō de, wǒ míngbai le.', th:'ตามที่คุณพูด ฉันเข้าใจแล้ว', breakdown:'根据 ใช้กับทั้งข้อมูล คำพูด และกฎ'},
           ], tip:'🔑 根据 = according to / based on — สำคัญมากในการนำเสนอหรือรายงาน'},
         {pattern:'百分之 + ตัวเลข (bǎifēnzhī)',meaning:'"...เปอร์เซ็นต์" บอกสัดส่วน',color:'#1a6b3a',bg:'#e8f4ed',
           examples:[
@@ -4139,7 +4127,7 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
       {sp:'B',spName:'เพื่อน', cn:'唉，事情有些复杂。我们为了一件小事吵起来了，后来谁都不肯让步。', py:'Āi, shìqíng yǒuxiē fùzá. Wǒmen wèile yī jiàn xiǎo shì chǎo qǐlái le, hòulái shuí dōu bù kěn ràngbù.', th:'อุ้ย เรื่องมันซับซ้อนนิดหน่อย เราทะเลาะกันเรื่องเล็กๆ แต่หลังจากนั้นก็ไม่มีใครยอมถอย'},
       {sp:'A',spName:'คนรู้จัก', cn:'那最后怎么解决的？总不能一直僵着吧。', py:'Nà zuìhòu zěnme jiějué de? Zǒng bù néng yīzhí jiāng zhe ba.', th:'แล้วสุดท้ายแก้ยังไง? คงไม่อยู่ในสภาวะเย็นชากันตลอดหรอกนะ'},
       {sp:'B',spName:'เพื่อน', cn:'是小李先低头道歉的，我也意识到自己当时太冲动了。', py:'Shì Xiǎo Lǐ xiān dī tóu dàoqiàn de, wǒ yě yìshídào zìjǐ dāngshí tài chōngdòng le.', th:'Xiao Li เป็นคนขอโทษก่อน ฉันก็ตระหนักว่าตัวเองตอนนั้นหุนหันพลันแล่นเกินไป'},
-      {sp:'A',spName:'คนรู้จัก', cn:'能互相反思就是成熟的表现，好朋友就是要经得起磨难的。', py:'Néng hùxiāng fǎnsī jiùshì chéngshú de biǎoxiàn, hǎo péngyǒu jiùshì yào jīng de qǐ mónàn de.', th:'ที่รู้จักทบทวนตัวเองด้วยกันได้คือสัญญาณของความเป็นผู้ใหญ่ เพื่อนแท้ต้องผ่านความยากลำบากมาด้วยกันได้'},
+      {sp:'A',spName:'คนรู้จัก', cn:'能互相反思就是成熟的表现，好朋友就是要经得起磨难的。', py:'Néng hùxiāng fǎnsī jiùshì chéngshú de biǎoxiàn, hǎo péngyou jiùshì yào jīng de qǐ mónàn de.', th:'ที่รู้จักทบทวนตัวเองด้วยกันได้คือสัญญาณของความเป็นผู้ใหญ่ เพื่อนแท้ต้องผ่านความยากลำบากมาด้วยกันได้'},
       {sp:'B',spName:'เพื่อน', cn:'说得对，现在我们反而比以前更了解彼此了，感情也更深了。', py:'Shuō de duì, xiànzài wǒmen fǎnér bǐ yǐqián gèng liǎojiě bǐcǐ le, gǎnqíng yě gèng shēn le.', th:'พูดถูก ตอนนี้เรากลับรู้จักกันมากกว่าก่อนเลย ความสัมพันธ์ก็ลึกซึ้งขึ้น'},
       {sp:'A',spName:'คนรู้จัก', cn:'这才是真正的友谊。有冲突不可怕，怕的是不敢面对和沟通。', py:'Zhè cái shì zhēnzhèng de yǒuyì. Yǒu chōngtū bù kěpà, pà de shì bù gǎn miànduì hé gōutōng.', th:'นี่ถึงจะเรียกว่ามิตรภาพที่แท้จริง การมีความขัดแย้งไม่น่ากลัว ที่น่ากลัวคือกล้าไม่เผชิญและสื่อสารกัน'},
     ],
@@ -4305,7 +4293,7 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
       {sp:'A',spName:'นักศึกษา', cn:'这个道理我懂，就是要分散投资，对吗？那具体怎么做呢？', py:'Zhège dàolǐ wǒ dǒng, jiùshì yào fēnsàn tóuzī, duì ma? Nà jùtǐ zěnme zuò ne?', th:'เรื่องนี้ฉันเข้าใจ คือต้องกระจายความเสี่ยงลงทุน ใช่ไหม? แล้วทำยังไงในทางปฏิบัติ?'},
       {sp:'B',spName:'อาจารย์', cn:'可以考虑指数基金、债券和现金组合。风险承受能力不同，配比也不同。', py:'Kěyǐ kǎolǜ zhǐshù jījīn, zhàiquàn hé xiànjīn zǔhé. Fēngxiǎn chéngshòu nénglì bùtóng, pèibǐ yě bùtóng.', th:'ลองคิดดูการผสมผสานกองทุนดัชนี พันธบัตร และเงินสด ความสามารถรับความเสี่ยงต่างกัน สัดส่วนก็ต่างกัน'},
       {sp:'A',spName:'นักศึกษา', cn:'明白了，那短期和长期投资有什么区别？', py:'Míngbái le, nà duǎnqī hé chángqī tóuzī yǒu shénme qūbié?', th:'เข้าใจแล้ว แล้วการลงทุนระยะสั้นและระยะยาวต่างกันยังไง?'},
-      {sp:'B',spName:'อาจารย์', cn:'长期投资受市场波动影响较小，而且复利效应非常显著。时间是长期投资者最好的朋友。', py:'Chángqī tóuzī shòu shìchǎng bōdòng yǐngxiǎng jiào xiǎo, érqiě fùlì xiàoyìng fēicháng xiǎnzhù. Shíjiān shì chángqī tóuzīzhě zuì hǎo de péngyǒu.', th:'การลงทุนระยะยาวได้รับผลกระทบจากความผันผวนของตลาดน้อยกว่า และผลของดอกเบี้ยทบต้นก็โดดเด่นมาก เวลาคือเพื่อนที่ดีที่สุดของนักลงทุนระยะยาว'},
+      {sp:'B',spName:'อาจารย์', cn:'长期投资受市场波动影响较小，而且复利效应非常显著。时间是长期投资者最好的朋友。', py:'Chángqī tóuzī shòu shìchǎng bōdòng yǐngxiǎng jiào xiǎo, érqiě fùlì xiàoyìng fēicháng xiǎnzhù. Shíjiān shì chángqī tóuzīzhě zuì hǎo de péngyou.', th:'การลงทุนระยะยาวได้รับผลกระทบจากความผันผวนของตลาดน้อยกว่า และผลของดอกเบี้ยทบต้นก็โดดเด่นมาก เวลาคือเพื่อนที่ดีที่สุดของนักลงทุนระยะยาว'},
       {sp:'A',spName:'นักศึกษา', cn:'那最重要的是要尽早开始，即使金额很小也有意义，是吗？', py:'Nà zuì zhòng要 de shì yào jǐn zǎo kāishǐ, jíshǐ jīné hěn xiǎo yě yǒu yìyì, shì ma?', th:'งั้นที่สำคัญที่สุดคือต้องเริ่มเร็วที่สุด แม้จำนวนเงินน้อยก็มีความหมายใช่ไหม?'},
       {sp:'B',spName:'อาจารย์', cn:'完全正确！与其等到有大钱再投资，不如从现在小额开始。', py:'Wánquán zhèngquè! Yǔqí děng dào yǒu dàqián zài tóuzī, bùrú cóng xiànzài xiǎo é kāishǐ.', th:'ถูกต้องอย่างยิ่ง! แทนที่จะรอให้มีเงินก้อนใหญ่ก่อนค่อยลงทุน ไม่เท่าเริ่มเล็กๆ ตั้งแต่ตอนนี้'},
     ],
@@ -4395,7 +4383,7 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
       {sp:'B',spName:'อาจารย์', cn:'这正是中国教育体制一直在探讨的问题——如何在知识传授和能力培养之间取得平衡。', py:'Zhè zhèng shì Zhōngguó jiàoyù tǐzhì yīzhí zài tàntǎo de wèntí —— rúhé zài zhīshì chuánshòu hé nénglì péiyǎng zhījiān qǔdé pínghéng.', th:'นี่คือประเด็นที่ระบบการศึกษาจีนถกเถียงกันมาตลอด — จะหาสมดุลระหว่างการถ่ายทอดความรู้และการพัฒนาทักษะได้อย่างไร'},
       {sp:'A',spName:'นักศึกษา', cn:'确实，我觉得现在的教育过于注重考试分数，忽视了创造力的培养。', py:'Quèshí, wǒ juéde xiànzài de jiàoyù guòyú zhùzhòng kǎoshì fēnshù, hūshìle chuàngzào lì de péiyǎng.', th:'ใช่เลย ฉันคิดว่าการศึกษาตอนนี้เน้นคะแนนสอบมากเกินไป ละเลยการพัฒนาความคิดสร้างสรรค์'},
       {sp:'B',spName:'อาจารย์', cn:'你说的有一定道理，但是问题没那么简单。在竞争激烈的社会里，成绩也是一种筛选机制。', py:'Nǐ shuō de yǒu yīdìng dàolǐ, dànshì wèntí méi nàme jiǎndān. Zài jìngzhēng jīliè de shèhuì lǐ, chéngjì yě shì yī zhǒng shāixuǎn jīzhì.', th:'สิ่งที่คุณพูดมีเหตุผลในระดับหนึ่ง แต่ปัญหาไม่ได้ง่ายขนาดนั้น ในสังคมที่แข่งขันสูง คะแนนก็เป็นกลไกการคัดเลือกแบบหนึ่ง'},
-      {sp:'A',spName:'นักศึกษา', cn:'我明白，所以改革教育体制既需要时间，也需要社会各界的共同努力。', py:'Wǒ míngbái, suǒyǐ gǎigé jiàoyù tǐzhì jì xūyào shíjiān, yě xūyào shèhuì gèjiè de gòngtóng nǔlì.', th:'ฉันเข้าใจ ดังนั้นการปฏิรูประบบการศึกษาทั้งต้องใช้เวลาและต้องอาศัยความพยายามร่วมกันจากทุกภาคส่วนของสังคม'},
+      {sp:'A',spName:'นักศึกษา', cn:'我明白，所以改革教育体制既需要时间，也需要社会各界的共同努力。', py:'Wǒ míngbai, suǒyǐ gǎigé jiàoyù tǐzhì jì xūyào shíjiān, yě xūyào shèhuì gèjiè de gòngtóng nǔlì.', th:'ฉันเข้าใจ ดังนั้นการปฏิรูประบบการศึกษาทั้งต้องใช้เวลาและต้องอาศัยความพยายามร่วมกันจากทุกภาคส่วนของสังคม'},
     ],
     reading:{
       title:'ปรัชญาการศึกษาตะวันออกและตะวันตก',
@@ -5298,7 +5286,7 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
       {sp:'A',spName:'นักวิจัย', cn:'在进行跨学科研究时，如何克服不同学科之间的认识论鸿沟？', py:'Zài jìnxíng kuà xuékē yánjiū shí, rúhé kèfú bùtóng xuékē zhījiān de rènshí lùn hónggōu?', th:'ในการทำวิจัยข้ามสาขา จะเอาชนะช่องว่างทางญาณวิทยาระหว่างสาขาต่างๆ ได้อย่างไร?'},
       {sp:'B',spName:'ศาสตราจารย์', cn:'这需要研究者具备元认知能力——不仅了解自己领域的方法论假设，还要能批判性地审视其他学科的认知框架。', py:'Zhè xūyào yánjiū zhě jùbèi yuán rènzhī nénglì —— bùjǐn liǎojiě zìjǐ lǐngyù de fāngfǎ lùn jiǎshè, hái yào néng pīpàn xìng de shěnshì qítā xuékē de rènzhī kuàngjià.', th:'สิ่งนี้ต้องการให้นักวิจัยมีความสามารถเมตาคอกนิชัน ไม่เพียงเข้าใจสมมติฐานวิธีวิทยาของสาขาตนเอง แต่ยังต้องสามารถตรวจสอบกรอบความรู้ของสาขาอื่นอย่างวิพากษ์'},
       {sp:'A',spName:'นักวิจัย', cn:'另外，大数据时代的相关性研究是否有取代因果推断的风险？', py:'Lìngwài, dà shùjù shídài de xiāngguān xìng yánjiū shìfǒu yǒu qǔdài yīnguǒ tuīduàn de fēngxiǎn?', th:'นอกจากนี้ การวิจัยสหสัมพันธ์ในยุค Big Data มีความเสี่ยงที่จะมาแทนที่การอนุมานเชิงเหตุผลไหม?'},
-      {sp:'B',spName:'ศาสตราจารย์', cn:'这是一个深刻的方法论挑战。相关性告诉我们"什么"，而因果性回答"为什么"。两者互补而非互斥。Pearl的因果革命正试图将因果推断形式化，弥补大数据研究的先天不足。', py:'Zhè shì yīgè shēnkè de fāngfǎ lùn tiǎozhàn. Xiāngguān xìng gàosù wǒmen "shénme", ér yīnguǒ xìng huídá "wèishéme". Liǎng zhě hùbǔ ér fēi hùchì. Pērl de yīnguǒ gémìng zhèng shìtú jiāng yīnguǒ tuīduàn xíngshì huà, mímǔ dà shùjù yánjiū de xiāntiān bùzú.', th:'"สหสัมพันธ์บอกว่า "อะไร" ส่วนเหตุและผลตอบ "ทำไม" ทั้งสองเสริมกันไม่ใช่ขัดกัน การปฏิวัติเชิงเหตุผลของ Pearl กำลังพยายามทำให้การอนุมานเชิงเหตุผลเป็นรูปแบบ เพื่อชดเชยข้อบกพร่องแต่กำเนิดของการวิจัย Big Data'},
+      {sp:'B',spName:'ศาสตราจารย์', cn:'这是一个深刻的方法论挑战。相关性告诉我们"什么"，而因果性回答"为什么"。两者互补而非互斥。Pearl的因果革命正试图将因果推断形式化，弥补大数据研究的先天不足。', py:'Zhè shì yīgè shēnkè de fāngfǎ lùn tiǎozhàn. Xiāngguān xìng gàosu wǒmen "shénme", ér yīnguǒ xìng huídá "wèishéme". Liǎng zhě hùbǔ ér fēi hùchì. Pērl de yīnguǒ gémìng zhèng shìtú jiāng yīnguǒ tuīduàn xíngshì huà, mímǔ dà shùjù yánjiū de xiāntiān bùzú.', th:'"สหสัมพันธ์บอกว่า "อะไร" ส่วนเหตุและผลตอบ "ทำไม" ทั้งสองเสริมกันไม่ใช่ขัดกัน การปฏิวัติเชิงเหตุผลของ Pearl กำลังพยายามทำให้การอนุมานเชิงเหตุผลเป็นรูปแบบ เพื่อชดเชยข้อบกพร่องแต่กำเนิดของการวิจัย Big Data'},
     ],
     reading:{
       title:'วิกฤตการทำซ้ำในวิทยาศาสตร์',
@@ -5950,7 +5938,7 @@ id:13, icon:'🛍️', theme:'การซื้อของ', hsk:2,
       {sp:'A',spName:'นักวิชาการ', cn:'金德尔伯格在分析两战之间的国际秩序时，提出了霸权稳定论。然而在当前的多极化趋势下，这一理论框架是否依然适用？', py:'Jīn Dé Ěr Bó Gé zài fēnxī liǎng zhàn zhījiān de guójì zhìxù shí, tíchū le bàquán wěndìng lùn. Rán ér zài dāngqián de duō jí huà qūshì xià, zhè yī lǐlùn kuàngjià shìfǒu yīrán shìyòng?', th:'คินเดิลเบิร์กเสนอทฤษฎีความมั่นคงแบบอำนาจนำในการวิเคราะห์ระเบียบระหว่างประเทศระหว่างสองสงคราม อย่างไรก็ตาม ภายใต้แนวโน้มพหุขั้วอำนาจปัจจุบัน กรอบทฤษฎีนี้ยังใช้ได้อยู่หรือ?'},
       {sp:'B',spName:'ศาสตราจารย์', cn:'霸权稳定论的核心假设是存在一个愿意且有能力提供全球公共物品的主导国。随着美国相对衰落和中国的崛起，我们或许正处于国际体系历史上最为复杂的权力转移时期。', py:'Bàquán wěndìng lùn de héxīn jiǎshè shì cúnzài yī gè yuànyì qiě yǒu nénglì tígōng quánqiú gōnggòng wùpǐn de zhǔdǎo guó. Suízhe Měiguó xiāngduì shuāiluò hé Zhōngguó de juéqǐ, wǒmen huòxǔ zhèng chǔyú guójì tǐxì lìshǐ shàng zuì wéi fùzá de quánlì zhuǎnyí shíqī.', th:'สมมติฐานหลักของทฤษฎีความมั่นคงแบบอำนาจนำคือมีประเทศนำที่เต็มใจและมีความสามารถให้สินค้าสาธารณะระดับโลก เมื่อสหรัฐฯ เสื่อมลงในเชิงสัมพัทธ์และจีนผงาดขึ้น บางทีเรากำลังอยู่ในช่วงเวลาของการเปลี่ยนขั้วอำนาจที่ซับซ้อนที่สุดในประวัติศาสตร์ระบบระหว่างประเทศ'},
       {sp:'A',spName:'นักวิชาการ', cn:'修昔底德陷阱是否为当前中美战略竞争提供了最有力的分析框架？还是说它过度决定论化了历史的偶然性？', py:'Xiū Xī Dǐ Dé xiànjǐng shìfǒu wèi dāngqián Zhōng Měi zhànlüè jìngzhēng tígōng le zuì yǒulì de fēnxī kuàngjià? Háishì shuō tā guòdù juédìng lùn huà le lìshǐ de ǒurán xìng?', th:'"กับดักทูซิดิดีส" ให้กรอบการวิเคราะห์ที่มีพลังที่สุดสำหรับการแข่งขันทางยุทธศาสตร์ระหว่างจีน-สหรัฐฯ ปัจจุบันหรือไม่? หรือว่ามันทำให้ความบังเอิญของประวัติศาสตร์กลายเป็นลัทธิกำหนดนิยมมากเกินไป?'},
-      {sp:'B',spName:'ศาสตราจารย์', cn:'修昔底德陷阱作为分析工具有其价值，但也有过度决定论的风险。历史告诉我们，权力转移既可以通过冲突，也可以通过制度性适应来管理。关键在于双方是否有足够的战略克制与制度智慧，以避免将结构性竞争演变为灾难性冲突。', py:'Xiū Xī Dǐ Dé xiànjǐng zuòwéi fēnxī gōngjù yǒu qí jiàzhí, dàn yě yǒu guòdù juédìng lùn de fēngxiǎn. Lìshǐ gàosù wǒmen, quánlì zhuǎnyí jì kěyǐ tōngguò chōngtū, yě kěyǐ tōngguò zhìdù xìng shìyìng lái guǎnlǐ. Guānjiàn zàiyú shuāngfāng shìfǒu yǒu zúgòu de zhànlüè kèzhì yǔ zhìdù zhìhuì, yǐ bìmiǎn jiāng jiégòu xìng jìngzhēng yǎnbiàn wéi zāinàn xìng chōngtū.', th:'"กับดักทูซิดิดีส" มีคุณค่าในฐานะเครื่องมือวิเคราะห์ แต่ก็มีความเสี่ยงที่จะกลายเป็นลัทธิกำหนดนิยมเกินไป ประวัติศาสตร์บอกเราว่าการเปลี่ยนขั้วอำนาจสามารถจัดการได้ทั้งผ่านความขัดแย้งและผ่านการปรับตัวเชิงสถาบัน สำคัญอยู่ที่ว่าทั้งสองฝ่ายมีการยับยั้งชั่งใจทางยุทธศาสตร์และปัญญาเชิงสถาบันเพียงพอไหม เพื่อป้องกันไม่ให้การแข่งขันเชิงโครงสร้างวิวัฒนาการเป็นความขัดแย้งหายนะ'},
+      {sp:'B',spName:'ศาสตราจารย์', cn:'修昔底德陷阱作为分析工具有其价值，但也有过度决定论的风险。历史告诉我们，权力转移既可以通过冲突，也可以通过制度性适应来管理。关键在于双方是否有足够的战略克制与制度智慧，以避免将结构性竞争演变为灾难性冲突。', py:'Xiū Xī Dǐ Dé xiànjǐng zuòwéi fēnxī gōngjù yǒu qí jiàzhí, dàn yě yǒu guòdù juédìng lùn de fēngxiǎn. Lìshǐ gàosu wǒmen, quánlì zhuǎnyí jì kěyǐ tōngguò chōngtū, yě kěyǐ tōngguò zhìdù xìng shìyìng lái guǎnlǐ. Guānjiàn zàiyú shuāngfāng shìfǒu yǒu zúgòu de zhànlüè kèzhì yǔ zhìdù zhìhuì, yǐ bìmiǎn jiāng jiégòu xìng jìngzhēng yǎnbiàn wéi zāinàn xìng chōngtū.', th:'"กับดักทูซิดิดีส" มีคุณค่าในฐานะเครื่องมือวิเคราะห์ แต่ก็มีความเสี่ยงที่จะกลายเป็นลัทธิกำหนดนิยมเกินไป ประวัติศาสตร์บอกเราว่าการเปลี่ยนขั้วอำนาจสามารถจัดการได้ทั้งผ่านความขัดแย้งและผ่านการปรับตัวเชิงสถาบัน สำคัญอยู่ที่ว่าทั้งสองฝ่ายมีการยับยั้งชั่งใจทางยุทธศาสตร์และปัญญาเชิงสถาบันเพียงพอไหม เพื่อป้องกันไม่ให้การแข่งขันเชิงโครงสร้างวิวัฒนาการเป็นความขัดแย้งหายนะ'},
     ],
     reading:{
       title:'อำนาจอ่อนและความชอบธรรมทางวัฒนธรรม',
@@ -6325,7 +6313,7 @@ const EXTRA_VOCAB = [
   // ความรู้สึก — ความรัก & ชีวิตประจำวัน (เพิ่มใหม่)
   {zh:'爱你',py:'ài nǐ',th:'รักคุณ / รักเธอ',en:'Love you',em:'❤️',theme:'ความรู้สึก'},
   {zh:'想你',py:'xiǎng nǐ',th:'คิดถึงคุณ',en:'Miss you',em:'🥺',theme:'ความรู้สึก'},
-  {zh:'喜欢你',py:'xǐhuān nǐ',th:'ชอบคุณ / ชอบเธอ',en:'I like you',em:'💕',theme:'ความรู้สึก'},
+  {zh:'喜欢你',py:'xǐhuan nǐ',th:'ชอบคุณ / ชอบเธอ',en:'I like you',em:'💕',theme:'ความรู้สึก'},
   {zh:'想见你',py:'xiǎng jiàn nǐ',th:'อยากเจอคุณ',en:'Want to see you',em:'🤗',theme:'ความรู้สึก'},
   {zh:'想抱你',py:'xiǎng bào nǐ',th:'อยากกอดคุณ',en:'Want to hug you',em:'🫂',theme:'ความรู้สึก'},
   {zh:'幸福',py:'xìngfú',th:'มีความสุข / อบอุ่นใจ',en:'Happiness / Bliss',em:'🌸',theme:'ความรู้สึก'},
@@ -6347,7 +6335,7 @@ const EXTRA_VOCAB = [
   {zh:'心疼',py:'xīnténg',th:'สงสาร / เจ็บปวดแทน',en:'Feel for someone',em:'💔',theme:'ความรู้สึก'},
   {zh:'珍惜',py:'zhēnxī',th:'ให้คุณค่า / ถนอมรัก',en:'Cherish / Treasure',em:'💎',theme:'ความรู้สึก'},
   {zh:'舍不得',py:'shě bu de',th:'ใจไม่อยากปล่อย / อาลัย',en:'Reluctant to let go',em:'🥺',theme:'ความรู้สึก'},
-  {zh:'没关系',py:'méiguānxi',th:'ไม่เป็นไร',en:"It's okay / No worries",em:'😊',theme:'ความรู้สึก'},
+  {zh:'没关系',py:'méi guānxi',th:'ไม่เป็นไร',en:"It's okay / No worries",em:'😊',theme:'ความรู้สึก'},
 
   // ══════════════════════════════════════
   // หมวด: คำกริยาชีวิตประจำวัน (เพิ่มใหม่ 30+ คำ)
@@ -6364,7 +6352,7 @@ const EXTRA_VOCAB = [
   {zh:'想',py:'xiǎng',th:'คิด / อยาก',en:'Think / Want',em:'💭',theme:'กริยา'},
   {zh:'知道',py:'zhīdào',th:'รู้ / ทราบ',en:'Know',em:'💡',theme:'กริยา'},
   {zh:'觉得',py:'juéde',th:'รู้สึก / คิดว่า',en:'Feel / Think',em:'🤔',theme:'กริยา'},
-  {zh:'喜欢',py:'xǐhuān',th:'ชอบ',en:'Like',em:'❤️',theme:'กริยา'},
+  {zh:'喜欢',py:'xǐhuan',th:'ชอบ',en:'Like',em:'❤️',theme:'กริยา'},
   {zh:'爱',py:'ài',th:'รัก',en:'Love',em:'💕',theme:'กริยา'},
   {zh:'用',py:'yòng',th:'ใช้',en:'Use',em:'🔧',theme:'กริยา'},
   {zh:'找',py:'zhǎo',th:'หา',en:'Look for / Find',em:'🔍',theme:'กริยา'},
@@ -8470,13 +8458,13 @@ const DAILY_POOL = [
   {q:'去 (qù) หมายความว่า?', opts:['มา','อยู่','ไป','กลับ'], ans:2},
   {q:'今天 (jīntiān) หมายความว่า?', opts:['เมื่อวาน','พรุ่งนี้','วันนี้','ทุกวัน'], ans:2},
   {q:'明天 (míngtiān) หมายความว่า?', opts:['วันนี้','เมื่อวาน','พรุ่งนี้','อาทิตย์หน้า'], ans:2},
-  {q:'朋友 (péngyǒu) หมายความว่า?', opts:['ครอบครัว','เพื่อน','เพื่อนบ้าน','คนรัก'], ans:1},
-  {q:'多少钱 (duōshǎo qián) หมายความว่า?', opts:['อยู่ที่ไหน','กี่โมง','ราคาเท่าไหร่','ชื่ออะไร'], ans:2},
+  {q:'朋友 (péngyou) หมายความว่า?', opts:['ครอบครัว','เพื่อน','เพื่อนบ้าน','คนรัก'], ans:1},
+  {q:'多少钱 (duōshao qián) หมายความว่า?', opts:['อยู่ที่ไหน','กี่โมง','ราคาเท่าไหร่','ชื่ออะไร'], ans:2},
   {q:'在哪里 (zài nǎlǐ) หมายความว่า?', opts:['เวลาไหน','อยู่ที่ไหน','ชื่ออะไร','ราคาเท่าไหร่'], ans:1},
   {q:'什么时候 (shénme shíhòu) หมายความว่า?', opts:['เวลาไหน / เมื่อไหร่','ที่ไหน','ชื่ออะไร','อย่างไร'], ans:0},
   {q:'再见 (zàijiàn) หมายความว่า?', opts:['สวัสดี','ขอบคุณ','ลาก่อน','ขอโทษ'], ans:2},
   {q:'对不起 (duìbuqǐ) หมายความว่า?', opts:['ขอบคุณ','ไม่เป็นไร','ขอโทษ','สวัสดี'], ans:2},
-  {q:'没关系 (méiguānxi) หมายความว่า?', opts:['ขอโทษ','ไม่เป็นไร','ขอบคุณ','ยินดี'], ans:1},
+  {q:'没关系 (méi guānxi) หมายความว่า?', opts:['ขอโทษ','ไม่เป็นไร','ขอบคุณ','ยินดี'], ans:1},
   {q:'请问 (qǐngwèn) หมายความว่า?', opts:['ขอโทษ','ขอถามหน่อย','ขอบคุณ','ยินดี'], ans:1},
   {q:'一 (yī) อ่านว่า?', opts:['èr','sān','yī','sì'], ans:2},
   {q:'五 (wǔ) หมายถึงตัวเลขใด?', opts:['3','4','5','6'], ans:2},
@@ -8589,19 +8577,19 @@ const SENTENCE_LEVELS = [
     {th:'นี่คืออะไร?', words:['这','是','什么','？'], correct:'这是什么？', py:'Zhè shì shénme'},
     {th:'ฉันไม่สบาย', words:['我','不','好'], correct:'我不好', py:'Wǒ bù hǎo'},
     {th:'คุณชื่ออะไร?', words:['你','叫','什么','名字','？'], correct:'你叫什么名字？', py:'Nǐ jiào shénme míngzi'},
-    {th:'เขาไม่ใช่นักเรียน', words:['他','不是','学生'], correct:'他不是学生', py:'Tā bú shì xuéshēng'},
-    {th:'ฉันมีเพื่อน', words:['我','有','朋友'], correct:'我有朋友', py:'Wǒ yǒu péngyǒu'},
+    {th:'เขาไม่ใช่นักเรียน', words:['他','不是','学生'], correct:'他不是学生', py:'Tā bú shì xuésheng'},
+    {th:'ฉันมีเพื่อน', words:['我','有','朋友'], correct:'我有朋友', py:'Wǒ yǒu péngyou'},
     {th:'ลาก่อน!', words:['再','见'], correct:'再见', py:'Zàijiàn'},
   ]},
   { level:2, name:'ด่านที่ 2 — ครอบครัว & ของ', color:'#8B5CF6', bg:'#EDE9FE', icon:'⭐⭐', sentences:[
     {th:'แม่ของฉันเป็นครู', words:['我','妈妈','是','老师'], correct:'我妈妈是老师', py:'Wǒ māma shì lǎoshī'},
     {th:'คุณมีน้องสาวไหม?', words:['你','有','妹妹','吗','？'], correct:'你有妹妹吗？', py:'Nǐ yǒu mèimei ma'},
     {th:'นี่เป็นหนังสือของฉัน', words:['这','是','我的','书'], correct:'这是我的书', py:'Zhè shì wǒ de shū'},
-    {th:'เขาชอบกินข้าว', words:['他','喜欢','吃饭'], correct:'他喜欢吃饭', py:'Tā xǐhuān chīfàn'},
+    {th:'เขาชอบกินข้าว', words:['他','喜欢','吃饭'], correct:'他喜欢吃饭', py:'Tā xǐhuan chīfàn'},
     {th:'ฉันต้องการดื่มน้ำ', words:['我','要','喝水'], correct:'我要喝水', py:'Wǒ yào hēshuǐ'},
     {th:'คนนั้นสูงมาก', words:['那个人','很','高'], correct:'那个人很高', py:'Nàgè rén hěn gāo'},
     {th:'โต๊ะนั้นใหญ่มาก', words:['那张桌子','很','大'], correct:'那张桌子很大', py:'Nà zhāng zhuōzi hěn dà'},
-    {th:'เธอไม่ชอบกินอาหาร', words:['她','不','喜欢','吃'], correct:'她不喜欢吃', py:'Tā bù xǐhuān chī'},
+    {th:'เธอไม่ชอบกินอาหาร', words:['她','不','喜欢','吃'], correct:'她不喜欢吃', py:'Tā bù xǐhuan chī'},
     {th:'บ้านของเขาสวยมาก', words:['他的','家','很','漂亮'], correct:'他的家很漂亮', py:'Tā de jiā hěn piàoliang'},
     {th:'หนังสือเล่มนั้นเล็กมาก', words:['那本书','很','小'], correct:'那本书很小', py:'Nà běn shū hěn xiǎo'},
   ]},
@@ -8613,7 +8601,7 @@ const SENTENCE_LEVELS = [
     {th:'พรุ่งนี้ฉันไม่ไปทำงาน', words:['明天','我','不','上班'], correct:'明天我不上班', py:'Míngtiān wǒ bù shàngbān'},
     {th:'เมื่อวานฉันกินข้าวที่บ้าน', words:['昨天','我','在家','吃饭'], correct:'昨天我在家吃饭', py:'Zuótiān wǒ zàijiā chīfàn'},
     {th:'ตอนนี้กี่โมงแล้ว?', words:['现在','几点了','？'], correct:'现在几点了？', py:'Xiànzài jǐ diǎn le'},
-    {th:'เขาชอบนอนตอนเที่ยง', words:['他','喜欢','中午','睡觉'], correct:'他喜欢中午睡觉', py:'Tā xǐhuān zhōngwǔ shuìjiào'},
+    {th:'เขาชอบนอนตอนเที่ยง', words:['他','喜欢','中午','睡觉'], correct:'他喜欢中午睡觉', py:'Tā xǐhuan zhōngwǔ shuìjiào'},
     {th:'ฉันกลับบ้านตอนหกโมง', words:['我','六点','回家'], correct:'我六点回家', py:'Wǒ liù diǎn huíjiā'},
     {th:'สัปดาห์นี้อากาศเย็นมาก', words:['这个星期','天气','很冷'], correct:'这个星期天气很冷', py:'Zhège xīngqī tiānqì hěn lěng'},
   ]},
@@ -8630,7 +8618,7 @@ const SENTENCE_LEVELS = [
     {th:'เดินจากโรงแรมไม่ไกล', words:['从','酒店','走','不远'], correct:'从酒店走不远', py:'Cóng jiǔdiàn zǒu bù yuǎn'},
   ]},
   { level:5, name:'ด่านที่ 5 — ช้อปปิ้ง & อาหาร', color:'#e67e22', bg:'#fef3e2', icon:'⭐⭐⭐⭐⭐', sentences:[
-    {th:'ราคาเท่าไหร่?', words:['这个','多少','钱'], correct:'这个多少钱', py:'Zhège duōshǎo qián'},
+    {th:'ราคาเท่าไหร่?', words:['这个','多少','钱'], correct:'这个多少钱', py:'Zhège duōshao qián'},
     {th:'ลดราคาหน่อยได้ไหม?', words:['可以','便宜','一点','吗'], correct:'可以便宜一点吗', py:'Kěyǐ piányí yīdiǎn ma'},
     {th:'ฉันอยากลองเสื้อตัวนี้', words:['我','想','试试','这件衣服'], correct:'我想试试这件衣服', py:'Wǒ xiǎng shìshì zhè jiàn yīfu'},
     {th:'ขอเมนูหน่อยได้ไหม?', words:['请','给我','菜单'], correct:'请给我菜单', py:'Qǐng gěi wǒ càidān'},
@@ -8902,7 +8890,7 @@ const GRAMMAR_DATA = {
         color: '#F13596', bg: '#FFEDF6',
         examples: [
           {cn:'我不是日本人。', py:'Wǒ bú shì Rìběn rén.', th:'ฉันไม่ใช่คนญี่ปุ่น', breakdown:'我 + 不是 + 日本人'},
-          {cn:'他不是学生。', py:'Tā bú shì xuéshēng.', th:'เขาไม่ใช่นักเรียน', breakdown:'他 + 不是 + 学生'},
+          {cn:'他不是学生。', py:'Tā bú shì xuésheng.', th:'เขาไม่ใช่นักเรียน', breakdown:'他 + 不是 + 学生'},
         ],
         tip:'💡 แค่ใส่ 不 หน้า 是 ก็ปฏิเสธได้เลย ง่ายมาก!'
       },
@@ -8945,12 +8933,12 @@ const GRAMMAR_DATA = {
         tip:'🇹🇭 เหมือนไทยมาก! ยี่สิบห้า = 二十五 แค่เปลี่ยนภาษา'
       },
       {
-        pattern: '多少钱？(duōshǎo qián)',
+        pattern: '多少钱？(duōshao qián)',
         meaning: 'ถามราคา: "เท่าไหร่?"',
         color: '#1a6b3a', bg: '#e8f4ed',
         examples: [
-          {cn:'这个多少钱？', py:'Zhège duōshǎo qián?', th:'อันนี้ราคาเท่าไหร่?', breakdown:'这个(อันนี้) + 多少钱(เท่าไหร่)'},
-          {cn:'一共多少钱？', py:'Yīgòng duōshǎo qián?', th:'รวมทั้งหมดเท่าไหร่?', breakdown:'一共(รวม) + 多少钱(เท่าไหร่)'},
+          {cn:'这个多少钱？', py:'Zhège duōshao qián?', th:'อันนี้ราคาเท่าไหร่?', breakdown:'这个(อันนี้) + 多少钱(เท่าไหร่)'},
+          {cn:'一共多少钱？', py:'Yīgòng duōshao qián?', th:'รวมทั้งหมดเท่าไหร่?', breakdown:'一共(รวม) + 多少钱(เท่าไหร่)'},
         ],
         tip:'💡 จำ 多少钱 ไว้ใช้ได้ทุกสถานการณ์ซื้อของ'
       },
@@ -9064,7 +9052,7 @@ const GRAMMAR_DATA = {
         color: '#534AB7', bg: '#EEEDFE',
         examples: [
           {cn:'坐地铁去。', py:'Zuò dìtiě qù.', th:'นั่งรถไฟฟ้าไป', breakdown:'坐(นั่ง) + 地铁(รถไฟฟ้า) + 去(ไป)'},
-          {cn:'坐出租车多少钱？', py:'Zuò chūzūchē duōshǎo qián?', th:'นั่งแท็กซี่เท่าไหร่?', breakdown:'坐 + 出租车 + 多少钱?'},
+          {cn:'坐出租车多少钱？', py:'Zuò chūzūchē duōshao qián?', th:'นั่งแท็กซี่เท่าไหร่?', breakdown:'坐 + 出租车 + 多少钱?'},
         ],
         tip:'🚇 坐 ใช้กับทุกยานพาหนะ รถไฟ บัส แท็กซี่ เครื่องบิน'
       },
@@ -9080,7 +9068,7 @@ const GRAMMAR_DATA = {
         meaning: '"มี" บอกการครอบครอง',
         color: '#1a6b3a', bg: '#e8f4ed',
         examples: [
-          {cn:'我有一个哥哥。', py:'Wǒ yǒu yī gè gēgē.', th:'ฉันมีพี่ชายหนึ่งคน', breakdown:'我 + 有(มี) + 一个(หนึ่งคน) + 哥哥(พี่ชาย)'},
+          {cn:'我有一个哥哥。', py:'Wǒ yǒu yī gè gēge.', th:'ฉันมีพี่ชายหนึ่งคน', breakdown:'我 + 有(มี) + 一个(หนึ่งคน) + 哥哥(พี่ชาย)'},
           {cn:'你有兄弟姐妹吗？', py:'Nǐ yǒu xiōngdì jiěmèi ma?', th:'คุณมีพี่น้องไหม?', breakdown:'你 + 有 + 兄弟姐妹 + 吗?'},
         ],
         tip:'🔑 有 = มี | 没有 = ไม่มี (ห้ามใช้ 不有 ผิดแน่นอน!)'
@@ -9231,7 +9219,7 @@ const GRAMMAR_DATA = {
         meaning: '"...ที่สุด" ขั้นสูงสุด',
         color:'#F13596', bg:'#FFEDF6',
         examples:[
-          {cn:'我最喜欢小狗。', py:'Wǒ zuì xǐhuān xiǎo gǒu.', th:'ฉันชอบหมาตัวเล็กที่สุด', breakdown:'最(ที่สุด) + 喜欢(ชอบ)'},
+          {cn:'我最喜欢小狗。', py:'Wǒ zuì xǐhuan xiǎo gǒu.', th:'ฉันชอบหมาตัวเล็กที่สุด', breakdown:'最(ที่สุด) + 喜欢(ชอบ)'},
           {cn:'熊猫是最可爱的动物。', py:'Xióngmāo shì zuì kěài de dòngwù.', th:'แพนด้าเป็นสัตว์ที่น่ารักที่สุด', breakdown:'最可爱 + 的 + 动物'},
         ],
         tip:'🔑 最 + คุณศัพท์/กริยา = ...ที่สุด วางหน้าคำที่ต้องการขยายเสมอ'
@@ -9439,7 +9427,7 @@ const GRAMMAR_DATA = {
         meaning: '"โดยเฉพาะ" vs "อย่างยิ่ง" เน้นต่างกัน',
         color:'#F13596', bg:'#FFEDF6',
         examples:[
-          {cn:'我喜欢运动，特别是踢足球。', py:'Wǒ xǐhuān yùndòng, tèbié shì tī zúqiú.', th:'ฉันชอบกีฬา โดยเฉพาะฟุตบอล', breakdown:'特别是 = โดยเฉพาะอย่างยิ่ง'},
+          {cn:'我喜欢运动，特别是踢足球。', py:'Wǒ xǐhuan yùndòng, tèbié shì tī zúqiú.', th:'ฉันชอบกีฬา โดยเฉพาะฟุตบอล', breakdown:'特别是 = โดยเฉพาะอย่างยิ่ง'},
           {cn:'今天非常热！', py:'Jīntiān fēicháng rè!', th:'วันนี้ร้อนมากๆ!', breakdown:'非常 = มากๆ (เน้นหนักกว่า 很)'},
         ],
         tip:'💡 ระดับเน้น: 有点(นิดหน่อย) < 比较(ค่อนข้าง) < 很(มาก) < 非常(มากๆ) < 太...了(เกินไป)'
@@ -9598,7 +9586,7 @@ const GRAMMAR_DATA = {
         color:'#1a4a8a', bg:'#e6f1fb',
         examples:[
           {cn:'对我来说，声调最难。', py:'Duì wǒ lái shuō, shēngdiào zuì nán.', th:'สำหรับฉัน วรรณยุกต์ยากที่สุด', breakdown:'对(สำหรับ) + เรา + 来说 + ความเห็น'},
-          {cn:'对学生来说，考试很重要。', py:'Duì xuéshēng lái shuō, kǎoshì hěn zhòng要.', th:'สำหรับนักเรียน การสอบสำคัญมาก', breakdown:'对+คน/กลุ่ม+来说 = สำหรับ...'},
+          {cn:'对学生来说，考试很重要。', py:'Duì xuésheng lái shuō, kǎoshì hěn zhòng要.', th:'สำหรับนักเรียน การสอบสำคัญมาก', breakdown:'对+คน/กลุ่ม+来说 = สำหรับ...'},
         ],
         tip:'💡 对...来说 = "จากมุมมองของ..." ใช้บอกความคิดเห็นส่วนตัวหรือกลุ่ม'
       },
@@ -9701,7 +9689,7 @@ const GRAMMAR_DATA = {
         meaning: '"กรุณา..." ขอร้องอย่างสุภาพ',
         color:'#1a6b3a', bg:'#e8f4ed',
         examples:[
-          {cn:'请告诉她我打过电话了。', py:'Qǐng gàosù tā wǒ dǎguò diànhuà le.', th:'กรุณาบอกเธอว่าฉันโทรมาแล้ว', breakdown:'请(กรุณา) + กริยา + ส่วนขยาย'},
+          {cn:'请告诉她我打过电话了。', py:'Qǐng gàosu tā wǒ dǎguò diànhuà le.', th:'กรุณาบอกเธอว่าฉันโทรมาแล้ว', breakdown:'请(กรุณา) + กริยา + ส่วนขยาย'},
           {cn:'请稍等。', py:'Qǐng shāo děng.', th:'กรุณารอสักครู่', breakdown:'请稍等 = กรุณารอ (ใช้ในโทรศัพท์บ่อยมาก)'},
         ],
         tip:'💡 请 + กริยา = กรุณา... ฟังดูสุภาพ ใช้ได้ทั้งโทรศัพท์ ร้านอาหาร ทุกสถานการณ์'
@@ -9842,7 +9830,7 @@ const GRAMMAR_DATA = {
         meaning: '"ที่คุณพูดมีเหตุผล แต่..." โต้แย้งสุภาพ',
         color:'#1a6b3a', bg:'#e8f4ed',
         examples:[
-          {cn:'你说的有道理，但是我还是不喜欢。', py:'Nǐ shuō de yǒu dàolǐ, dànshì wǒ háishi bù xǐhuān.', th:'ที่คุณพูดมีเหตุผล แต่ฉันก็ยังไม่ชอบอยู่ดี', breakdown:'有道理(มีเหตุผล) + 但是(แต่) + ความเห็นตัวเอง'},
+          {cn:'你说的有道理，但是我还是不喜欢。', py:'Nǐ shuō de yǒu dàolǐ, dànshì wǒ háishi bù xǐhuan.', th:'ที่คุณพูดมีเหตุผล แต่ฉันก็ยังไม่ชอบอยู่ดี', breakdown:'有道理(มีเหตุผล) + 但是(แต่) + ความเห็นตัวเอง'},
           {cn:'有道理，不过我有不同的看法。', py:'Yǒu dàolǐ, búguò wǒ yǒu bùtóng de kànfǎ.', th:'มีเหตุผลดี แต่ฉันมีมุมมองต่างออกไป', breakdown:'不过 = แต่ (เบากว่า 但是) | 看法 = มุมมอง'},
         ],
         tip:'🤝 สูตรโต้แย้งอย่างสุภาพ: ยอมรับ + 但是/不过 + ความเห็นตัวเอง'
@@ -9852,7 +9840,7 @@ const GRAMMAR_DATA = {
         meaning: '"ค่อนข้าง..." บอกระดับกลางๆ',
         color:'#8a5a1a', bg:'#FBF3E8',
         examples:[
-          {cn:'我比较喜欢喜剧片。', py:'Wǒ bǐjiào xǐhuān xǐjù piàn.', th:'ฉันค่อนข้างชอบหนังตลก (กว่าแบบอื่น)', breakdown:'比较(ค่อนข้าง/เปรียบเทียบ) + คุณ/กริยา'},
+          {cn:'我比较喜欢喜剧片。', py:'Wǒ bǐjiào xǐhuan xǐjù piàn.', th:'ฉันค่อนข้างชอบหนังตลก (กว่าแบบอื่น)', breakdown:'比较(ค่อนข้าง/เปรียบเทียบ) + คุณ/กริยา'},
           {cn:'这个比较贵，那个比较便宜。', py:'Zhège bǐjiào guì, nàge bǐjiào piányí.', th:'อันนี้ค่อนข้างแพง อันนั้นค่อนข้างถูก', breakdown:'比较 ใช้เปรียบเทียบหรือบอกระดับ'},
         ],
         tip:'📊 ระดับ: 有点(นิดหน่อย) < 比较(ค่อนข้าง) < 很(มาก) < 非常(มากๆ) < 极了(สุดๆ)'
@@ -11436,30 +11424,26 @@ async function loadAdminUsers() {
     listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--red)">❌ ' + error.message + '</div>';
     return;
   }
+  // function ส่งมาเป็น JSON array ต้อง parse แต่ละ row
   const data = (rawData || []).map(row => {
     if (!row) return {};
+    // Already parsed object with expected fields
     if (row.user_id || row.email) return row;
+    // Wrapped in admin_list_users key as JSON string
     const val = row.admin_list_users || (typeof row === 'string' ? row : JSON.stringify(row));
     try { return typeof val === 'string' ? JSON.parse(val) : val; }
     catch(e) { return row; }
   });
 
-  window._adminUsersCache = data;
-
   const total = data.length;
   const premiumCount = data.filter(u => u.is_premium).length;
   summaryEl.innerHTML = `สมาชิกทั้งหมด <b>${total} คน</b> · Premium <b style="color:var(--red)">${premiumCount} คน</b> · ฟรี <b>${total - premiumCount} คน</b>`;
 
-  renderAdminUserList(data);
-}
-
-function renderAdminUserList(data) {
-  const listEl = document.getElementById('admin-user-list');
-  if (!listEl) return;
   if (data.length === 0) {
-    listEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink3)">ไม่พบสมาชิกที่ค้นหา 🔍</div>';
+    listEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink3)">ยังไม่มีสมาชิก</div>';
     return;
   }
+
   listEl.innerHTML = data.map(u => `
     <div id="user-row-${u.user_id}" style="background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:14px;margin-bottom:8px;box-shadow:var(--shadow)">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
@@ -11477,18 +11461,6 @@ function renderAdminUserList(data) {
       </div>
     </div>`).join('');
 }
-
-function filterAdminUsers(query) {
-  const data = window._adminUsersCache || [];
-  if (!query.trim()) { renderAdminUserList(data); return; }
-  const q = query.toLowerCase().trim();
-  const filtered = data.filter(u =>
-    (u.email || '').toLowerCase().includes(q) ||
-    (u.name || '').toLowerCase().includes(q)
-  );
-  renderAdminUserList(filtered);
-}
-
 
 async function togglePremium(userId, currentStatus) {
   const newStatus = !currentStatus;
