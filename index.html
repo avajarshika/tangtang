@@ -1731,19 +1731,6 @@ body {
   </div>
 
   <!-- LESSON 0 — PINYIN -->
-  <!-- PLACEMENT TEST SCREEN -->
-  <div id="screen-placement" class="screen">
-    <div class="detail-header" style="background:linear-gradient(135deg,#1a0a2e,#3d1a6b)">
-      <button class="back-btn" onclick="goScreen('home')" style="color:white">← กลับ</button>
-      <div class="detail-title" style="color:white">🎯 วัดระดับภาษาจีน</div>
-      <div class="detail-sub" style="color:rgba(255,255,255,0.7)">30 ข้อ · ฟัง · แปล · เรียงประโยค</div>
-      <div class="prog-bar" style="margin-top:10px;background:rgba(255,255,255,0.2)">
-        <div class="prog-fill" id="placement-prog" style="width:0%;background:white"></div>
-      </div>
-    </div>
-    <div id="placement-content" style="padding:16px"></div>
-  </div>
-
   <div id="screen-pinyin" class="screen">
     <div class="detail-header">
       <button class="back-btn" onclick="goScreen('home')">← กลับ</button>
@@ -2000,6 +1987,18 @@ body {
         <div id="admin-summary" style="font-size:12px;color:var(--ink2)">กำลังโหลด...</div>
       </div>
       <div style="font-size:12px;font-weight:700;color:var(--ink3);letter-spacing:.05em;margin-bottom:10px">รายชื่อสมาชิกทั้งหมด</div>
+      <!-- Search Bar -->
+      <div style="position:relative;margin-bottom:12px">
+        <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:15px">🔍</span>
+        <input
+          id="admin-search-input"
+          type="text"
+          placeholder="ค้นหาด้วยอีเมล..."
+          oninput="filterAdminUsers(this.value)"
+          style="width:100%;padding:10px 12px 10px 36px;border:1.5px solid var(--paper3);border-radius:10px;font-size:13px;font-family:inherit;background:white;box-sizing:border-box;outline:none"
+        >
+        <button onclick="document.getElementById('admin-search-input').value='';filterAdminUsers('')" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;font-size:14px;cursor:pointer;color:var(--ink3)">✕</button>
+      </div>
       <div id="admin-user-list">
         <div style="text-align:center;padding:30px;color:var(--ink3)">⏳ กำลังโหลด...</div>
       </div>
@@ -6630,7 +6629,7 @@ function goScreen(s) {
   document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
   document.getElementById('screen-' + s).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  const navMap = { home:'nav-home', 'lessons-hub':'nav-lessons', play:'nav-chat', chat:'nav-chat', quiz:'nav-quiz', profile:'nav-profile', lesson:'nav-home', pinyin:'nav-home', vocab:'nav-lessons', placement:'nav-home' };
+  const navMap = { home:'nav-home', 'lessons-hub':'nav-lessons', play:'nav-chat', chat:'nav-chat', quiz:'nav-quiz', profile:'nav-profile', lesson:'nav-home', pinyin:'nav-home', vocab:'nav-lessons' };
   const nb = document.getElementById(navMap[s]);
   if (nb) nb.classList.add('active');
   state.curScreen = s;
@@ -6845,34 +6844,6 @@ function renderHome() {
   const lessons = pathObj ? pathObj.lessons.map(id => LESSONS.find(l => l.id === id)).filter(Boolean) : LESSONS;
   const showPinyin = (state.curPath === 'hsk1' || state.curPath === 'daily');
   const pinDone = (d.completed || []).includes(0);
-  const placementCard = `
-  <div onclick="openPlacementTest()" style="
-    margin:0 0 8px 0;
-    background:linear-gradient(135deg,#1a0a2e,#3d1a6b);
-    border-radius:16px;
-    padding:16px 18px;
-    cursor:pointer;
-    position:relative;
-    overflow:hidden;
-    box-shadow:0 4px 16px rgba(100,50,200,0.25)
-  ">
-    <div style="position:absolute;right:-10px;top:-10px;font-size:60px;opacity:0.12">🎯</div>
-    <div style="display:flex;align-items:center;gap:12px">
-      <div style="width:48px;height:48px;background:rgba(255,255,255,0.15);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">🎯</div>
-      <div style="flex:1">
-        <div style="font-size:15px;font-weight:800;color:white;margin-bottom:3px">วัดระดับภาษาจีนของคุณ</div>
-        <div style="font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:8px">ทำแบบทดสอบ 30 ข้อ รู้ระดับและจุดที่ต้องพัฒนาทันที</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <span style="background:rgba(255,255,255,0.15);color:white;font-size:10px;padding:3px 8px;border-radius:20px">🎵 ฟัง</span>
-          <span style="background:rgba(255,255,255,0.15);color:white;font-size:10px;padding:3px 8px;border-radius:20px">📝 แปล</span>
-          <span style="background:rgba(255,255,255,0.15);color:white;font-size:10px;padding:3px 8px;border-radius:20px">🔀 เรียงประโยค</span>
-          <span style="background:rgba(255,255,255,0.15);color:white;font-size:10px;padding:3px 8px;border-radius:20px">30 ข้อ</span>
-        </div>
-      </div>
-      <div style="color:rgba(255,255,255,0.6);font-size:20px">›</div>
-    </div>
-  </div>`;
-
   const pinCard = showPinyin ? `<div class="lesson-card ${pinDone ? 'done' : ''}" onclick="openPinyin()" style="border-color:${pinDone ? '#b8dfc7' : '#c47a1a'};${pinDone ? 'background:var(--green-light)' : 'background:var(--amber-light)'}">
     <div class="lesson-num" style="background:${pinDone ? 'var(--green-light)' : 'var(--amber-light)'}">
       ${pinDone ? '✅' : '🔤'}
@@ -6886,7 +6857,7 @@ function renderHome() {
       </div>
     </div>
   </div>` : '';
-  ll.innerHTML = placementCard + pinCard + lessons.map((l, i) => {
+  ll.innerHTML = pinCard + lessons.map((l, i) => {
     if (!l) return '';
     const isDone = (d.completed || []).includes(l.id);
     const hskColors = {1:'background:var(--red-light);color:var(--red)',2:'background:#e6f1fb;color:var(--blue)',3:'background:#e8f4ed;color:#1a6b3a',4:'background:#f0e8f4;color:#6b1a6b',5:'background:#e0f0f0;color:#1a5a5a',6:'background:#e0e4f0;color:#1a2a5a'};
@@ -7514,304 +7485,6 @@ function renderProfile() {
 }
 
 // ═══════════════════════════════════
-// ── PLACEMENT TEST SOUND ──
-function playSFX(type) {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    if (type === 'correct') {
-      [523, 659, 784].forEach((freq, i) => {
-        const o = ctx.createOscillator(), g = ctx.createGain();
-        o.connect(g); g.connect(ctx.destination);
-        o.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.1);
-        g.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.1);
-        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.1 + 0.2);
-        o.start(ctx.currentTime + i * 0.1);
-        o.stop(ctx.currentTime + i * 0.1 + 0.2);
-      });
-    } else {
-      const o = ctx.createOscillator(), g = ctx.createGain();
-      o.connect(g); g.connect(ctx.destination);
-      o.type = 'sawtooth';
-      o.frequency.setValueAtTime(200, ctx.currentTime);
-      o.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.3);
-      g.gain.setValueAtTime(0.15, ctx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
-      o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.3);
-    }
-  } catch(e) {}
-}
-
-// ── PLACEMENT TEST ──
-const PLACEMENT_QUESTIONS = [
-  // HSK 1-2 (ข้อ 1-10)
-  { type:'translate', q:'เลือกความหมายของ: 你在哪里工作？', opts:['คุณทำงานที่ไหน?','คุณกินข้าวหรือยัง?','คุณชอบทำงานไหม?','คุณทำงานกี่ชั่วโมง?'], ans:0, hsk:1 },
-  { type:'listen', zh:'我每天坐公共汽车上班', py:'Wǒ měitiān zuò gōnggòng qìchē shàngbān', q:'ฟังแล้วเลือกความหมาย', opts:['ฉันนั่งรถเมล์ไปทำงานทุกวัน','ฉันขับรถไปทำงาน','ฉันเดินไปทำงานทุกวัน','ฉันนั่งแท็กซี่ไปทำงาน'], ans:0, hsk:1 },
-  { type:'order', words:['我','想','喝','咖啡'], correct:'我想喝咖啡', meaning:'ฉันอยากดื่มกาแฟ', hsk:1 },
-  { type:'translate', q:'เลือกความหมายของ: 这件衣服多少钱？', opts:['เสื้อตัวนี้ราคาเท่าไหร่?','เสื้อตัวนี้สวยมาก','คุณมีเสื้อไหม?','เสื้อตัวนี้เป็นของใคร?'], ans:0, hsk:1 },
-  { type:'listen', zh:'她比我高，但是我比她重', py:'Tā bǐ wǒ gāo, dànshì wǒ bǐ tā zhòng', q:'ฟังแล้วเลือกความหมาย', opts:['เธอสูงกว่าฉัน แต่ฉันหนักกว่าเธอ','เธอสูงและหนักกว่าฉัน','ฉันสูงและหนักกว่าเธอ','เธอและฉันสูงเท่ากัน'], ans:0, hsk:2 },
-  { type:'fill', q:'他______去北京，不是坐飞机。', opts:['坐火车','坐汽车','骑自行车','走路'], ans:0, meaning:'เขาโดยสารรถไฟไปปักกิ่ง ไม่ใช่นั่งเครื่องบิน', hsk:2 },
-  { type:'order', words:['你','能','帮','我','一下','吗'], correct:'你能帮我一下吗', meaning:'คุณช่วยฉันได้ไหม?', hsk:2 },
-  { type:'listen', zh:'我把手机忘在家里了', py:'Wǒ bǎ shǒujī wàng zài jiālǐ le', q:'ฟังแล้วเลือกความหมาย', opts:['ฉันลืมโทรศัพท์ไว้ที่บ้าน','ฉันทำโทรศัพท์หาย','ฉันซื้อโทรศัพท์ใหม่','ฉันวางโทรศัพท์ไว้ที่ออฟฟิศ'], ans:0, hsk:2 },
-  { type:'translate', q:'เลือกความหมายของ: 虽然很贵，但是质量很好', opts:['แม้จะแพงแต่คุณภาพดีมาก','ราคาถูกและคุณภาพดี','แพงมากและคุณภาพแย่','ราคาปานกลางคุณภาพดี'], ans:0, hsk:2 },
-  { type:'order', words:['我','对','中国文化','很','感兴趣'], correct:'我对中国文化很感兴趣', meaning:'ฉันสนใจวัฒนธรรมจีนมาก', hsk:2 },
-
-  // HSK 3-4 (ข้อ 11-20)
-  { type:'listen', zh:'这次考试他考得不太理想，需要继续努力', py:'Zhè cì kǎoshì tā kǎo de bú tài lǐxiǎng, xūyào jìxù nǔlì', q:'ฟังแล้วเลือกความหมาย', opts:['การสอบครั้งนี้เขาทำได้ไม่ดีนัก ต้องพยายามต่อไป','เขาสอบผ่านและพอใจกับผลสอบ','เขาไม่ต้องการสอบอีกแล้ว','การสอบครั้งนี้ยากมากสำหรับทุกคน'], ans:0, hsk:3 },
-  { type:'translate', q:'เลือกความหมายของ: 他的建议对我很有帮助', opts:['คำแนะนำของเขามีประโยชน์กับฉันมาก','เขาไม่มีความคิดเห็นเลย','ฉันไม่เห็นด้วยกับเขา','เขาต้องการความช่วยเหลือจากฉัน'], ans:0, hsk:3 },
-  { type:'order', words:['只有','努力学习','才能','取得','好成绩'], correct:'只有努力学习才能取得好成绩', meaning:'มีแต่ขยันเรียนเท่านั้นถึงจะได้ผลดี', hsk:3 },
-  { type:'fill', q:'他______参加这次会议，因为有更重要的事情。', opts:['没能','可以','应该','已经'], ans:0, meaning:'เขาไม่สามารถเข้าร่วมประชุมครั้งนี้ได้ เพราะมีเรื่องสำคัญกว่า', hsk:3 },
-  { type:'listen', zh:'随着科技的发展，人们的生活越来越方便', py:'Suízhe kējì de fāzhǎn, rénmen de shēnghuó yuèláiyuè fāngbiàn', q:'ฟังแล้วเลือกความหมาย', opts:['เมื่อเทคโนโลยีพัฒนา ชีวิตผู้คนก็สะดวกขึ้นเรื่อยๆ','เทคโนโลยีทำให้ชีวิตยากขึ้น','ผู้คนไม่ชอบใช้เทคโนโลยี','เทคโนโลยีไม่มีผลต่อชีวิตประจำวัน'], ans:0, hsk:4 },
-  { type:'translate', q:'เลือกความหมายของ: 与其坐在家里抱怨，不如出去想办法解决', opts:['แทนที่จะนั่งบ่นอยู่บ้าน ไม่ดีกว่าหรือที่จะออกไปหาทางแก้ปัญหา','ควรอยู่บ้านและคิดแผน','ออกไปเดินเล่นดีกว่าบ่น','ปัญหาแก้ไม่ได้ควรยอมรับ'], ans:0, hsk:4 },
-  { type:'order', words:['尽管','困难重重','他','还是','坚持','完成了任务'], correct:'尽管困难重重他还是坚持完成了任务', meaning:'แม้จะมีอุปสรรคมากมาย เขาก็ยังคงทำภารกิจจนสำเร็จ', hsk:4 },
-  { type:'listen', zh:'这项政策的实施对当地经济产生了深远的影响', py:'Zhè xiàng zhèngcè de shíshī duì dāngdì jīngjì chǎnshēngle shēnyuǎn de yǐngxiǎng', q:'ฟังแล้วเลือกความหมาย', opts:['การดำเนินนโยบายนี้ส่งผลกระทบอย่างลึกซึ้งต่อเศรษฐกิจท้องถิ่น','นโยบายนี้ไม่ได้รับการอนุมัติ','เศรษฐกิจท้องถิ่นไม่ได้รับผลกระทบ','รัฐบาลยกเลิกนโยบายนี้แล้ว'], ans:0, hsk:4 },
-  { type:'fill', q:'他为了______目标，每天刻苦训练，从不______。', opts:['实现/放弃','放弃/实现','完成/坚持','努力/休息'], ans:0, meaning:'เพื่อบรรลุเป้าหมาย เขาฝึกซ้อมอย่างหนักทุกวัน ไม่เคยยอมแพ้', hsk:4 },
-  { type:'translate', q:'เลือกความหมายของ: 他的话让我如梦初醒', opts:['คำพูดของเขาทำให้ฉันตาสว่างทันที','เขาพูดเรื่องความฝัน','ฉันง่วงนอนมากเพราะคำพูดของเขา','เขาชอบพูดเรื่องไม่เป็นเรื่อง'], ans:0, hsk:4 },
-
-  // HSK 5-6 (ข้อ 21-30)
-  { type:'listen', zh:'在竞争激烈的市场环境中，企业必须不断创新才能保持竞争优势', py:'Zài jìngzhēng jīliè de shìchǎng huánjìng zhōng, qǐyè bìxū bùduàn chuàngxīn cái néng bǎochí jìngzhēng yōushì', q:'ฟังแล้วเลือกความหมาย', opts:['ในสภาพตลาดที่แข่งขันรุนแรง บริษัทต้องสร้างนวัตกรรมอย่างต่อเนื่องเพื่อรักษาความได้เปรียบ','บริษัทควรหลีกเลี่ยงการแข่งขัน','ตลาดไม่มีการแข่งขันรุนแรง','นวัตกรรมไม่จำเป็นในธุรกิจ'], ans:0, hsk:5 },
-  { type:'translate', q:'เลือกความหมายของ: 这篇报道客观地反映了社会现实', opts:['รายงานชิ้นนี้สะท้อนความเป็นจริงของสังคมอย่างเป็นกลาง','รายงานนี้ไม่เป็นความจริง','รายงานนี้เขียนโดยคนในสังคม','สังคมไม่ยอมรับรายงานชิ้นนี้'], ans:0, hsk:5 },
-  { type:'fill', q:'面对困境，我们应该______而不是______。', opts:['迎难而上/怨天尤人','逃避现实/积极应对','消极应对/乐观面对','放弃努力/坚持到底'], ans:0, meaning:'เมื่อเผชิญกับความยากลำบาก เราควรเดินหน้าสู้ ไม่ใช่บ่นว่าโชคชะตา', hsk:5 },
-  { type:'order', words:['正是','这种','坚韧不拔的精神','使他','克服了','重重困难'], correct:'正是这种坚韧不拔的精神使他克服了重重困难', meaning:'นี่คือจิตใจที่เข้มแข็งอดทนที่ทำให้เขาเอาชนะอุปสรรคทั้งหมด', hsk:5 },
-  { type:'listen', zh:'文化的多样性不仅丰富了人类的精神世界，也促进了不同文明之间的交流与融合', py:'Wénhuà de duōyàngxìng bùjǐn fēngfùle rénlèi de jīngshén shìjiè, yě cùjìnle bùtóng wénmíng zhījiān de jiāoliú yǔ rónghé', q:'ฟังแล้วเลือกความหมาย', opts:['ความหลากหลายทางวัฒนธรรมไม่เพียงแต่เสริมสร้างโลกจิตใจมนุษย์ แต่ยังส่งเสริมการแลกเปลี่ยนระหว่างอารยธรรม','วัฒนธรรมที่หลากหลายทำให้เกิดความขัดแย้ง','มีเพียงวัฒนธรรมเดียวที่ดีที่สุด','การแลกเปลี่ยนวัฒนธรรมไม่มีประโยชน์'], ans:0, hsk:6 },
-  { type:'translate', q:'เลือกความหมายของ: 他惯于在压力下工作，临危不乱', opts:['เขาชินกับการทำงานภายใต้ความกดดัน สงบนิ่งเมื่อเผชิญวิกฤต','เขาทำงานได้เฉพาะตอนไม่มีความกดดัน','เขาตื่นตกใจง่ายเมื่อเจอปัญหา','เขาไม่ชอบทำงานในสถานการณ์ฉุกเฉิน'], ans:0, hsk:6 },
-  { type:'fill', q:'这位学者的研究______了传统理论，为该领域的发展______了新的方向。', opts:['突破/开辟','遵循/延续','否定/消除','支持/限制'], ans:0, meaning:'การวิจัยของนักวิชาการผู้นี้ก้าวข้ามทฤษฎีเดิม และเปิดทิศทางใหม่ให้กับสาขานี้', hsk:6 },
-  { type:'listen', zh:'在信息爆炸的时代，批判性思维显得尤为重要，它帮助人们辨别真假，做出理性判断', py:'Zài xìnxī bàozhà de shídài, pīpànxìng sīwéi xiǎnde yóuwéi zhòngyào, tā bāngzhù rénmen biànbié zhēnjiǎ, zuòchū lǐxìng pànduàn', q:'ฟังแล้วเลือกความหมาย', opts:['ในยุคข้อมูลท่วม การคิดเชิงวิจารณ์สำคัญมากขึ้น ช่วยให้คนแยกแยะความจริงและตัดสินอย่างมีเหตุผล','ข้อมูลมากเกินไปทำให้คนคิดน้อยลง','การคิดวิจารณ์ทำให้คนไม่เชื่อใคร','ยุคดิจิทัลไม่ต้องการการคิดวิเคราะห์'], ans:0, hsk:6 },
-  { type:'order', words:['尽管','争议不断','这一政策','仍然','得到了','广泛实施'], correct:'尽管争议不断这一政策仍然得到了广泛实施', meaning:'แม้จะมีข้อโต้แย้งต่อเนื่อง นโยบายนี้ก็ยังได้รับการนำไปใช้อย่างแพร่หลาย', hsk:6 },
-  { type:'translate', q:'เลือกความหมายของ: 经济全球化是把双刃剑，既带来机遇，也带来挑战', opts:['โลกาภิวัตน์ทางเศรษฐกิจเป็นดาบสองคม ทั้งนำโอกาสและความท้าทายมาด้วย','โลกาภิวัตน์ดีสำหรับทุกประเทศ','โลกาภิวัตน์ทำให้เศรษฐกิจพัง','ประเทศควรปิดกั้นการค้าระหว่างประเทศ'], ans:0, hsk:6 },
-];
-
-let placementIdx = 0;
-let placementScore = 0;
-let placementAnswers = [];
-let placementOrderSelected = [];
-
-function openPlacementTest() {
-  placementIdx = 0;
-  placementScore = 0;
-  placementAnswers = [];
-  placementOrderSelected = [];
-  goScreen('placement');
-  renderPlacementQuestion();
-}
-
-function renderPlacementQuestion() {
-  const box = document.getElementById('placement-content');
-  const prog = document.getElementById('placement-prog');
-  if (!box) return;
-
-  if (placementIdx >= PLACEMENT_QUESTIONS.length) {
-    showPlacementResult();
-    return;
-  }
-
-  const pct = (placementIdx / PLACEMENT_QUESTIONS.length) * 100;
-  prog.style.width = pct + '%';
-
-  // Shuffle options ถ้าเป็น translate/listen/fill
-  const rawQ = PLACEMENT_QUESTIONS[placementIdx];
-  let q = rawQ;
-  if (['translate','listen','fill'].includes(rawQ.type) && rawQ.opts) {
-    const correctAns = rawQ.opts[rawQ.ans];
-    const shuffled = [...rawQ.opts].sort(() => Math.random() - 0.5);
-    const newAns = shuffled.indexOf(correctAns);
-    q = { ...rawQ, opts: shuffled, ans: newAns };
-    PLACEMENT_QUESTIONS[placementIdx] = q;
-  }
-
-  const qNum = placementIdx + 1;
-
-  let html = `
-    <div style="text-align:center;margin-bottom:16px">
-      <span style="font-size:12px;color:#888">ข้อ ${qNum} / ${PLACEMENT_QUESTIONS.length}</span>
-      <span style="margin-left:12px;font-size:11px;background:#f0e8f4;color:#6b1a6b;padding:2px 8px;border-radius:10px">HSK ${q.hsk}</span>
-    </div>`;
-
-  if (q.type === 'listen') {
-    html += `
-      <div style="background:linear-gradient(135deg,#1a0a2e,#3d1a6b);border-radius:16px;padding:20px;text-align:center;margin-bottom:16px">
-        <div style="font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:12px">🎵 กดฟังแล้วเลือกความหมาย</div>
-        <button onclick="speakWord('${q.zh}')" style="background:rgba(255,255,255,0.2);border:none;border-radius:50px;padding:12px 24px;color:white;font-size:16px;cursor:pointer;margin-bottom:8px">
-          🔊 ฟังประโยค
-        </button>
-        <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:8px">${q.py}</div>
-      </div>
-      <div style="font-size:14px;font-weight:600;color:#2C2C2A;margin-bottom:12px">${q.q}</div>`;
-  } else if (q.type === 'order') {
-    placementOrderSelected = [];
-    const shuffled = [...q.words].sort(() => Math.random() - 0.5);
-    html += `
-      <div style="background:white;border:1px solid #eee;border-radius:16px;padding:16px;margin-bottom:16px">
-        <div style="font-size:13px;color:#888;margin-bottom:8px">🔀 เรียงคำให้เป็นประโยคที่ถูกต้อง</div>
-        <div style="font-size:12px;color:#aaa;margin-bottom:12px">ความหมาย: ${q.meaning}</div>
-        <div id="placement-order-result" style="min-height:44px;background:#f8f0ff;border-radius:10px;padding:10px;margin-bottom:12px;font-size:16px;text-align:center;color:#3d1a6b;font-weight:600;letter-spacing:1px">
-          กดคำด้านล่างเพื่อเรียง
-        </div>
-        <div id="placement-order-words" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center">
-          ${shuffled.map((w, i) => `<button id="pw-${i}" onclick="placementSelectWord('${w}',${i})" style="background:#f0e8ff;border:1px solid #c8a0ff;border-radius:8px;padding:8px 14px;font-size:15px;cursor:pointer;color:#3d1a6b">${w}</button>`).join('')}
-        </div>
-        <button onclick="placementClearOrder()" style="margin-top:10px;font-size:12px;color:#888;background:none;border:none;cursor:pointer">↺ เริ่มใหม่</button>
-      </div>
-      <button onclick="submitPlacementOrder()" style="width:100%;padding:14px;background:#3d1a6b;color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer">ยืนยันคำตอบ</button>`;
-
-    box.innerHTML = html;
-    return;
-  } else if (q.type === 'fill') {
-    html += `
-      <div style="background:white;border:1px solid #eee;border-radius:16px;padding:16px;margin-bottom:16px">
-        <div style="font-size:13px;color:#888;margin-bottom:8px">📝 เติมคำในช่องว่าง</div>
-        <div style="font-size:16px;font-weight:600;color:#2C2C2A;margin-bottom:4px;line-height:1.8">${q.q}</div>
-        <div style="font-size:12px;color:#aaa">ความหมาย: ${q.meaning}</div>
-      </div>`;
-  } else {
-    html += `
-      <div style="background:white;border:1px solid #eee;border-radius:16px;padding:16px;margin-bottom:16px">
-        <div style="font-size:15px;font-weight:600;color:#2C2C2A;line-height:1.8">${q.q}</div>
-      </div>`;
-  }
-
-  html += `<div style="display:flex;flex-direction:column;gap:10px">
-    ${q.opts.map((o, i) => `
-      <button onclick="answerPlacement(${i})" style="text-align:left;padding:14px 16px;background:white;border:1.5px solid #e0d8f0;border-radius:12px;font-size:14px;color:#2C2C2A;cursor:pointer;line-height:1.5">
-        <span style="font-weight:700;color:#3d1a6b;margin-right:8px">${['A','B','C','D'][i]}.</span>${o}
-      </button>`).join('')}
-  </div>`;
-
-  box.innerHTML = html;
-}
-
-function placementSelectWord(word, idx) {
-  placementOrderSelected.push(word);
-  document.getElementById(`pw-${idx}`).style.opacity = '0.3';
-  document.getElementById(`pw-${idx}`).disabled = true;
-  const result = document.getElementById('placement-order-result');
-  result.textContent = placementOrderSelected.join('');
-}
-
-function placementClearOrder() {
-  placementOrderSelected = [];
-  renderPlacementQuestion();
-}
-
-function submitPlacementOrder() {
-  const q = PLACEMENT_QUESTIONS[placementIdx];
-  const userAnswer = placementOrderSelected.join('');
-  const correct = userAnswer === q.correct;
-  if (correct) { placementScore++; playSFX('correct'); } else { playSFX('wrong'); }
-  placementAnswers.push({ q, correct, userAnswer });
-  showPlacementFeedback(correct, q.correct, q.meaning);
-}
-
-function answerPlacement(chosen) {
-  const q = PLACEMENT_QUESTIONS[placementIdx];
-  const correct = chosen === q.ans;
-  if (correct) { placementScore++; playSFX('correct'); } else { playSFX('wrong'); }
-  placementAnswers.push({ q, correct, chosen });
-  showPlacementFeedback(correct, q.opts[q.ans], q.meaning || '');
-}
-
-function showPlacementFeedback(correct, correctAns, meaning) {
-  const box = document.getElementById('placement-content');
-  const isLast = placementIdx >= PLACEMENT_QUESTIONS.length - 1;
-  box.innerHTML = `
-    <div style="text-align:center;padding:40px 20px">
-      <div style="font-size:64px;margin-bottom:16px">${correct ? '✅' : '❌'}</div>
-      <div style="font-size:18px;font-weight:800;color:${correct ? '#1D9E75' : '#e84393'};margin-bottom:12px">
-        ${correct ? 'ถูกต้อง!' : 'ไม่ถูกค่า'}
-      </div>
-      ${!correct ? `<div style="background:#f8f0ff;border-radius:12px;padding:12px;margin-bottom:12px;font-size:14px;color:#3d1a6b"><b>คำตอบที่ถูก:</b> ${correctAns}</div>` : ''}
-      ${meaning ? `<div style="font-size:13px;color:#888;margin-bottom:20px">${meaning}</div>` : ''}
-      <button onclick="${isLast ? 'showPlacementResult()' : 'nextPlacementQuestion()'}" style="padding:14px 32px;background:linear-gradient(135deg,#1a0a2e,#3d1a6b);color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer">
-        ${isLast ? '🎯 ดูผลลัพธ์' : 'ข้อต่อไป →'}
-      </button>
-    </div>`;
-}
-
-function nextPlacementQuestion() {
-  placementIdx++;
-  placementOrderSelected = [];
-  renderPlacementQuestion();
-}
-
-function showPlacementResult() {
-  const prog = document.getElementById('placement-prog');
-  prog.style.width = '100%';
-  const score = placementScore;
-  const total = PLACEMENT_QUESTIONS.length;
-  const pct = Math.round(score / total * 100);
-
-  let level, levelDesc, color, recommend, improve, next;
-
-  if (score <= 5) {
-    level = 'มือใหม่ — เริ่มต้น'; levelDesc = 'HSK 0-1'; color = '#F13596';
-    recommend = 'เริ่มจากบทพินอินก่อนเลยค่ะ แล้วค่อยเข้า HSK 1 ตามลำดับ';
-    improve = 'การออกเสียงวรรณยุกต์ · คำศัพท์พื้นฐาน · ประโยคง่ายๆ';
-    next = 'บทที่ 0 พินอิน → HSK 1 บทที่ 1-4';
-  } else if (score <= 10) {
-    level = 'ผู้เริ่มต้น'; levelDesc = 'HSK 1'; color = '#e84393';
-    recommend = 'คุณรู้พื้นฐานบ้างแล้ว แนะนำทบทวน HSK 1 และเริ่ม HSK 2 ค่ะ';
-    improve = 'โครงสร้างประโยค · คำศัพท์ชีวิตประจำวัน · การฟัง';
-    next = 'HSK 1 บทที่ 5-12 → HSK 2';
-  } else if (score <= 16) {
-    level = 'พื้นฐาน'; levelDesc = 'HSK 2'; color = '#185FA5';
-    recommend = 'ดีมากเลยค่ะ! แนะนำเริ่มเรียน HSK 3 ได้เลย';
-    improve = 'การเรียงประโยคซับซ้อน · คำเชื่อม · บทสนทนายาวขึ้น';
-    next = 'HSK 2 ทบทวน → HSK 3';
-  } else if (score <= 22) {
-    level = 'กลาง'; levelDesc = 'HSK 3-4'; color = '#1a6b3a';
-    recommend = 'เก่งมากเลยค่ะ! ระดับของคุณอยู่ที่ HSK 3-4 แนะนำข้ามไป HSK 4 ได้เลย';
-    improve = 'สำนวน · ภาษาระดับสูง · การฟังประโยคยาว';
-    next = 'HSK 4 → HSK 5';
-  } else if (score <= 27) {
-    level = 'ก้าวหน้า'; levelDesc = 'HSK 4-5'; color = '#6b1a6b';
-    recommend = 'ยอดเยี่ยมมากค่ะ! คุณอยู่ระดับสูงแล้ว แนะนำ HSK 5-6';
-    improve = 'ภาษาธุรกิจ · สำนวนระดับสูง · การอ่านข่าวจีน';
-    next = 'HSK 5 → HSK 6';
-  } else {
-    level = 'มืออาชีพ'; levelDesc = 'HSK 5-6'; color = '#1a2a5a';
-    recommend = 'เก่งมากเลยค่ะ! ภาษาจีนของคุณอยู่ระดับมืออาชีพแล้ว!';
-    improve = 'สำนวนเชิงวรรณกรรม · ภาษาการเมือง/เศรษฐกิจ';
-    next = 'HSK 6 ทบทวนให้ครบ · ฝึกอ่านข่าวจีน';
-  }
-
-  const box = document.getElementById('placement-content');
-  box.innerHTML = `
-    <div style="text-align:center;padding:24px 16px 0">
-      <div style="font-size:48px;margin-bottom:8px">🎯</div>
-      <div style="font-size:22px;font-weight:900;color:${color};margin-bottom:4px">${level}</div>
-      <div style="font-size:14px;color:#888;margin-bottom:20px">ระดับ: ${levelDesc}</div>
-
-      <div style="background:linear-gradient(135deg,${color}22,${color}11);border:2px solid ${color}44;border-radius:20px;padding:20px;margin-bottom:16px">
-        <div style="font-size:36px;font-weight:900;color:${color}">${score}<span style="font-size:18px;color:#888"> / ${total}</span></div>
-        <div style="font-size:14px;color:#888">คะแนน · ${pct}%</div>
-      </div>
-
-      <div style="text-align:left;background:white;border:1px solid #eee;border-radius:16px;padding:16px;margin-bottom:12px">
-        <div style="font-size:13px;font-weight:700;color:#2C2C2A;margin-bottom:8px">🦊 ถังถังแนะนำ</div>
-        <div style="font-size:13px;color:#444;line-height:1.7">${recommend}</div>
-      </div>
-
-      <div style="text-align:left;background:#fff8f0;border:1px solid #fde8c8;border-radius:16px;padding:16px;margin-bottom:12px">
-        <div style="font-size:13px;font-weight:700;color:#c47a1a;margin-bottom:8px">⚡ ควรพัฒนาเรื่อง</div>
-        <div style="font-size:13px;color:#444;line-height:1.7">${improve}</div>
-      </div>
-
-      <div style="text-align:left;background:#f0fff8;border:1px solid #b8dfc7;border-radius:16px;padding:16px;margin-bottom:20px">
-        <div style="font-size:13px;font-weight:700;color:#1D9E75;margin-bottom:8px">📚 เรียนต่อที่</div>
-        <div style="font-size:13px;color:#444;line-height:1.7">${next}</div>
-      </div>
-
-      <button onclick="goScreen('home')" style="width:100%;padding:14px;background:linear-gradient(135deg,#1a0a2e,#3d1a6b);color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px">
-        📖 เริ่มเรียนเลย
-      </button>
-      <button onclick="openPlacementTest()" style="width:100%;padding:12px;background:white;border:1.5px solid #e0d8f0;border-radius:12px;font-size:14px;color:#3d1a6b;cursor:pointer">
-        🔄 ทำแบบทดสอบอีกครั้ง
-      </button>
-      ${score <= 10 ? `<div style="margin-top:14px;background:#fff8f0;border:1px solid #fde8c8;border-radius:12px;padding:12px;font-size:12px;color:#c47a1a;line-height:1.7;text-align:left">
-        *** ถ้าคุณไม่รู้เลยแต่เดาและตอบถูกบ้าง ถังถังแนะนำให้เริ่มเรียนใหม่ตั้งแต่ต้นเลยนะคะ เพราะรากฐานที่แน่นจะทำให้เรียนได้เร็วและไม่งงในภายหลังค่ะ 🦊
-      </div>` : ''}
-    </div>`;
-}
-
 function renderPinyinIntro() {
   const box = document.getElementById('ptab-intro');
   if (!box) return;
@@ -11763,26 +11436,30 @@ async function loadAdminUsers() {
     listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--red)">❌ ' + error.message + '</div>';
     return;
   }
-  // function ส่งมาเป็น JSON array ต้อง parse แต่ละ row
   const data = (rawData || []).map(row => {
     if (!row) return {};
-    // Already parsed object with expected fields
     if (row.user_id || row.email) return row;
-    // Wrapped in admin_list_users key as JSON string
     const val = row.admin_list_users || (typeof row === 'string' ? row : JSON.stringify(row));
     try { return typeof val === 'string' ? JSON.parse(val) : val; }
     catch(e) { return row; }
   });
 
+  window._adminUsersCache = data;
+
   const total = data.length;
   const premiumCount = data.filter(u => u.is_premium).length;
   summaryEl.innerHTML = `สมาชิกทั้งหมด <b>${total} คน</b> · Premium <b style="color:var(--red)">${premiumCount} คน</b> · ฟรี <b>${total - premiumCount} คน</b>`;
 
+  renderAdminUserList(data);
+}
+
+function renderAdminUserList(data) {
+  const listEl = document.getElementById('admin-user-list');
+  if (!listEl) return;
   if (data.length === 0) {
-    listEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink3)">ยังไม่มีสมาชิก</div>';
+    listEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink3)">ไม่พบสมาชิกที่ค้นหา 🔍</div>';
     return;
   }
-
   listEl.innerHTML = data.map(u => `
     <div id="user-row-${u.user_id}" style="background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:14px;margin-bottom:8px;box-shadow:var(--shadow)">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
@@ -11800,6 +11477,18 @@ async function loadAdminUsers() {
       </div>
     </div>`).join('');
 }
+
+function filterAdminUsers(query) {
+  const data = window._adminUsersCache || [];
+  if (!query.trim()) { renderAdminUserList(data); return; }
+  const q = query.toLowerCase().trim();
+  const filtered = data.filter(u =>
+    (u.email || '').toLowerCase().includes(q) ||
+    (u.name || '').toLowerCase().includes(q)
+  );
+  renderAdminUserList(filtered);
+}
+
 
 async function togglePremium(userId, currentStatus) {
   const newStatus = !currentStatus;
