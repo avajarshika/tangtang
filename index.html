@@ -6614,6 +6614,7 @@ function updateStreak() {
 // NAVIGATION
 // ═══════════════════════════════════
 function goScreen(s) {
+  playClickSound();
   document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
   document.getElementById('screen-' + s).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -7048,6 +7049,7 @@ function openLesson(id) {
 }
 
 function switchTab(name, btn) {
+  playClickSound();
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
   const pane = document.getElementById('tab-' + name);
   if (pane) pane.classList.add('active');
@@ -7179,6 +7181,7 @@ function updateFC() {
 }
 
 function flipFC() {
+  playFlipSound();
   state.fcFlipped = !state.fcFlipped;
   document.getElementById('flip-scene').classList.toggle('flipped', state.fcFlipped);
   const btns = document.querySelector('.srs-btns');
@@ -8238,6 +8241,95 @@ function speakVocab(zh, btn) {
 
 function speakWord(zh) { stopSpeech(); speak(zh); }
 
+function playClickSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'sine'; osc.frequency.setValueAtTime(600, ctx.currentTime);
+    gain.gain.setValueAtTime(0.08, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.08);
+  } catch(e) {}
+}
+
+function playPenSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // เสียงปากกาขีด = noise burst สั้นๆ
+    const bufLen = ctx.sampleRate * 0.06;
+    const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < bufLen; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i/bufLen, 3) * 0.3;
+    }
+    const src = ctx.createBufferSource();
+    const gain = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass'; filter.frequency.value = 2000; filter.Q.value = 0.8;
+    src.buffer = buf;
+    src.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
+    gain.gain.setValueAtTime(0.5, ctx.currentTime);
+    src.start(ctx.currentTime);
+  } catch(e) {}
+}
+
+function playTickSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(1200, ctx.currentTime);
+    gain.gain.setValueAtTime(0.04, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.04);
+  } catch(e) {}
+}
+
+function playUrgentTick() {
+  // เสียงนาฬิกาตอนวินาทีสุดท้าย — เร็วและดังขึ้น
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [0, 0.12].forEach(delay => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(delay === 0 ? 1400 : 1000, ctx.currentTime + delay);
+      gain.gain.setValueAtTime(0.08, ctx.currentTime + delay);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.08);
+      osc.start(ctx.currentTime + delay);
+      osc.stop(ctx.currentTime + delay + 0.1);
+    });
+  } catch(e) {}
+}
+
+function playFlipSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // เสียงกระดาษพลิก — swoosh สั้นๆ
+    const bufLen = ctx.sampleRate * 0.12;
+    const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < bufLen; i++) {
+      const t = i / bufLen;
+      data[i] = (Math.random() * 2 - 1) * Math.sin(t * Math.PI) * 0.15;
+    }
+    const src = ctx.createBufferSource();
+    const gain = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'highpass'; filter.frequency.value = 1200;
+    src.buffer = buf;
+    src.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
+    gain.gain.setValueAtTime(0.6, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+    src.start(ctx.currentTime);
+  } catch(e) {}
+}
+
 function playCorrectSound() {
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -8414,9 +8506,9 @@ function renderStrokeGame() {
       </div>
     </div>
     <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:16px">
-      <button onclick="if(hwWriter)hwWriter.animateCharacter()" style="padding:10px 16px;background:#6b1a6b;color:white;border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">▶ ดูการเขียน</button>
-      <button onclick="if(hwWriter)hwWriter.quiz({onComplete:()=>strokeQuizDone()})" style="padding:10px 16px;background:var(--red);color:white;border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">✏️ ฝึกเขียน</button>
-      <button onclick="if(hwWriter)hwWriter.showCharacter()" style="padding:10px 16px;background:var(--paper2);color:var(--ink2);border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">👁 แสดง</button>
+      <button onclick="if(hwWriter){playPenSound();hwWriter.animateCharacter()}" style="padding:10px 16px;background:#6b1a6b;color:white;border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">▶ ดูการเขียน</button>
+      <button onclick="if(hwWriter){playClickSound();hwWriter.quiz({onComplete:()=>strokeQuizDone()})}" style="padding:10px 16px;background:var(--red);color:white;border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">✏️ ฝึกเขียน</button>
+      <button onclick="if(hwWriter){playClickSound();hwWriter.showCharacter()}" style="padding:10px 16px;background:var(--paper2);color:var(--ink2);border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">👁 แสดง</button>
     </div>
     <div id="stroke-feedback" style="text-align:center;min-height:36px;margin-bottom:16px"></div>
     <div style="display:flex;gap:10px">
@@ -8799,8 +8891,8 @@ function renderSentenceWords() {
     :sbAnswer.map((w,i)=>`<button onclick="sbRemove(${i})" style="padding:10px 14px;background:${lv.color};color:white;border:none;border-radius:12px;font-family:'Noto Serif SC',serif;font-size:18px;cursor:pointer;box-shadow:0 2px 6px ${lv.color}40">${w}</button>`).join('');
 }
 
-function sbSelect(w,enc){ sbAnswer.push(decodeURIComponent(enc)); renderSentenceWords(); }
-function sbRemove(i){sbAnswer.splice(i,1);renderSentenceWords();}
+function sbSelect(w,enc){ playClickSound(); sbAnswer.push(decodeURIComponent(enc)); renderSentenceWords(); }
+function sbRemove(i){playClickSound();sbAnswer.splice(i,1);renderSentenceWords();}
 function sbClear(){sbAnswer=[];renderSentenceWords();}
 
 function checkSentence() {
@@ -8808,10 +8900,11 @@ function checkSentence() {
   const s=lv.sentences[sbLevelIdx];
   const ans=sbAnswer.join(''); const correct=ans===s.correct;
   const fb=document.getElementById('sb-feedback');
+  if(!correct){playWrongSound();}
   if(fb) fb.innerHTML=correct
     ?`<div style="color:var(--green);font-weight:700;font-size:14px">🎉 ถูกต้อง! +15 XP</div><div style="font-size:12px;color:var(--ink3);margin-top:4px">${s.py}</div>`
     :`<div style="color:var(--red);font-weight:700;font-size:14px">❌ เฉลย: ${s.correct}</div><div style="font-size:12px;color:var(--ink3);margin-top:4px">${s.py}</div>`;
-  if(correct){sbScore++;if(state.user){state.user.data.xp=(state.user.data.xp||0)+15;trackActivity();saveState();updateTopbar();}}
+  if(correct){playCorrectSound();sbScore++;if(state.user){state.user.data.xp=(state.user.data.xp||0)+15;trackActivity();saveState();updateTopbar();}}
   const btn=document.getElementById('sb-check-btn');
   if(btn){
     btn.textContent=sbLevelIdx+1>=lv.sentences.length?'🏁 ดูผลลัพธ์':'ถัดไป →';
@@ -9969,6 +10062,7 @@ let hubVmFilter = 'ทั้งหมด';
 let hubCurrentHSK = 1;
 
 function switchHubTab(tab, btn) {
+  playClickSound();
   document.getElementById('hub-pane-lessons').style.display = tab === 'lessons' ? 'block' : 'none';
   document.getElementById('hub-pane-vocab').style.display = tab === 'vocab' ? 'block' : 'none';
   document.querySelectorAll('#screen-lessons-hub .tab-btn').forEach(b => {
@@ -11954,6 +12048,10 @@ function renderSpeedQ() {
       tc.textContent = speedTimeLeft;
       if (speedTimeLeft <= 3) { tc.style.background = 'rgba(255,80,80,.6)'; tc.style.transform = 'scale(1.15)'; }
     }
+    // เสียงนาฬิกา
+    if (speedTimeLeft <= 0) { /* หมดเวลา handled below */ }
+    else if (speedTimeLeft <= 3) { playUrgentTick(); }
+    else { playTickSound(); }
     if (speedTimeLeft <= 0) {
       clearInterval(speedTimer);
       const fb = document.getElementById('speed-feedback');
@@ -13096,6 +13194,10 @@ function checkMatch() {
 }
 
 function showMatchDone(lv) {
+  // เสียงตามเวลา — เร็ว = ชนะสวย
+  if (matchTime <= 60) playWinSound();
+  else if (matchTime <= 120) playCorrectSound();
+  else playLoseSound();
   const box = document.getElementById('match-content');
   const timeStr = Math.floor(matchTime/60)+':'+String(matchTime%60).padStart(2,'0');
   const key = 'matchLevel'+(matchLevel+1)+'Best';
@@ -13314,7 +13416,7 @@ function renderListenQ(){
   const opts=[].concat(w.opts).sort(function(){return Math.random()-.5;});
   let optsHtml='';
   opts.forEach(function(o,i){
-    optsHtml+='<button id="lopt-'+i+'" data-val="'+o+'" data-correct="'+w.th+'" onclick="answerListen(this)" '
+    optsHtml+='<button id="lopt-'+i+'" data-val="'+o+'" data-correct="'+w.th+'" onclick="playClickSound();answerListen(this)" '
       +'style="padding:14px 10px;background:white;border:2px solid var(--paper3);border-radius:14px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:.2s;color:var(--ink)">'+o+'</button>';
   });
   box.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">'
@@ -13362,6 +13464,9 @@ function answerListen(el){
 }
 
 function showListenDone(){
+  if(listenScore>=6) playWinSound();
+  else if(listenScore>=4) playCorrectSound();
+  else playLoseSound();
   const box=document.getElementById('listen-content');
   const lv=LISTEN_LEVELS[listenLevel];
   const key='listenLevel'+(listenLevel+1)+'Best';
