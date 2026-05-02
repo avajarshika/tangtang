@@ -6851,8 +6851,8 @@ function renderHome() {
     const hskColors = {1:'background:var(--red-light);color:var(--red)',2:'background:#e6f1fb;color:var(--blue)',3:'background:#e8f4ed;color:#1a6b3a',4:'background:#f0e8f4;color:#6b1a6b',5:'background:#e0f0f0;color:#1a5a5a',6:'background:#e0e4f0;color:#1a2a5a'};
     const hskLabel = l.hsk ? 'HSK ' + l.hsk : 'HSK 1';
     const hskStyle = hskColors[l.hsk || 1];
-    return `<div class="lesson-card ${isDone?'done':''} ${(i >= 3 && !isPremium()) ? 'locked-lesson' : ''}" onclick="tryOpenLesson(${l.id}, ${i})">
-      <div class="lesson-num">${isDone ? '✅' : (i >= 3 && !isPremium()) ? '🔒' : l.icon}</div>
+    return `<div class="lesson-card ${isDone?'done':''} ${(i >= 5 && !isPremium()) ? 'locked-lesson' : ''}" onclick="tryOpenLesson(${l.id}, ${i})">
+      <div class="lesson-num">${isDone ? '✅' : (i >= 5 && !isPremium()) ? '🔒' : l.icon}</div>
       <div class="lesson-info">
         <div class="lesson-title">${l.title}</div>
         <div class="lesson-sub">${l.sub}</div>
@@ -6967,7 +6967,7 @@ function isPremium() {
 }
 
 function tryOpenLesson(id, index) {
-  if (index >= 3 && !isPremium()) {
+  if (index >= 5 && !isPremium()) {
     showPaymentModal();
     return;
   }
@@ -8334,6 +8334,11 @@ const STROKE_CHARS = {
   3: ['因','为','所','以','但','虽','然','如','果','只','要','就','都','还','再','又','也','和','了','的','很','最','太','真','更','非','常','比','像','把'],
   4: ['觉','得','认','为','感','情','想','法','知','道','明','白','理','解','记','忆','思','考','判','断','选','择','决','定','改','变','发','现','创','新'],
   5: ['经','济','政','治','文','化','历','史','科','技','环','境','社','会','教','育','健','康','发','展','国','际','合','作','交','流','进','步','创','造'],
+  6: ['请','问','谢','对','起','没','关','系','欢','迎','祝','贺','恭','喜','再','见','拜','托','麻','烦','帮','忙','借','让','用','好','坏','对','错','真'],
+  7: ['爱','恨','怕','累','烦','急','慌','笑','哭','想','念','思','恋','盼','忘','记','担','心','高','兴','痛','苦','幸','福','骄','傲','羞','耻','惊','喜'],
+  8: ['旅','游','机','场','酒','店','餐','厅','商','场','银','行','医','院','学','校','图','书','馆','公','园','超','市','地','铁','站','路','口','桥','街'],
+  9: ['责','任','机','会','竞','争','创','业','成','功','失','败','坚','持','放','弃','努','力','奋','斗','梦','想','希','望','理','想','目','标','信','心'],
+  10:['哲','学','艺','术','音','乐','文','学','科','学','技','术','政','策','法','律','经','济','社','会','文','化','传','统','民','族','宗','教','历','史'],
 };
 const STROKE_MEANINGS = {
   // Level 1 — พื้นฐาน
@@ -8359,11 +8364,16 @@ const STROKE_MEANINGS = {
 };
 
 const STROKE_LEVEL_NAMES = {
-  1: 'ระดับ 1 — พื้นฐาน',
+  1: 'ระดับ 1 — พื้นฐาน HSK1',
   2: 'ระดับ 2 — ชีวิตประจำวัน',
   3: 'ระดับ 3 — คำเชื่อม',
   4: 'ระดับ 4 — ความคิด',
   5: 'ระดับ 5 — สังคมและโลก',
+  6: 'ระดับ 6 — มารยาทและสำนวน',
+  7: 'ระดับ 7 — อารมณ์และความรู้สึก',
+  8: 'ระดับ 8 — สถานที่และการเดินทาง',
+  9: 'ระดับ 9 — อาชีพและความสำเร็จ',
+  10:'ระดับ 10 — ปรัชญาและวัฒนธรรม',
 };
 
 let hwWriter = null, strokeCharIdx = 0, strokeHSK = 1;
@@ -8379,16 +8389,16 @@ function initStrokeGame() {
 }
 
 function renderStrokeGame() {
-  if (!isPremium() && strokeHSK > 1) { strokeHSK = 1; } // Free = Level 1 เท่านั้น
-  const freeLimit = isPremium() ? 999 : 5;
+  if (!isPremium() && strokeHSK > 2) { strokeHSK = 2; } // Free = Level 1-2 เท่านั้น
+  const freeLimit = isPremium() ? 999 : 10;
   if (!isPremium() && strokeCharIdx >= freeLimit) { strokeCharIdx = freeLimit - 1; }
-  const chars = (isPremium() ? STROKE_CHARS[strokeHSK] : STROKE_CHARS[1].slice(0,5)) || STROKE_CHARS[1];
+  const chars = (isPremium() ? STROKE_CHARS[strokeHSK] : STROKE_CHARS[1].slice(0,10)) || STROKE_CHARS[1];
   const char = chars[strokeCharIdx%chars.length];
   const meaning = STROKE_MEANINGS[char]||'';
   const box = document.getElementById('stroke-content');
   box.innerHTML = `
     <div style="display:flex;justify-content:center;gap:6px;margin-bottom:16px">
-      ${[1,2,3,4,5].map(h=>{const lk=!isPremium()&&h>1;return`<button onclick="${lk?'showPaymentModal()':'strokeHSK='+h+';strokeCharIdx=0;renderStrokeGame()'}" style="padding:5px 12px;border-radius:20px;border:1.5px solid ${strokeHSK===h?'#6b1a6b':'var(--paper3)'};background:${strokeHSK===h?'#6b1a6b':lk?'var(--paper2)':'white'};font-size:11px;font-weight:700;color:${strokeHSK===h?'white':lk?'var(--ink3)':'var(--ink3)'};cursor:pointer;font-family:inherit">${lk?'🔒 ':''}ระดับ ${h}</button>`;}).join('')}
+      ${[1,2,3,4,5,6,7,8,9,10].map(h=>{const lk=!isPremium()&&h>1;return`<button onclick="${lk?'showPaymentModal()':'strokeHSK='+h+';strokeCharIdx=0;renderStrokeGame()'}" style="padding:5px 12px;border-radius:20px;border:1.5px solid ${strokeHSK===h?'#6b1a6b':'var(--paper3)'};background:${strokeHSK===h?'#6b1a6b':lk?'var(--paper2)':'white'};font-size:11px;font-weight:700;color:${strokeHSK===h?'white':lk?'var(--ink3)':'var(--ink3)'};cursor:pointer;font-family:inherit">${lk?'🔒 ':''}ระดับ ${h}</button>`;}).join('')}
     </div>
     <div style="text-align:center;margin-bottom:8px">
       <div style="font-size:11px;font-weight:600;color:#6b1a6b;margin-bottom:2px">${STROKE_LEVEL_NAMES[strokeHSK]||''}</div>
@@ -8640,6 +8650,54 @@ const SENTENCE_LEVELS = [
     {th:'การออกกำลังกายดีต่อสุขภาพ', words:['运动','对','身体','有好处'], correct:'运动对身体有好处', py:'Yùndòng duì shēntǐ yǒu hǎochù'},
     {th:'ฉันหวังว่าจะได้ไปจีนสักครั้ง', words:['我希望','有机会','去','中国'], correct:'我希望有机会去中国', py:'Wǒ xīwàng yǒu jīhuì qù Zhōngguó'},
     {th:'ยิ่งฝึกมาก ยิ่งพูดได้คล่อง', words:['练习得越多','说得','越流利'], correct:'练习得越多说得越流利', py:'Liànxí de yuè duō shuō de yuè liúlì'},
+  ]},
+  { level:7, name:'ด่านที่ 7 — HSK2 ประโยคซับซ้อน', color:'#6a1b9a', bg:'#f3e5f5', icon:'🔥', sentences:[
+    {th:'เขาเพิ่งกลับมาจากต่างประเทศ', words:['他','刚','从','国外','回来了'], correct:'他刚从国外回来了', py:'Tā gāng cóng guówài huílái le'},
+    {th:'ฉันยังไม่ได้กินข้าวเลย', words:['我','还','没有','吃饭'], correct:'我还没有吃饭', py:'Wǒ hái méiyǒu chīfàn'},
+    {th:'เธอพูดภาษาจีนได้ดีกว่าฉัน', words:['她','比我','说中文','说得好'], correct:'她比我说中文说得好', py:'Tā bǐ wǒ shuō Zhōngwén shuō de hǎo'},
+    {th:'วันนี้ฉันไม่อยากออกไปข้างนอก', words:['今天','我','不想','出去'], correct:'今天我不想出去', py:'Jīntiān wǒ bù xiǎng chūqù'},
+    {th:'ฉันใช้เวลาสองชั่วโมงทำการบ้าน', words:['我','用了','两个小时','做作业'], correct:'我用了两个小时做作业', py:'Wǒ yòng le liǎng gè xiǎoshí zuò zuòyè'},
+    {th:'ของที่นี่แพงกว่าที่นั่น', words:['这里的东西','比','那里','贵'], correct:'这里的东西比那里贵', py:'Zhèlǐ de dōngxi bǐ nàlǐ guì'},
+    {th:'คุณควรพักผ่อนให้มากขึ้น', words:['你','应该','多','休息'], correct:'你应该多休息', py:'Nǐ yīnggāi duō xiūxi'},
+    {th:'ฉันกำลังเรียนภาษาจีนอยู่', words:['我','正在','学习','中文'], correct:'我正在学习中文', py:'Wǒ zhèngzài xuéxí Zhōngwén'},
+    {th:'เขาบอกว่าจะมาช้า', words:['他','说','他会','来晚'], correct:'他说他会来晚', py:'Tā shuō tā huì lái wǎn'},
+    {th:'ฉันไม่ค่อยชอบกินผัก', words:['我','不太','喜欢','吃蔬菜'], correct:'我不太喜欢吃蔬菜', py:'Wǒ bù tài xǐhuan chī shūcài'},
+  ]},
+  { level:8, name:'ด่านที่ 8 — HSK2-3 สำนวนชีวิต', color:'#bf360c', bg:'#fbe9e7', icon:'🔥🔥', sentences:[
+    {th:'ยิ่งมากยิ่งดี', words:['越多','越好'], correct:'越多越好', py:'Yuè duō yuè hǎo'},
+    {th:'เขาไม่ได้มาตั้งนานแล้ว', words:['他','好久','没来了'], correct:'他好久没来了', py:'Tā hǎojiǔ méi lái le'},
+    {th:'ฉันพึ่งรู้ว่าเธอแต่งงานแล้ว', words:['我','才知道','她','结婚了'], correct:'我才知道她结婚了', py:'Wǒ cái zhīdào tā jiéhūn le'},
+    {th:'ถ้าไม่พยายามก็ไม่มีวันสำเร็จ', words:['不努力','就不会','成功'], correct:'不努力就不会成功', py:'Bù nǔlì jiù bù huì chénggōng'},
+    {th:'ฉันอยากให้เธอมีความสุข', words:['我希望','你','能','幸福'], correct:'我希望你能幸福', py:'Wǒ xīwàng nǐ néng xìngfú'},
+    {th:'เขาทำงานหนักจนป่วย', words:['他','因为','工作太累','生病了'], correct:'他因为工作太累生病了', py:'Tā yīnwèi gōngzuò tài lèi shēngbìng le'},
+    {th:'ภาษาจีนไม่ยากถ้าฝึกทุกวัน', words:['中文','不难','只要','每天练习'], correct:'中文不难只要每天练习', py:'Zhōngwén bù nán zhǐyào měitiān liànxí'},
+    {th:'เธอกลับมาแล้วหรือยัง?', words:['她','回来了','吗','？'], correct:'她回来了吗？', py:'Tā huílái le ma'},
+    {th:'ฉันไม่แน่ใจว่าเขาจะมาไหม', words:['我不确定','他','会不会来'], correct:'我不确定他会不会来', py:'Wǒ bù quèdìng tā huì bu huì lái'},
+    {th:'ตั้งแต่เรียนจีนฉันมีเพื่อนมากขึ้น', words:['自从','学中文','我','朋友越来越多'], correct:'自从学中文我朋友越来越多', py:'Zìcóng xué Zhōngwén wǒ péngyou yuè lái yuè duō'},
+  ]},
+  { level:9, name:'ด่านที่ 9 — HSK3 ไวยากรณ์ขั้นสูง', color:'#1a237e', bg:'#e8eaf6', icon:'🔥🔥🔥', sentences:[
+    {th:'แม้ว่าฉันจะเหนื่อย แต่ก็ยังคงพยายามต่อ', words:['尽管','我很累','但是','仍然坚持'], correct:'尽管我很累但是仍然坚持', py:'Jǐnguǎn wǒ hěn lèi dànshì réngrán jiānchí'},
+    {th:'เธอค่อยๆ เก่งขึ้นทุกวัน', words:['她','每天','都在','逐渐进步'], correct:'她每天都在逐渐进步', py:'Tā měitiān dōu zài zhújiàn jìnbù'},
+    {th:'ตามที่ฉันรู้ เขาเป็นคนดี', words:['据我所知','他','是个','好人'], correct:'据我所知他是个好人', py:'Jù wǒ suǒ zhī tā shì gè hǎo rén'},
+    {th:'ไม่ว่าจะยากแค่ไหน ฉันจะไม่ยอมแพ้', words:['不管','多难','我','都不会放弃'], correct:'不管多难我都不会放弃', py:'Bùguǎn duō nán wǒ dōu bù huì fàngqì'},
+    {th:'เขาดูเหมือนจะไม่พอใจ', words:['他','似乎','不太','满意'], correct:'他似乎不太满意', py:'Tā sìhū bù tài mǎnyì'},
+    {th:'แน่นอนว่าการเรียนสำคัญมาก', words:['当然','学习','非常','重要'], correct:'当然学习非常重要', py:'Dāngrán xuéxí fēicháng zhòngyào'},
+    {th:'ตราบเท่าที่ยังมีความหวัง ก็มีทางออก', words:['只要','有希望','就','有出路'], correct:'只要有希望就有出路', py:'Zhǐyào yǒu xīwàng jiù yǒu chūlù'},
+    {th:'เขาทำสำเร็จได้เพราะมีความพยายาม', words:['他','之所以','成功','是因为努力'], correct:'他之所以成功是因为努力', py:'Tā zhī suǒyǐ chénggōng shì yīnwèi nǔlì'},
+    {th:'สิ่งแวดล้อมมีผลต่อคนมาก', words:['环境','对人','有很大的','影响'], correct:'环境对人有很大的影响', py:'Huánjìng duì rén yǒu hěn dà de yǐngxiǎng'},
+    {th:'ยิ่งรีบ ยิ่งผิดพลาด', words:['越','着急','越','容易出错'], correct:'越着急越容易出错', py:'Yuè zhāojí yuè róngyì chūcuò'},
+  ]},
+  { level:10, name:'ด่านที่ 10 — ขั้นเซียน! HSK3+', color:'#880e4f', bg:'#fce4ec', icon:'👑', sentences:[
+    {th:'ประสบการณ์ที่ดีที่สุดคือการล้มแล้วลุก', words:['最好的经验','是','跌倒后','再站起来'], correct:'最好的经验是跌倒后再站起来', py:'Zuì hǎo de jīngyàn shì diēdǎo hòu zài zhàn qǐlái'},
+    {th:'การสื่อสารที่ดีช่วยแก้ปัญหาทุกอย่างได้', words:['良好的沟通','能','解决','所有问题'], correct:'良好的沟通能解决所有问题', py:'Liánghǎo de gōutōng néng jiějué suǒyǒu wèntí'},
+    {th:'ฉันเชื่อว่าความพยายามไม่เคยทำให้ผิดหวัง', words:['我相信','努力','不会','让人失望'], correct:'我相信努力不会让人失望', py:'Wǒ xiāngxìn nǔlì bù huì ràng rén shīwàng'},
+    {th:'แม้จะยากแค่ไหน เราก็ต้องรับผิดชอบ', words:['无论多难','我们','都要','承担责任'], correct:'无论多难我们都要承担责任', py:'Wúlùn duō nán wǒmen dōu yào chéngdān zérèn'},
+    {th:'สังคมที่ดีเริ่มจากการเคารพซึ่งกันและกัน', words:['好的社会','从','互相尊重','开始'], correct:'好的社会从互相尊重开始', py:'Hǎo de shèhuì cóng hùxiāng zūnzhòng kāishǐ'},
+    {th:'ความรู้คือพลังที่ยิ่งใหญ่ที่สุด', words:['知识','是','最强大的','力量'], correct:'知识是最强大的力量', py:'Zhīshi shì zuì qiángdà de lìliàng'},
+    {th:'อย่าเสียใจกับสิ่งที่ผ่านไปแล้ว', words:['不要','为了','已经过去的事','而遗憾'], correct:'不要为了已经过去的事而遗憾', py:'Bùyào wèile yǐjīng guòqù de shì ér yíhàn'},
+    {th:'ภาษาคือสะพานเชื่อมวัฒนธรรม', words:['语言','是','连接','文化的桥梁'], correct:'语言是连接文化的桥梁', py:'Yǔyán shì liánjié wénhuà de qiáoliáng'},
+    {th:'ไม่มีสิ่งใดสำเร็จได้โดยปราศจากความพยายาม', words:['没有什么','是','不经过努力','就能成功的'], correct:'没有什么是不经过努力就能成功的', py:'Méiyǒu shénme shì bù jīngguò nǔlì jiù néng chénggōng de'},
+    {th:'การเรียนรู้ไม่มีวันสิ้นสุด', words:['学无止境'], correct:'学无止境', py:'Xué wú zhǐjìng'},
   ]},
 ];
 
@@ -9965,7 +10023,7 @@ function renderLessonsHub() {
 
     const lessonCards = hsk1Lessons.map((l, i) => {
       const isDone = (d.completed||[]).includes(l.id);
-      const locked = i >= 3 && !isPremium();
+      const locked = i >= 5 && !isPremium();
       return `<div class="lesson-card ${isDone?'done':''} ${locked?'locked':''}" onclick="${locked?'showPaymentModal()':'openLesson('+l.id+')'}">
         <div class="lesson-num">${isDone?'✅':locked?'🔒':l.icon}</div>
         <div class="lesson-info">
@@ -9988,7 +10046,7 @@ function renderLessonsHub() {
     if (badge) badge.innerHTML = `HSK 2 — ผู้เริ่มต้น A2 &nbsp;·&nbsp; เรียนแล้ว ${done2}/${hsk2Lessons.length} บท &nbsp;·&nbsp; ~300 คำ`;
     hub.innerHTML = hsk2Lessons.map((l, i) => {
       const isDone = (d.completed||[]).includes(l.id);
-      const locked = i >= 3 && !isPremium();
+      const locked = i >= 5 && !isPremium();
       return `<div class="lesson-card ${isDone?'done':''} ${locked?'locked':''}" onclick="${locked?'showPaymentModal()':'openLesson('+l.id+')'}">
         <div class="lesson-num">${isDone?'✅':locked?'🔒':l.icon}</div>
         <div class="lesson-info">
@@ -11261,7 +11319,7 @@ function renderReadingTab() {
         <div style="font-family:'Noto Serif SC',serif;font-size:16px;color:var(--ink);line-height:2;margin-bottom:10px">${r.text}</div>
         <div style="font-size:12px;font-weight:600;color:var(--blue);margin-bottom:4px">${r.py}</div>
         <div style="font-size:13px;color:var(--ink3);line-height:1.7">${r.th}</div>
-        <button onclick="speakWord('${r.text.substring(0,30)}')" style="margin-top:10px;display:flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--blue-light);border-radius:20px;background:var(--blue-light);font-size:12px;font-weight:600;color:var(--blue);font-family:inherit;cursor:pointer">🔊 ฟังเสียง</button>
+        <button onclick="speak(state.curLesson.reading.text.substring(0,50),null,0.8)" style="margin-top:10px;display:flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--blue-light);border-radius:20px;background:var(--blue-light);font-size:12px;font-weight:600;color:var(--blue);font-family:inherit;cursor:pointer">🔊 ฟังเสียง</button>
       </div>
       <div style="background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:14px;box-shadow:var(--shadow)">
         <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px">❓ ทดสอบความเข้าใจ</div>
@@ -12664,7 +12722,7 @@ const MATCH_LEVELS = [
     ]
   },
   {
-    name: 'ด่าน 2 — ความรู้สึก', icon: '❤️', color: '#e91e8c', free: false,
+    name: 'ด่าน 2 — ความรู้สึก', icon: '❤️', color: '#e91e8c', free: true,
     pairs: [
       {zh:'开心',th:'มีความสุข'}, {zh:'难过',th:'เศร้า'}, {zh:'生气',th:'โกรธ'},
       {zh:'害怕',th:'กลัว'}, {zh:'累',th:'เหนื่อย'}, {zh:'爱你',th:'รักคุณ'},
@@ -12672,7 +12730,7 @@ const MATCH_LEVELS = [
     ]
   },
   {
-    name: 'ด่าน 3 — กริยาชีวิตประจำวัน', icon: '🏃', color: '#9c27b0', free: false,
+    name: 'ด่าน 3 — กริยาชีวิตประจำวัน', icon: '🏃', color: '#9c27b0', free: true,
     pairs: [
       {zh:'吃',th:'กิน'}, {zh:'喝',th:'ดื่ม'}, {zh:'走',th:'เดิน'},
       {zh:'跑',th:'วิ่ง'}, {zh:'睡觉',th:'นอนหลับ'}, {zh:'工作',th:'ทำงาน'},
@@ -12680,7 +12738,7 @@ const MATCH_LEVELS = [
     ]
   },
   {
-    name: 'ด่าน 4 — ความรัก & อารมณ์', icon: '💕', color: '#c2185b', free: false,
+    name: 'ด่าน 4 — ความรัก & อารมณ์', icon: '💕', color: '#c2185b', free: true,
     pairs: [
       {zh:'心动',th:'หัวใจเต้นแรง'}, {zh:'嫉妒',th:'อิจฉา/หึงหวง'}, {zh:'委屈',th:'น้อยใจ'},
       {zh:'期待',th:'ตั้งตารอ'}, {zh:'温柔',th:'อ่อนโยน'}, {zh:'珍惜',th:'ถนอมรัก'},
@@ -12688,7 +12746,7 @@ const MATCH_LEVELS = [
     ]
   },
   {
-    name: 'ด่าน 5 — กริยาการสื่อสาร', icon: '💬', color: '#1565c0', free: false,
+    name: 'ด่าน 5 — กริยาการสื่อสาร', icon: '💬', color: '#1565c0', free: true,
     pairs: [
       {zh:'说',th:'พูด'}, {zh:'听',th:'ฟัง'}, {zh:'看',th:'ดู/มอง'},
       {zh:'问',th:'ถาม'}, {zh:'回答',th:'ตอบ'}, {zh:'聊天',th:'คุย/สนทนา'},
@@ -12750,7 +12808,154 @@ const MATCH_LEVELS = [
       {zh:'妹妹',th:'น้องสาว'}, {zh:'老师',th:'ครู'}, {zh:'医生',th:'แพทย์'},
       {zh:'朋友',th:'เพื่อน'}, {zh:'同事',th:'เพื่อนร่วมงาน'}
     ]
-  }
+  },
+  {
+    name: 'ด่าน 13 — ร่างกาย', icon: '🧍', color: '#00838f', free: false,
+    pairs: [
+      {zh:'头',th:'หัว'}, {zh:'眼睛',th:'ตา'}, {zh:'耳朵',th:'หู'},
+      {zh:'嘴',th:'ปาก'}, {zh:'手',th:'มือ'}, {zh:'脚',th:'เท้า'},
+      {zh:'肚子',th:'ท้อง'}, {zh:'背',th:'หลัง'}
+    ]
+  },
+  {
+    name: 'ด่าน 14 — สุขภาพ & อาการ', icon: '🏥', color: '#c62828', free: false,
+    pairs: [
+      {zh:'头疼',th:'ปวดหัว'}, {zh:'发烧',th:'มีไข้'}, {zh:'咳嗽',th:'ไอ'},
+      {zh:'感冒',th:'หวัด'}, {zh:'肚子疼',th:'ปวดท้อง'}, {zh:'过敏',th:'แพ้'},
+      {zh:'药',th:'ยา'}, {zh:'医院',th:'โรงพยาบาล'}
+    ]
+  },
+  {
+    name: 'ด่าน 15 — ธรรมชาติ & สภาพอากาศ', icon: '🌤️', color: '#1565c0', free: false,
+    pairs: [
+      {zh:'太阳',th:'ดวงอาทิตย์'}, {zh:'月亮',th:'ดวงจันทร์'}, {zh:'星星',th:'ดาว'},
+      {zh:'下雨',th:'ฝนตก'}, {zh:'下雪',th:'หิมะตก'}, {zh:'刮风',th:'ลมพัด'},
+      {zh:'热',th:'ร้อน'}, {zh:'冷',th:'หนาว'}
+    ]
+  },
+  {
+    name: 'ด่าน 16 — กีฬา & สันทนาการ', icon: '⚽', color: '#2e7d32', free: false,
+    pairs: [
+      {zh:'踢足球',th:'เตะฟุตบอล'}, {zh:'打篮球',th:'เล่นบาสเกตบอล'}, {zh:'游泳',th:'ว่ายน้ำ'},
+      {zh:'跑步',th:'วิ่ง'}, {zh:'爬山',th:'ปีนเขา'}, {zh:'钓鱼',th:'ตกปลา'},
+      {zh:'唱歌',th:'ร้องเพลง'}, {zh:'跳舞',th:'เต้น'}
+    ]
+  },
+  {
+    name: 'ด่าน 17 — เทคโนโลยี & อินเทอร์เน็ต', icon: '💻', color: '#1a237e', free: false,
+    pairs: [
+      {zh:'手机',th:'มือถือ'}, {zh:'电脑',th:'คอมพิวเตอร์'}, {zh:'网络',th:'อินเทอร์เน็ต'},
+      {zh:'上网',th:'ท่องอินเทอร์เน็ต'}, {zh:'发邮件',th:'ส่งอีเมล'}, {zh:'下载',th:'ดาวน์โหลด'},
+      {zh:'密码',th:'รหัสผ่าน'}, {zh:'充电',th:'ชาร์จไฟ'}
+    ]
+  },
+  {
+    name: 'ด่าน 18 — การศึกษา', icon: '📚', color: '#4527a0', free: false,
+    pairs: [
+      {zh:'课本',th:'หนังสือเรียน'}, {zh:'作业',th:'การบ้าน'}, {zh:'考试',th:'สอบ'},
+      {zh:'成绩',th:'ผลการเรียน'}, {zh:'毕业',th:'จบการศึกษา'}, {zh:'留学',th:'เรียนต่อต่างประเทศ'},
+      {zh:'图书馆',th:'ห้องสมุด'}, {zh:'课堂',th:'ห้องเรียน'}
+    ]
+  },
+  {
+    name: 'ด่าน 19 — HSK2 ผสม (ยาก)', icon: '🌟', color: '#e65100', free: false,
+    pairs: [
+      {zh:'比较',th:'ค่อนข้าง / เปรียบเทียบ'}, {zh:'已经',th:'แล้ว / เรียบร้อย'},
+      {zh:'还是',th:'หรือว่า'}, {zh:'虽然',th:'แม้ว่า'},
+      {zh:'而且',th:'และยังอีก'}, {zh:'因为',th:'เพราะว่า'},
+      {zh:'所以',th:'ดังนั้น'}, {zh:'但是',th:'แต่ว่า'}
+    ]
+  },
+  {
+    name: 'ด่าน 20 — HSK3 คำเชื่อม', icon: '🔗', color: '#6a1b9a', free: false,
+    pairs: [
+      {zh:'如果',th:'ถ้า'}, {zh:'不管',th:'ไม่ว่า'}, {zh:'只要',th:'ขอเพียงแค่'},
+      {zh:'只有',th:'มีแต่ / เฉพาะเมื่อ'}, {zh:'除非',th:'นอกจากว่า'}, {zh:'虽然...但是',th:'แม้ว่า...แต่'},
+      {zh:'既然',th:'เมื่อเป็นเช่นนั้น'}, {zh:'不论',th:'ไม่ว่าจะ'}
+    ]
+  },
+  {
+    name: 'ด่าน 21 — งาน & ธุรกิจ', icon: '💼', color: '#1b5e20', free: false,
+    pairs: [
+      {zh:'公司',th:'บริษัท'}, {zh:'同事',th:'เพื่อนร่วมงาน'}, {zh:'老板',th:'เจ้านาย'},
+      {zh:'会议',th:'ประชุม'}, {zh:'合同',th:'สัญญา'}, {zh:'工资',th:'เงินเดือน'},
+      {zh:'加班',th:'ทำงานล่วงเวลา'}, {zh:'出差',th:'เดินทางเพื่อธุรกิจ'}
+    ]
+  },
+  {
+    name: 'ด่าน 22 — บ้าน & การซ่อมแซม', icon: '🔧', color: '#37474f', free: false,
+    pairs: [
+      {zh:'修理',th:'ซ่อมแซม'}, {zh:'打扫',th:'ทำความสะอาด'}, {zh:'洗碗',th:'ล้างจาน'},
+      {zh:'做饭',th:'ทำอาหาร'}, {zh:'洗衣服',th:'ซักผ้า'}, {zh:'倒垃圾',th:'ทิ้งขยะ'},
+      {zh:'开灯',th:'เปิดไฟ'}, {zh:'关门',th:'ปิดประตู'}
+    ]
+  },
+  {
+    name: 'ด่าน 23 — ความฝัน & อนาคต', icon: '🚀', color: '#0277bd', free: false,
+    pairs: [
+      {zh:'梦想',th:'ความฝัน'}, {zh:'希望',th:'หวัง'}, {zh:'打算',th:'วางแผน'},
+      {zh:'努力',th:'พยายาม'}, {zh:'成功',th:'ประสบความสำเร็จ'}, {zh:'失败',th:'ล้มเหลว'},
+      {zh:'坚持',th:'ยืนหยัด'}, {zh:'放弃',th:'ล้มเลิก'}
+    ]
+  },
+  {
+    name: 'ด่าน 24 — HSK3 คำคุณศัพท์', icon: '✨', color: '#c62828', free: false,
+    pairs: [
+      {zh:'简单',th:'ง่าย'}, {zh:'复杂',th:'ซับซ้อน'}, {zh:'方便',th:'สะดวก'},
+      {zh:'麻烦',th:'ยุ่งยาก'}, {zh:'重要',th:'สำคัญ'}, {zh:'普通',th:'ธรรมดา'},
+      {zh:'特别',th:'พิเศษ'}, {zh:'安全',th:'ปลอดภัย'}
+    ]
+  },
+  {
+    name: 'ด่าน 25 — การเงิน & ธนาคาร', icon: '🏦', color: '#1b5e20', free: false,
+    pairs: [
+      {zh:'银行',th:'ธนาคาร'}, {zh:'存钱',th:'ฝากเงิน'}, {zh:'取钱',th:'ถอนเงิน'},
+      {zh:'汇款',th:'โอนเงิน'}, {zh:'利息',th:'ดอกเบี้ย'}, {zh:'贷款',th:'กู้เงิน'},
+      {zh:'账单',th:'ใบแจ้งหนี้'}, {zh:'保险',th:'ประกัน'}
+    ]
+  },
+  {
+    name: 'ด่าน 26 — HSK3 คำกริยา (ยาก)', icon: '⚡', color: '#e65100', free: false,
+    pairs: [
+      {zh:'参加',th:'เข้าร่วม'}, {zh:'解决',th:'แก้ไข/แก้ปัญหา'}, {zh:'影响',th:'ส่งผล/มีผลต่อ'},
+      {zh:'改变',th:'เปลี่ยนแปลง'}, {zh:'表示',th:'แสดง/หมายถึง'}, {zh:'发现',th:'ค้นพบ'},
+      {zh:'完成',th:'เสร็จสมบูรณ์'}, {zh:'准备',th:'เตรียมพร้อม'}
+    ]
+  },
+  {
+    name: 'ด่าน 27 — อาหารจีน & วัฒนธรรม', icon: '🥟', color: '#bf360c', free: false,
+    pairs: [
+      {zh:'包子',th:'ซาลาเปา'}, {zh:'饺子',th:'เกี๊ยว'}, {zh:'馒头',th:'ขนมปังนึ่ง'},
+      {zh:'炒饭',th:'ข้าวผัด'}, {zh:'汤',th:'ซุป'}, {zh:'春节',th:'ตรุษจีน'},
+      {zh:'红包',th:'ซองแดง'}, {zh:'筷子',th:'ตะเกียบ'}
+    ]
+  },
+  {
+    name: 'ด่าน 28 — HSK3 ผสม (ยากมาก)', icon: '🔥', color: '#880e4f', free: false,
+    pairs: [
+      {zh:'经验',th:'ประสบการณ์'}, {zh:'态度',th:'ทัศนคติ'}, {zh:'压力',th:'ความกดดัน'},
+      {zh:'机会',th:'โอกาส'}, {zh:'责任',th:'ความรับผิดชอบ'}, {zh:'信心',th:'ความมั่นใจ'},
+      {zh:'环境',th:'สิ่งแวดล้อม'}, {zh:'竞争',th:'การแข่งขัน'}
+    ]
+  },
+  {
+    name: 'ด่าน 29 — คำคู่ตรงข้าม HSK1-3', icon: '⚖️', color: '#1a237e', free: false,
+    pairs: [
+      {zh:'快乐←→难过',th:'มีความสุข←→เศร้า'}, {zh:'便宜←→贵',th:'ถูก←→แพง'},
+      {zh:'大←→小',th:'ใหญ่←→เล็ก'}, {zh:'热←→冷',th:'ร้อน←→หนาว'},
+      {zh:'快←→慢',th:'เร็ว←→ช้า'}, {zh:'新←→旧',th:'ใหม่←→เก่า'},
+      {zh:'多←→少',th:'มาก←→น้อย'}, {zh:'来←→去',th:'มา←→ไป'}
+    ]
+  },
+  {
+    name: 'ด่าน 30 — ยากที่สุด: HSK3 ศัพท์สูง', icon: '👑', color: '#4a148c', free: false,
+    pairs: [
+      {zh:'尽管',th:'แม้ว่า/ทั้งที่'}, {zh:'何况',th:'ยิ่งไม่ต้องพูดถึง'},
+      {zh:'毕竟',th:'อย่างไรก็ตาม'}, {zh:'究竟',th:'กันแน่/สรุปแล้ว'},
+      {zh:'逐渐',th:'ค่อยๆ'}, {zh:'似乎',th:'ดูเหมือนว่า'},
+      {zh:'当然',th:'แน่นอน'}, {zh:'根据',th:'ตามที่/อ้างอิงจาก'}
+    ]
+  },
 ];
 
 let matchLevel = 0, matchSelected = null, matchRightSelected = null, matchMatched = [], matchTimer = null, matchTime = 0, matchStarted = false;
@@ -12924,7 +13129,7 @@ const LISTEN_LEVELS = [
     {zh:'好的',th:'โอเค/ดีค่ะ',opts:['ไม่ดี','โอเค/ดีค่ะ','ขอบคุณ','ลาก่อน']},
     {zh:'不客气',th:'ยินดีค่ะ',opts:['ขอโทษ','ยินดีค่ะ','ขอบคุณ','สวัสดี']}
   ]},
-  {name:'ด่าน 2 — ความรู้สึก',icon:'❤️',color:'#e91e8c',free:false,words:[
+  {name:'ด่าน 2 — ความรู้สึก',icon:'❤️',color:'#e91e8c',free:true,words:[
     {zh:'开心',th:'มีความสุข',opts:['เศร้า','โกรธ','มีความสุข','กลัว']},
     {zh:'难过',th:'เศร้า',opts:['มีความสุข','เศร้า','โกรธ','เหนื่อย']},
     {zh:'生气',th:'โกรธ',opts:['กลัว','เศร้า','โกรธ','มีความสุข']},
@@ -12934,7 +13139,7 @@ const LISTEN_LEVELS = [
     {zh:'幸福',th:'มีความสุขมาก',opts:['เศร้ามาก','มีความสุขมาก','โกรธมาก','เหนื่อยมาก']},
     {zh:'期待',th:'ตั้งตารอ',opts:['ผิดหวัง','ตั้งตารอ','กังวล','กลัว']}
   ]},
-  {name:'ด่าน 3 — กริยา',icon:'🏃',color:'#7b1fa2',free:false,words:[
+  {name:'ด่าน 3 — กริยา',icon:'🏃',color:'#7b1fa2',free:true,words:[
     {zh:'吃',th:'กิน',opts:['ดื่ม','กิน','เดิน','วิ่ง']},
     {zh:'喝',th:'ดื่ม',opts:['กิน','ดื่ม','นอน','เล่น']},
     {zh:'走',th:'เดิน',opts:['วิ่ง','เดิน','กระโดด','นั่ง']},
@@ -12944,7 +13149,7 @@ const LISTEN_LEVELS = [
     {zh:'学习',th:'เรียน',opts:['สอน','เรียน','ทำงาน','เล่น']},
     {zh:'玩',th:'เล่น',opts:['ทำงาน','เรียน','เล่น','พัก']}
   ]},
-  {name:'ด่าน 4 — อาหาร & เครื่องดื่ม',icon:'🍜',color:'#e65100',free:false,words:[
+  {name:'ด่าน 4 — อาหาร & เครื่องดื่ม',icon:'🍜',color:'#e65100',free:true,words:[
     {zh:'米饭',th:'ข้าวสวย',opts:['ก๋วยเตี๋ยว','ข้าวสวย','เกี๊ยว','ซาลาเปา']},
     {zh:'面条',th:'ก๋วยเตี๋ยว',opts:['ข้าวสวย','ก๋วยเตี๋ยว','ข้าวผัด','หม้อไฟ']},
     {zh:'火锅',th:'หม้อไฟ',opts:['เกี๊ยว','ก๋วยเตี๋ยว','หม้อไฟ','ข้าวผัด']},
@@ -12954,7 +13159,7 @@ const LISTEN_LEVELS = [
     {zh:'饿',th:'หิว',opts:['อิ่ม','หิว','อร่อย','กิน']},
     {zh:'饱',th:'อิ่ม',opts:['หิว','อิ่ม','กิน','ดื่ม']}
   ]},
-  {name:'ด่าน 5 — สถานที่ & เวลา',icon:'📍',color:'#1565c0',free:false,words:[
+  {name:'ด่าน 5 — สถานที่ & เวลา',icon:'📍',color:'#1565c0',free:true,words:[
     {zh:'今天',th:'วันนี้',opts:['เมื่อวาน','วันนี้','พรุ่งนี้','สัปดาห์นี้']},
     {zh:'明天',th:'พรุ่งนี้',opts:['วันนี้','พรุ่งนี้','เมื่อวาน','อาทิตย์หน้า']},
     {zh:'医院',th:'โรงพยาบาล',opts:['โรงเรียน','โรงพยาบาล','สนามบิน','ตลาด']},
@@ -13034,6 +13239,37 @@ const LISTEN_LEVELS = [
     {zh:'期待见到你！',th:'ตั้งตารอที่จะเจอคุณ!',opts:['ไม่อยากเจอเลย','ตั้งตารอที่จะเจอคุณ!','ลืมไปแล้ว','ยังไม่พร้อม']},
     {zh:'我也是，再见！',th:'ฉันก็เหมือนกัน ลาก่อน!',opts:['ฉันไม่ไป ลาก่อน!','ฉันก็เหมือนกัน ลาก่อน!','เจอกันพรุ่งนี้','โทรหาทีหลัง']}
   ]}
+,
+  {name:'ด่าน 8 — HSK2 การเดินทาง',icon:'✈️',color:'#0277bd',free:false,words:[
+    {zh:'机场',th:'สนามบิน',opts:['สถานีรถไฟ','สนามบิน','ท่าเรือ','โรงแรม']},
+    {zh:'火车',th:'รถไฟ',opts:['รถบัส','รถไฟ','เรือ','เครื่องบิน']},
+    {zh:'地铁',th:'รถไฟใต้ดิน',opts:['รถแท็กซี่','รถไฟใต้ดิน','รถบัส','รถไฟ']},
+    {zh:'护照',th:'หนังสือเดินทาง',opts:['บัตรประชาชน','หนังสือเดินทาง','บัตรโดยสาร','วีซ่า']},
+    {zh:'行李',th:'กระเป๋าเดินทาง',opts:['กระเป๋าใบเล็ก','กระเป๋าเดินทาง','ของฝาก','กระเป๋าสตางค์']},
+    {zh:'迷路',th:'หลงทาง',opts:['หยุดพัก','หลงทาง','ถึงแล้ว','กลับบ้าน']},
+    {zh:'路线',th:'เส้นทาง',opts:['จุดหมาย','แผนที่','เส้นทาง','ป้ายบอกทาง']},
+    {zh:'导游',th:'ไกด์/มัคคุเทศก์',opts:['คนขับรถ','พนักงาน','ไกด์/มัคคุเทศก์','เพื่อนร่วมทาง']}
+  ]},
+  {name:'ด่าน 9 — HSK3 ความคิดเห็น (ยาก)',icon:'💭',color:'#6a1b9a',free:false,words:[
+    {zh:'认为',th:'คิดว่า/มีความเห็นว่า',opts:['รู้ว่า','คิดว่า/มีความเห็นว่า','บอกว่า','เห็นว่า']},
+    {zh:'对于',th:'สำหรับ/เกี่ยวกับ',opts:['เพราะ','สำหรับ/เกี่ยวกับ','ถึงแม้','นอกจาก']},
+    {zh:'尽管',th:'แม้ว่า/ทั้งที่',opts:['เพราะว่า','ดังนั้น','แม้ว่า/ทั้งที่','แต่ว่า']},
+    {zh:'逐渐',th:'ค่อยๆ',opts:['ทันที','ค่อยๆ','เร็วมาก','บางครั้ง']},
+    {zh:'根据',th:'ตามที่/อ้างอิงจาก',opts:['ดังนั้น','ตามที่/อ้างอิงจาก','เพราะ','แม้ว่า']},
+    {zh:'当然',th:'แน่นอน',opts:['บางที','อาจจะ','แน่นอน','ไม่แน่ใจ']},
+    {zh:'似乎',th:'ดูเหมือนว่า',opts:['แน่ใจว่า','ดูเหมือนว่า','รู้ชัดว่า','เห็นว่า']},
+    {zh:'究竟',th:'กันแน่/สรุปแล้ว',opts:['แน่นอน','กันแน่/สรุปแล้ว','บางที','อาจจะ']}
+  ]},
+  {name:'ด่าน 10 — HSK3 ผสมยากที่สุด',icon:'👑',color:'#880e4f',free:false,words:[
+    {zh:'责任',th:'ความรับผิดชอบ',opts:['ความสำเร็จ','ความรับผิดชอบ','ความกดดัน','ความคาดหวัง']},
+    {zh:'经验',th:'ประสบการณ์',opts:['ความรู้','ประสบการณ์','ทักษะ','ความสามารถ']},
+    {zh:'机会',th:'โอกาส',opts:['ปัญหา','ความเสี่ยง','โอกาส','ความท้าทาย']},
+    {zh:'压力',th:'ความกดดัน',opts:['ความผ่อนคลาย','ความสุข','ความกดดัน','ความเครียด']},
+    {zh:'竞争',th:'การแข่งขัน',opts:['การร่วมมือ','การแข่งขัน','การสนับสนุน','การพัฒนา']},
+    {zh:'影响',th:'ส่งผล/มีผลต่อ',opts:['ไม่เกี่ยวข้อง','ส่งผล/มีผลต่อ','ช่วยเหลือ','ขัดขวาง']},
+    {zh:'改变',th:'เปลี่ยนแปลง',opts:['คงที่','เปลี่ยนแปลง','ยืนหยัด','พัฒนา']},
+    {zh:'解决',th:'แก้ไข/แก้ปัญหา',opts:['สร้างปัญหา','แก้ไข/แก้ปัญหา','หลีกเลี่ยง','ยอมรับ']}
+  ]},
 ];
 
 let listenLevel=0,listenIdx=0,listenScore=0,listenAnswered=false;
