@@ -11813,14 +11813,17 @@ async function markAffiliatePaid(userId, amount) {
 
 function filterAdminUsers(query) {
   const q = (query || '').toLowerCase().trim();
-  const cards = document.querySelectorAll('#admin-user-list [class="user-card"], #admin-user-list .user-card');
-  let shown = 0;
-  cards.forEach(card => {
-    const searchAttr = (card.getAttribute('data-search') || '').toLowerCase();
-    const textContent = card.textContent.toLowerCase();
-    const match = !q || searchAttr.includes(q) || textContent.includes(q);
-    card.style.display = match ? '' : 'none';
-    if (match) shown++;
+  // เลือกทุก direct children ของ admin-user-list
+  const listEl = document.getElementById('admin-user-list');
+  if (!listEl) return;
+  const cards = listEl.children;
+  Array.from(cards).forEach(card => {
+    if (card.id && card.id.startsWith('user-row-')) {
+      const text = card.innerText.toLowerCase();
+      const attr = (card.getAttribute('data-search') || '').toLowerCase();
+      const match = !q || text.includes(q) || attr.includes(q);
+      card.style.display = match ? '' : 'none';
+    }
   });
 }
 
