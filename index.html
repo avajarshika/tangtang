@@ -8082,42 +8082,51 @@ function markPinyinDone() {
 // ═══════════════════════════════════
 // TTS ENGINE
 // ═══════════════════════════════════
-const synth = window.speechSynthesis;
-let voices = [];
-let zhVoice = null;
+const SUPABASE_TTS_URL = 'https://zmshxxmcgbxavzlqmpxd.supabase.co/functions/v1/tts';
+const SUPABASE_TTS_KEY = 'sb_publishable_keEZg6pZ0l3BPbTSHNLlUQ_A9K-E6bO';
 
-function loadVoices() {
-  voices = synth ? synth.getVoices() : [];
-  zhVoice = voices.find(v => v.name.includes('Google') && v.lang === 'zh-CN') ||
-            voices.find(v => v.name.includes('Google') && v.lang.startsWith('zh')) ||
-            voices.find(v => v.lang === 'zh-CN') ||
-            voices.find(v => v.lang === 'zh-TW') ||
-            voices.find(v => v.lang.startsWith('zh')) || null;
+let currentAudio = null;
+
+function stopSpeech() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.src = '';
+    currentAudio = null;
+  }
 }
 
-if (synth) {
-  loadVoices();
-  synth.onvoiceschanged = loadVoices;
-  // Samsung/Android อาจต้องรอ voices โหลด
-  setTimeout(loadVoices, 500);
-  setTimeout(loadVoices, 1000);
-}
-
-// fallback สำหรับกรณีไม่มี zhVoice
-function speakWithGoogleTTS(text, onEnd) {
-  // ลอง Web Speech API โดยไม่ระบุ voice
-  if (synth) {
-    synth.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'zh-CN';
-    u.rate = 0.85;
-    u.pitch = 1.05;
-    u.onend = () => { if (onEnd) onEnd(); };
-    u.onerror = () => { if (onEnd) onEnd(); };
-    synth.speak(u);
-  } else {
+async function speak(text, onEnd, rate=0.85) {
+  stopSpeech();
+  try {
+    const res = await fetch(SUPABASE_TTS_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPABASE_TTS_KEY}`,
+      },
+      body: JSON.stringify({ text }),
+    });
+    const data = await res.json();
+    if (!data.audioContent) { if (onEnd) onEnd(); return; }
+    const audio = new Audio('data:audio/mp3;base64,' + data.audioContent);
+    currentAudio = audio;
+    audio.playbackRate = rate;
+    audio.onended = () => { currentAudio = null; if (onEnd) onEnd(); };
+    audio.onerror = () => { currentAudio = null; if (onEnd) onEnd(); };
+    audio.play();
+  } catch(e) {
     if (onEnd) onEnd();
   }
+}
+
+async function speakPY(py) {
+  const han = PY_TO_HAN[py];
+  if (!han) return;
+  speak(han, null, 0.75);
+}
+
+function speakWithGoogleTTS(text, onEnd) {
+  speak(text, onEnd);
 }
 
 // Pinyin → Chinese character map ครบทุกเสียงในตารางฝึกอ่าน
@@ -8190,39 +8199,7 @@ const PY_TO_HAN = {
   'fēng':'风','féng':'缝','fěng':'讽','fèng':'凤',
 };
 
-function speakPY(py) {
-  const han = PY_TO_HAN[py];
-  if (!han) { return; }
-  try {
-    if (!window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(han);
-    u.lang = 'zh-CN'; u.rate = 0.75; u.pitch = 1.0;
-    const allVoices = window.speechSynthesis.getVoices();
-    const zh = allVoices.find(v=>v.lang==='zh-CN') ||
-               allVoices.find(v=>v.lang==='zh-TW') ||
-               allVoices.find(v=>v.lang.startsWith('zh'));
-    if (zh) u.voice = zh;
-    window.speechSynthesis.speak(u);
-  } catch(e) {}
-}
 
-function speak(text, onEnd, rate=0.85) {
-  // ลอง Web Speech API ก่อน ถ้าไม่มีเสียงจีนให้ใช้ Google TTS
-  if (synth && zhVoice) {
-    synth.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'zh-CN'; u.rate = rate; u.pitch = 1.05;
-    u.voice = zhVoice;
-    u.onend = () => { if (onEnd) onEnd(); };
-    u.onerror = () => { speakWithGoogleTTS(text, onEnd); };
-    synth.speak(u);
-  } else {
-    speakWithGoogleTTS(text, onEnd);
-  }
-}
-
-function stopSpeech() { if (synth) synth.cancel(); }
 
 function speakLine(idx, btn) {
   if (!state.curLesson) return;
