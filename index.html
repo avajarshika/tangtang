@@ -8088,19 +8088,36 @@ let zhVoice = null;
 
 function loadVoices() {
   voices = synth ? synth.getVoices() : [];
-  zhVoice = voices.find(v => v.name.includes('Google') && v.lang.startsWith('zh')) ||
+  zhVoice = voices.find(v => v.name.includes('Google') && v.lang === 'zh-CN') ||
+            voices.find(v => v.name.includes('Google') && v.lang.startsWith('zh')) ||
             voices.find(v => v.lang === 'zh-CN') ||
+            voices.find(v => v.lang === 'zh-TW') ||
             voices.find(v => v.lang.startsWith('zh')) || null;
 }
 
-if (synth) { loadVoices(); synth.onvoiceschanged = loadVoices; }
+if (synth) {
+  loadVoices();
+  synth.onvoiceschanged = loadVoices;
+  // Samsung/Android อาจต้องรอ voices โหลด
+  setTimeout(loadVoices, 500);
+  setTimeout(loadVoices, 1000);
+}
 
-// ใช้ Google TTS เป็น fallback สำหรับ Android
+// fallback สำหรับกรณีไม่มี zhVoice
 function speakWithGoogleTTS(text, onEnd) {
-  const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&tl=zh-CN&client=tw-ob&q=${encodeURIComponent(text)}`);
-  audio.onended = () => { if (onEnd) onEnd(); };
-  audio.onerror = () => { if (onEnd) onEnd(); };
-  audio.play().catch(() => { if (onEnd) onEnd(); });
+  // ลอง Web Speech API โดยไม่ระบุ voice
+  if (synth) {
+    synth.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'zh-CN';
+    u.rate = 0.85;
+    u.pitch = 1.05;
+    u.onend = () => { if (onEnd) onEnd(); };
+    u.onerror = () => { if (onEnd) onEnd(); };
+    synth.speak(u);
+  } else {
+    if (onEnd) onEnd();
+  }
 }
 
 // Pinyin → Chinese character map ครบทุกเสียงในตารางฝึกอ่าน
@@ -8177,20 +8194,16 @@ function speakPY(py) {
   const han = PY_TO_HAN[py];
   if (!han) { return; }
   try {
-    window.speechSynthesis && window.speechSynthesis.cancel();
-    const audio = new Audio(
-      `https://translate.google.com/translate_tts?ie=UTF-8&tl=zh-CN&client=tw-ob&q=${encodeURIComponent(han)}`
-    );
-    audio.play().catch(() => {
-      const u = new SpeechSynthesisUtterance(han);
-      u.lang = 'zh-CN'; u.rate = 0.75;
-      if (window.speechSynthesis) {
-        const voices = window.speechSynthesis.getVoices();
-        const zh = voices.find(v=>v.lang==='zh-CN') || voices.find(v=>v.lang.startsWith('zh'));
-        if (zh) u.voice = zh;
-      }
-      window.speechSynthesis && window.speechSynthesis.speak(u);
-    });
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(han);
+    u.lang = 'zh-CN'; u.rate = 0.75; u.pitch = 1.0;
+    const allVoices = window.speechSynthesis.getVoices();
+    const zh = allVoices.find(v=>v.lang==='zh-CN') ||
+               allVoices.find(v=>v.lang==='zh-TW') ||
+               allVoices.find(v=>v.lang.startsWith('zh'));
+    if (zh) u.voice = zh;
+    window.speechSynthesis.speak(u);
   } catch(e) {}
 }
 
