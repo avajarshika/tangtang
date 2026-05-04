@@ -1,8 +1,2 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "com.tangtangchinese.twa",
-        "sha256_cert_fingerprints": ["48:7A:4A:1C:69:F1:DE:F8:E6:22:F9:BE:EF:0A:30:2B:C7:45:23:51:02:A0:92:7E:E5:FC:07:C6:83:E3:EE:5B"]
-      }
-    }]
+include:
+  - .well-known
