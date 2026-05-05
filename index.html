@@ -1653,6 +1653,16 @@ body {
           <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:10px">ฟังเสียงจีน แล้วเลือกคำที่ถูก!</div>
           <span style="font-size:10px;font-weight:700;color:#0097a7;background:#e0f7fa;padding:3px 10px;border-radius:20px">ฟรี ด่าน 1 ✨</span>
         </div>
+        <!-- Listening Comprehension Game -->
+        <div onclick="openGame('listening')" style="grid-column:1/-1;background:white;border:1.5px solid var(--paper3);border-radius:16px;padding:18px;cursor:pointer;transition:.2s;box-shadow:var(--shadow);display:flex;align-items:center;gap:16px" onmouseover="this.style.borderColor='#6b1a6b';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--paper3)';this.style.transform='none'">
+          <div style="font-size:42px;flex-shrink:0">🎧</div>
+          <div style="flex:1">
+            <div style="font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px">จับใจความ</div>
+            <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:8px">ฟังบทสนทนาจีน แล้วตอบคำถามความเข้าใจ</div>
+            <span style="font-size:10px;font-weight:700;color:#6b1a6b;background:#f0e8f4;padding:3px 10px;border-radius:20px">🎧 ระดับกลาง HSK 2-3</span>
+          </div>
+          <div style="font-size:24px;opacity:.3">→</div>
+        </div>
         <!-- Journal — full width -->
         <div onclick="openGame('journal')" style="grid-column:1/-1;background:white;border:1.5px solid var(--paper3);border-radius:16px;padding:18px;cursor:pointer;transition:.2s;box-shadow:var(--shadow);display:flex;align-items:center;gap:16px" onmouseover="this.style.borderColor='#C9A96E';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--paper3)';this.style.transform='none'">
           <div style="font-size:42px;flex-shrink:0">📓</div>
@@ -1718,6 +1728,15 @@ body {
         <div style="font-size:15px;font-weight:700;color:var(--ink)">⚡ Speed Quiz</div>
       </div>
       <div id="speed-content" style="padding:16px"></div>
+    </div>
+
+    <!-- Game: Listening Comprehension -->
+    <div id="game-listening" style="display:none">
+      <div style="padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--paper3);background:white;position:sticky;top:56px;z-index:30">
+        <button onclick="closeGame()" style="background:var(--paper2);border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center">←</button>
+        <div style="font-size:15px;font-weight:700;color:var(--ink)">🎧 จับใจความ</div>
+      </div>
+      <div id="listening-content" style="padding:16px"></div>
     </div>
 
     <!-- Game: Journal -->
@@ -1962,6 +1981,29 @@ body {
   </div>
 
   <!-- ADMIN SCREEN -->
+  <!-- TANGTANG CHAT SCREEN -->
+  <div id="screen-tangtang-chat" class="screen">
+    <div style="background:linear-gradient(135deg,#6b1a6b,#F13596);padding:16px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:30">
+      <img src="https://avajarshika.github.io/tangtang/tangtang.png" alt="TangTang" style="width:44px;height:44px;object-fit:contain;border-radius:50%;background:rgba(255,255,255,0.2);padding:4px">
+      <div style="flex:1">
+        <div style="font-size:15px;font-weight:800;color:white">ถังถัง 🦊</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.8)">ผู้ช่วยสอนภาษาจีน AI 🦊</div>
+      </div>
+    </div>
+    <div style="background:#fff3e0;border:1.5px solid #ff9800;border-radius:12px;margin:16px 16px 0;padding:14px;display:flex;gap:10px;align-items:flex-start">
+      <div style="font-size:22px">🚧</div>
+      <div>
+        <div style="font-size:13px;font-weight:800;color:#e65100">ระบบกำลังพัฒนา</div>
+        <div style="font-size:12px;color:#bf360c;margin-top:4px;line-height:1.5">ยังไม่สามารถใช้งานได้ในขณะนี้ค่า จะเปิดให้บริการเร็วๆ นี้นะคะ 🦊✨</div>
+      </div>
+    </div>
+    <div id="tangtang-messages" style="padding:16px;display:flex;flex-direction:column;gap:12px;padding-bottom:100px;min-height:calc(100vh - 260px)"></div>
+    <div style="position:fixed;bottom:60px;left:0;right:0;background:white;border-top:1px solid var(--paper3);padding:10px 12px;display:flex;gap:8px;z-index:30;opacity:0.5;pointer-events:none">
+      <input type="text" placeholder="ระบบกำลังพัฒนา ยังไม่สามารถใช้งานได้..." style="flex:1;padding:12px 14px;border:1.5px solid var(--paper3);border-radius:24px;font-size:14px;font-family:inherit;outline:none;background:#f5f5f5" disabled>
+      <button style="background:#ccc;border:none;border-radius:50%;width:44px;height:44px;color:white;font-size:20px;cursor:not-allowed;flex-shrink:0;display:flex;align-items:center;justify-content:center" disabled>↑</button>
+    </div>
+  </div>
+
   <div id="screen-admin" class="screen">
     <div style="padding:16px 20px 0">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
@@ -2074,7 +2116,10 @@ body {
       <span class="nav-icon">📚</span>บทเรียน
     </button>
     <button class="nav-btn" id="nav-chat" onclick="goScreen('play');initPlay()">
-      <span class="nav-icon">🦊</span>เกม
+      <span class="nav-icon">🎮</span>เกม
+    </button>
+    <button class="nav-btn" id="nav-tangtang" onclick="goScreen('tangtang-chat')">
+      <span class="nav-icon">🦊</span>ถังถัง
     </button>
     <button class="nav-btn" id="nav-quiz" onclick="goScreen('quiz');initMainQuiz()">
       <span class="nav-icon">🎯</span>ทดสอบ
@@ -6626,7 +6671,7 @@ function goScreen(s) {
   document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
   document.getElementById('screen-' + s).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  const navMap = { home:'nav-home', 'lessons-hub':'nav-lessons', play:'nav-chat', chat:'nav-chat', quiz:'nav-quiz', profile:'nav-profile', lesson:'nav-home', pinyin:'nav-home', vocab:'nav-lessons' };
+  const navMap = { home:'nav-home', 'lessons-hub':'nav-lessons', play:'nav-chat', chat:'nav-chat', quiz:'nav-quiz', profile:'nav-profile', lesson:'nav-home', pinyin:'nav-home', vocab:'nav-lessons', 'tangtang-chat':'nav-tangtang' };
   const nb = document.getElementById(navMap[s]);
   if (nb) nb.classList.add('active');
   state.curScreen = s;
@@ -6637,6 +6682,7 @@ function goScreen(s) {
   if (s === 'play') initPlay();
   if (s === 'lessons-hub') { renderLessonsHub(); renderHubVocab(); }
   if (s === 'quiz') initMainQuiz();
+  if (s === 'tangtang-chat') initTangTangChat();
   updateTopbar();
 }
 
@@ -8385,7 +8431,7 @@ function updateSpeedBadge() {
 
 function openGame(name) {
   document.getElementById('play-hub').style.display = 'none';
-  ['stroke','daily','sentence','speed','journal','match','listen'].forEach(g => {
+  ['stroke','daily','sentence','speed','journal','match','listen','listening'].forEach(g => {
     document.getElementById('game-'+g).style.display = g===name ? 'block' : 'none';
   });
   window.scrollTo(0,0);
@@ -8396,10 +8442,11 @@ function openGame(name) {
   else if (name==='journal') renderJournalHub();
   else if (name==='match') initMatchGame();
   else if (name==='listen') initListenGame();
+  else if (name==='listening') initListeningGame();
 }
 
 function closeGame() {
-  ['stroke','daily','sentence','speed','journal','match','listen'].forEach(g => {
+  ['stroke','daily','sentence','speed','journal','match','listen','listening'].forEach(g => {
     document.getElementById('game-'+g).style.display = 'none';
   });
   document.getElementById('play-hub').style.display = 'block';
@@ -13942,6 +13989,547 @@ function showListenDone(){
     +'<button onclick="renderListenHub()" style="padding:13px;background:var(--paper2);color:var(--ink3);border:none;border-radius:12px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer">← เลือกด่าน</button>'
     +'</div></div>';
 }
+
+// ══════════════════════════════════════════════════════
+// 🦊 TANGTANG CHAT — AI แชทกับถังถัง
+// ══════════════════════════════════════════════════════
+const TANGTANG_HISTORY = [];
+let tangtangWelcomed = false;
+
+function initTangTangChat() {
+  if (!tangtangWelcomed) {
+    tangtangWelcomed = true;
+    appendTangTangMsg('assistant', 'นี่หวา! 你好！ ฉันคือถังถังค่า 🦊✨\n\nถามฉันได้เลยนะคะ เช่น:\n• คำศัพท์จีน ความหมาย พินอิน\n• ประโยคที่อยากรู้\n• ไวยากรณ์จีน\n• วิธีออกเสียงให้ถูกต้อง\n\n加油！สู้ๆ นะคะ! 🌸');
+  }
+}
+
+function appendTangTangMsg(role, text) {
+  const box = document.getElementById('tangtang-messages');
+  if (!box) return;
+  const isUser = role === 'user';
+  const div = document.createElement('div');
+  div.style.cssText = `display:flex;gap:8px;align-items:flex-end;${isUser ? 'flex-direction:row-reverse' : ''}`;
+  div.innerHTML = `
+    ${!isUser ? `<img src="https://avajarshika.github.io/tangtang/tangtang.png" style="width:32px;height:32px;object-fit:contain;flex-shrink:0;border-radius:50%;background:#fce4f3;padding:2px">` : ''}
+    <div style="max-width:78%;padding:12px 14px;border-radius:${isUser?'18px 18px 4px 18px':'18px 18px 18px 4px'};background:${isUser?'#F13596':'white'};color:${isUser?'white':'var(--ink)'};font-size:14px;line-height:1.7;box-shadow:0 2px 8px rgba(0,0,0,0.08);white-space:pre-wrap;border:${isUser?'none':'1px solid var(--paper3)'}">
+      ${text}
+    </div>
+  `;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+function appendTangTangLoading() {
+  const box = document.getElementById('tangtang-messages');
+  if (!box) return;
+  const div = document.createElement('div');
+  div.id = 'tangtang-loading';
+  div.style.cssText = 'display:flex;gap:8px;align-items:flex-end';
+  div.innerHTML = `
+    <img src="https://avajarshika.github.io/tangtang/tangtang.png" style="width:32px;height:32px;object-fit:contain;flex-shrink:0;border-radius:50%;background:#fce4f3;padding:2px">
+    <div style="padding:12px 16px;border-radius:18px 18px 18px 4px;background:white;border:1px solid var(--paper3);box-shadow:0 2px 8px rgba(0,0,0,0.08)">
+      <div style="display:flex;gap:5px;align-items:center">
+        <div style="width:8px;height:8px;background:#F13596;border-radius:50%;animation:bounce 1s infinite"></div>
+        <div style="width:8px;height:8px;background:#F13596;border-radius:50%;animation:bounce 1s 0.2s infinite"></div>
+        <div style="width:8px;height:8px;background:#F13596;border-radius:50%;animation:bounce 1s 0.4s infinite"></div>
+      </div>
+    </div>
+  `;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+async function sendToTangTang() {
+  const input = document.getElementById('tangtang-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  input.focus();
+
+  appendTangTangMsg('user', text);
+  TANGTANG_HISTORY.push({ role: 'user', content: text });
+  appendTangTangLoading();
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: `คุณคือ "ถังถัง" จิ้งจอกน้อยสีชมพูน่ารัก ผู้ช่วยสอนภาษาจีนใน TangTang Chinese แอปสำหรับคนไทย
+พูดภาษาไทยเป็นหลัก ใช้คำลงท้าย "ค่า" ร่าเริง น่ารัก กระตือรือร้น ใส่ emoji เล็กน้อย
+เมื่อตอบเรื่องภาษาจีนให้แสดง: ตัวอักษรจีน (พินอิน) = ความหมายไทย
+ถ้าถามนอกเรื่องภาษาจีน ตอบสั้นๆ แล้วดึงกลับมาเรื่องภาษาจีน
+ห้ามตอบยาวเกินไป ตอบกระชับ เข้าใจง่าย`,
+        messages: TANGTANG_HISTORY.slice(-10)
+      })
+    });
+    const data = await res.json();
+    document.getElementById('tangtang-loading')?.remove();
+    const reply = data.content?.[0]?.text || 'ขอโทษนะคะ ลองใหม่ได้เลยค่า 🦊';
+    TANGTANG_HISTORY.push({ role: 'assistant', content: reply });
+    appendTangTangMsg('assistant', reply);
+  } catch(e) {
+    document.getElementById('tangtang-loading')?.remove();
+    appendTangTangMsg('assistant', 'ขอโทษนะคะ เชื่อมต่อไม่ได้ตอนนี้ ลองใหม่อีกครั้งได้เลยค่า 🦊');
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// 🎧 LISTENING COMPREHENSION — จับใจความ
+// ══════════════════════════════════════════════════════
+const LISTENING_DATA = [
+  // ── ระดับเริ่มต้น (ด่าน 1-7) ──
+  {
+    level:'🟢 เริ่มต้น', title:'ด่าน 1 — ที่ร้านกาแฟ', situation:'สถานการณ์: ที่ร้านกาแฟ',
+    lines:[
+      {speaker:'A',zh:'你好，我想要一杯咖啡。',th:'สวัสดีค่ะ ฉันอยากได้กาแฟหนึ่งแก้ว'},
+      {speaker:'B',zh:'好的，要热的还是冰的？',th:'ได้เลยค่ะ เอาร้อนหรือเย็นคะ?'},
+      {speaker:'A',zh:'冰的，谢谢。多少钱？',th:'เย็นค่ะ ขอบคุณ ราคาเท่าไหร่คะ?'},
+      {speaker:'B',zh:'三十块。',th:'สามสิบหยวนค่ะ'},
+    ],
+    questions:[
+      {q:'A ต้องการอะไร?',options:['ชา','กาแฟ','น้ำผลไม้','น้ำเปล่า'],answer:'กาแฟ'},
+      {q:'A เลือกเครื่องดื่มแบบไหน?',options:['ร้อน','อุ่น','เย็น','ไม่บอก'],answer:'เย็น'},
+      {q:'ราคาเท่าไหร่?',options:['13 หยวน','30 หยวน','33 หยวน','3 หยวน'],answer:'30 หยวน'}
+    ]
+  },
+  {
+    level:'🟢 เริ่มต้น', title:'ด่าน 2 — นัดเจอกัน', situation:'สถานการณ์: คุยโทรศัพท์นัดเจอกัน',
+    lines:[
+      {speaker:'A',zh:'喂，你明天有空吗？',th:'ฮัลโหล พรุ่งนี้ว่างไหม?'},
+      {speaker:'B',zh:'有，你想做什么？',th:'ว่างนะ อยากทำอะไร?'},
+      {speaker:'A',zh:'我们去看电影吧。下午三点怎么样？',th:'ไปดูหนังกันเถอะ บ่ายสามโมงเป็นไงบ้าง?'},
+      {speaker:'B',zh:'好啊，在哪里见面？',th:'โอเค แล้วจะเจอกันที่ไหน?'},
+      {speaker:'A',zh:'在电影院门口见。',th:'เจอกันที่หน้าโรงหนังเลย'},
+    ],
+    questions:[
+      {q:'A อยากชวน B ทำอะไร?',options:['ไปกินข้าว','ไปดูหนัง','ไปเที่ยว','ไปช้อปปิ้ง'],answer:'ไปดูหนัง'},
+      {q:'นัดกันกี่โมง?',options:['บ่ายโมง','บ่ายสองโมง','บ่ายสามโมง','สี่โมงเย็น'],answer:'บ่ายสามโมง'},
+      {q:'นัดเจอกันที่ไหน?',options:['หน้าร้านกาแฟ','หน้าโรงหนัง','ในห้าง','ที่บ้าน'],answer:'หน้าโรงหนัง'}
+    ]
+  },
+  {
+    level:'🟢 เริ่มต้น', title:'ด่าน 3 — ถามทาง', situation:'สถานการณ์: ถามทางไปสถานีรถไฟ',
+    lines:[
+      {speaker:'A',zh:'不好意思，火车站怎么走？',th:'ขอโทษนะคะ ไปสถานีรถไฟยังไงคะ?'},
+      {speaker:'B',zh:'你往前走，然后左转。',th:'เดินตรงไปข้างหน้า แล้วเลี้ยวซ้ายค่ะ'},
+      {speaker:'A',zh:'要走多远？',th:'ต้องเดินไกลแค่ไหนคะ?'},
+      {speaker:'B',zh:'不远，走五分钟就到了。',th:'ไม่ไกลค่ะ เดินแค่ห้านาทีก็ถึง'},
+    ],
+    questions:[
+      {q:'A ถามทางไปที่ไหน?',options:['สนามบิน','สถานีรถไฟ','โรงพยาบาล','ตลาด'],answer:'สถานีรถไฟ'},
+      {q:'ต้องเลี้ยวทิศทางไหน?',options:['ขวา','ซ้าย','ตรงไป','กลับหลัง'],answer:'ซ้าย'},
+      {q:'ใช้เวลาเดินนานแค่ไหน?',options:['10 นาที','15 นาที','5 นาที','20 นาที'],answer:'5 นาที'}
+    ]
+  },
+  {
+    level:'🟢 เริ่มต้น', title:'ด่าน 4 — ที่ร้านอาหาร', situation:'สถานการณ์: สั่งอาหารที่ร้าน',
+    lines:[
+      {speaker:'A',zh:'你们有什么好吃的？',th:'มีอะไรอร่อยบ้างคะ?'},
+      {speaker:'B',zh:'我们的炒饭和汤面都很好吃。',th:'ข้าวผัดกับก๋วยเตี๋ยวของเราอร่อยทั้งคู่ค่ะ'},
+      {speaker:'A',zh:'好，我要一碗炒饭。',th:'โอเค ขอข้าวผัดหนึ่งจานค่ะ'},
+      {speaker:'B',zh:'要喝什么饮料吗？',th:'จะดื่มอะไรด้วยไหมคะ?'},
+      {speaker:'A',zh:'一杯水就好了，谢谢。',th:'แค่น้ำเปล่าหนึ่งแก้วพอค่ะ ขอบคุณ'},
+    ],
+    questions:[
+      {q:'A สั่งอาหารอะไร?',options:['ก๋วยเตี๋ยว','ข้าวผัด','ผัดไทย','ข้าวต้ม'],answer:'ข้าวผัด'},
+      {q:'A สั่งเครื่องดื่มอะไร?',options:['กาแฟ','ชา','น้ำเปล่า','น้ำผลไม้'],answer:'น้ำเปล่า'},
+      {q:'ร้านนี้มีอาหารอะไรอร่อย?',options:['ข้าวผัดและก๋วยเตี๋ยว','ซุปและสลัด','ข้าวและแกง','บะหมี่และข้าว'],answer:'ข้าวผัดและก๋วยเตี๋ยว'}
+    ]
+  },
+  {
+    level:'🟢 เริ่มต้น', title:'ด่าน 5 — ซื้อของในตลาด', situation:'สถานการณ์: ซื้อผลไม้ในตลาด',
+    lines:[
+      {speaker:'A',zh:'这个苹果多少钱一斤？',th:'แอปเปิลนี้กิโลละเท่าไหร่คะ?'},
+      {speaker:'B',zh:'五块钱一斤。',th:'ห้าหยวนต่อกิโลครับ'},
+      {speaker:'A',zh:'我要两斤，可以便宜一点吗？',th:'ขอสองกิโลค่ะ ลดราคาได้ไหมคะ?'},
+      {speaker:'B',zh:'好吧，九块钱两斤。',th:'ได้ครับ เก้าหยวนสองกิโล'},
+    ],
+    questions:[
+      {q:'A ซื้ออะไร?',options:['ส้ม','แอปเปิล','กล้วย','มะม่วง'],answer:'แอปเปิล'},
+      {q:'ราคาปกติต่อกิโลเท่าไหร่?',options:['3 หยวน','4 หยวน','5 หยวน','6 หยวน'],answer:'5 หยวน'},
+      {q:'สุดท้ายซื้อในราคาเท่าไหร่?',options:['9 หยวน','10 หยวน','8 หยวน','7 หยวน'],answer:'9 หยวน'}
+    ]
+  },
+  {
+    level:'🟢 เริ่มต้น', title:'ด่าน 6 — แนะนำตัวเอง', situation:'สถานการณ์: พบเพื่อนใหม่ในชั้นเรียน',
+    lines:[
+      {speaker:'A',zh:'你好！我叫李明，你叫什么名字？',th:'สวัสดี! ฉันชื่อหลี่หมิง คุณชื่ออะไรคะ?'},
+      {speaker:'B',zh:'你好！我叫王芳，很高兴认识你。',th:'สวัสดี! ฉันชื่อหวังฟาง ยินดีที่รู้จักค่ะ'},
+      {speaker:'A',zh:'你是哪里人？',th:'คุณมาจากไหนคะ?'},
+      {speaker:'B',zh:'我是北京人，你呢？',th:'ฉันมาจากปักกิ่งค่ะ แล้วคุณล่ะ?'},
+      {speaker:'A',zh:'我来自上海。',th:'ฉันมาจากเซี่ยงไฮ้ค่ะ'},
+    ],
+    questions:[
+      {q:'A ชื่ออะไร?',options:['หวังฟาง','หลี่หมิง','หลี่ฟาง','หวังหมิง'],answer:'หลี่หมิง'},
+      {q:'B มาจากเมืองไหน?',options:['เซี่ยงไฮ้','กว่างโจว','ปักกิ่ง','เฉิงตู'],answer:'ปักกิ่ง'},
+      {q:'A มาจากเมืองไหน?',options:['ปักกิ่ง','เซี่ยงไฮ้','เซินเจิ้น','หางโจว'],answer:'เซี่ยงไฮ้'}
+    ]
+  },
+  {
+    level:'🟢 เริ่มต้น', title:'ด่าน 7 — จองโรงแรม', situation:'สถานการณ์: โทรจองห้องพักโรงแรม',
+    lines:[
+      {speaker:'A',zh:'你好，我想预订一个房间。',th:'สวัสดีครับ ผมอยากจองห้องพักหนึ่งห้อง'},
+      {speaker:'B',zh:'好的，您要住几天？',th:'ได้ค่ะ จะพักกี่คืนคะ?'},
+      {speaker:'A',zh:'三天两夜，从明天开始。',th:'สามวันสองคืนครับ เริ่มพรุ่งนี้'},
+      {speaker:'B',zh:'一间标准房每晚三百元，可以吗？',th:'ห้องมาตรฐานคืนละ 300 หยวนค่ะ ได้ไหม?'},
+      {speaker:'A',zh:'好的，我要订。',th:'โอเคครับ ขอจองเลย'},
+    ],
+    questions:[
+      {q:'A จะพักกี่คืน?',options:['1 คืน','2 คืน','3 คืน','4 คืน'],answer:'2 คืน'},
+      {q:'จะเริ่มพักวันไหน?',options:['วันนี้','พรุ่งนี้','มะรืน','สัปดาห์หน้า'],answer:'พรุ่งนี้'},
+      {q:'ราคาห้องคืนละเท่าไหร่?',options:['200 หยวน','250 หยวน','300 หยวน','350 หยวน'],answer:'300 หยวน'}
+    ]
+  },
+  // ── ระดับกลาง (ด่าน 8-14) ──
+  {
+    level:'🟡 กลาง', title:'ด่าน 8 — คุยเรื่องงาน', situation:'สถานการณ์: สัมภาษณ์งาน',
+    lines:[
+      {speaker:'A',zh:'请问您有工作经验吗？',th:'ขอถามว่าคุณมีประสบการณ์ทำงานไหมคะ?'},
+      {speaker:'B',zh:'有，我在上家公司做了三年销售工作。',th:'มีครับ ผมทำงานฝ่ายขายในบริษัทเดิมมาสามปีแล้ว'},
+      {speaker:'A',zh:'您的月薪期望是多少？',th:'คุณคาดหวังเงินเดือนเท่าไหร่คะ?'},
+      {speaker:'B',zh:'我希望能得到八千元左右。',th:'ผมหวังว่าจะได้ประมาณแปดพันหยวนครับ'},
+      {speaker:'A',zh:'好的，我们会通知您面试结果。',th:'ได้ค่ะ เราจะแจ้งผลการสัมภาษณ์ให้ทราบ'},
+    ],
+    questions:[
+      {q:'B มีประสบการณ์ทำงานด้านไหน?',options:['การตลาด','ฝ่ายขาย','บัญชี','IT'],answer:'ฝ่ายขาย'},
+      {q:'B ทำงานที่บริษัทเดิมนานแค่ไหน?',options:['1 ปี','2 ปี','3 ปี','5 ปี'],answer:'3 ปี'},
+      {q:'B คาดหวังเงินเดือนเท่าไหร่?',options:['6,000 หยวน','7,000 หยวน','8,000 หยวน','10,000 หยวน'],answer:'8,000 หยวน'}
+    ]
+  },
+  {
+    level:'🟡 กลาง', title:'ด่าน 9 — ไปหาหมอ', situation:'สถานการณ์: ที่คลินิก',
+    lines:[
+      {speaker:'A',zh:'医生，我最近头很痛，还发烧。',th:'คุณหมอ ช่วงนี้ผมปวดหัวมากและมีไข้ด้วยครับ'},
+      {speaker:'B',zh:'从什么时候开始的？',th:'เริ่มเป็นมาตั้งแต่เมื่อไหร่คะ?'},
+      {speaker:'A',zh:'从昨天晚上开始，还有点咳嗽。',th:'เริ่มตั้งแต่เมื่อคืนครับ และไอนิดหน่อยด้วย'},
+      {speaker:'B',zh:'你可能是感冒了，我给你开一些药。',th:'คุณอาจเป็นหวัดค่ะ จะให้ยาไปนะคะ'},
+      {speaker:'B',zh:'要多喝水，好好休息。',th:'ดื่มน้ำมากๆ และพักผ่อนให้เพียงพอนะคะ'},
+    ],
+    questions:[
+      {q:'A มีอาการอะไรบ้าง?',options:['ปวดท้องและคลื่นไส้','ปวดหัวและมีไข้','เจ็บคอและเวียนหัว','ปวดขาและอ่อนเพลีย'],answer:'ปวดหัวและมีไข้'},
+      {q:'อาการเริ่มมาตั้งแต่เมื่อไหร่?',options:['เมื่อเช้า','เมื่อคืน','เมื่อวาน','สองวันก่อน'],answer:'เมื่อคืน'},
+      {q:'หมอคิดว่า A เป็นอะไร?',options:['ไข้หวัดใหญ่','โควิด','หวัด','ภูมิแพ้'],answer:'หวัด'}
+    ]
+  },
+  {
+    level:'🟡 กลาง', title:'ด่าน 10 — คุยเรื่องการเรียน', situation:'สถานการณ์: นักศึกษาคุยกัน',
+    lines:[
+      {speaker:'A',zh:'你这学期选了几门课？',th:'เทอมนี้คุณลงทะเบียนกี่วิชาคะ?'},
+      {speaker:'B',zh:'我选了五门课，最难的是数学。',th:'ลงห้าวิชาครับ วิชาที่ยากที่สุดคือคณิตศาสตร์'},
+      {speaker:'A',zh:'数学我也觉得很难，你平时怎么复习？',th:'คณิตฉันก็รู้สึกว่ายากเหมือนกัน ปกติคุณทบทวนยังไงคะ?'},
+      {speaker:'B',zh:'我每天晚上复习两个小时，还会做练习题。',th:'ผมทบทวนทุกคืน สองชั่วโมง และทำโจทย์ฝึกหัดด้วย'},
+      {speaker:'A',zh:'我要向你学习！',th:'ฉันต้องเรียนรู้จากคุณเลยค่ะ!'},
+    ],
+    questions:[
+      {q:'B ลงทะเบียนกี่วิชา?',options:['3 วิชา','4 วิชา','5 วิชา','6 วิชา'],answer:'5 วิชา'},
+      {q:'วิชาที่ B รู้สึกว่ายากที่สุดคือ?',options:['ฟิสิกส์','เคมี','คณิตศาสตร์','ภาษาอังกฤษ'],answer:'คณิตศาสตร์'},
+      {q:'B ทบทวนหนังสือนานแค่ไหนต่อวัน?',options:['1 ชั่วโมง','2 ชั่วโมง','3 ชั่วโมง','4 ชั่วโมง'],answer:'2 ชั่วโมง'}
+    ]
+  },
+  {
+    level:'🟡 กลาง', title:'ด่าน 11 — คุยเรื่องสภาพอากาศ', situation:'สถานการณ์: คุยกันเรื่องอากาศและแผนวันหยุด',
+    lines:[
+      {speaker:'A',zh:'今天天气真好，你打算做什么？',th:'วันนี้อากาศดีจริงๆ เลย คุณวางแผนจะทำอะไรคะ?'},
+      {speaker:'B',zh:'我想去公园散步，顺便拍些照片。',th:'ผมอยากไปเดินเล่นในสวนสาธารณะ แล้วก็ถ่ายรูปด้วย'},
+      {speaker:'A',zh:'听起来不错，我能和你一起去吗？',th:'ฟังดูน่าสนใจเลยค่ะ ฉันไปด้วยได้ไหม?'},
+      {speaker:'B',zh:'当然可以，我们两点见面吧。',th:'ได้เลยครับ งั้นเจอกันบ่ายสองโมงนะ'},
+      {speaker:'A',zh:'好的，那一会儿见！',th:'โอเคค่ะ แล้วเจอกันทีหลังนะคะ!'},
+    ],
+    questions:[
+      {q:'B วางแผนจะทำอะไร?',options:['ไปห้องสมุด','ไปเดินในสวน','ไปดูหนัง','ไปกินอาหาร'],answer:'ไปเดินในสวน'},
+      {q:'B จะไปทำกิจกรรมพิเศษอะไรด้วย?',options:['วาดรูป','วิ่งออกกำลัง','ถ่ายรูป','อ่านหนังสือ'],answer:'ถ่ายรูป'},
+      {q:'พวกเขาจะเจอกันกี่โมง?',options:['บ่ายโมง','บ่ายสองโมง','บ่ายสามโมง','สี่โมงเย็น'],answer:'บ่ายสองโมง'}
+    ]
+  },
+  {
+    level:'🟡 กลาง', title:'ด่าน 12 — คุยโทรศัพท์', situation:'สถานการณ์: โทรหาเพื่อนที่ไม่อยู่บ้าน',
+    lines:[
+      {speaker:'A',zh:'喂，请问张明在吗？',th:'ฮัลโหล ขอสายจางหมิงได้ไหมคะ?'},
+      {speaker:'B',zh:'他现在不在，您是哪位？',th:'ตอนนี้เขาไม่อยู่ครับ คุณเป็นใครคะ?'},
+      {speaker:'A',zh:'我是他的同事王红，请问他什么时候回来？',th:'ฉันเป็นเพื่อนร่วมงานชื่อหวังหงค่ะ ขอถามว่าเขาจะกลับมาเมื่อไหร่คะ?'},
+      {speaker:'B',zh:'大概晚上七点，您要留言吗？',th:'ประมาณสองทุ่มครับ จะฝากข้อความไหมครับ?'},
+      {speaker:'A',zh:'好的，请告诉他明天的会议改到下午三点。',th:'ได้ค่ะ ช่วยบอกเขาด้วยว่าประชุมพรุ่งนี้เลื่อนเป็นบ่ายสามโมง'},
+    ],
+    questions:[
+      {q:'A โทรหาใคร?',options:['หวังหง','จางหมิง','หลี่หมิง','หวังหมิง'],answer:'จางหมิง'},
+      {q:'เขาจะกลับมาบ้านกี่โมง?',options:['หกโมงเย็น','หนึ่งทุ่ม','สองทุ่ม','สามทุ่ม'],answer:'สองทุ่ม'},
+      {q:'ข้อความที่ฝากคืออะไร?',options:['ยกเลิกประชุม','ประชุมเลื่อนเป็นบ่ายสาม','ประชุมเลื่อนไปพรุ่งนี้','เพิ่มการประชุมเช้า'],answer:'ประชุมเลื่อนเป็นบ่ายสาม'}
+    ]
+  },
+  {
+    level:'🟡 กลาง', title:'ด่าน 13 — ความสัมพันธ์ครอบครัว', situation:'สถานการณ์: คุยเรื่องครอบครัว',
+    lines:[
+      {speaker:'A',zh:'你家里有几个人？',th:'ครอบครัวคุณมีกี่คนคะ?'},
+      {speaker:'B',zh:'我家有五个人，爸爸、妈妈、哥哥、妹妹和我。',th:'ครอบครัวผมมีห้าคนครับ พ่อ แม่ พี่ชาย น้องสาว กับผม'},
+      {speaker:'A',zh:'你哥哥做什么工作？',th:'พี่ชายคุณทำงานอะไรคะ?'},
+      {speaker:'B',zh:'他是工程师，在深圳工作。',th:'เขาเป็นวิศวกรครับ ทำงานอยู่ที่เซินเจิ้น'},
+      {speaker:'A',zh:'那你们不常见面吧？',th:'งั้นคุณคงไม่ค่อยได้เจอกันใช่ไหมคะ?'},
+      {speaker:'B',zh:'对，只有过年才能团聚。',th:'ใช่ครับ ได้อยู่พร้อมหน้ากันแค่ตรุษจีนค่ะ'},
+    ],
+    questions:[
+      {q:'ครอบครัว B มีกี่คน?',options:['3 คน','4 คน','5 คน','6 คน'],answer:'5 คน'},
+      {q:'พี่ชาย B ทำงานอะไร?',options:['แพทย์','วิศวกร','ครู','นักบัญชี'],answer:'วิศวกร'},
+      {q:'ครอบครัว B ได้อยู่พร้อมหน้าตอนไหน?',options:['วันเกิด','วันหยุดฤดูร้อน','ตรุษจีน','วันปีใหม่'],answer:'ตรุษจีน'}
+    ]
+  },
+  {
+    level:'🟡 กลาง', title:'ด่าน 14 — ช้อปปิ้งออนไลน์', situation:'สถานการณ์: คุยกันเรื่องซื้อของออนไลน์',
+    lines:[
+      {speaker:'A',zh:'你经常在网上购物吗？',th:'คุณซื้อของออนไลน์บ่อยไหมคะ?'},
+      {speaker:'B',zh:'对，我每周都会在淘宝上买东西。',th:'บ่อยมากครับ ทุกสัปดาห์ผมจะซื้อของในเถาเป่า'},
+      {speaker:'A',zh:'你觉得网上购物安全吗？',th:'คุณคิดว่าการซื้อของออนไลน์ปลอดภัยไหมคะ?'},
+      {speaker:'B',zh:'只要选择信用好的卖家就没问题。',th:'ถ้าเลือกผู้ขายที่น่าเชื่อถือก็ไม่มีปัญหาครับ'},
+      {speaker:'A',zh:'万一收到的东西不好怎么办？',th:'ถ้าของที่ได้รับไม่ดีจะทำยังไงคะ?'},
+      {speaker:'B',zh:'可以申请退款或者换货。',th:'สามารถขอคืนเงินหรือเปลี่ยนสินค้าได้ครับ'},
+    ],
+    questions:[
+      {q:'B ซื้อของออนไลน์บ่อยแค่ไหน?',options:['ทุกวัน','ทุกสัปดาห์','ทุกเดือน','นานๆ ครั้ง'],answer:'ทุกสัปดาห์'},
+      {q:'B ซื้อของที่แพลตฟอร์มไหน?',options:['JD.com','Pinduoduo','Taobao','Shopee'],answer:'Taobao'},
+      {q:'ถ้าของไม่ดีจะทำอย่างไรได้บ้าง?',options:['ทิ้งไป','ร้องเรียนตำรวจ','ขอคืนเงินหรือเปลี่ยนสินค้า','ไม่มีทางแก้'],answer:'ขอคืนเงินหรือเปลี่ยนสินค้า'}
+    ]
+  },
+  // ── ระดับสูง (ด่าน 15-20) ──
+  {
+    level:'🔴 สูง', title:'ด่าน 15 — ประชุมธุรกิจ', situation:'สถานการณ์: ประชุมธุรกิจระหว่างบริษัท',
+    lines:[
+      {speaker:'A',zh:'感谢贵公司给我们这次合作机会。',th:'ขอบคุณที่บริษัทของท่านให้โอกาสร่วมมือกันในครั้งนี้'},
+      {speaker:'B',zh:'这次合作对双方都有利，我们非常期待。',th:'การร่วมมือครั้งนี้เป็นประโยชน์ต่อทั้งสองฝ่าย เราตั้งตารอมากค่ะ'},
+      {speaker:'A',zh:'关于合同条款，我们有几点想进一步讨论。',th:'เกี่ยวกับเงื่อนไขในสัญญา เราอยากหารือเพิ่มเติมอีกสองสามประเด็น'},
+      {speaker:'B',zh:'没问题，请您详细说明。',th:'ไม่มีปัญหาค่ะ กรุณาอธิบายให้ละเอียดด้วยนะคะ'},
+      {speaker:'A',zh:'首先是付款方式，我们希望能分三期支付。',th:'ประการแรกเรื่องวิธีชำระเงิน เราอยากชำระแบบแบ่งสามงวด'},
+    ],
+    questions:[
+      {q:'การประชุมครั้งนี้เกี่ยวกับเรื่องอะไร?',options:['การสัมภาษณ์งาน','ความร่วมมือทางธุรกิจ','การฝึกอบรม','การประเมินผล'],answer:'ความร่วมมือทางธุรกิจ'},
+      {q:'A ต้องการหารือเรื่องอะไร?',options:['ราคาสินค้า','เงื่อนไขในสัญญา','เส้นทางการขนส่ง','ทีมงาน'],answer:'เงื่อนไขในสัญญา'},
+      {q:'A อยากชำระเงินแบบไหน?',options:['ชำระครั้งเดียว','แบ่งสองงวด','แบ่งสามงวด','แบ่งหกงวด'],answer:'แบ่งสามงวด'}
+    ]
+  },
+  {
+    level:'🔴 สูง', title:'ด่าน 16 — คุยเรื่องสิ่งแวดล้อม', situation:'สถานการณ์: อภิปรายเรื่องสิ่งแวดล้อม',
+    lines:[
+      {speaker:'A',zh:'你觉得现在的环境污染问题严重吗？',th:'คุณคิดว่าปัญหามลพิษสิ่งแวดล้อมตอนนี้รุนแรงไหมคะ?'},
+      {speaker:'B',zh:'非常严重，特别是空气污染和水污染。',th:'รุนแรงมากครับ โดยเฉพาะมลพิษทางอากาศและน้ำ'},
+      {speaker:'A',zh:'我们个人能做什么来减少污染？',th:'เราในฐานะบุคคลทำอะไรได้บ้างเพื่อลดมลพิษ?'},
+      {speaker:'B',zh:'可以减少使用一次性塑料，多骑自行车。',th:'เราสามารถลดการใช้พลาสติกใช้ครั้งเดียวทิ้ง และขี่จักรยานให้มากขึ้น'},
+      {speaker:'A',zh:'政府也应该制定更严格的法律。',th:'รัฐบาลก็ควรออกกฎหมายที่เข้มงวดขึ้นด้วย'},
+    ],
+    questions:[
+      {q:'ปัญหาสิ่งแวดล้อมที่กล่าวถึงมีอะไรบ้าง?',options:['ขยะและเสียง','อากาศและน้ำ','ดินและอากาศ','น้ำและขยะ'],answer:'อากาศและน้ำ'},
+      {q:'B แนะนำให้ทำอะไรเพื่อลดมลพิษ?',options:['ปลูกต้นไม้','ลดพลาสติกและขี่จักรยาน','ประหยัดไฟฟ้า','รีไซเคิลขยะ'],answer:'ลดพลาสติกและขี่จักรยาน'},
+      {q:'A คิดว่าใครควรมีบทบาทด้วย?',options:['บริษัทเอกชน','องค์กรสากล','รัฐบาล','นักวิทยาศาสตร์'],answer:'รัฐบาล'}
+    ]
+  },
+  {
+    level:'🔴 สูง', title:'ด่าน 17 — วางแผนอนาคต', situation:'สถานการณ์: คุยเรื่องแผนอนาคตกับที่ปรึกษา',
+    lines:[
+      {speaker:'A',zh:'你毕业以后有什么打算？',th:'หลังเรียนจบคุณมีแผนอะไรบ้างคะ?'},
+      {speaker:'B',zh:'我打算先工作几年，积累一些经验和资金。',th:'ผมวางแผนจะทำงานก่อนสักสองสามปี สะสมประสบการณ์และเงินทุน'},
+      {speaker:'A',zh:'然后呢？',th:'แล้วหลังจากนั้นล่ะคะ?'},
+      {speaker:'B',zh:'我想自己创业，开一家餐厅。',th:'ผมอยากเริ่มธุรกิจของตัวเอง เปิดร้านอาหารครับ'},
+      {speaker:'A',zh:'这是个很好的计划，但是创业风险也很大。',th:'นั่นเป็นแผนที่ดีมากค่ะ แต่การทำธุรกิจก็มีความเสี่ยงสูงนะคะ'},
+      {speaker:'B',zh:'我知道，所以我要做好充分的准备。',th:'ผมรู้ครับ ดังนั้นผมจะเตรียมตัวให้พร้อมที่สุด'},
+    ],
+    questions:[
+      {q:'B วางแผนจะทำอะไรก่อน?',options:['เรียนต่อ','ทำงานสะสมประสบการณ์','ท่องเที่ยว','เปิดธุรกิจทันที'],answer:'ทำงานสะสมประสบการณ์'},
+      {q:'B อยากทำธุรกิจอะไร?',options:['ร้านกาแฟ','โรงเรียน','ร้านอาหาร','บริษัท IT'],answer:'ร้านอาหาร'},
+      {q:'A เตือนเรื่องอะไร?',options:['ขาดทุนแน่นอน','มีความเสี่ยงสูง','ต้องมีทุนมาก','ต้องมีพาร์ทเนอร์'],answer:'มีความเสี่ยงสูง'}
+    ]
+  },
+  {
+    level:'🔴 สูง', title:'ด่าน 18 — ข่าวสังคม', situation:'สถานการณ์: อภิปรายข่าวสังคม',
+    lines:[
+      {speaker:'A',zh:'你看了今天的新闻吗？发生了很多事情。',th:'คุณดูข่าววันนี้ไหมคะ มีเรื่องมากเลยค่ะ'},
+      {speaker:'B',zh:'看了，最让我担心的是经济不景气的问题。',th:'ดูแล้วครับ ที่ผมเป็นห่วงที่สุดคือปัญหาเศรษฐกิจตกต่ำ'},
+      {speaker:'A',zh:'是的，很多企业都在裁员，失业率也在上升。',th:'ใช่ค่ะ บริษัทหลายแห่งกำลังลดพนักงาน อัตราการว่างงานก็เพิ่มขึ้น'},
+      {speaker:'B',zh:'政府应该出台更多扶持中小企业的政策。',th:'รัฐบาลควรออกนโยบายสนับสนุนธุรกิจขนาดกลางและเล็กมากขึ้นครับ'},
+      {speaker:'A',zh:'同意，同时我们个人也要做好财务规划。',th:'เห็นด้วยค่ะ พร้อมกันนั้นเราแต่ละคนก็ต้องวางแผนทางการเงินให้ดีด้วย'},
+    ],
+    questions:[
+      {q:'สิ่งที่ B กังวลมากที่สุดคือ?',options:['ปัญหาการเมือง','เศรษฐกิจตกต่ำ','สภาพอากาศ','ปัญหาการศึกษา'],answer:'เศรษฐกิจตกต่ำ'},
+      {q:'ผลกระทบทางเศรษฐกิจที่กล่าวถึงคือ?',options:['ราคาสินค้าแพง','บริษัทลดพนักงาน','อัตราดอกเบี้ยสูง','การนำเข้าลดลง'],answer:'บริษัทลดพนักงาน'},
+      {q:'A แนะนำให้บุคคลทั่วไปทำอะไร?',options:['หาอาชีพเสริม','ลงทุนในหุ้น','วางแผนทางการเงิน','ประหยัดค่าใช้จ่าย'],answer:'วางแผนทางการเงิน'}
+    ]
+  },
+  {
+    level:'🔴 สูง', title:'ด่าน 19 — ปรัชญาชีวิต', situation:'สถานการณ์: สนทนาเรื่องปรัชญาและความสุข',
+    lines:[
+      {speaker:'A',zh:'你觉得什么是真正的幸福？',th:'คุณคิดว่าความสุขที่แท้จริงคืออะไรคะ?'},
+      {speaker:'B',zh:'我觉得幸福就是做自己喜欢的事，同时对社会有贡献。',th:'ผมคิดว่าความสุขคือการทำสิ่งที่ตัวเองชอบ และในขณะเดียวกันก็มีส่วนช่วยสังคมด้วย'},
+      {speaker:'A',zh:'但是在现实生活中，很难做到两全其美。',th:'แต่ในชีวิตจริง มันยากที่จะได้ทั้งสองอย่างพร้อมกันนะคะ'},
+      {speaker:'B',zh:'是的，所以我们需要在理想和现实之间找到平衡。',th:'ใช่ครับ ดังนั้นเราต้องหาจุดสมดุลระหว่างอุดมคติกับความเป็นจริง'},
+      {speaker:'A',zh:'我完全同意，这需要智慧和勇气。',th:'ฉันเห็นด้วยอย่างยิ่งค่ะ สิ่งนี้ต้องการทั้งปัญญาและความกล้า'},
+    ],
+    questions:[
+      {q:'B นิยามความสุขว่าอย่างไร?',options:['มีเงินมาก','ทำสิ่งที่ชอบและช่วยสังคม','มีสุขภาพดี','มีครอบครัวที่ดี'],answer:'ทำสิ่งที่ชอบและช่วยสังคม'},
+      {q:'A คิดว่าปัญหาในชีวิตจริงคืออะไร?',options:['ขาดเงิน','ยากที่จะได้ทุกอย่างพร้อมกัน','ไม่มีเวลา','ขาดโอกาส'],answer:'ยากที่จะได้ทุกอย่างพร้อมกัน'},
+      {q:'B แนะนำให้หาอะไร?',options:['ความร่ำรวย','จุดสมดุลระหว่างอุดมคติกับความจริง','เพื่อนที่ดี','งานที่มั่นคง'],answer:'จุดสมดุลระหว่างอุดมคติกับความจริง'}
+    ]
+  },
+  {
+    level:'🔴 สูง', title:'ด่าน 20 — เจรจาต่อรอง', situation:'สถานการณ์: เจรจาสัญญาธุรกิจขั้นสูง',
+    lines:[
+      {speaker:'A',zh:'关于这份合作协议，我们认为价格方面还有谈判的空间。',th:'เกี่ยวกับข้อตกลงความร่วมมือฉบับนี้ เราคิดว่ายังมีพื้นที่เจรจาเรื่องราคาอยู่'},
+      {speaker:'B',zh:'我们已经给出了最优惠的价格，但可以考虑增加服务内容。',th:'เราให้ราคาที่ดีที่สุดแล้วค่ะ แต่สามารถพิจารณาเพิ่มเนื้อหาบริการได้'},
+      {speaker:'A',zh:'如果你们能提供额外的技术支持，我们可以接受这个价格。',th:'ถ้าคุณสามารถให้การสนับสนุนด้านเทคนิคเพิ่มเติมได้ เราสามารถยอมรับราคานี้'},
+      {speaker:'B',zh:'没问题，我们可以安排专人负责技术支持，每周提供一次。',th:'ไม่มีปัญหาค่ะ เราสามารถจัดคนเฉพาะมาดูแลด้านเทคนิค สัปดาห์ละครั้ง'},
+      {speaker:'A',zh:'很好，那我们就按这个方案签合同吧。',th:'ดีมากค่ะ งั้นเราก็เซ็นสัญญาตามแผนนี้เลยนะคะ'},
+    ],
+    questions:[
+      {q:'A ต้องการเจรจาเรื่องอะไร?',options:['ระยะเวลาสัญญา','ราคา','คุณภาพสินค้า','การจัดส่ง'],answer:'ราคา'},
+      {q:'B เสนออะไรแทนการลดราคา?',options:['ของขวัญพิเศษ','เพิ่มบริการ','ขยายระยะเวลาสัญญา','ให้ส่วนลดครั้งต่อไป'],answer:'เพิ่มบริการ'},
+      {q:'B จะให้การสนับสนุนด้านเทคนิคบ่อยแค่ไหน?',options:['ทุกวัน','สัปดาห์ละครั้ง','เดือนละครั้ง','เมื่อมีปัญหาเท่านั้น'],answer:'สัปดาห์ละครั้ง'}
+    ]
+  }
+];
+
+let lgIdx=0, lgQIdx=0, lgScore=0;
+
+function initListeningGame() { lgIdx=0; lgScore=0; renderListeningHub(); }
+
+function renderListeningHub() {
+  const box = document.getElementById('listening-content');
+  const isPremium = state.user && state.user.data && state.user.data.premium;
+  const FREE_LIMIT = 5; // ฟรีถึงด่านที่ 5
+  const groups = [
+    { label:'🟢 ระดับเริ่มต้น', range:[0,6], color:'#2e7d32', bg:'#e8f5e9' },
+    { label:'🟡 ระดับกลาง', range:[7,13], color:'#f57f17', bg:'#fff8e1' },
+    { label:'🔴 ระดับสูง', range:[14,19], color:'#c62828', bg:'#ffebee' },
+  ];
+  box.innerHTML = `
+    <div style="text-align:center;margin-bottom:20px">
+      <img src="https://avajarshika.github.io/tangtang/tangtang.png" style="width:80px;height:80px;object-fit:contain;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.3))">
+      <div style="font-size:20px;font-weight:900;color:#6b1a6b;margin-top:8px">🎧 จับใจความ</div>
+      <div style="font-size:13px;color:var(--ink3);margin-top:4px">ฟังบทสนทนา แล้วตอบคำถาม · 20 ด่าน</div>
+      ${!isPremium ? `<div style="background:#fce4f3;border:1.5px solid #F13596;border-radius:10px;padding:8px 14px;margin-top:10px;font-size:12px;color:#c2185b">🔓 ด่าน 1-5 ฟรี | 🔒 ด่าน 6-20 สำหรับสมาชิก Premium</div>` : ''}
+    </div>
+    ${groups.map(g => `
+      <div style="margin-bottom:16px">
+        <div style="background:${g.bg};border:1.5px solid ${g.color};border-radius:12px;padding:8px 14px;margin-bottom:8px">
+          <div style="font-size:13px;font-weight:800;color:${g.color}">${g.label}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          ${LISTENING_DATA.slice(g.range[0], g.range[1]+1).map((l,i) => {
+            const idx = g.range[0]+i;
+            const isLocked = !isPremium && idx >= FREE_LIMIT;
+            return `<div onclick="${isLocked ? `showToast('🔒 ด่านนี้สำหรับสมาชิก Premium ค่า อัปเกรดได้เลยนะคะ!')` : `startListeningLesson(${idx})`}" style="background:${isLocked?'#f5f5f5':'white'};border:2px solid ${isLocked?'#e0e0e0':'var(--paper3)'};border-radius:14px;padding:14px;cursor:${isLocked?'default':'pointer'};transition:.2s;display:flex;align-items:center;gap:12px;opacity:${isLocked?'0.7':'1'}" ${isLocked?'':` onmouseover="this.style.borderColor='${g.color}'" onmouseout="this.style.borderColor='var(--paper3)'"`}>
+              <div style="background:${isLocked?'#e0e0e0':g.bg};border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:${isLocked?'18':'14'}px;font-weight:800;color:${isLocked?'#9e9e9e':g.color};flex-shrink:0">${isLocked?'🔒':idx+1}</div>
+              <div style="flex:1">
+                <div style="font-size:13px;font-weight:700;color:${isLocked?'#9e9e9e':'var(--ink)'}">ด่าน ${idx+1} — ${l.title.replace(/ด่าน \d+ — /,'')}</div>
+                <div style="font-size:11px;color:var(--ink3);margin-top:2px">${isLocked?'🔒 Premium เท่านั้น':`${l.lines.length} ประโยค · ${l.questions.length} คำถาม`}</div>
+              </div>
+              <div style="font-size:18px;opacity:.3">${isLocked?'🔒':'→'}</div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function startListeningLesson(i) { lgIdx=i; lgQIdx=0; lgScore=0; renderListeningScene(); }
+
+function renderListeningScene() {
+  const box = document.getElementById('listening-content');
+  const lesson = LISTENING_DATA[lgIdx];
+  box.innerHTML = `
+    <div style="background:linear-gradient(135deg,#6b1a6b,#F13596);border-radius:16px;padding:16px;color:white;margin-bottom:16px;text-align:center">
+      <div style="font-size:12px;opacity:.7;margin-bottom:4px">${lesson.situation}</div>
+      <div style="font-size:16px;font-weight:800">${lesson.title}</div>
+    </div>
+    <div style="background:var(--paper2);border-radius:12px;padding:14px;margin-bottom:16px">
+      <div style="font-size:12px;color:var(--ink3);margin-bottom:10px;font-weight:600">📜 บทสนทนา (กดฟังเสียงแต่ละประโยค)</div>
+      ${lesson.lines.map((line,i)=>`
+        <div style="display:flex;gap:10px;margin-bottom:10px;align-items:flex-start">
+          <div style="background:${line.speaker==='A'?'#F13596':'#6b1a6b'};color:white;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;margin-top:2px">${line.speaker}</div>
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+              <span style="font-size:16px;font-weight:700;color:var(--ink);font-family:'Noto Serif SC',serif">${line.zh}</span>
+              <button onclick="speak('${line.zh.replace(/'/g,"\\'")}')" style="background:#F13596;border:none;border-radius:20px;padding:3px 10px;color:white;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">🔊 ฟัง</button>
+            </div>
+            <div style="font-size:11px;color:var(--ink3);margin-top:2px">${line.th}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <button onclick="speakAllListeningLines(${lgIdx})" id="play-all-btn" style="width:100%;padding:14px;background:linear-gradient(135deg,#6b1a6b,#F13596);color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;margin-bottom:10px">🎧 ฟังบทสนทนาทั้งหมด</button>
+    <button onclick="startListeningQuiz()" style="width:100%;padding:14px;background:white;color:#6b1a6b;border:2px solid #6b1a6b;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">✅ พร้อมแล้ว! ไปทำข้อสอบ →</button>`;
+}
+
+async function speakAllListeningLines(idx) {
+  const lesson = LISTENING_DATA[idx];
+  const btn = document.getElementById('play-all-btn');
+  if (btn) { btn.textContent='⏳ กำลังเล่น...'; btn.disabled=true; }
+  for (let i=0; i<lesson.lines.length; i++) {
+    await new Promise(r => speak(lesson.lines[i].zh, r));
+    await new Promise(r => setTimeout(r, 400));
+  }
+  if (btn) { btn.textContent='🎧 ฟังบทสนทนาทั้งหมด'; btn.disabled=false; }
+}
+
+function startListeningQuiz() { lgQIdx=0; lgScore=0; renderListeningQuestion(); }
+
+function renderListeningQuestion() {
+  const box = document.getElementById('listening-content');
+  const lesson = LISTENING_DATA[lgIdx];
+  const q = lesson.questions[lgQIdx];
+  const total = lesson.questions.length;
+  box.innerHTML = `
+    <div style="margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div style="font-size:12px;color:var(--ink3);font-weight:600">ข้อ ${lgQIdx+1} / ${total}</div>
+        <div style="font-size:12px;color:#6b1a6b;font-weight:700">คะแนน ${lgScore}</div>
+      </div>
+      <div style="background:#e0e0e0;height:6px;border-radius:10px">
+        <div style="background:#6b1a6b;height:6px;border-radius:10px;width:${(lgQIdx/total)*100}%;transition:.3s"></div>
+      </div>
+    </div>
+    <button onclick="speakAllListeningLines(${lgIdx})" style="width:100%;padding:10px;background:var(--paper2);color:#6b1a6b;border:1.5px solid #6b1a6b;border-radius:10px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;margin-bottom:16px">🎧 ฟังบทสนทนาอีกครั้ง</button>
+    <div style="background:linear-gradient(135deg,#6b1a6b,#F13596);border-radius:16px;padding:20px;text-align:center;margin-bottom:20px">
+      <div style="font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:8px">❓ คำถาม</div>
+      <div style="font-size:17px;font-weight:800;color:white;line-height:1.4">${q.q}</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px" id="lg-options">
+      ${q.options.map(opt=>`
+        <button onclick="answerListening('${opt}','${q.answer}')" style="padding:16px;background:white;border:2px solid var(--paper3);border-radius:12px;font-size:14px;font-weight:700;color:var(--ink);cursor:pointer;font-family:inherit;text-align:left;transition:.2s">${opt}</button>
+      `).join('')}
+    </div>`;
+}
+
+function answerListening(chosen, correct) {
+  document.querySelectorAll('#lg-options button').forEach(btn => {
+    btn.onclick = null;
+    if (btn.textContent.trim()===correct) { btn.style.background='#e8f5e9'; btn.style.borderColor='#4caf50'; btn.style.color='#2e7d32'; }
+    else if (btn.textContent.trim()===chosen && chosen!==correct) { btn.style.background='#ffebee'; btn.style.borderColor='#f44336'; btn.style.color='#c62828'; }
+  });
+  if (chosen===correct) { lgScore++; playCorrectSound(); }
+  else playWrongSound();
+  setTimeout(() => { lgQIdx++; lgQIdx>=LISTENING_DATA[lgIdx].questions.length ? showListeningResult() : renderListeningQuestion(); }, 1000);
+}
+
+function showListeningResult() {
+  addXP(20);
+  const total = LISTENING_DATA[lgIdx].questions.length;
+  const box = document.getElementById('listening-content');
+  const img = lgScore>=total ? 'tangtang-happy.png' : lgScore>=total*0.6 ? 'tangtang.png' : 'tangtang-sad.png';
+  const msg = lgScore>=total ? 'เยี่ยมมาก! เข้าใจทุกข้อ! 🎉' : lgScore>=total*0.6 ? 'ดีมากค่ะ! 👍' : 'ลองฟังอีกครั้งนะคะ 💪';
+  box.innerHTML = `
+    <div style="text-align:center;padding:32px 16px">
+      <img src="https://avajarshika.github.io/tangtang/${img}" style="width:100px;height:100px;object-fit:contain;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.3))">
+      <div style="font-size:24px;font-weight:900;color:#6b1a6b;margin-top:12px">${msg}</div>
+      <div style="font-size:40px;font-weight:900;color:var(--ink);margin:16px 0">${lgScore} / ${total}</div>
+      <div style="font-size:13px;color:var(--green);font-weight:700;margin-bottom:24px">+20 XP ได้รับแล้ว!</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button onclick="startListeningLesson(${lgIdx})" style="padding:13px;background:#6b1a6b;color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">🔄 ฟังใหม่อีกครั้ง</button>
+        ${lgIdx<LISTENING_DATA.length-1?`<button onclick="startListeningLesson(${lgIdx+1})" style="padding:13px;background:white;color:#6b1a6b;border:2px solid #6b1a6b;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">➡️ ด่านถัดไป</button>`:''}
+        <button onclick="renderListeningHub()" style="padding:13px;background:var(--paper2);color:var(--ink3);border:none;border-radius:12px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer">← เลือกด่าน</button>
+      </div>
+    </div>`;
+}
+
+
 
 </script>
 
