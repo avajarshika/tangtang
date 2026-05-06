@@ -1556,8 +1556,8 @@ body {
     <div class="section-title">Learning Paths</div>
     <div style="padding:0 16px 6px;font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase">📚 ตามระดับ HSK</div>
     <div class="path-row" id="path-row-hsk" style="grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px"></div>
-    <div style="padding:8px 16px 6px;font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase">🎯 หมวดหมู่</div>
-    <div class="path-row" id="path-row-theme" style="gap:8px;padding:0 16px"></div>
+    <div style="padding:8px 16px 6px;font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase">💬 การสื่อสารจริง</div>
+    <div id="path-row-comm" style="padding:0 16px 8px;display:flex;flex-direction:column;gap:8px"></div>
 
     <div style="padding:10px 16px 6px;display:flex;align-items:center;justify-content:space-between;">
       <div style="font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase">📚 เรียนตามหัวข้อ — 10 หัวข้อ · 56 บท</div>
@@ -1590,6 +1590,27 @@ body {
 
     <div class="section-title" id="home-section-title">HSK 1 — บทเรียน</div>
     <div class="lesson-section" id="home-lesson-list"></div>
+  </div>
+
+  <!-- COMM HUB -->
+  <div id="screen-comm-hub" class="screen">
+    <div class="page-header" style="padding:14px 16px 10px">
+      <button class="back-btn" onclick="goScreen('home')" style="margin-bottom:6px">← กลับ</button>
+      <div id="comm-hub-title" style="font-size:18px;font-weight:800;color:var(--ink)">✈️ ท่องเที่ยวและการเดินทาง</div>
+      <div id="comm-hub-sub" style="font-size:12px;color:var(--ink3);margin-top:2px">13 บทเรียน · การสื่อสารจริงในชีวิต</div>
+    </div>
+    <div id="comm-hub-list" style="padding:8px 16px 80px"></div>
+  </div>
+
+  <!-- COMM LESSON -->
+  <div id="screen-comm-lesson" class="screen">
+    <div class="detail-header">
+      <button class="back-btn" id="comm-lesson-back" onclick="goScreen('comm-hub')">← กลับ</button>
+      <div class="detail-title" id="comm-lesson-title">บทเรียน</div>
+      <div class="detail-sub" id="comm-lesson-sub"></div>
+      <div class="prog-bar" style="margin-top:10px"><div class="prog-fill" id="comm-lesson-prog" style="width:0%"></div></div>
+    </div>
+    <div id="comm-lesson-content" style="padding:16px 16px 80px"></div>
   </div>
 
   <!-- GAMES HUB -->
@@ -6472,8 +6493,7 @@ const PATHS = [
   { id:'hsk5', name:'HSK 5', sub:'Advanced C1 · 8 บท', icon:'📒', color:'#1a5a5a', lessons:[41,42,43,44,45,46,47,48] },
   { id:'hsk6', name:'HSK 6', sub:'Mastery C2 · 8 บท', icon:'📔', color:'#1a2a5a', lessons:[49,50,51,52,53,54,55,56] },
   // ── Thematic Paths ──
-  { id:'travel', name:'🌏 Travel', sub:'เที่ยวจีนได้เลย · 8 บท', icon:'✈️', color:'#e67e22', lessons:[3,4,13,14,19,22,23,28] },
-  { id:'daily', name:'Daily Life', sub:'ชีวิตประจำวัน · 6 บท', icon:'🏠', color:'#27ae60', lessons:[1,2,5,6,7,8] },
+  // Thematic paths replaced by COMM_CATEGORIES
 ];
 
 // ═══════════════════════════════════
@@ -6491,6 +6511,368 @@ const TOPIC_CLUSTERS = [
   { icon:'🔬', name:'วิทยาศาสตร์ & เทคโนโลยี', color:'#1a4a8a', lessons:[38,46,52] },
   { icon:'🏛️', name:'ปรัชญา & การเมือง',   color:'#1a2a5a', lessons:[41,44,49,55] },
 ];
+
+
+// ═══════════════════════════════════════════════════════════════
+// 🌍 COMMUNICATION LESSONS — เนื้อหาเน้นสื่อสารจริง
+// ═══════════════════════════════════════════════════════════════
+const COMM_CATEGORIES = [
+  {
+    id: 'travel', icon: '✈️', name: 'ท่องเที่ยวและการเดินทาง',
+    color: '#0891b2', bg: '#e0f7fa',
+    sub: 'สถานการณ์จริงตอนไปจีน · 13 บท',
+    lessons: [] // จะ reference ด้านล่าง
+  },
+];
+
+const COMM_LESSONS = [
+  // ═══════════════ ✈️ ท่องเที่ยว ═══════════════
+  {
+    id: 'tr01', cat: 'travel', icon: '🛫', premium: false,
+    title: 'เช็คอินที่สนามบิน',
+    situation: 'คุณมาถึงสนามบินในจีน กำลังยืนอยู่หน้าเคาน์เตอร์เช็คอิน พนักงานพูดภาษาจีนกับคุณ',
+    dialog: [
+      { speaker: 'พนักงาน', zh: '您好！请问您有几件托运行李？', py: 'Nín hǎo! Qǐngwèn nín yǒu jǐ jiàn tuōyùn xínglǐ?', th: 'สวัสดีค่ะ ขอถามว่าคุณมีกระเป๋าโหลดใต้เครื่องกี่ใบคะ?' },
+      { speaker: 'คุณ', zh: '我有一件，这是我的护照和机票。', py: 'Wǒ yǒu yī jiàn, zhè shì wǒ de hùzhào hé jīpiào.', th: 'ฉันมีหนึ่งใบค่ะ นี่คือหนังสือเดินทางและตั๋วของฉัน' },
+      { speaker: 'พนักงาน', zh: '好的，您想要靠窗还是靠走道的座位？', py: 'Hǎo de, nín xiǎng yào kào chuāng háishi kào zǒudào de zuòwèi?', th: 'ได้ค่ะ คุณต้องการที่นั่งริมหน้าต่างหรือริมทางเดินคะ?' },
+      { speaker: 'คุณ', zh: '靠窗的，谢谢。请问几号登机口？', py: 'Kào chuāng de, xièxiè. Qǐngwèn jǐ hào dēngjī kǒu?', th: 'ริมหน้าต่างค่ะ ขอบคุณ ขอถามว่าประตูขึ้นเครื่องหมายเลขอะไรคะ?' },
+      { speaker: 'พนักงาน', zh: '二十三号登机口，请提前三十分钟到达。', py: 'Èrshísān hào dēngjī kǒu, qǐng tíqián sānshí fēnzhōng dàodá.', th: 'ประตู 23 ค่ะ กรุณามาถึงก่อน 30 นาทีนะคะ' },
+      { speaker: 'คุณ', zh: '好的，谢谢您！', py: 'Hǎo de, xièxiè nín!', th: 'ได้ค่ะ ขอบคุณมากค่ะ!' },
+    ],
+    questions: [
+      { q: 'คุณมีกระเป๋าโหลดกี่ใบ?', opts: ['สองใบ','หนึ่งใบ','ไม่มีเลย','สามใบ'], ans: 'หนึ่งใบ' },
+      { q: 'คุณเลือกที่นั่งแบบไหน?', opts: ['ริมทางเดิน','ตรงกลาง','ริมหน้าต่าง','ชั้นธุรกิจ'], ans: 'ริมหน้าต่าง' },
+      { q: 'ประตูขึ้นเครื่องหมายเลขอะไร?', opts: ['13','32','23','33'], ans: '23' },
+      { q: 'ต้องมาถึงก่อนกี่นาที?', opts: ['20 นาที','45 นาที','60 นาที','30 นาที'], ans: '30 นาที' },
+      { q: 'คุณส่งเอกสารอะไรให้พนักงาน?', opts: ['บัตรประชาชน','วีซ่าอย่างเดียว','หนังสือเดินทางและตั๋ว','ใบรับรองแพทย์'], ans: 'หนังสือเดินทางและตั๋ว' },
+    ],
+    fillBlanks: [
+      { sentence: '我有___件托运行李。', blank: '___', answer: '一', opts: ['一','两','三','四'] },
+      { sentence: '请问几号___口？', blank: '___', answer: '登机', opts: ['登机','出发','到达','安全'] },
+      { sentence: '请提前三十___到达。', blank: '___', answer: '分钟', opts: ['分钟','小时','天','秒'] },
+      { sentence: '我想要___窗的座位。', blank: '___', answer: '靠', opts: ['靠','离','近','远'] },
+    ]
+  },
+  {
+    id: 'tr02', cat: 'travel', icon: '🛃', premium: false,
+    title: 'ผ่านตรวจคนเข้าเมือง',
+    situation: 'คุณถึงด่านตรวจคนเข้าเมือง เจ้าหน้าที่ขอดูเอกสารและถามวัตถุประสงค์การเดินทาง',
+    dialog: [
+      { speaker: 'เจ้าหน้าที่', zh: '护照请给我看一下。', py: 'Hùzhào qǐng gěi wǒ kàn yīxià.', th: 'ขอดูหนังสือเดินทางด้วยครับ' },
+      { speaker: 'คุณ', zh: '好的，给您。', py: 'Hǎo de, gěi nín.', th: 'ได้ค่ะ นี่เลยค่ะ' },
+      { speaker: 'เจ้าหน้าที่', zh: '您来中国的目的是什么？', py: 'Nín lái Zhōngguó de mùdì shì shénme?', th: 'วัตถุประสงค์การมาจีนของคุณคืออะไรครับ?' },
+      { speaker: 'คุณ', zh: '我是来旅游的，计划待十天。', py: 'Wǒ shì lái lǚyóu de, jìhuà dāi shí tiān.', th: 'ฉันมาท่องเที่ยวค่ะ วางแผนจะอยู่สิบวัน' },
+      { speaker: 'เจ้าหน้าที่', zh: '您住在哪里？有酒店预订吗？', py: 'Nín zhù zài nǎlǐ? Yǒu jiǔdiàn yùdìng ma?', th: 'คุณพักที่ไหนครับ มีการจองโรงแรมไหม?' },
+      { speaker: 'คุณ', zh: '住在上海希尔顿酒店，这是预订单。', py: 'Zhù zài Shànghǎi Xī ěr dùn jiǔdiàn, zhè shì yùdìng dān.', th: 'พักที่โรงแรม Hilton เซี่ยงไฮ้ค่ะ นี่คือใบจองค่ะ' },
+      { speaker: 'เจ้าหน้าที่', zh: '好，祝您在中国旅途愉快！', py: 'Hǎo, zhù nín zài Zhōngguó lǚtú yúkuài!', th: 'ดีครับ ขอให้เพลิดเพลินกับการเดินทางในจีนครับ!' },
+    ],
+    questions: [
+      { q: 'คุณมาจีนเพื่ออะไร?', opts: ['ทำงาน','เรียนหนังสือ','ท่องเที่ยว','เยี่ยมญาติ'], ans: 'ท่องเที่ยว' },
+      { q: 'คุณวางแผนจะอยู่กี่วัน?', opts: ['7 วัน','14 วัน','10 วัน','5 วัน'], ans: '10 วัน' },
+      { q: 'คุณพักที่โรงแรมอะไร?', opts: ['Marriott','Hilton','Hyatt','Sheraton'], ans: 'Hilton' },
+      { q: 'เจ้าหน้าที่ขอดูอะไรเป็นอย่างแรก?', opts: ['วีซ่า','ตั๋วเครื่องบิน','ใบจองโรงแรม','หนังสือเดินทาง'], ans: 'หนังสือเดินทาง' },
+      { q: 'คุณอยู่ในเมืองอะไร?', opts: ['ปักกิ่ง','เซี่ยงไฮ้','กว่างโจว','เฉิงตู'], ans: 'เซี่ยงไฮ้' },
+    ],
+    fillBlanks: [
+      { sentence: '我是来___的。', blank: '___', answer: '旅游', opts: ['旅游','工作','学习','探亲'] },
+      { sentence: '计划待___天。', blank: '___', answer: '十', opts: ['十','五','七','十四'] },
+      { sentence: '这是___单。', blank: '___', answer: '预订', opts: ['预订','付款','发票','收据'] },
+      { sentence: '护照请给我___一下。', blank: '___', answer: '看', opts: ['看','拿','给','检查'] },
+    ]
+  },
+  {
+    id: 'tr03', cat: 'travel', icon: '🚕', premium: false,
+    title: 'นั่งแท็กซี่/Didi จากสนามบิน',
+    situation: 'คุณออกจากสนามบินแล้ว ต้องการนั่งแท็กซี่หรือ Didi ไปยังโรงแรมในเมือง',
+    dialog: [
+      { speaker: 'คุณ', zh: '你好！我要去希尔顿酒店，怎么走？', py: 'Nǐ hǎo! Wǒ yào qù Xī ěr dùn jiǔdiàn, zěnme zǒu?', th: 'สวัสดีค่ะ ฉันต้องการไปโรงแรม Hilton ไปยังไงคะ?' },
+      { speaker: 'คนขับ', zh: '上车吧，大概四十分钟，用滴滴还是现金？', py: 'Shàng chē ba, dàgài sìshí fēnzhōng, yòng dīdī háishi xiànjīn?', th: 'ขึ้นมาเลยครับ ประมาณสี่สิบนาที จ่ายด้วย Didi หรือเงินสดครับ?' },
+      { speaker: 'คุณ', zh: '用微信支付可以吗？', py: 'Yòng Wēixìn zhīfù kěyǐ ma?', th: 'จ่ายด้วย WeChat Pay ได้ไหมคะ?' },
+      { speaker: 'คนขับ', zh: '可以，请上车，我帮您放行李。', py: 'Kěyǐ, qǐng shàng chē, wǒ bāng nín fàng xínglǐ.', th: 'ได้ครับ ขึ้นมาเลย ผมจะช่วยยกกระเป๋าให้' },
+      { speaker: 'คุณ', zh: '谢谢！请开空调，有点热。', py: 'Xièxiè! Qǐng kāi kōngtiáo, yǒudiǎn rè.', th: 'ขอบคุณค่ะ ช่วยเปิดแอร์ด้วยนะคะ ร้อนนิดหน่อย' },
+      { speaker: 'คนขับ', zh: '好的，到了我通知您。', py: 'Hǎo de, dào le wǒ tōngzhī nín.', th: 'ได้ครับ ถึงแล้วผมจะแจ้งคุณ' },
+    ],
+    questions: [
+      { q: 'การเดินทางใช้เวลาประมาณเท่าไหร่?', opts: ['20 นาที','30 นาที','50 นาที','40 นาที'], ans: '40 นาที' },
+      { q: 'คุณจะจ่ายเงินด้วยวิธีไหน?', opts: ['เงินสด','บัตรเครดิต','WeChat Pay','Alipay'], ans: 'WeChat Pay' },
+      { q: 'คุณขอให้คนขับทำอะไร?', opts: ['เปิดวิทยุ','เปิดแอร์','ขับเร็วขึ้น','เปิดหน้าต่าง'], ans: 'เปิดแอร์' },
+      { q: 'คนขับบอกว่าจะทำอะไรให้?', opts: ['จองโรงแรม','แนะนำร้านอาหาร','ยกกระเป๋าให้','เรียก Didi ให้'], ans: 'ยกกระเป๋าให้' },
+      { q: 'คุณจะไปที่ไหน?', opts: ['สถานีรถไฟ','โรงแรม Hilton','ศูนย์การค้า','มหาวิทยาลัย'], ans: 'โรงแรม Hilton' },
+    ],
+    fillBlanks: [
+      { sentence: '大概___分钟。', blank: '___', answer: '四十', opts: ['四十','三十','二十','五十'] },
+      { sentence: '用微信___可以吗？', blank: '___', answer: '支付', opts: ['支付','付款','转账','消费'] },
+      { sentence: '请开___，有点热。', blank: '___', answer: '空调', opts: ['空调','窗户','收音机','灯'] },
+      { sentence: '到了我___您。', blank: '___', answer: '通知', opts: ['通知','告诉','叫醒','提醒'] },
+    ]
+  },
+  {
+    id: 'tr04', cat: 'travel', icon: '🏨', premium: false,
+    title: 'เช็คอินเข้าโรงแรม',
+    situation: 'คุณมาถึงโรงแรมแล้ว กำลังทำการเช็คอินที่ฟร้อนต์เดสก์',
+    dialog: [
+      { speaker: 'พนักงาน', zh: '欢迎光临！请问您有预订吗？', py: 'Huānyíng guānglín! Qǐngwèn nín yǒu yùdìng ma?', th: 'ยินดีต้อนรับค่ะ ขอถามว่าคุณมีการจองไว้ไหมคะ?' },
+      { speaker: 'คุณ', zh: '有，我叫阿华，预订了三晚的标准间。', py: 'Yǒu, wǒ jiào Ā Huá, yùdìng le sān wǎn de biāozhǔn jiān.', th: 'มีค่ะ ฉันชื่ออ้ายหวา จองห้องมาตรฐานสามคืนค่ะ' },
+      { speaker: 'พนักงาน', zh: '好的，请给我看一下护照。退房时间是明天中午十二点。', py: 'Hǎo de, qǐng gěi wǒ kàn yīxià hùzhào. Tuìfáng shíjiān shì míngtiān zhōngwǔ shí èr diǎn.', th: 'ได้ค่ะ กรุณาให้ดูหนังสือเดินทางหน่อยนะคะ เวลาเช็คเอาท์คือเที่ยงวันพรุ่งนี้ค่ะ' },
+      { speaker: 'คุณ', zh: '好的。请问房间有WiFi吗？密码是多少？', py: 'Hǎo de. Qǐngwèn fángjiān yǒu WiFi ma? Mìmǎ shì duōshǎo?', th: 'ได้ค่ะ ขอถามว่าในห้องมี WiFi ไหมคะ รหัสผ่านคืออะไรคะ?' },
+      { speaker: 'พนักงาน', zh: 'WiFi密码在这张卡上，房间是八零八。', py: 'WiFi mìmǎ zài zhè zhāng kǎ shàng, fángjiān shì bā líng bā.', th: 'รหัส WiFi อยู่บนการ์ดใบนี้ค่ะ ห้องคือ 808 ค่ะ' },
+      { speaker: 'คุณ', zh: '谢谢！早餐几点开始？', py: 'Xièxiè! Zǎocān jǐ diǎn kāishǐ?', th: 'ขอบคุณค่ะ อาหารเช้าเริ่มกี่โมงคะ?' },
+      { speaker: 'พนักงาน', zh: '早上七点到十点，在一楼餐厅。', py: 'Zǎoshang qī diǎn dào shí diǎn, zài yī lóu cāntīng.', th: 'ตี 7 ถึง 10 โมงเช้าค่ะ ที่ร้านอาหารชั้น 1 ค่ะ' },
+    ],
+    questions: [
+      { q: 'คุณจองห้องพักกี่คืน?', opts: ['สองคืน','สี่คืน','หนึ่งคืน','สามคืน'], ans: 'สามคืน' },
+      { q: 'เวลาเช็คเอาท์คือเมื่อไหร่?', opts: ['10 โมงเช้า','บ่าย 2','เที่ยงวัน','บ่าย 3'], ans: 'เที่ยงวัน' },
+      { q: 'ห้องพักหมายเลขอะไร?', opts: ['808','880','008','800'], ans: '808' },
+      { q: 'อาหารเช้าอยู่ที่ชั้นไหน?', opts: ['ชั้น 2','ชั้น B1','ชั้น 3','ชั้น 1'], ans: 'ชั้น 1' },
+      { q: 'อาหารเช้าเสิร์ฟถึงกี่โมง?', opts: ['9 โมง','11 โมง','10 โมง','8 โมง'], ans: '10 โมง' },
+    ],
+    fillBlanks: [
+      { sentence: '预订了三晚的___间。', blank: '___', answer: '标准', opts: ['标准','豪华','双人','单人'] },
+      { sentence: '___时间是中午十二点。', blank: '___', answer: '退房', opts: ['退房','入住','到达','离开'] },
+      { sentence: '早餐几点___？', blank: '___', answer: '开始', opts: ['开始','结束','供应','准备'] },
+      { sentence: '在一楼___。', blank: '___', answer: '餐厅', opts: ['餐厅','大堂','电梯','游泳池'] },
+    ]
+  },
+  {
+    id: 'tr05', cat: 'travel', icon: '🗺️', premium: false,
+    title: 'ถามทางในเมือง',
+    situation: 'คุณหลงทางในเมืองจีน กำลังถามคนในพื้นที่ว่าต้องไปยังไงถึงจะถึงจุดหมาย',
+    dialog: [
+      { speaker: 'คุณ', zh: '你好！请问故宫怎么走？', py: 'Nǐ hǎo! Qǐngwèn Gùgōng zěnme zǒu?', th: 'สวัสดีค่ะ ขอถามว่าพระราชวังต้องห้ามไปทางไหนคะ?' },
+      { speaker: 'คนในพื้นที่', zh: '你可以坐地铁，坐一号线到天安门东站。', py: 'Nǐ kěyǐ zuò dìtiě, zuò yī hào xiàn dào Tiān ān mén dōng zhàn.', th: 'คุณขึ้นรถไฟฟ้าได้ครับ นั่งสาย 1 ไปลงที่สถานีเทียนอันเหมินตะวันออก' },
+      { speaker: 'คุณ', zh: '地铁站在哪里？离这里远吗？', py: 'Dìtiě zhàn zài nǎlǐ? Lí zhèlǐ yuǎn ma?', th: 'สถานีรถไฟฟ้าอยู่ที่ไหนคะ ไกลจากที่นี่ไหมคะ?' },
+      { speaker: 'คนในพื้นที่', zh: '不远，往前走五分钟，看到红绿灯左转就到了。', py: 'Bù yuǎn, wǎng qián zǒu wǔ fēnzhōng, kàn dào hónglǜdēng zuǒ zhuǎn jiù dào le.', th: 'ไม่ไกลครับ เดินตรงไปห้านาที พอเห็นสัญญาณไฟจราจรเลี้ยวซ้ายก็ถึงแล้ว' },
+      { speaker: 'คุณ', zh: '好的，谢谢！我可以买一日票吗？', py: 'Hǎo de, xièxiè! Wǒ kěyǐ mǎi yī rì piào ma?', th: 'ได้ค่ะ ขอบคุณค่ะ ซื้อตั๋วรายวันได้ไหมคะ?' },
+      { speaker: 'คนในพื้นที่', zh: '可以，在自动售票机买就行了。', py: 'Kěyǐ, zài zìdòng shòupiào jī mǎi jiù xíng le.', th: 'ได้ครับ ซื้อที่ตู้จำหน่ายตั๋วอัตโนมัติได้เลยครับ' },
+    ],
+    questions: [
+      { q: 'คุณถามว่าจะไปที่ไหน?', opts: ['วัดเส้าหลิน','กำแพงเมืองจีน','พระราชวังต้องห้าม','หอคอยเซี่ยงไฮ้'], ans: 'พระราชวังต้องห้าม' },
+      { q: 'ต้องนั่งรถไฟฟ้าสายอะไร?', opts: ['สาย 2','สาย 4','สาย 3','สาย 1'], ans: 'สาย 1' },
+      { q: 'สถานีรถไฟฟ้าอยู่ไกลแค่ไหน?', opts: ['10 นาที','2 นาที','15 นาที','5 นาที'], ans: '5 นาที' },
+      { q: 'ต้องเลี้ยวไปทางไหน?', opts: ['ขวา','ตรงไป','ซ้าย','กลับหลัง'], ans: 'ซ้าย' },
+      { q: 'ซื้อตั๋วได้ที่ไหน?', opts: ['ออนไลน์','ที่ช่องจำหน่าย','ตู้อัตโนมัติ','แอปมือถือ'], ans: 'ตู้อัตโนมัติ' },
+    ],
+    fillBlanks: [
+      { sentence: '往前走___分钟。', blank: '___', answer: '五', opts: ['五','三','十','二'] },
+      { sentence: '看到___灯左转。', blank: '___', answer: '红绿', opts: ['红绿','交通','指示','警告'] },
+      { sentence: '坐___到天安门东站。', blank: '___', answer: '一号线', opts: ['一号线','二号线','三号线','四号线'] },
+      { sentence: '在___售票机买就行了。', blank: '___', answer: '自动', opts: ['自动','手动','电子','网络'] },
+    ]
+  },
+  {
+    id: 'tr06', cat: 'travel', icon: '🚄', premium: true,
+    title: 'นั่งรถไฟความเร็วสูง',
+    situation: 'คุณอยู่ที่สถานีรถไฟความเร็วสูง กำลังซื้อตั๋วและถามข้อมูลการเดินทาง',
+    dialog: [
+      { speaker: 'คุณ', zh: '我要买一张去上海的高铁票，最近一班是什么时候？', py: 'Wǒ yào mǎi yī zhāng qù Shànghǎi de gāotiě piào, zuìjìn yī bān shì shénme shíhòu?', th: 'ฉันต้องการซื้อตั๋วรถไฟความเร็วสูงไปเซี่ยงไฮ้หนึ่งใบ เที่ยวที่ใกล้ที่สุดเมื่อไหร่คะ?' },
+      { speaker: 'พนักงาน', zh: '下一班是两点半，二等座还是一等座？', py: 'Xià yī bān shì liǎng diǎn bàn, èr děng zuò háishi yī děng zuò?', th: 'เที่ยวถัดไปคือบ่ายสองครึ่งครับ นั่งชั้นสองหรือชั้นหนึ่งครับ?' },
+      { speaker: 'คุณ', zh: '二等座多少钱？需要多长时间？', py: 'Èr děng zuò duōshǎo qián? Xūyào duō cháng shíjiān?', th: 'ชั้นสองราคาเท่าไหร่คะ ใช้เวลานานแค่ไหนคะ?' },
+      { speaker: 'พนักงาน', zh: '二百五十元，大约四个小时。', py: 'Èr bǎi wǔshí yuán, dàyuē sì gè xiǎoshí.', th: '250 หยวนครับ ประมาณสี่ชั่วโมงครับ' },
+      { speaker: 'คุณ', zh: '好，我要一张二等座。可以刷信用卡吗？', py: 'Hǎo, wǒ yào yī zhāng èr děng zuò. Kěyǐ shuā xìnyòngkǎ ma?', th: 'ได้ค่ะ ขอหนึ่งใบชั้นสองค่ะ รูดบัตรเครดิตได้ไหมคะ?' },
+      { speaker: 'พนักงาน', zh: '可以，请在这里刷卡，车票在这里。', py: 'Kěyǐ, qǐng zài zhèlǐ shuā kǎ, chēpiào zài zhèlǐ.', th: 'ได้ครับ รูดบัตรที่นี่เลยครับ ตั๋วรถไฟอยู่นี่ครับ' },
+    ],
+    questions: [
+      { q: 'คุณต้องการไปเมืองอะไร?', opts: ['ปักกิ่ง','กว่างโจว','เฉิงตู','เซี่ยงไฮ้'], ans: 'เซี่ยงไฮ้' },
+      { q: 'รถออกกี่โมง?', opts: ['บ่ายสอง','บ่ายสามครึ่ง','บ่ายสองครึ่ง','บ่ายสี่'], ans: 'บ่ายสองครึ่ง' },
+      { q: 'ราคาตั๋วชั้นสองเท่าไหร่?', opts: ['150 หยวน','300 หยวน','200 หยวน','250 หยวน'], ans: '250 หยวน' },
+      { q: 'ใช้เวลาเดินทางนานแค่ไหน?', opts: ['2 ชั่วโมง','6 ชั่วโมง','3 ชั่วโมง','4 ชั่วโมง'], ans: '4 ชั่วโมง' },
+      { q: 'คุณเลือกนั่งชั้นอะไร?', opts: ['ชั้นธุรกิจ','ชั้นพิเศษ','ชั้นหนึ่ง','ชั้นสอง'], ans: 'ชั้นสอง' },
+    ],
+    fillBlanks: [
+      { sentence: '下一班是两点___。', blank: '___', answer: '半', opts: ['半','整','过','差'] },
+      { sentence: '大约___个小时。', blank: '___', answer: '四', opts: ['四','三','五','六'] },
+      { sentence: '___座多少钱？', blank: '___', answer: '二等', opts: ['二等','一等','商务','特等'] },
+      { sentence: '可以___信用卡吗？', blank: '___', answer: '刷', opts: ['刷','用','付','扫'] },
+    ]
+  },
+  {
+    id: 'tr07', cat: 'travel', icon: '🍜', premium: true,
+    title: 'สั่งอาหารในร้าน',
+    situation: 'คุณเข้าร้านอาหารจีน เมนูเป็นภาษาจีนทั้งหมด กำลังสั่งอาหารกับพนักงาน',
+    dialog: [
+      { speaker: 'พนักงาน', zh: '欢迎！几位？这是菜单。', py: 'Huānyíng! Jǐ wèi? Zhè shì càidān.', th: 'ยินดีต้อนรับค่ะ กี่ท่านคะ? นี่คือเมนูค่ะ' },
+      { speaker: 'คุณ', zh: '两位，谢谢。请问有什么推荐的菜？', py: 'Liǎng wèi, xièxiè. Qǐngwèn yǒu shénme tuījiàn de cài?', th: 'สองท่านค่ะ ขอบคุณ ขอถามว่ามีเมนูแนะนำอะไรบ้างคะ?' },
+      { speaker: 'พนักงาน', zh: '我们的招牌菜是北京烤鸭和麻婆豆腐。', py: 'Wǒmen de zhāopáicài shì Běijīng kǎoyā hé mápó dòufu.', th: 'เมนูซิกเนเจอร์ของเราคือเป็ดปักกิ่งและเต้าหู้มาโปค่ะ' },
+      { speaker: 'คุณ', zh: '好，我要一份北京烤鸭，不要太辣。还有一碗米饭。', py: 'Hǎo, wǒ yào yī fèn Běijīng kǎoyā, bú yào tài là. Hái yǒu yī wǎn mǐfàn.', th: 'โอเคค่ะ ขอเป็ดปักกิ่งหนึ่งที่ ไม่เอาเผ็ดมาก และข้าวสวยหนึ่งชามด้วยค่ะ' },
+      { speaker: 'พนักงาน', zh: '好的，喝什么？', py: 'Hǎo de, hē shénme?', th: 'ได้ค่ะ ดื่มอะไรคะ?' },
+      { speaker: 'คุณ', zh: '一杯茉莉花茶，谢谢。还有，有没有素食菜单？', py: 'Yī bēi mòlìhuā chá, xièxiè. Hái yǒu, yǒu méiyǒu sùshí càidān?', th: 'ชาดอกมะลิหนึ่งแก้วค่ะ ขอบคุณ แล้วก็ มีเมนูมังสวิรัติไหมคะ?' },
+      { speaker: 'พนักงาน', zh: '有，我去拿给您。', py: 'Yǒu, wǒ qù ná gěi nín.', th: 'มีค่ะ หนูไปเอาให้นะคะ' },
+    ],
+    questions: [
+      { q: 'มากี่คน?', opts: ['สามคน','หนึ่งคน','สี่คน','สองคน'], ans: 'สองคน' },
+      { q: 'เมนูซิกเนเจอร์คืออะไร?', opts: ['ข้าวผัดและซุปเต้าหู้','ก๋วยเตี๋ยวและไก่','เป็ดปักกิ่งและเต้าหู้มาโป','หมูสามชั้นและผัดผัก'], ans: 'เป็ดปักกิ่งและเต้าหู้มาโป' },
+      { q: 'คุณสั่งดื่มอะไร?', opts: ['ชาเขียว','กาแฟ','น้ำเปล่า','ชาดอกมะลิ'], ans: 'ชาดอกมะลิ' },
+      { q: 'คุณบอกว่าอยากได้อาหารแบบไหน?', opts: ['เผ็ดมาก','ไม่เอาเผ็ดมาก','หวานมาก','ไม่ใส่น้ำตาล'], ans: 'ไม่เอาเผ็ดมาก' },
+      { q: 'คุณขอถามเรื่องอะไรเพิ่มเติม?', opts: ['ราคา','เวลาปิด','ที่จอดรถ','เมนูมังสวิรัติ'], ans: 'เมนูมังสวิรัติ' },
+    ],
+    fillBlanks: [
+      { sentence: '我要一份北京___。', blank: '___', answer: '烤鸭', opts: ['烤鸭','炒饭','火锅','面条'] },
+      { sentence: '不要太___。', blank: '___', answer: '辣', opts: ['辣','甜','咸','油'] },
+      { sentence: '一___茉莉花茶。', blank: '___', answer: '杯', opts: ['杯','碗','瓶','盘'] },
+      { sentence: '有没有___菜单？', blank: '___', answer: '素食', opts: ['素食','儿童','英文','甜点'] },
+    ]
+  },
+  {
+    id: 'tr08', cat: 'travel', icon: '🛍️', premium: true,
+    title: 'ต่อรองราคาในตลาด',
+    situation: 'คุณอยู่ในตลาดของที่ระลึก เจอของที่อยากได้และกำลังต่อรองราคากับแม่ค้า',
+    dialog: [
+      { speaker: 'คุณ', zh: '你好！这个包包多少钱？', py: 'Nǐ hǎo! Zhège bāobāo duōshǎo qián?', th: 'สวัสดีค่ะ กระเป๋าใบนี้ราคาเท่าไหร่คะ?' },
+      { speaker: 'แม่ค้า', zh: '三百八，质量很好的！', py: 'Sān bǎi bā, zhìliàng hěn hǎo de!', th: '380 หยวน คุณภาพดีมากเลยค่ะ!' },
+      { speaker: 'คุณ', zh: '太贵了！能便宜一点吗？两百块可以吗？', py: 'Tài guì le! Néng piányí yīdiǎn ma? Liǎng bǎi kuài kěyǐ ma?', th: 'แพงเกินไปค่ะ ลดได้ไหมคะ สองร้อยหยวนได้ไหมคะ?' },
+      { speaker: 'แม่ค้า', zh: '太低了，两百八，我已经最低了。', py: 'Tài dī le, liǎng bǎi bā, wǒ yǐjīng zuìdī le.', th: 'ต่ำเกินไปค่ะ 280 หยวน นี่ราคาต่ำสุดแล้วค่ะ' },
+      { speaker: 'คุณ', zh: '我买两个，两百五，行吗？', py: 'Wǒ mǎi liǎng gè, liǎng bǎi wǔ, xíng ma?', th: 'ฉันซื้อสองใบ 250 หยวนได้ไหมคะ?' },
+      { speaker: 'แม่ค้า', zh: '好吧，成交！你真会买东西！', py: 'Hǎo ba, chéngjião! Nǐ zhēn huì mǎi dōngxi!', th: 'โอเคค่ะ ตกลงเลย! คุณต่อราคาเก่งมากเลยนะคะ!' },
+    ],
+    questions: [
+      { q: 'ราคาเริ่มต้นของกระเป๋าเท่าไหร่?', opts: ['280','350','300','380'], ans: '380' },
+      { q: 'คุณเสนอราคาแรกเท่าไหร่?', opts: ['150','250','200','220'], ans: '200' },
+      { q: 'ราคาต่ำสุดของแม่ค้าคือเท่าไหร่?', opts: ['300','260','250','280'], ans: '280' },
+      { q: 'ในที่สุดตกลงราคาเท่าไหร่?', opts: ['300 สองใบ','280 ใบเดียว','250 สองใบ','200 สองใบ'], ans: '250 สองใบ' },
+      { q: 'แม่ค้าบอกว่าคุณเป็นอย่างไร?', opts: ['น่ารักมาก','พูดจีนเก่ง','ต่อราคาเก่ง','ใจดีมาก'], ans: 'ต่อราคาเก่ง' },
+    ],
+    fillBlanks: [
+      { sentence: '太___了！', blank: '___', answer: '贵', opts: ['贵','便宜','好','差'] },
+      { sentence: '能___一点吗？', blank: '___', answer: '便宜', opts: ['便宜','贵','多','少'] },
+      { sentence: '我买___个。', blank: '___', answer: '两', opts: ['两','一','三','四'] },
+      { sentence: '好吧，___！', blank: '___', answer: '成交', opts: ['成交','再见','谢谢','不行'] },
+    ]
+  },
+  {
+    id: 'tr09', cat: 'travel', icon: '🆘', premium: true,
+    title: 'ขอความช่วยเหลือฉุกเฉิน',
+    situation: 'คุณรู้สึกไม่สบายหรือสูญหายสิ่งของ กำลังขอความช่วยเหลือจากคนรอบข้าง',
+    dialog: [
+      { speaker: 'คุณ', zh: '不好意思！我需要帮助，我的包被偷了！', py: 'Bù hǎoyìsi! Wǒ xūyào bāngzhù, wǒ de bāo bèi tōu le!', th: 'ขอโทษค่ะ! ฉันต้องการความช่วยเหลือ กระเป๋าฉันถูกขโมยค่ะ!' },
+      { speaker: 'คนช่วยเหลือ', zh: '什么？在哪里发生的？', py: 'Shénme? Zài nǎlǐ fāshēng de?', th: 'อะไรนะครับ? เกิดขึ้นที่ไหนครับ?' },
+      { speaker: 'คุณ', zh: '刚才在地铁上，里面有护照和钱包。', py: 'Gāngcái zài dìtiě shàng, lǐmiàn yǒu hùzhào hé qiánbāo.', th: 'เมื่อกี้บนรถไฟใต้ดินค่ะ ข้างในมีหนังสือเดินทางและกระเป๋าเงินค่ะ' },
+      { speaker: 'คนช่วยเหลือ', zh: '我们要去报警，请跟我来。你需要翻译吗？', py: 'Wǒmen yào qù bàojǐng, qǐng gēn wǒ lái. Nǐ xūyào fānyì ma?', th: 'เราต้องไปแจ้งความครับ กรุณาตามผมมา คุณต้องการล่ามไหมครับ?' },
+      { speaker: 'คุณ', zh: '是的，我听不懂中文，需要翻译，也需要联系泰国大使馆。', py: 'Shì de, wǒ tīng bù dǒng Zhōngwén, xūyào fānyì, yě xūyào liánxì Tàiguó dàshǐguǎn.', th: 'ใช่ค่ะ ฉันฟังภาษาจีนไม่รู้เรื่อง ต้องการล่าม และต้องติดต่อสถานทูตไทยด้วยค่ะ' },
+      { speaker: 'คนช่วยเหลือ', zh: '好的，我帮你打电话，别担心。', py: 'Hǎo de, wǒ bāng nǐ dǎ diànhuà, bié dānxīn.', th: 'ได้ครับ ผมช่วยโทรให้ ไม่ต้องกังวลนะครับ' },
+    ],
+    questions: [
+      { q: 'เกิดอะไรขึ้นกับคุณ?', opts: ['หลงทาง','กระเป๋าถูกขโมย','รู้สึกไม่สบาย','ทำพาสปอร์ตหาย'], ans: 'กระเป๋าถูกขโมย' },
+      { q: 'เกิดเหตุที่ไหน?', opts: ['ในร้านอาหาร','บนรถไฟใต้ดิน','ในตลาด','ที่โรงแรม'], ans: 'บนรถไฟใต้ดิน' },
+      { q: 'ของที่หายในกระเป๋ามีอะไรบ้าง?', opts: ['โทรศัพท์และกล้อง','เงินสดอย่างเดียว','หนังสือเดินทางและกระเป๋าเงิน','บัตรเครดิต'], ans: 'หนังสือเดินทางและกระเป๋าเงิน' },
+      { q: 'คุณต้องการติดต่อที่ไหน?', opts: ['สถานทูตจีน','ตำรวจท่องเที่ยว','สถานทูตไทย','โรงพยาบาล'], ans: 'สถานทูตไทย' },
+      { q: 'คนช่วยเหลือบอกว่าจะทำอะไร?', opts: ['พาไปโรงพยาบาล','โทรศัพท์ให้','พาไปสนามบิน','หาล่ามให้'], ans: 'โทรศัพท์ให้' },
+    ],
+    fillBlanks: [
+      { sentence: '我的包被___了！', blank: '___', answer: '偷', opts: ['偷','拿','丢','忘'] },
+      { sentence: '我们要去___警。', blank: '___', answer: '报', opts: ['报','打','叫','找'] },
+      { sentence: '我听不___中文。', blank: '___', answer: '懂', opts: ['懂','到','见','清楚'] },
+      { sentence: '别___心。', blank: '___', answer: '担', opts: ['担','操','烦','想'] },
+    ]
+  },
+  {
+    id: 'tr10', cat: 'travel', icon: '📸', premium: true,
+    title: 'ขอให้ช่วยถ่ายรูป',
+    situation: 'คุณอยู่หน้าสถานที่ท่องเที่ยวสวยๆ อยากถ่ายรูปและขอให้คนอื่นช่วยถ่ายให้',
+    dialog: [
+      { speaker: 'คุณ', zh: '你好！能帮我们拍张照片吗？', py: 'Nǐ hǎo! Néng bāng wǒmen pāi zhāng zhàopiàn ma?', th: 'สวัสดีค่ะ ช่วยถ่ายรูปให้พวกเราได้ไหมคะ?' },
+      { speaker: 'คนอื่น', zh: '当然可以！怎么用这个手机？', py: 'Dāngrán kěyǐ! Zěnme yòng zhège shǒujī?', th: 'ได้เลยครับ ใช้โทรศัพท์นี้ยังไงครับ?' },
+      { speaker: 'คุณ', zh: '按这个按钮就可以了，要拍几张？', py: 'Àn zhège ànniǔ jiù kěyǐ le, yào pāi jǐ zhāng?', th: 'กดปุ่มนี้ได้เลยค่ะ จะถ่ายกี่รูปดีคะ?' },
+      { speaker: 'คนอื่น', zh: '我帮你们拍三张，你们站到那个石头旁边。', py: 'Wǒ bāng nǐmen pāi sān zhāng, nǐmen zhàn dào nàgè shítou pángbiān.', th: 'ผมถ่ายให้สามรูปเลยครับ ไปยืนข้างหินก้อนนั้นเลยครับ' },
+      { speaker: 'คุณ', zh: '好！一、二、三，茄子！', py: 'Hǎo! Yī, èr, sān, qiézi!', th: 'โอเคค่ะ หนึ่ง สอง สาม ยิ้มค่ะ!' },
+      { speaker: 'คนอื่น', zh: '拍好了，照片很好看！来，我发给你的微信。', py: 'Pāi hǎo le, zhàopiàn hěn hǎokàn! Lái, wǒ fā gěi nǐ de wēixìn.', th: 'ถ่ายเสร็จแล้วครับ รูปสวยมากเลยครับ มาเลย ผมส่งให้ทาง WeChat เลย' },
+    ],
+    questions: [
+      { q: 'คุณขอให้คนอื่นทำอะไร?', opts: ['แนะนำร้านอาหาร','ถ่ายรูปให้','ช่วยหิ้วของ','บอกทาง'], ans: 'ถ่ายรูปให้' },
+      { q: 'จะถ่ายกี่รูป?', opts: ['สองรูป','ห้ารูป','หนึ่งรูป','สามรูป'], ans: 'สามรูป' },
+      { q: 'ต้องยืนที่ไหน?', opts: ['ข้างต้นไม้','หน้าวัด','ข้างหิน','บนสะพาน'], ans: 'ข้างหิน' },
+      { q: 'คำว่า 茄子 ใช้ตอนไหน?', opts: ['ก่อนถ่าย','หลังถ่าย','ตอนถ่าย (ยิ้มสิ)','เวลาขอบคุณ'], ans: 'ตอนถ่าย (ยิ้มสิ)' },
+      { q: 'คนถ่ายรูปจะส่งรูปยังไง?', opts: ['อีเมล','LINE','WeChat','Bluetooth'], ans: 'WeChat' },
+    ],
+    fillBlanks: [
+      { sentence: '能帮我们___张照片吗？', blank: '___', answer: '拍', opts: ['拍','照','摄','录'] },
+      { sentence: '___这个按钮就可以了。', blank: '___', answer: '按', opts: ['按','推','拉','点'] },
+      { sentence: '一、二、三，___！', blank: '___', answer: '茄子', opts: ['茄子','苹果','香蕉','谢谢'] },
+      { sentence: '照片很好___！', blank: '___', answer: '看', opts: ['看','拍','做','说'] },
+    ]
+  },
+  {
+    id: 'tr11', cat: 'travel', icon: '🎟️', premium: true,
+    title: 'จองตั๋วสถานที่ท่องเที่ยว',
+    situation: 'คุณต้องการเข้าชมสถานที่ท่องเที่ยว กำลังซื้อตั๋วและถามข้อมูลที่จำเป็น',
+    dialog: [
+      { speaker: 'คุณ', zh: '请问参观长城需要买票吗？', py: 'Qǐngwèn cānguān Chángchéng xūyào mǎi piào ma?', th: 'ขอถามว่าเข้าชมกำแพงเมืองจีนต้องซื้อตั๋วไหมคะ?' },
+      { speaker: 'พนักงาน', zh: '需要，成人票八十元，学生票四十元。', py: 'Xūyào, chéngrén piào bāshí yuán, xuéshēng piào sìshí yuán.', th: 'ต้องซื้อค่ะ ตั๋วผู้ใหญ่ 80 หยวน ตั๋วนักเรียน 40 หยวนค่ะ' },
+      { speaker: 'คุณ', zh: '我要两张成人票，可以用手机支付吗？', py: 'Wǒ yào liǎng zhāng chéngrén piào, kěyǐ yòng shǒujī zhīfù ma?', th: 'ขอตั๋วผู้ใหญ่สองใบค่ะ จ่ายด้วยโทรศัพท์ได้ไหมคะ?' },
+      { speaker: 'พนักงาน', zh: '可以，用微信或支付宝都行，几点开放的就是早上八点。', py: 'Kěyǐ, yòng Wēixìn huò Zhīfùbǎo dōu xíng, jǐ diǎn kāifàng de jiùshì zǎoshang bā diǎn.', th: 'ได้ค่ะ ใช้ WeChat หรือ Alipay ได้เลยค่ะ เปิดตี 8 เช้าค่ะ' },
+      { speaker: 'คุณ', zh: '谢谢，请问最后入场是几点？', py: 'Xièxiè, qǐngwèn zuìhòu rùchǎng shì jǐ diǎn?', th: 'ขอบคุณค่ะ ขอถามว่าเข้าได้ถึงกี่โมงสุดท้ายคะ?' },
+      { speaker: 'พนักงาน', zh: '下午四点半，五点关门，请早点进去。', py: 'Xiàwǔ sì diǎn bàn, wǔ diǎn guānmén, qǐng zǎodiǎn jìnqù.', th: 'บ่ายสี่ครึ่งค่ะ ปิดห้าโมงเย็น กรุณาเข้าไปแต่เนิ่นๆ นะคะ' },
+    ],
+    questions: [
+      { q: 'ตั๋วผู้ใหญ่ราคาเท่าไหร่?', opts: ['60 หยวน','100 หยวน','40 หยวน','80 หยวน'], ans: '80 หยวน' },
+      { q: 'คุณซื้อตั๋วกี่ใบ?', opts: ['สามใบ','หนึ่งใบ','สองใบ','สี่ใบ'], ans: 'สองใบ' },
+      { q: 'เปิดให้เข้าชมกี่โมง?', opts: ['ตี 7','ตี 9','ตี 6','ตี 8'], ans: 'ตี 8' },
+      { q: 'เข้าได้ถึงกี่โมงสุดท้าย?', opts: ['บ่าย 3','บ่าย 5','บ่าย 4 ครึ่ง','บ่าย 4'], ans: 'บ่าย 4 ครึ่ง' },
+      { q: 'รับชำระเงินผ่านอะไรได้บ้าง?', opts: ['เงินสดอย่างเดียว','บัตรเครดิต','WeChat หรือ Alipay','ทุกวิธี'], ans: 'WeChat หรือ Alipay' },
+    ],
+    fillBlanks: [
+      { sentence: '成人票___十元。', blank: '___', answer: '八', opts: ['八','六','九','七'] },
+      { sentence: '我要两张___票。', blank: '___', answer: '成人', opts: ['成人','学生','老人','儿童'] },
+      { sentence: '___点关门。', blank: '___', answer: '五', opts: ['五','六','四','七'] },
+      { sentence: '请早点___去。', blank: '___', answer: '进', opts: ['进','出','走','来'] },
+    ]
+  },
+  {
+    id: 'tr12', cat: 'travel', icon: '💱', premium: true,
+    title: 'แลกเงิน/จ่ายเงิน',
+    situation: 'คุณต้องการแลกเงินบาทเป็นหยวน และถามเรื่องการจ่ายเงินในจีน',
+    dialog: [
+      { speaker: 'คุณ', zh: '你好，我想换钱，泰铢换人民币。', py: 'Nǐ hǎo, wǒ xiǎng huàn qián, Tàibì huàn Rénmínbì.', th: 'สวัสดีค่ะ ฉันต้องการแลกเงิน เงินบาทเป็นหยวนค่ะ' },
+      { speaker: 'พนักงาน', zh: '好的，今天汇率是一元人民币等于五点一泰铢。', py: 'Hǎo de, jīntiān huìlǜ shì yī yuán Rénmínbì děngyú wǔ diǎn yī Tàibì.', th: 'ได้ค่ะ อัตราแลกเปลี่ยนวันนี้คือ 1 หยวน เท่ากับ 5.1 บาทค่ะ' },
+      { speaker: 'คุณ', zh: '我换两千泰铢，大概能换多少人民币？', py: 'Wǒ huàn liǎng qiān Tàibì, dàgài néng huàn duōshǎo Rénmínbì?', th: 'ฉันแลก 2,000 บาทค่ะ ได้ประมาณกี่หยวนคะ?' },
+      { speaker: 'พนักงาน', zh: '大概三百九十元。请问还需要什么？', py: 'Dàgài sān bǎi jiǔshí yuán. Qǐngwèn hái xūyào shénme?', th: 'ประมาณ 390 หยวนค่ะ ขอถามว่าต้องการอะไรเพิ่มเติมไหมคะ?' },
+      { speaker: 'คุณ', zh: '在中国用现金还是手机支付更方便？', py: 'Zài Zhōngguó yòng xiànjīn háishi shǒujī zhīfù gèng fāngbiàn?', th: 'ในจีนใช้เงินสดหรือจ่ายผ่านโทรศัพท์สะดวกกว่ากันคะ?' },
+      { speaker: 'พนักงาน', zh: '手机支付更方便，微信和支付宝到处都可以用。', py: 'Shǒujī zhīfù gèng fāngbiàn, Wēixìn hé Zhīfùbǎo dàochù dōu kěyǐ yòng.', th: 'จ่ายผ่านโทรศัพท์สะดวกกว่าค่ะ WeChat และ Alipay ใช้ได้ทุกที่เลยค่ะ' },
+    ],
+    questions: [
+      { q: 'อัตราแลกเปลี่ยนวันนี้คือเท่าไหร่?', opts: ['1 หยวน = 4.5 บาท','1 หยวน = 5.5 บาท','1 หยวน = 5 บาท','1 หยวน = 5.1 บาท'], ans: '1 หยวน = 5.1 บาท' },
+      { q: 'คุณแลกเงินเท่าไหร่?', opts: ['1,000 บาท','5,000 บาท','3,000 บาท','2,000 บาท'], ans: '2,000 บาท' },
+      { q: 'ได้หยวนมาประมาณเท่าไหร่?', opts: ['300 หยวน','450 หยวน','350 หยวน','390 หยวน'], ans: '390 หยวน' },
+      { q: 'วิธีจ่ายเงินแบบไหนสะดวกกว่าในจีน?', opts: ['เงินสด','บัตรเครดิต','โทรศัพท์มือถือ','เช็ค'], ans: 'โทรศัพท์มือถือ' },
+      { q: 'แอปชำระเงินที่ใช้ได้ทั่วไปในจีนคือ?', opts: ['PromptPay และ TrueMoney','PayPal และ Stripe','WeChat และ Alipay','Apple Pay และ Google Pay'], ans: 'WeChat และ Alipay' },
+    ],
+    fillBlanks: [
+      { sentence: '我想___钱。', blank: '___', answer: '换', opts: ['换','花','存','取'] },
+      { sentence: '今天___率是多少？', blank: '___', answer: '汇', opts: ['汇','换','利','税'] },
+      { sentence: '手机支付更___。', blank: '___', answer: '方便', opts: ['方便','安全','便宜','快'] },
+      { sentence: '到处都可以___。', blank: '___', answer: '用', opts: ['用','买','找','换'] },
+    ]
+  },
+  {
+    id: 'tr13', cat: 'travel', icon: '🤝', premium: true,
+    title: 'บังเอิญเจอเพื่อนใหม่คนจีน',
+    situation: 'คุณกำลังท่องเที่ยวอยู่แล้วบังเอิญเจอคนจีนน่ารักคนหนึ่ง เริ่มคุยทำความรู้จักกัน แลกคอนแทค WeChat',
+    dialog: [
+      { speaker: 'คนจีน', zh: '你好！你是泰国人吗？你的中文说得很好！', py: 'Nǐ hǎo! Nǐ shì Tàiguó rén ma? Nǐ de Zhōngwén shuō de hěn hǎo!', th: 'สวัสดีครับ คุณเป็นคนไทยเหรอ? พูดภาษาจีนเก่งมากเลยครับ!' },
+      { speaker: 'คุณ', zh: '谢谢！我是泰国人，正在学中文。你叫什么名字？', py: 'Xièxiè! Wǒ shì Tàiguó rén, zhèngzài xué Zhōngwén. Nǐ jiào shénme míngzi?', th: 'ขอบคุณค่ะ ฉันเป็นคนไทย กำลังเรียนภาษาจีนอยู่ค่ะ คุณชื่ออะไรคะ?' },
+      { speaker: 'คนจีน', zh: '我叫小明，是北京人。你来中国做什么？', py: 'Wǒ jiào Xiǎo Míng, shì Běijīng rén. Nǐ lái Zhōngguó zuò shénme?', th: 'ฉันชื่อเสี่ยวหมิงครับ เป็นคนปักกิ่งครับ คุณมาจีนทำอะไรครับ?' },
+      { speaker: 'คุณ', zh: '我来旅游，特别喜欢中国的历史和美食！你觉得哪里最好玩？', py: 'Wǒ lái lǚyóu, tèbié xǐhuān Zhōngguó de lìshǐ hé měishí! Nǐ juéde nǎlǐ zuì hǎowán?', th: 'มาท่องเที่ยวค่ะ ชอบประวัติศาสตร์และอาหารของจีนมากเลยค่ะ คุณคิดว่าที่ไหนน่าเที่ยวที่สุดคะ?' },
+      { speaker: 'คนจีน', zh: '四川的火锅和成都的熊猫基地！对了，你喜欢中国菜吗？', py: 'Sìchuān de huǒguō hé Chéngdū de xióngmāo jīdì! Duì le, nǐ xǐhuān Zhōngguó cài ma?', th: 'หม้อไฟเสฉวนและฐานหมีแพนด้าเฉิงตูครับ อ้อ คุณชอบอาหารจีนไหมครับ?' },
+      { speaker: 'คุณ', zh: '超喜欢！特别是火锅！我们加个微信吧，以后可以互相推荐好地方。', py: 'Chāo xǐhuān! Tèbié shì huǒguō! Wǒmen jiā gè Wēixìn ba, yǐhòu kěyǐ hùxiāng tuījiàn hǎo dìfang.', th: 'ชอบมากเลยค่ะ โดยเฉพาะหม้อไฟ! เพิ่ม WeChat กันนะคะ เดี๋ยวจะได้แนะนำสถานที่ดีๆ ให้กันและกันได้ค่ะ' },
+      { speaker: 'คนจีน', zh: '好主意！来，扫我的二维码，我们保持联系！', py: 'Hǎo zhǔyì! Lái, sǎo wǒ de èrwéimǎ, wǒmen bǎochí liánxì!', th: 'ความคิดดีมากเลยครับ มาเลย สแกน QR Code ของผมได้เลย เราคงเจอกันอีกแน่ๆ ครับ!' },
+    ],
+    questions: [
+      { q: 'เสี่ยวหมิงเป็นคนเมืองอะไร?', opts: ['เซี่ยงไฮ้','เฉิงตู','กว่างโจว','ปักกิ่ง'], ans: 'ปักกิ่ง' },
+      { q: 'คุณบอกว่าชอบอะไรในจีน?', opts: ['ธรรมชาติและภูเขา','ช้อปปิ้งและแฟชั่น','ประวัติศาสตร์และอาหาร','เทคโนโลยีและนวัตกรรม'], ans: 'ประวัติศาสตร์และอาหาร' },
+      { q: 'เสี่ยวหมิงแนะนำที่ไหน?', opts: ['ปักกิ่งและเซี่ยงไฮ้','เสฉวนและฐานหมีแพนด้า','กำแพงเมืองจีนและพระราชวัง','เฉิงตูและฉงชิ่ง'], ans: 'เสฉวนและฐานหมีแพนด้า' },
+      { q: 'อาหารที่คุณชอบเป็นพิเศษคือ?', opts: ['เป็ดปักกิ่ง','ติ่มซำ','หม้อไฟ','ข้าวผัดไข่'], ans: 'หม้อไฟ' },
+      { q: 'จะติดต่อกันยังไงในอนาคต?', opts: ['LINE','Facebook','WeChat','Instagram'], ans: 'WeChat' },
+    ],
+    fillBlanks: [
+      { sentence: '我正在___中文。', blank: '___', answer: '学', opts: ['学','说','写','读'] },
+      { sentence: '我们___个微信吧。', blank: '___', answer: '加', opts: ['加','换','找','要'] },
+      { sentence: '___我的二维码。', blank: '___', answer: '扫', opts: ['扫','看','拍','找'] },
+      { sentence: '我们保持___系！', blank: '___', answer: '联', opts: ['联','关','联络','连'] },
+    ]
+  },
+];
+
+// เชื่อม lessons เข้า category
+COMM_CATEGORIES[0].lessons = COMM_LESSONS.filter(l => l.cat === 'travel');
 
 // ═══════════════════════════════════
 // STATE & STORAGE
@@ -6666,12 +7048,252 @@ function updateStreak() {
 // ═══════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════
+
+// ═══════════════════════════════════════════════════════════════
+// 🌍 COMMUNICATION LESSONS — functions
+// ═══════════════════════════════════════════════════════════════
+
+let commCat = 'travel';
+let commLesson = null;
+let commPhase = 'dialog'; // 'dialog' | 'quiz' | 'fill'
+let commQuizIdx = 0;
+let commQuizScore = 0;
+let commFillIdx = 0;
+let commFillScore = 0;
+
+function openCommCat(catId) {
+  commCat = catId;
+  const cat = COMM_CATEGORIES.find(c => c.id === catId);
+  if (!cat) return;
+  document.getElementById('comm-hub-title').textContent = cat.icon + ' ' + cat.name;
+  document.getElementById('comm-hub-sub').textContent = cat.lessons.length + ' บทเรียน · การสื่อสารจริงในชีวิต';
+  renderCommHub();
+  goScreen('comm-hub');
+}
+
+function renderCommHub() {
+  const box = document.getElementById('comm-hub-list');
+  if (!box) return;
+  const cat = COMM_CATEGORIES.find(c => c.id === commCat);
+  if (!cat) return;
+  const done = state.user?.data?.commDone || [];
+  box.innerHTML = cat.lessons.map((l, i) => {
+    const isLocked = l.premium && !isPremium();
+    const isDone = done.includes(l.id);
+    return `<div onclick="${isLocked ? 'showPaymentModal()' : `openCommLesson('${l.id}')`}"
+      style="background:${isLocked?'#f5f5f5':isDone?'#f0fdf4':'white'};border:2px solid ${isLocked?'#e0e0e0':isDone?'#4caf50':cat.color+'40'};border-radius:16px;padding:16px;margin-bottom:10px;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:14px">
+      <div style="width:44px;height:44px;border-radius:12px;background:${isLocked?'#e0e0e0':cat.bg};display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">${isLocked?'🔒':isDone?'✅':l.icon}</div>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:800;color:${isLocked?'#9e9e9e':'var(--ink)'}">บทที่ ${i+1} — ${l.title}</div>
+        <div style="font-size:11px;color:var(--ink3);margin-top:3px">${isLocked?'🔒 Premium':'📖 บทสนทนา · ✏️ ถาม-ตอบ · 🔤 เติมคำ'}</div>
+      </div>
+      <div style="font-size:18px;color:${isDone?'#4caf50':cat.color};opacity:${isLocked?.4:1}">→</div>
+    </div>`;
+  }).join('');
+}
+
+function openCommLesson(lessonId) {
+  commLesson = COMM_LESSONS.find(l => l.id === lessonId);
+  if (!commLesson) return;
+  commPhase = 'dialog';
+  commQuizIdx = 0; commQuizScore = 0;
+  commFillIdx = 0; commFillScore = 0;
+  document.getElementById('comm-lesson-title').textContent = commLesson.icon + ' ' + commLesson.title;
+  document.getElementById('comm-lesson-sub').textContent = commLesson.situation;
+  document.getElementById('comm-lesson-prog').style.width = '0%';
+  renderCommPhase();
+  goScreen('comm-lesson');
+}
+
+function renderCommPhase() {
+  const box = document.getElementById('comm-lesson-content');
+  const cat = COMM_CATEGORIES.find(c => c.id === commLesson.cat);
+  const color = cat?.color || '#0891b2';
+  if (commPhase === 'dialog') renderCommDialog(box, color);
+  else if (commPhase === 'quiz') renderCommQuiz(box, color);
+  else if (commPhase === 'fill') renderCommFill(box, color);
+  // update progress bar
+  const prog = commPhase === 'dialog' ? 10 : commPhase === 'quiz' ? 40 + (commQuizIdx / commLesson.questions.length * 30) : 70 + (commFillIdx / commLesson.fillBlanks.length * 30);
+  document.getElementById('comm-lesson-prog').style.width = Math.round(prog) + '%';
+}
+
+function renderCommDialog(box, color) {
+  box.innerHTML = `
+    <div style="background:linear-gradient(135deg,${color},${color}cc);border-radius:16px;padding:14px 16px;color:white;margin-bottom:20px">
+      <div style="font-size:12px;font-weight:700;opacity:.8;margin-bottom:4px">🎭 สถานการณ์</div>
+      <div style="font-size:13px;line-height:1.6">${commLesson.situation}</div>
+    </div>
+    ${commLesson.dialog.map((line, i) => `
+      <div style="background:white;border-radius:14px;padding:14px;margin-bottom:10px;border:1.5px solid #f0f0f0;box-shadow:0 2px 8px rgba(0,0,0,.04)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div style="font-size:11px;font-weight:700;color:${line.speaker==='คุณ'?color:'#666'};background:${line.speaker==='คุณ'?color+'15':'#f5f5f5'};padding:3px 10px;border-radius:20px">${line.speaker==='คุณ'?'🙋 '+line.speaker:'👤 '+line.speaker}</div>
+          <button onclick="speak('${line.zh.replace(/'/g,"\\'")}',null,0.85)" style="background:${color}15;border:none;border-radius:20px;padding:5px 12px;font-size:11px;color:${color};font-weight:700;cursor:pointer;font-family:inherit">🔊 ฟัง</button>
+        </div>
+        <div style="font-size:20px;font-weight:700;color:#1a1a1a;letter-spacing:1px;margin-bottom:6px">${line.zh}</div>
+        <div style="font-size:13px;color:#666;margin-bottom:6px;font-style:italic">${line.py}</div>
+        <div id="th-${commLesson.id}-${i}" style="font-size:13px;color:${color};font-weight:600;display:none">${line.th}</div>
+        <button onclick="toggleCommTh('${commLesson.id}',${i})" style="background:none;border:1px solid ${color}50;border-radius:20px;padding:4px 12px;font-size:11px;color:${color};cursor:pointer;font-family:inherit;margin-top:4px">👁 แสดง/ซ่อนคำแปล</button>
+      </div>
+    `).join('')}
+    <button onclick="commPhase='quiz';renderCommPhase()" style="width:100%;padding:16px;background:linear-gradient(135deg,${color},${color}cc);color:white;border:none;border-radius:14px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;margin-top:10px;box-shadow:0 4px 16px ${color}40">
+      ✏️ ทำแบบฝึกหัดต่อ →
+    </button>`;
+}
+
+function toggleCommTh(lessonId, idx) {
+  const el = document.getElementById('th-' + lessonId + '-' + idx);
+  if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function renderCommQuiz(box, color) {
+  const q = commLesson.questions[commQuizIdx];
+  const total = commLesson.questions.length;
+  box.innerHTML = `
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:12px;color:var(--ink3);font-weight:600">ตอบคำถาม ${commQuizIdx+1} / ${total}</div>
+      <div style="background:#f0f0f0;border-radius:20px;height:6px;margin-top:8px">
+        <div style="background:${color};width:${((commQuizIdx)/total*100)}%;height:100%;border-radius:20px;transition:.3s"></div>
+      </div>
+    </div>
+    <div style="background:linear-gradient(135deg,${color}20,${color}10);border-radius:16px;padding:20px;margin-bottom:24px;border:1.5px solid ${color}30">
+      <div style="font-size:12px;font-weight:700;color:${color};margin-bottom:8px">❓ คำถามที่ ${commQuizIdx+1}</div>
+      <div style="font-size:16px;font-weight:800;color:var(--ink);line-height:1.5">${q.q}</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      ${q.opts.map(opt => `
+        <button onclick="answerCommQuiz('${opt.replace(/'/g,"\\'")}')" style="padding:14px 16px;background:white;border:2px solid ${color}30;border-radius:12px;font-size:14px;font-weight:600;color:var(--ink);font-family:inherit;cursor:pointer;text-align:left;transition:.2s">${opt}</button>
+      `).join('')}
+    </div>`;
+}
+
+function answerCommQuiz(chosen) {
+  const q = commLesson.questions[commQuizIdx];
+  const isCorrect = chosen === q.ans;
+  if (isCorrect) { commQuizScore++; playCorrectSound(); } else { playWrongSound(); }
+  const color = COMM_CATEGORIES.find(c => c.id === commLesson.cat)?.color || '#0891b2';
+  const btns = document.querySelectorAll('#comm-lesson-content button');
+  btns.forEach(btn => {
+    btn.onclick = null;
+    if (btn.textContent.trim() === q.ans) { btn.style.background='#e8f5e9'; btn.style.borderColor='#4caf50'; btn.style.color='#2e7d32'; }
+    else if (btn.textContent.trim() === chosen && !isCorrect) { btn.style.background='#ffebee'; btn.style.borderColor='#f44336'; btn.style.color='#c62828'; }
+  });
+  setTimeout(() => {
+    commQuizIdx++;
+    if (commQuizIdx >= commLesson.questions.length) {
+      commPhase = 'fill'; commFillIdx = 0;
+    }
+    renderCommPhase();
+  }, 900);
+}
+
+function renderCommFill(box, color) {
+  if (commFillIdx >= commLesson.fillBlanks.length) {
+    renderCommDone(box, color); return;
+  }
+  const fb = commLesson.fillBlanks[commFillIdx];
+  const total = commLesson.fillBlanks.length;
+  const parts = fb.sentence.split('___');
+  box.innerHTML = `
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:12px;color:var(--ink3);font-weight:600">เติมคำ ${commFillIdx+1} / ${total}</div>
+      <div style="background:#f0f0f0;border-radius:20px;height:6px;margin-top:8px">
+        <div style="background:${color};width:${(commFillIdx/total*100)}%;height:100%;border-radius:20px;transition:.3s"></div>
+      </div>
+    </div>
+    <div style="background:linear-gradient(135deg,${color}15,${color}08);border-radius:16px;padding:20px;margin-bottom:24px;border:1.5px solid ${color}25;text-align:center">
+      <div style="font-size:12px;font-weight:700;color:${color};margin-bottom:12px">🔤 เติมคำที่ขาดหายไป</div>
+      <div style="font-size:22px;font-weight:800;color:var(--ink);letter-spacing:2px;line-height:2">
+        ${parts[0]}<span id="fill-blank" style="display:inline-block;min-width:60px;border-bottom:3px solid ${color};color:${color};padding:0 8px;font-size:20px">　</span>${parts[1]||''}
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      ${fb.opts.map(opt => `
+        <button onclick="answerCommFill('${opt.replace(/'/g,"\\'")}')" style="padding:14px;background:white;border:2px solid ${color}30;border-radius:12px;font-size:16px;font-weight:700;color:var(--ink);font-family:inherit;cursor:pointer;transition:.2s">${opt}</button>
+      `).join('')}
+    </div>`;
+}
+
+function answerCommFill(chosen) {
+  const fb = commLesson.fillBlanks[commFillIdx];
+  const isCorrect = chosen === fb.answer;
+  if (isCorrect) { commFillScore++; playCorrectSound(); } else { playWrongSound(); }
+  const blank = document.getElementById('fill-blank');
+  if (blank) { blank.textContent = chosen; blank.style.color = isCorrect ? '#2e7d32' : '#c62828'; blank.style.borderColor = isCorrect ? '#4caf50' : '#f44336'; }
+  const btns = document.querySelectorAll('#comm-lesson-content button');
+  btns.forEach(btn => {
+    btn.onclick = null;
+    if (btn.textContent.trim() === fb.answer) { btn.style.background='#e8f5e9'; btn.style.borderColor='#4caf50'; btn.style.color='#2e7d32'; }
+    else if (btn.textContent.trim() === chosen && !isCorrect) { btn.style.background='#ffebee'; btn.style.borderColor='#f44336'; btn.style.color='#c62828'; }
+  });
+  setTimeout(() => { commFillIdx++; renderCommPhase(); }, 900);
+}
+
+function renderCommDone(box, color) {
+  // mark lesson done
+  if (!state.user?.data) state.user.data = {};
+  if (!state.user.data.commDone) state.user.data.commDone = [];
+  if (!state.user.data.commDone.includes(commLesson.id)) state.user.data.commDone.push(commLesson.id);
+  addXP(20);
+  saveState();
+  const total = commLesson.questions.length + commLesson.fillBlanks.length;
+  const score = commQuizScore + commFillScore;
+  const isGood = score >= total * 0.8;
+  if (isGood) { playWinSound(); } else { playCorrectSound(); }
+  document.getElementById('comm-lesson-prog').style.width = '100%';
+  const cat = COMM_CATEGORIES.find(c => c.id === commLesson.cat);
+  const nextLesson = cat?.lessons.find((l, i) => i > cat.lessons.findIndex(x => x.id === commLesson.id));
+  box.innerHTML = `
+    <div style="text-align:center;padding:20px 8px">
+      <img src="https://avajarshika.github.io/tangtang/tangtang-happy.png" style="width:90px;height:90px;object-fit:contain;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 4px 14px ${color}50)">
+      <div style="font-size:22px;font-weight:900;color:${color};margin-top:12px">${isGood?'เก่งมากเลย! 🎉':'ทำได้ดีค่ะ! 👍'}</div>
+      <div style="font-size:14px;color:var(--ink3);margin-top:4px">จบบทเรียน "${commLesson.title}"</div>
+      <div style="display:flex;gap:12px;justify-content:center;margin:20px 0">
+        <div style="background:${color}15;border-radius:14px;padding:14px 20px;text-align:center">
+          <div style="font-size:24px;font-weight:900;color:${color}">${commQuizScore}/${commLesson.questions.length}</div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:2px">✏️ ถาม-ตอบ</div>
+        </div>
+        <div style="background:${color}15;border-radius:14px;padding:14px 20px;text-align:center">
+          <div style="font-size:24px;font-weight:900;color:${color}">${commFillScore}/${commLesson.fillBlanks.length}</div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:2px">🔤 เติมคำ</div>
+        </div>
+      </div>
+      <div style="background:#e8f5e9;border-radius:10px;padding:8px 18px;display:inline-block;font-size:13px;color:#2e7d32;font-weight:700;margin-bottom:20px">+20 XP ได้รับแล้ว! ⭐</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        ${nextLesson ? `<button onclick="openCommLesson('${nextLesson.id}')" style="padding:15px;background:linear-gradient(135deg,${color},${color}cc);color:white;border:none;border-radius:14px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 4px 16px ${color}40">🚀 บทถัดไป: ${nextLesson.title}</button>` : '<div style="padding:13px;background:#fce4f3;border-radius:12px;font-size:14px;font-weight:700;color:#F13596;text-align:center">🏆 จบครบทุกบทแล้วค่า!</div>'}
+        <button onclick="openCommLesson('${commLesson.id}')" style="padding:13px;background:white;color:${color};border:2px solid ${color};border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">🔄 เรียนซ้ำอีกครั้ง</button>
+        <button onclick="goScreen('comm-hub')" style="padding:13px;background:var(--paper2);color:var(--ink3);border:none;border-radius:12px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer">← กลับหมวดหมู่</button>
+      </div>
+    </div>`;
+}
+
+
+function renderCommCategoryCards() {
+  const box = document.getElementById('path-row-comm');
+  if (!box) return;
+  const done = state.user?.data?.commDone || [];
+  box.innerHTML = COMM_CATEGORIES.map(cat => {
+    const total = cat.lessons.length;
+    const doneCnt = cat.lessons.filter(l => done.includes(l.id)).length;
+    const pct = total ? Math.round(doneCnt / total * 100) : 0;
+    return `<div onclick="openCommCat('${cat.id}')" style="background:white;border:2px solid ${cat.color}30;border-radius:16px;padding:14px 16px;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:12px" onmouseover="this.style.borderColor='${cat.color}'" onmouseout="this.style.borderColor='${cat.color}30'">
+      <div style="width:44px;height:44px;border-radius:12px;background:${cat.bg};display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">${cat.icon}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:14px;font-weight:800;color:var(--ink)">${cat.name}</div>
+        <div style="font-size:11px;color:var(--ink3);margin-top:2px">${cat.sub}</div>
+        <div style="background:#f0f0f0;border-radius:20px;height:4px;margin-top:6px"><div style="background:${cat.color};width:${pct}%;height:100%;border-radius:20px;transition:.5s"></div></div>
+        <div style="font-size:10px;color:var(--ink3);margin-top:2px">${doneCnt}/${total} บทเสร็จแล้ว</div>
+      </div>
+      <div style="font-size:18px;color:${cat.color}">→</div>
+    </div>`;
+  }).join('');
+}
+
 function goScreen(s) {
   playClickSound();
   document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
   document.getElementById('screen-' + s).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  const navMap = { home:'nav-home', 'lessons-hub':'nav-lessons', play:'nav-chat', chat:'nav-chat', quiz:'nav-quiz', profile:'nav-profile', lesson:'nav-home', pinyin:'nav-home', vocab:'nav-lessons', 'tangtang-chat':'nav-tangtang' };
+  const navMap = { home:'nav-home', 'lessons-hub':'nav-lessons', play:'nav-chat', chat:'nav-chat', quiz:'nav-quiz', profile:'nav-profile', lesson:'nav-home', pinyin:'nav-home', vocab:'nav-lessons', 'tangtang-chat':'nav-tangtang', 'comm-hub':'nav-lessons', 'comm-lesson':'nav-lessons' };
   const nb = document.getElementById(navMap[s]);
   if (nb) nb.classList.add('active');
   state.curScreen = s;
@@ -6919,6 +7541,7 @@ function renderHome() {
       </div>
     </div>`;
   }).join('');
+  renderCommCategoryCards();
   updateTopbar();
 }
 
@@ -14430,7 +15053,7 @@ function initListeningGame() { lgIdx=0; lgScore=0; renderListeningHub(); }
 
 function renderListeningHub() {
   const box = document.getElementById('listening-content');
-  const isPremium = state.user && state.user.data && state.user.data.premium;
+  const userIsPremium = isPremium(); // ใช้ global isPremium() ที่รวม isAdmin() ไว้แล้ว
   const FREE_LIMIT = 5; // ฟรีถึงด่านที่ 5
   const groups = [
     { label:'🟢 ระดับเริ่มต้น', range:[0,6], color:'#2e7d32', bg:'#e8f5e9' },
@@ -14442,7 +15065,7 @@ function renderListeningHub() {
       <img src="https://avajarshika.github.io/tangtang/tangtang.png" style="width:80px;height:80px;object-fit:contain;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.3))">
       <div style="font-size:20px;font-weight:900;color:#6b1a6b;margin-top:8px">🎧 จับใจความ</div>
       <div style="font-size:13px;color:var(--ink3);margin-top:4px">ฟังบทสนทนา แล้วตอบคำถาม · 20 ด่าน</div>
-      ${!isPremium ? `<div style="background:#fce4f3;border:1.5px solid #F13596;border-radius:10px;padding:8px 14px;margin-top:10px;font-size:12px;color:#c2185b">🔓 ด่าน 1-5 ฟรี | 🔒 ด่าน 6-20 สำหรับสมาชิก Premium</div>` : ''}
+      ${!userIsPremium ? `<div style="background:#fce4f3;border:1.5px solid #F13596;border-radius:10px;padding:8px 14px;margin-top:10px;font-size:12px;color:#c2185b">🔓 ด่าน 1-5 ฟรี | 🔒 ด่าน 6-20 สำหรับสมาชิก Premium</div>` : ''}
     </div>
     ${groups.map(g => `
       <div style="margin-bottom:16px">
@@ -14452,8 +15075,8 @@ function renderListeningHub() {
         <div style="display:flex;flex-direction:column;gap:8px">
           ${LISTENING_DATA.slice(g.range[0], g.range[1]+1).map((l,i) => {
             const idx = g.range[0]+i;
-            const isLocked = !isPremium && idx >= FREE_LIMIT;
-            return `<div onclick="${isLocked ? `showToast('🔒 ด่านนี้สำหรับสมาชิก Premium ค่า อัปเกรดได้เลยนะคะ!')` : `startListeningLesson(${idx})`}" style="background:${isLocked?'#f5f5f5':'white'};border:2px solid ${isLocked?'#e0e0e0':'var(--paper3)'};border-radius:14px;padding:14px;cursor:${isLocked?'default':'pointer'};transition:.2s;display:flex;align-items:center;gap:12px;opacity:${isLocked?'0.7':'1'}" ${isLocked?'':` onmouseover="this.style.borderColor='${g.color}'" onmouseout="this.style.borderColor='var(--paper3)'"`}>
+            const isLocked = !userIsPremium && idx >= FREE_LIMIT;
+            return `<div onclick="${isLocked ? `showPaymentModal()` : `startListeningLesson(${idx})`}" style="background:${isLocked?'#f5f5f5':'white'};border:2px solid ${isLocked?'#e0e0e0':'var(--paper3)'};border-radius:14px;padding:14px;cursor:${isLocked?'default':'pointer'};transition:.2s;display:flex;align-items:center;gap:12px;opacity:${isLocked?'0.7':'1'}" ${isLocked?'':` onmouseover="this.style.borderColor='${g.color}'" onmouseout="this.style.borderColor='var(--paper3)'"`}>
               <div style="background:${isLocked?'#e0e0e0':g.bg};border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:${isLocked?'18':'14'}px;font-weight:800;color:${isLocked?'#9e9e9e':g.color};flex-shrink:0">${isLocked?'🔒':idx+1}</div>
               <div style="flex:1">
                 <div style="font-size:13px;font-weight:700;color:${isLocked?'#9e9e9e':'var(--ink)'}">ด่าน ${idx+1} — ${l.title.replace(/ด่าน \d+ — /,'')}</div>
