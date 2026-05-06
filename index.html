@@ -8319,7 +8319,10 @@ function playPenSound() {
   } catch(e) {}
 }
 
+let _speedSoundEnabled = false;
+
 function playTickSound() {
+  if (!_speedSoundEnabled) return;
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = ctx.createOscillator();
@@ -8334,7 +8337,7 @@ function playTickSound() {
 }
 
 function playUrgentTick() {
-  // เสียงนาฬิกาตอนวินาทีสุดท้าย — เร็วและดังขึ้น
+  if (!_speedSoundEnabled) return;
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     [0, 0.12].forEach(delay => {
@@ -8446,9 +8449,9 @@ function openGame(name) {
 }
 
 function closeGame() {
-  // หยุดเสียงและ timer ทั้งหมดก่อนออก
-  if (typeof speedTimer !== 'undefined' && speedTimer) { clearInterval(speedTimer); speedTimer = null; }
-  if (typeof _speedTimer !== 'undefined' && _speedTimer) { clearInterval(_speedTimer); _speedTimer = null; }
+  _speedSoundEnabled = false;
+  if (speedTimer) { clearInterval(speedTimer); speedTimer = null; }
+  if (_speedTimer) { clearInterval(_speedTimer); _speedTimer = null; }
   if (typeof matchTimer !== 'undefined' && matchTimer) { clearInterval(matchTimer); matchTimer = null; }
   ['stroke','daily','sentence','speed','journal','match','listen','listening'].forEach(g => {
     document.getElementById('game-'+g).style.display = 'none';
@@ -12302,6 +12305,7 @@ function startSpeedLevel(lv) {
   const levelData = SPEED_LEVELS[speedLevel];
   speedTimeLeft = levelData.timeLimit;
   speedQuestions = [...levelData.questions].sort(() => Math.random() - .5);
+  _speedSoundEnabled = true;
   renderSpeedQ();
 }
 
@@ -12400,6 +12404,7 @@ function answerSpeed(chosen) {
 }
 
 function renderSpeedLevelDone() {
+  _speedSoundEnabled = false;
   if (speedTimer) clearInterval(speedTimer);
   const box = document.getElementById('speed-content');
   const passed = speedCorrectInLevel >= SPEED_PASS_SCORE;
