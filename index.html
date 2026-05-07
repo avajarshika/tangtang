@@ -7610,6 +7610,7 @@ function renderCommCategoryCards() {
 }
 
 function goScreen(s) {
+  stopSpeech();
   playClickSound();
   document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
   document.getElementById('screen-' + s).classList.add('active');
@@ -9083,6 +9084,8 @@ function stopSpeech() {
     currentAudio.src = '';
     currentAudio = null;
   }
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  document.querySelectorAll('.speak-btn').forEach(b => { b.classList.remove('playing'); b.textContent = '🔊'; });
 }
 
 async function speak(text, onEnd, rate=0.85) {
