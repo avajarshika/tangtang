@@ -446,6 +446,58 @@ body {
       </div>
     </div>
 
+    <!-- PACKAGE SELECTOR -->
+    <div class="card">
+      <div class="section-title">💎 เลือกแพ็กเกจ</div>
+      <div style="display:flex;flex-direction:column;gap:10px" id="pkg-list">
+
+        <!-- รายเดือน -->
+        <div class="pkg-card" id="pkg-monthly" onclick="selectPackage('monthly')"
+          style="border:2px solid #e0e0e0;border-radius:16px;padding:16px;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;border-radius:12px;background:#e0f7fa;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">📅</div>
+          <div style="flex:1">
+            <div style="font-size:14px;font-weight:800;color:#2D1A24">รายเดือน</div>
+            <div style="font-size:11px;color:#8C6B7A;margin-top:2px">ปลดล็อคเนื้อหาทั้งหมด + อีบุค HSK ไล่ระดับ</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:20px;font-weight:900;color:#0891b2">฿199</div>
+            <div style="font-size:10px;color:#8C6B7A">/เดือน</div>
+          </div>
+        </div>
+
+        <!-- รายปี (แนะนำ) -->
+        <div class="pkg-card" id="pkg-yearly" onclick="selectPackage('yearly')"
+          style="border:2px solid #1565c0;border-radius:16px;padding:16px;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#1565c0,#1976d2);position:relative">
+          <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#ff9800;color:white;font-size:10px;font-weight:800;padding:2px 14px;border-radius:20px;white-space:nowrap">🔥 ประหยัดที่สุด</div>
+          <div style="width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">⭐</div>
+          <div style="flex:1">
+            <div style="font-size:14px;font-weight:800;color:white">รายปี</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.8);margin-top:2px">ทุกฟีเจอร์ + อีบุคครบ + อัปเดตตลอดปี</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:12px;color:rgba(255,255,255,.6);text-decoration:line-through">฿2,388</div>
+            <div style="font-size:20px;font-weight:900;color:white">฿990</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.7)">/ปี</div>
+          </div>
+        </div>
+
+        <!-- ถาวร -->
+        <div class="pkg-card" id="pkg-lifetime" onclick="selectPackage('lifetime')"
+          style="border:2px solid #e0e0e0;border-radius:16px;padding:16px;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:14px">
+          <div style="width:44px;height:44px;border-radius:12px;background:#f3e5f5;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">🌟</div>
+          <div style="flex:1">
+            <div style="font-size:14px;font-weight:800;color:#2D1A24">ถาวรตลอดชีพ</div>
+            <div style="font-size:11px;color:#8C6B7A;margin-top:2px">จ่ายครั้งเดียว ทุกฟีเจอร์ + อัปเดตตลอดชีพ</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:20px;font-weight:900;color:#6b1a6b">฿2,490</div>
+            <div style="font-size:10px;color:#8C6B7A">ครั้งเดียว</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- FORM -->
     <div class="card">
       <div class="section-title">👤 ข้อมูลสำหรับการสมัครและชำระเงิน</div>
@@ -513,7 +565,7 @@ body {
         </div>
         <div class="qr-name">จารชิกา แก้ววรรณา</div>
         <div class="qr-number">083-642-3619</div>
-        <div class="qr-bank">PromptPay · 083-642-3619 · ยอดชำระ ฿1,290</div>
+        <div class="qr-bank">PromptPay · 083-642-3619 · ยอดชำระ <span id="qr-amount">฿1,290</span></div>
       </div>
       </div><!-- end payment-qr-section -->
 
@@ -539,7 +591,7 @@ body {
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0">
               <span style="font-size:12px;color:var(--ink3)">ยอดโอน</span>
-              <span style="font-size:16px;font-weight:900;color:var(--red)">฿1,290</span>
+              <span style="font-size:16px;font-weight:900;color:var(--red)" id="bank-amount">฿1,290</span>
             </div>
           </div>
         </div>
@@ -682,7 +734,7 @@ body {
       </div>
     </div>
     <a href="https://line.me/ti/p/@ava11" target="_blank" class="btn-line" style="margin-top:0;background:linear-gradient(135deg,#06C755,#02a548);">
-      🎁 แอด Line @ava11 — รับ Bonus ของแถม
+      🎁 แอด Line รับของแถม คลิก
     </a>
     <button onclick="document.getElementById('success-overlay').classList.remove('show');window.location.href='index.html'" style="width:100%;padding:12px;margin-top:10px;background:none;border:1.5px solid var(--paper3);border-radius:12px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;color:var(--ink3)">
       กลับหน้าหลัก
@@ -741,6 +793,64 @@ async function uploadSlip(file, email) {
   } catch(e) { console.log('Upload error:', e); return null; }
 }
 
+
+// ── Package Selection ──
+let selectedPackage = 'yearly';
+let selectedPrice = '990';
+let selectedAmountInt = 990;
+const pkgData = {
+  monthly: { price: '199', amount: 199, label: 'รายเดือน', origLabel: '' },
+  yearly:  { price: '990', amount: 990, label: 'รายปี', origLabel: 'ราคาปกติ 2,388 บาท' },
+  lifetime:{ price: '2,490', amount: 2490, label: 'ถาวรตลอดชีพ', origLabel: '' },
+};
+
+function selectPackage(type) {
+  selectedPackage = type;
+  const pkg = pkgData[type];
+  selectedPrice = pkg.price;
+  selectedAmountInt = pkg.amount;
+
+  // update card borders
+  document.querySelectorAll('.pkg-card').forEach(el => {
+    const isYearly = el.id === 'pkg-yearly';
+    el.style.border = '2px solid #e0e0e0';
+    if (!isYearly) el.style.background = '';
+  });
+  const sel = document.getElementById('pkg-' + type);
+  if (sel) {
+    if (type === 'yearly') {
+      sel.style.border = '3px solid #ff9800';
+    } else {
+      sel.style.border = '2px solid ' + (type==='monthly'?'#0891b2':'#6b1a6b');
+      sel.style.background = type==='monthly'?'#e0f7fa15':'#f3e5f515';
+    }
+  }
+
+  // update price displays
+  const qrAmt = document.getElementById('qr-amount');
+  if (qrAmt) qrAmt.textContent = '฿' + pkg.price;
+  const bankAmt = document.getElementById('bank-amount');
+  if (bankAmt) bankAmt.textContent = '฿' + pkg.price;
+  const sumOrig = document.getElementById('sum-original');
+  if (sumOrig) sumOrig.textContent = pkg.origLabel;
+
+  // update summary total
+  const priceTotal = document.querySelector('.price-total');
+  if (priceTotal) priceTotal.textContent = '฿' + pkg.price;
+
+  // update submit button
+  const btn = document.querySelector('.btn-submit');
+  if (btn) btn.innerHTML = '✅ ยืนยันการสั่งซื้อ — ฿' + pkg.price;
+}
+
+// auto-select from URL param
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const pkg = params.get('pkg');
+  if (pkg && pkgData[pkg]) selectPackage(pkg);
+  else selectPackage('yearly'); // default yearly
+});
+
 async function sendLineNotify(name, phone, email, slipUrl, referralCode) {
   try {
     await fetch('https://zmshxxmcgbxavzlqmpxd.supabase.co/functions/v1/line-notify', {
@@ -749,7 +859,7 @@ async function sendLineNotify(name, phone, email, slipUrl, referralCode) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inptc2h4eG1jZ2J4YXZ6bHFtcHhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NzkwODEsImV4cCI6MjA5MjA1NTA4MX0.USeFzW09aOqqtwtYFaC9lgmcLkpkjz12ciQLrG3IhZQ'
       },
-      body: JSON.stringify({ name, phone, email, slipUrl, referralCode })
+      body: JSON.stringify({ name, phone, email, slipUrl, referralCode, package: selectedPackage, amount: selectedAmountInt })
     });
   } catch(e) { console.log('Line notify error:', e); }
 }
@@ -758,7 +868,7 @@ async function saveToSupabase(name, phone, email, slipUrl, referralCode) {
   try {
     await sb.from('orders').insert({
       name, phone, email,
-      amount: 1290,
+      amount: selectedAmountInt,
       status: 'pending',
       slip_url: slipUrl || null,
       referral_code: referralCode || null,
@@ -828,7 +938,7 @@ async function submitOrder() {
 
   if (error) {
     err.textContent = error.message === 'User already registered' ? 'อีเมลนี้สมัครแล้ว กรุณาใช้อีเมลอื่น' : error.message;
-    if (btn) { btn.disabled = false; btn.innerHTML = '✅ ยืนยันการสั่งซื้อ — ฿1,290'; }
+    if (btn) { btn.disabled = false; btn.innerHTML = '✅ ยืนยันการสั่งซื้อ — ฿' + selectedPrice; }
     return;
   }
 
@@ -852,7 +962,7 @@ async function submitOrder() {
   // Update affiliate stats if referral code used
   if (referralCode) await updateAffiliateStats(referralCode);
 
-  if (btn) { btn.disabled = false; btn.innerHTML = '✅ ยืนยันการสั่งซื้อ — ฿1,290'; }
+  if (btn) { btn.disabled = false; btn.innerHTML = '✅ ยืนยันการสั่งซื้อ — ฿' + selectedPrice; }
   document.getElementById('success-overlay').classList.add('show');
 }
 

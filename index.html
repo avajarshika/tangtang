@@ -1592,6 +1592,21 @@ body {
     <div class="lesson-section" id="home-lesson-list"></div>
   </div>
 
+
+  <!-- PRICING SCREEN -->
+  <div id="screen-pricing" class="screen">
+    <div style="padding:16px 20px 0">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+        <button onclick="goScreen('profile')" style="background:none;border:none;font-size:20px;cursor:pointer;padding:0">←</button>
+        <div>
+          <div style="font-size:18px;font-weight:800;color:var(--ink)">💎 เลือกแพ็กเกจ</div>
+          <div style="font-size:12px;color:var(--ink3)">เรียนภาษาจีนได้ไม่จำกัด</div>
+        </div>
+      </div>
+    </div>
+    <div id="pricing-content" style="padding:16px 20px 80px;overflow-y:auto;max-height:calc(100vh - 80px)"></div>
+  </div>
+
   <!-- COMM HUB -->
   <div id="screen-comm-hub" class="screen">
     <div class="page-header" style="padding:14px 16px 10px">
@@ -1928,6 +1943,11 @@ body {
             ปรึกษาถังถัง คลิก!
           </a>
         </div>
+      </div>
+
+      <!-- Subscription Status -->
+      <div style="padding:14px 16px;border-bottom:1px solid var(--paper3)">
+        <div id="prof-subscription"></div>
       </div>
 
       <!-- Level bar -->
@@ -8147,8 +8167,11 @@ function saveState() {
 
 async function loadStateFromCloud(uid) {
   try {
-    const { data } = await sb.from('user_progress').select('data').eq('user_id', uid).single();
+    const { data } = await sb.from('user_progress').select('data,subscription_type,subscription_end,subscription_start,is_premium').eq('user_id', uid).single();
     if (data?.data) {
+      // Merge subscription fields into data
+      if (data.subscription_type) data.data.subscription_type = data.subscription_type;
+      if (data.subscription_end) data.data.subscription_end = data.subscription_end;
       // Merge cloud data with local (take whichever has more XP)
       const local = loadState(uid);
       const cloud = data.data;
@@ -8522,13 +8545,170 @@ function renderCommCategoryCards() {
   }).join('');
 }
 
+
+// ══════════════════════════════════════════
+// SUBSCRIPTION / PRICING
+// ══════════════════════════════════════════
+
+function getSubscriptionLabel(user) {
+  const d = user?.data || {};
+  const type = d.subscription_type || 'free';
+  const end = d.subscription_end;
+  if (type === 'lifetime') return { label: '🌟 ถาวรตลอดชีพ', color: '#6b1a6b', bg: '#f3e5f5' };
+  if (type === 'yearly' && end) {
+    const endDate = new Date(end).toLocaleDateString('th-TH', {day:'numeric',month:'short',year:'numeric'});
+    return { label: '📅 รายปี · หมดอายุ ' + endDate, color: '#1565c0', bg: '#e3f2fd' };
+  }
+  if (type === 'monthly' && end) {
+    const endDate = new Date(end).toLocaleDateString('th-TH', {day:'numeric',month:'short',year:'numeric'});
+    return { label: '📅 รายเดือน · หมดอายุ ' + endDate, color: '#0891b2', bg: '#e0f7fa' };
+  }
+  return { label: '🔓 ใช้งานฟรี', color: '#666', bg: '#f5f5f5' };
+}
+
+function renderPricing() {
+  const box = document.getElementById('pricing-content');
+  if (!box) return;
+  const currentType = state.user?.data?.subscription_type || 'free';
+
+  box.innerHTML = `
+    <div style="text-align:center;margin-bottom:24px">
+      <img src="https://avajarshika.github.io/tangtang/tangtang-wow.png" style="width:80px;height:80px;object-fit:contain;animation:float 3s ease-in-out infinite;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.3))">
+      <div style="font-size:18px;font-weight:900;color:var(--ink);margin-top:8px">เลือกแพ็กเกจที่ใช่สำหรับคุณ</div>
+      <div style="font-size:12px;color:var(--ink3);margin-top:4px">เรียนภาษาจีนได้จริง พูดได้ใช้ได้ 🇨🇳</div>
+    </div>
+
+    <!-- การ์ด 3 แพ็กเกจ -->
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:28px">
+
+      <!-- รายเดือน -->
+      <div onclick="showPricingDetail('monthly')" style="background:white;border:2px solid ${currentType==='monthly'?'#0891b2':'#e0e0e0'};border-radius:20px;padding:20px;cursor:pointer;transition:.2s;position:relative">
+        ${currentType==='monthly' ? '<div style="position:absolute;top:-10px;right:16px;background:#0891b2;color:white;font-size:11px;font-weight:800;padding:3px 12px;border-radius:20px">แพ็กเกจปัจจุบัน</div>' : ''}
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div>
+            <div style="font-size:16px;font-weight:900;color:var(--ink)">📅 รายเดือน</div>
+            <div style="font-size:12px;color:var(--ink3);margin-top:2px">ปลดล็อคเนื้อหาทั้งหมด</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:28px;font-weight:900;color:#0891b2">฿199</div>
+            <div style="font-size:11px;color:var(--ink3)">/เดือน</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--ink2);line-height:1.8">
+          ✅ ปลดล็อคเนื้อหาทั้งหมด<br>
+          ✅ อีบุค HSK ไล่ระดับเดือนละชุด (เดือน 1 = HSK1, เดือน 2 = HSK2...)<br>
+          ✅ อัปเดตเนื้อหาตลอดช่วงสมาชิก
+        </div>
+      </div>
+
+      <!-- รายปี (แนะนำ) -->
+      <div onclick="showPricingDetail('yearly')" style="background:linear-gradient(135deg,#1565c0,#1976d2);border:2px solid #1565c0;border-radius:20px;padding:20px;cursor:pointer;transition:.2s;position:relative">
+        <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#ff9800;color:white;font-size:11px;font-weight:800;padding:3px 16px;border-radius:20px;white-space:nowrap">🔥 ประหยัดที่สุด</div>
+        ${currentType==='yearly' ? '<div style="position:absolute;top:-10px;right:16px;background:white;color:#1565c0;font-size:11px;font-weight:800;padding:3px 12px;border-radius:20px">แพ็กเกจปัจจุบัน</div>' : ''}
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div>
+            <div style="font-size:16px;font-weight:900;color:white">⭐ รายปี</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.8);margin-top:2px">คุ้มค่าที่สุด เซฟ ฿1,398</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:13px;color:rgba(255,255,255,.6);text-decoration:line-through">฿2,388</div>
+            <div style="font-size:28px;font-weight:900;color:white">฿990</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.7)">/ปี</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:rgba(255,255,255,.9);line-height:1.8">
+          ✅ ทุกฟีเจอร์ครบทั้งหมด<br>
+          ✅ อีบุคครบทุก HSK ทุกเล่ม<br>
+          ✅ รับทุกอัปเดตตลอดปี
+        </div>
+      </div>
+
+      <!-- ถาวร -->
+      <div onclick="showPricingDetail('lifetime')" style="background:white;border:2px solid ${currentType==='lifetime'?'#6b1a6b':'#e0e0e0'};border-radius:20px;padding:20px;cursor:pointer;transition:.2s;position:relative">
+        ${currentType==='lifetime' ? '<div style="position:absolute;top:-10px;right:16px;background:#6b1a6b;color:white;font-size:11px;font-weight:800;padding:3px 12px;border-radius:20px">แพ็กเกจปัจจุบัน</div>' : ''}
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div>
+            <div style="font-size:16px;font-weight:900;color:var(--ink)">🌟 ถาวรตลอดชีพ</div>
+            <div style="font-size:12px;color:var(--ink3);margin-top:2px">จ่ายครั้งเดียว ใช้ได้ตลอด</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:28px;font-weight:900;color:#6b1a6b">฿2,490</div>
+            <div style="font-size:11px;color:var(--ink3)">ครั้งเดียว</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--ink2);line-height:1.8">
+          ✅ ทุกฟีเจอร์ครบทั้งหมด<br>
+          ✅ อีบุคครบทุกเล่ม<br>
+          ✅ รับทุกอัปเดตตลอดชีพ ไม่ต้องต่ออายุ
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;font-size:12px;color:var(--ink3);line-height:1.8">
+      🔒 ชำระผ่านการโอนเงิน · แอดมินอนุมัติภายใน 24 ชม.<br>
+      📞 สอบถาม LINE: <a href="https://line.me/R/ti/p/@ava11" style="color:#F13596;font-weight:700">@ava11</a>
+    </div>
+  `;
+}
+
+function showPricingDetail(type) {
+  const info = {
+    monthly: { name:'รายเดือน', price:'199', icon:'📅', color:'#0891b2',
+      desc:'ปลดล็อคเนื้อหาทั้งหมด + อีบุค HSK ไล่ระดับ', detail:'โอนเงิน ฿199 พร้อมแจ้งชื่อ-อีเมล' },
+    yearly: { name:'รายปี', price:'990', icon:'⭐', color:'#1565c0',
+      desc:'ทุกฟีเจอร์ + อีบุคครบ + รับอัปเดตตลอดปี', detail:'โอนเงิน ฿990 พร้อมแจ้งชื่อ-อีเมล' },
+    lifetime: { name:'ถาวรตลอดชีพ', price:'2,490', icon:'🌟', color:'#6b1a6b',
+      desc:'ทุกฟีเจอร์ + อีบุคครบ + อัปเดตตลอดชีพ', detail:'โอนเงิน ฿2,490 พร้อมแจ้งชื่อ-อีเมล' },
+  };
+  const i = info[type];
+  const existing = document.getElementById('pricing-detail-modal');
+  if (existing) existing.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'pricing-detail-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.6);display:flex;align-items:flex-end;';
+  modal.innerHTML = `
+    <div style="background:white;border-radius:24px 24px 0 0;padding:28px 24px 40px;width:100%;max-height:85vh;overflow-y:auto;">
+      <div style="text-align:center;margin-bottom:20px">
+        <div style="font-size:40px">${i.icon}</div>
+        <div style="font-size:20px;font-weight:900;color:${i.color};margin-top:8px">แพ็กเกจ${i.name}</div>
+        <div style="font-size:13px;color:var(--ink3);margin-top:4px">${i.desc}</div>
+      </div>
+
+      <div style="background:#f8f8f8;border-radius:16px;padding:18px;margin-bottom:20px">
+        <div style="font-size:13px;font-weight:800;color:var(--ink);margin-bottom:12px">📋 วิธีสมัคร:</div>
+        <div style="font-size:13px;color:var(--ink2);line-height:2">
+          <b>1.</b> โอนเงิน <b style="color:${i.color}">฿${i.price}</b><br>
+          <b>ธนาคาร:</b> กสิกรไทย<br>
+          <b>ชื่อ:</b> อรฉัตร ภิรมย์<br>
+          <b>เลขบัญชี:</b> 096-3-42838-9<br><br>
+          <b>2.</b> แจ้งสลิป + อีเมลที่สมัครมาที่<br>
+          LINE: <a href="https://line.me/R/ti/p/@ava11" style="color:#F13596;font-weight:700">@ava11</a><br><br>
+          <b>3.</b> แอดมินเปิดสิทธิ์ให้ภายใน <b>24 ชั่วโมง</b> ค่ะ 🎉
+        </div>
+      </div>
+
+      <a href="https://line.me/R/ti/p/@ava11" target="_blank"
+        style="display:block;width:100%;padding:14px;background:#06C755;color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px;text-align:center;text-decoration:none;box-sizing:border-box">
+        💬 แจ้งชำระเงินทาง LINE
+      </a>
+      <button onclick="document.getElementById('pricing-detail-modal').remove()"
+        style="width:100%;padding:12px;background:#f0f0f0;border:none;border-radius:12px;font-size:13px;color:#666;cursor:pointer;font-family:inherit;">
+        ปิด
+      </button>
+    </div>
+  `;
+  modal.addEventListener('click', (e) => { if(e.target===modal) modal.remove(); });
+  document.body.appendChild(modal);
+}
+
 function goScreen(s) {
   stopSpeech();
   playClickSound();
   document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
   document.getElementById('screen-' + s).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  const navMap = { home:'nav-home', 'lessons-hub':'nav-lessons', play:'nav-chat', chat:'nav-chat', quiz:'nav-quiz', profile:'nav-profile', lesson:'nav-home', pinyin:'nav-home', vocab:'nav-lessons', 'tangtang-chat':'nav-tangtang', 'comm-hub':'nav-lessons', 'comm-lesson':'nav-lessons' };
+  const navMap = { home:'nav-home', 'lessons-hub':'nav-lessons', play:'nav-chat', chat:'nav-chat', quiz:'nav-quiz', profile:'nav-profile', lesson:'nav-home', pinyin:'nav-home', vocab:'nav-lessons', 'tangtang-chat':'nav-tangtang', 'comm-hub':'nav-lessons', 'comm-lesson':'nav-lessons', 'pricing':'nav-profile' };
   const nb = document.getElementById(navMap[s]);
   if (nb) nb.classList.add('active');
   state.curScreen = s;
@@ -8540,6 +8720,8 @@ function goScreen(s) {
   if (s === 'lessons-hub') { renderLessonsHub(); renderHubVocab(); }
   if (s === 'quiz') initMainQuiz();
   if (s === 'tangtang-chat') initTangTangChat();
+  if (s === 'pricing') renderPricing();
+  if (s === 'comm-hub') renderCommHub();
   updateTopbar();
 }
 
@@ -8876,7 +9058,12 @@ function getDueCount() {
 function isPremium() {
   if (!state.user) return false;
   if (isAdmin()) return true;
-  return state.user.is_premium === true || state.user.data.isPremium === true;
+  const d = state.user.data || {};
+  // เช็ค subscription ใหม่
+  if (d.subscription_type === 'lifetime') return true;
+  if (d.subscription_end && new Date(d.subscription_end) > new Date()) return true;
+  // legacy fallback
+  return state.user.is_premium === true || d.isPremium === true;
 }
 
 function tryOpenLesson(id, index) {
@@ -8890,40 +9077,67 @@ function tryOpenLesson(id, index) {
 function showPaymentModal() {
   const existing = document.getElementById('payment-modal');
   if (existing) existing.remove();
-  
+
   const modal = document.createElement('div');
   modal.id = 'payment-modal';
   modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.6);display:flex;align-items:flex-end;';
   modal.innerHTML = `
-    <div style="background:white;border-radius:24px 24px 0 0;padding:28px 24px 40px;width:100%;max-height:85vh;overflow-y:auto;">
-      <div style="text-align:center;margin-bottom:20px;">
-        <img src="https://avajarshika.github.io/tangtang/tangtang-wow.png" alt="TangTang" style="width:90px;height:90px;object-fit:contain;display:block;margin:0 auto 8px;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.25));animation:float 3s ease-in-out infinite">
-        <div style="font-size:20px;font-weight:700;color:#1a1a1a;">ปลดล็อคทุกบทเรียน</div>
-        <div style="font-size:13px;color:#888;margin-top:4px;">เข้าถึงบทเรียนกว่า 50+ บท ตลอดชีพ</div>
+    <div style="background:white;border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-height:90vh;overflow-y:auto;">
+      <div style="text-align:center;margin-bottom:18px">
+        <img src="https://avajarshika.github.io/tangtang/tangtang-wow.png" style="width:72px;height:72px;object-fit:contain;display:block;margin:0 auto 8px;filter:drop-shadow(0 4px 14px rgba(241,53,150,0.25));animation:float 3s ease-in-out infinite">
+        <div style="font-size:18px;font-weight:900;color:#1a1a1a">เลือกแพ็กเกจที่ใช่สำหรับคุณ</div>
+        <div style="font-size:12px;color:#888;margin-top:4px">เรียนภาษาจีนได้จริง พูดได้ใช้ได้ 🇨🇳</div>
       </div>
 
-      <div style="background:#fff5f9;border:1.5px solid #F13596;border-radius:16px;padding:16px;margin-bottom:20px;text-align:center;">
-        <div style="font-size:13px;color:#888;text-decoration:line-through;">ราคาปกติ 1,990 บาท</div>
-        <div style="font-size:36px;font-weight:800;color:#F13596;">1,290 บาท</div>
-        <div style="font-size:12px;color:#888;">จ่ายครั้งเดียว ตลอดชีพ ✨</div>
-      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px">
 
-      <div style="background:#f8f8f8;border-radius:12px;padding:14px;margin-bottom:20px;">
-        <div style="font-size:13px;font-weight:700;color:#333;margin-bottom:8px;">✅ ที่จะได้รับ:</div>
-        <div style="font-size:12px;color:#555;line-height:2;">
-          🎯 บทเรียนครบทุกบท ทักทาย · อาหาร · เดินทาง และอื่นๆ<br>
-          ⚡ มินิเกม Speed Quiz · เรียงประโยค · ลำดับขีด ทุก Level<br>
-          📚 คำศัพท์กว่า 5,000+ คำ พร้อม Flashcard SRS<br>
-          🎮 แบบทดสอบและ Final Exam ครบทุกระดับ<br>
-          🔄 อัปเดตเนื้อหาฟรีตลอด
+        <!-- รายเดือน -->
+        <div onclick="document.getElementById('payment-modal').remove();showPricingDetail('monthly')"
+          style="background:white;border:2px solid #e0f7fa;border-radius:16px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px">
+          <div style="width:40px;height:40px;border-radius:12px;background:#e0f7fa;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">📅</div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:800;color:#1a1a1a">รายเดือน</div>
+            <div style="font-size:11px;color:#888;margin-top:1px">ปลดล็อคเนื้อหาทั้งหมด + อีบุค HSK</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:900;color:#0891b2">฿199</div>
+            <div style="font-size:10px;color:#aaa">/เดือน</div>
+          </div>
         </div>
+
+        <!-- รายปี (แนะนำ) -->
+        <div onclick="document.getElementById('payment-modal').remove();showPricingDetail('yearly')"
+          style="background:linear-gradient(135deg,#1565c0,#1976d2);border:2px solid #1565c0;border-radius:16px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;position:relative">
+          <div style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#ff9800;color:white;font-size:10px;font-weight:800;padding:2px 12px;border-radius:20px;white-space:nowrap">🔥 ประหยัดที่สุด</div>
+          <div style="width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">⭐</div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:800;color:white">รายปี</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.8);margin-top:1px">ทุกฟีเจอร์ + อีบุคครบ + อัปเดตตลอดปี</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:12px;color:rgba(255,255,255,.5);text-decoration:line-through">฿2,388</div>
+            <div style="font-size:18px;font-weight:900;color:white">฿990</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.6)">/ปี</div>
+          </div>
+        </div>
+
+        <!-- ถาวร -->
+        <div onclick="document.getElementById('payment-modal').remove();showPricingDetail('lifetime')"
+          style="background:white;border:2px solid #f3e5f5;border-radius:16px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px">
+          <div style="width:40px;height:40px;border-radius:12px;background:#f3e5f5;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🌟</div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:800;color:#1a1a1a">ถาวรตลอดชีพ</div>
+            <div style="font-size:11px;color:#888;margin-top:1px">จ่ายครั้งเดียว อัปเดตตลอดชีพ</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:900;color:#6b1a6b">฿2,490</div>
+            <div style="font-size:10px;color:#aaa">ครั้งเดียว</div>
+          </div>
+        </div>
+
       </div>
 
-      <button onclick="document.getElementById('payment-modal').remove();window.location.href='checkout.html'" 
-        style="width:100%;padding:14px;background:#F13596;color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px;">
-        🛒 สั่งซื้อตอนนี้ — ฿1,290
-      </button>
-      <button onclick="document.getElementById('payment-modal').remove()" 
+      <button onclick="document.getElementById('payment-modal').remove()"
         style="width:100%;padding:12px;background:#f0f0f0;border:none;border-radius:12px;font-size:13px;color:#666;cursor:pointer;font-family:inherit;">
         ปิด
       </button>
@@ -9371,6 +9585,25 @@ function renderProfile() {
   // แสดง/ซ่อนปุ่ม Admin
   const adminBtn = document.getElementById('admin-btn');
   if (adminBtn) adminBtn.style.display = isAdmin() ? 'block' : 'none';
+
+  // แสดงสถานะ subscription
+  const subEl = document.getElementById('prof-subscription');
+  if (subEl) {
+    const sub = getSubscriptionLabel(state.user);
+    const isActive = isPremium();
+    subEl.innerHTML = `
+      <div style="background:${sub.bg};border:1.5px solid ${sub.color}40;border-radius:14px;padding:14px 16px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-size:11px;font-weight:700;color:var(--ink3);margin-bottom:4px">สถานะแพ็กเกจ</div>
+            <div style="font-size:14px;font-weight:800;color:${sub.color}">${sub.label}</div>
+          </div>
+          <button onclick="goScreen('pricing')" style="padding:8px 16px;background:${isActive?sub.color:'#F13596'};color:white;border:none;border-radius:20px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer">
+            ${isActive?'จัดการ':'⬆️ อัปเกรด'}
+          </button>
+        </div>
+      </div>`;
+  }
 
   const done = (d.completed || []).map(id => LESSONS.find(l => l.id === id)).filter(Boolean);
   const dl = document.getElementById('done-list');
@@ -13795,66 +14028,90 @@ async function loadAdminUsers() {
     return;
   }
 
-  listEl.innerHTML = data.map(u => `
-    <div id="user-row-${u.user_id}" class="user-card" data-search="${(u.email||'').toLowerCase()} ${(u.name||'').toLowerCase()} ${u.is_premium?'premium':'ฟรี'}" style="background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:14px;margin-bottom:8px;box-shadow:var(--shadow)">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+  listEl.innerHTML = data.map(u => {
+    const subType = u.subscription_type || (u.is_premium ? 'lifetime' : 'free');
+    const subEnd = u.subscription_end;
+    const subEndStr = subEnd ? new Date(subEnd).toLocaleDateString('th-TH',{day:'numeric',month:'short',year:'numeric'}) : '-';
+    const subBadge = subType==='lifetime' ? '🌟 ถาวร' : subType==='yearly' ? '⭐ รายปี' : subType==='monthly' ? '📅 รายเดือน' : 'ฟรี';
+    const subColor = subType==='lifetime' ? '#6b1a6b' : subType==='yearly' ? '#1565c0' : subType==='monthly' ? '#0891b2' : '#999';
+    return `
+    <div id="user-row-${u.user_id}" class="user-card" data-search="${(u.email||'').toLowerCase()} ${(u.name||'').toLowerCase()} ${subBadge}" style="background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:14px;margin-bottom:8px;box-shadow:var(--shadow)">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px">
         <div style="flex:1;min-width:0">
-          <div style="font-size:13px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.email}</div>
-          <div style="font-size:11px;color:var(--ink3);margin-top:2px">👤 ${u.name || ''} · ⭐ ${u.xp || 0} XP · อัปเดต ${u.updated_at ? new Date(u.updated_at).toLocaleDateString('th-TH') : '-'}</div>
+          <div style="font-size:13px;font-weight:700;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u.email}</div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:2px">👤 ${u.name||''} · ⭐ ${u.xp||0} XP</div>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-          <span id="badge-${u.user_id}" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;${u.is_premium ? 'background:#fff5f9;color:var(--red);border:1px solid var(--red)' : 'background:var(--paper2);color:var(--ink3);border:1px solid var(--paper3)'}">${u.is_premium ? '⭐ Premium' : 'ฟรี'}</span>
-          <button onclick="togglePremium('${u.user_id}', ${u.is_premium})" id="btn-${u.user_id}"
-            style="padding:6px 14px;border-radius:20px;border:none;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;${u.is_premium ? 'background:#fee2e2;color:#dc2626' : 'background:#dcfce7;color:#16a34a'}">
-            ${u.is_premium ? '🔒 ถอด' : '🔓 ปลดล็อค'}
-          </button>
-        </div>
+        <span id="badge-${u.user_id}" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;flex-shrink:0;background:${subColor}15;color:${subColor};border:1px solid ${subColor}40">${subBadge}</span>
       </div>
-    </div>`).join('');
+      ${subType!=='free' ? `<div style="font-size:11px;color:var(--ink3);margin-bottom:10px;background:var(--paper2);border-radius:8px;padding:6px 10px">📅 หมดอายุ: <b>${subType==='lifetime'?'ไม่มีวันหมด':subEndStr}</b></div>` : ''}
+      <div id="sub-btns-${u.user_id}" style="display:flex;gap:6px;flex-wrap:wrap">
+        <button onclick="adminSetSubscription('${u.user_id}','monthly')" style="padding:5px 10px;border-radius:20px;border:none;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;background:#e0f7fa;color:#0891b2">📅 รายเดือน</button>
+        <button onclick="adminSetSubscription('${u.user_id}','yearly')" style="padding:5px 10px;border-radius:20px;border:none;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;background:#e3f2fd;color:#1565c0">⭐ รายปี</button>
+        <button onclick="adminSetSubscription('${u.user_id}','lifetime')" style="padding:5px 10px;border-radius:20px;border:none;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;background:#f3e5f5;color:#6b1a6b">🌟 ถาวร</button>
+        <button onclick="adminSetSubscription('${u.user_id}','free')" style="padding:5px 10px;border-radius:20px;border:none;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;background:#fee2e2;color:#dc2626">🔒 ถอด</button>
+      </div>
+    </div>`;
+  }).join('');
   // Re-apply search after reload
   const searchInput = document.getElementById('admin-search');
   if (searchInput && searchInput.value) filterAdminUsers(searchInput.value);
 }
 
 async function togglePremium(userId, currentStatus) {
-  const newStatus = !currentStatus;
-  const btn = document.getElementById('btn-' + userId);
-  const badge = document.getElementById('badge-' + userId);
-  if (btn) { btn.disabled = true; btn.textContent = '⏳'; }
+  // legacy compat — เรียก adminSetSubscription
+  await adminSetSubscription(userId, currentStatus ? 'free' : 'lifetime');
+}
 
-  const { error } = await sb.rpc('admin_set_premium', {
-    target_user_id: userId,
-    premium_value: newStatus
-  });
+async function adminSetSubscription(userId, type) {
+  const btnsEl = document.getElementById('sub-btns-' + userId);
+  const badge = document.getElementById('badge-' + userId);
+  if (btnsEl) btnsEl.querySelectorAll('button').forEach(b => { b.disabled = true; });
+
+  // คำนวณ subscription_end อัตโนมัติ
+  let subEnd = null;
+  const now = new Date();
+  if (type === 'monthly') {
+    const d = new Date(now); d.setDate(d.getDate() + 30);
+    subEnd = d.toISOString().split('T')[0];
+  } else if (type === 'yearly') {
+    const d = new Date(now); d.setDate(d.getDate() + 365);
+    subEnd = d.toISOString().split('T')[0];
+  }
+  // lifetime = null, free = null
+
+  const isPrem = type !== 'free';
+
+  // อัปเดต Supabase
+  const { error } = await sb.from('user_progress').update({
+    subscription_type: type,
+    subscription_start: isPrem ? now.toISOString().split('T')[0] : null,
+    subscription_end: subEnd,
+    is_premium: isPrem,
+  }).eq('user_id', userId);
 
   if (error) {
-    showToast('❌ เกิดข้อผิดพลาด: ' + error.message);
-    if (btn) { btn.disabled = false; btn.textContent = currentStatus ? '🔒 ถอด' : '🔓 ปลดล็อค'; }
+    showToast('❌ ' + error.message);
+    if (btnsEl) btnsEl.querySelectorAll('button').forEach(b => { b.disabled = false; });
     return;
   }
 
-  if (badge) {
-    badge.textContent = newStatus ? '⭐ Premium' : 'ฟรี';
-    badge.style.cssText = newStatus
-      ? 'font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:#fff5f9;color:var(--red);border:1px solid var(--red)'
-      : 'font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:var(--paper2);color:var(--ink3);border:1px solid var(--paper3)';
-  }
-  if (btn) {
-    btn.disabled = false;
-    btn.textContent = newStatus ? '🔒 ถอด' : '🔓 ปลดล็อค';
-    btn.style.cssText = newStatus
-      ? 'padding:6px 14px;border-radius:20px;border:none;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;background:#fee2e2;color:#dc2626'
-      : 'padding:6px 14px;border-radius:20px;border:none;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;background:#dcfce7;color:#16a34a';
-  }
+  // อัปเดต UI
+  const subColors = { lifetime:'#6b1a6b', yearly:'#1565c0', monthly:'#0891b2', free:'#999' };
+  const subLabels = { lifetime:'🌟 ถาวร', yearly:'⭐ รายปี', monthly:'📅 รายเดือน', free:'ฟรี' };
+  const color = subColors[type] || '#999';
+  const label = subLabels[type] || 'ฟรี';
 
-  showToast(newStatus ? '✅ ปลดล็อค Premium แล้ว!' : '🔒 ถอด Premium แล้ว');
+  if (badge) {
+    badge.textContent = label;
+    badge.style.cssText = `font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;flex-shrink:0;background:${color}15;color:${color};border:1px solid ${color}40`;
+  }
+  if (btnsEl) btnsEl.querySelectorAll('button').forEach(b => { b.disabled = false; });
+
+  const msgs = { lifetime:'🌟 ให้สิทธิ์ถาวรแล้ว!', yearly:'⭐ ให้รายปีแล้ว!', monthly:'📅 ให้รายเดือนแล้ว!', free:'🔒 ถอด Premium แล้ว' };
+  showToast(msgs[type] || '✅ อัปเดตแล้ว');
 
   // อัปเดต summary
-  const rows = document.querySelectorAll('[id^="badge-"]');
-  const total = rows.length;
-  const premiumCount = Array.from(rows).filter(b => b.textContent.includes('Premium')).length;
-  const summaryEl = document.getElementById('admin-summary');
-  if (summaryEl) summaryEl.innerHTML = `สมาชิกทั้งหมด <b>${total} คน</b> · Premium <b style="color:var(--red)">${premiumCount} คน</b> · ฟรี <b>${total - premiumCount} คน</b>`;
+  loadAdminUsers();
 }
 
 // ═══════════════════════════════════
