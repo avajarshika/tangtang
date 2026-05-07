@@ -2057,9 +2057,10 @@ body {
 
       <!-- Admin Tabs -->
       <div style="display:flex;border-bottom:1px solid var(--paper3);margin-bottom:16px">
-        <button id="admin-tab-users" onclick="switchAdminTab('users')" style="flex:1;padding:10px;font-size:13px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:var(--red);border-bottom:2px solid var(--red);margin-bottom:-1px">👥 สมาชิก</button>
-        <button id="admin-tab-affiliate" onclick="switchAdminTab('affiliate')" style="flex:1;padding:10px;font-size:13px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:var(--ink3);border-bottom:2px solid transparent;margin-bottom:-1px">🤝 Affiliate</button>
-        <button id="admin-tab-export" onclick="switchAdminTab('export')" style="flex:1;padding:10px;font-size:13px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:var(--ink3);border-bottom:2px solid transparent;margin-bottom:-1px">📥 Export</button>
+        <button id="admin-tab-users" onclick="switchAdminTab('users')" style="flex:1;padding:10px;font-size:12px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:var(--red);border-bottom:2px solid var(--red);margin-bottom:-1px">👥 สมาชิก</button>
+        <button id="admin-tab-orders" onclick="switchAdminTab('orders')" style="flex:1;padding:10px;font-size:12px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:var(--ink3);border-bottom:2px solid transparent;margin-bottom:-1px">📋 Orders</button>
+        <button id="admin-tab-affiliate" onclick="switchAdminTab('affiliate')" style="flex:1;padding:10px;font-size:12px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:var(--ink3);border-bottom:2px solid transparent;margin-bottom:-1px">🤝 Affiliate</button>
+        <button id="admin-tab-export" onclick="switchAdminTab('export')" style="flex:1;padding:10px;font-size:12px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:var(--ink3);border-bottom:2px solid transparent;margin-bottom:-1px">📥 Export</button>
       </div>
     </div>
 
@@ -2084,7 +2085,18 @@ body {
     </div>
 
     <!-- Tab: Affiliate -->
-    <div id="admin-pane-affiliate" style="padding:0 20px 20px;display:none">
+    <!-- Tab: Orders -->
+    <div id="admin-pane-orders" style="padding:0 20px 20px;display:none">
+      <div style="background:#e3f2fd;border:1px solid #90caf9;border-radius:var(--r);padding:14px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:700;color:#1565c0;margin-bottom:4px">📋 รายการสั่งซื้อทั้งหมด</div>
+        <div id="orders-summary" style="font-size:12px;color:var(--ink2)">กำลังโหลด...</div>
+      </div>
+      <div id="admin-orders-list">
+        <div style="text-align:center;padding:30px;color:var(--ink3)">⏳ กำลังโหลด...</div>
+      </div>
+    </div>
+
+        <div id="admin-pane-affiliate" style="padding:0 20px 20px;display:none">
       <div style="background:var(--amber-light);border:1px solid #DFC090;border-radius:var(--r);padding:14px;margin-bottom:16px">
         <div style="font-size:13px;font-weight:700;color:var(--amber);margin-bottom:4px">💰 สรุป Affiliate</div>
         <div id="affiliate-admin-summary" style="font-size:12px;color:var(--ink2)">กำลังโหลด...</div>
@@ -13823,11 +13835,14 @@ function goAdminPanel() {
 
 function switchAdminTab(tab) {
   document.getElementById('admin-pane-users').style.display = tab==='users'?'block':'none';
+  document.getElementById('admin-pane-orders').style.display = tab==='orders'?'block':'none';
   document.getElementById('admin-pane-affiliate').style.display = tab==='affiliate'?'block':'none';
   document.getElementById('admin-pane-export').style.display = tab==='export'?'block':'none';
-  document.getElementById('admin-tab-users').style.cssText = `flex:1;padding:10px;font-size:13px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:${tab==='users'?'var(--red)':'var(--ink3)'};border-bottom:2px solid ${tab==='users'?'var(--red)':'transparent'};margin-bottom:-1px`;
-  document.getElementById('admin-tab-affiliate').style.cssText = `flex:1;padding:10px;font-size:13px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:${tab==='affiliate'?'var(--amber)':'var(--ink3)'};border-bottom:2px solid ${tab==='affiliate'?'var(--amber)':'transparent'};margin-bottom:-1px`;
-  document.getElementById('admin-tab-export').style.cssText = `flex:1;padding:10px;font-size:13px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:${tab==='export'?'var(--blue)':'var(--ink3)'};border-bottom:2px solid ${tab==='export'?'var(--blue)':'transparent'};margin-bottom:-1px`;
+  if (tab==='orders') loadAdminOrders();
+  document.getElementById('admin-tab-users').style.cssText = `flex:1;padding:10px;font-size:12px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:${tab==='users'?'var(--red)':'var(--ink3)'};border-bottom:2px solid ${tab==='users'?'var(--red)':'transparent'};margin-bottom:-1px`;
+  document.getElementById('admin-tab-orders').style.cssText = `flex:1;padding:10px;font-size:12px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:${tab==='orders'?'#1565c0':'var(--ink3)'};border-bottom:2px solid ${tab==='orders'?'#1565c0':'transparent'};margin-bottom:-1px`;
+  document.getElementById('admin-tab-affiliate').style.cssText = `flex:1;padding:10px;font-size:12px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:${tab==='affiliate'?'var(--amber)':'var(--ink3)'};border-bottom:2px solid ${tab==='affiliate'?'var(--amber)':'transparent'};margin-bottom:-1px`;
+  document.getElementById('admin-tab-export').style.cssText = `flex:1;padding:10px;font-size:12px;font-weight:700;font-family:inherit;border:none;background:none;cursor:pointer;color:${tab==='export'?'var(--blue)':'var(--ink3)'};border-bottom:2px solid ${tab==='export'?'var(--blue)':'transparent'};margin-bottom:-1px`;
 }
 
 async function loadAffiliateAdmin() {
@@ -13948,6 +13963,115 @@ function filterAdminUsers(query) {
       card.style.display = match ? '' : 'none';
     }
   });
+}
+
+
+// ══════════════════════════════════════════
+// ADMIN ORDERS
+// ══════════════════════════════════════════
+async function loadAdminOrders() {
+  const listEl = document.getElementById('admin-orders-list');
+  const summaryEl = document.getElementById('orders-summary');
+  if (!listEl) return;
+  listEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink3)">⏳ กำลังโหลด...</div>';
+
+  const { data, error } = await sb.from('orders')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) { listEl.innerHTML = '<div style="color:var(--red);padding:20px">❌ ' + error.message + '</div>'; return; }
+
+  const orders = data || [];
+  const pending = orders.filter(o => o.status === 'pending').length;
+  const approved = orders.filter(o => o.status === 'approved').length;
+  summaryEl.innerHTML = `ทั้งหมด <b>${orders.length}</b> รายการ · รอ approve <b style="color:#e65100">${pending}</b> · approved แล้ว <b style="color:#2e7d32">${approved}</b>`;
+
+  if (orders.length === 0) {
+    listEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink3)">ยังไม่มี order</div>';
+    return;
+  }
+
+  const pkgLabel = { monthly:'📅 รายเดือน', yearly:'⭐ รายปี', lifetime:'🌟 ถาวร' };
+
+  listEl.innerHTML = orders.map(o => {
+    const isPending = o.status === 'pending';
+    const date = o.created_at ? new Date(o.created_at).toLocaleString('th-TH') : '-';
+    const pkg = pkgLabel[o.package_type] || pkgLabel[o.package] || '❓ ไม่ระบุ';
+    const hasAffiliate = !!o.referral_code;
+    const commission = Math.round((o.amount || 0) * 0.10);
+
+    return `<div id="order-row-${o.id}" style="background:white;border:1.5px solid ${isPending?'#ff9800':'#e0e0e0'};border-radius:14px;padding:14px;margin-bottom:10px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:700;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${o.email || '-'}</div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:2px">👤 ${o.name||''} · 📱 ${o.phone||''}</div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:2px">🕐 ${date}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-size:13px;font-weight:800;color:#F13596">฿${(o.amount||0).toLocaleString()}</div>
+          <div style="font-size:11px;color:var(--ink3)">${pkg}</div>
+          <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;${isPending?'background:#fff3e0;color:#e65100':'background:#e8f5e9;color:#2e7d32'}">${isPending?'⏳ รอ approve':'✅ approved'}</span>
+        </div>
+      </div>
+      ${o.slip_url ? `<a href="${o.slip_url}" target="_blank" style="display:inline-block;font-size:11px;color:#1565c0;font-weight:700;margin-bottom:8px">🖼 ดูสลิป</a>` : '<div style="font-size:11px;color:#999;margin-bottom:8px">ไม่มีสลิป</div>'}
+      ${hasAffiliate ? `<div style="font-size:11px;background:#fff8e1;border-radius:8px;padding:5px 10px;margin-bottom:8px;color:#f57f17">🤝 Affiliate: <b>${o.referral_code}</b> · ค่าคอม ฿${commission}</div>` : ''}
+      ${isPending ? `<button onclick="approveOrder('${o.id}','${o.email||''}','${o.referral_code||''}',${o.amount||0})"
+        style="width:100%;padding:10px;background:linear-gradient(135deg,#2e7d32,#43a047);color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">
+        ✅ Approve — ปลดล็อค Premium + ${hasAffiliate?'จ่ายค่าคอม':'ไม่มี affiliate'}
+      </button>` : ''}
+    </div>`;
+  }).join('');
+}
+
+async function approveOrder(orderId, email, referralCode, amount) {
+  const btn = document.querySelector(`#order-row-${orderId} button`);
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ กำลัง approve...'; }
+
+  // 1. อัปเดต order status → approved
+  const { error: orderErr } = await sb.from('orders').update({ status: 'approved' }).eq('id', orderId);
+  if (orderErr) { showToast('❌ ' + orderErr.message); if (btn) btn.disabled = false; return; }
+
+  // 2. หา user_id จาก email แล้ว set premium
+  const { data: userRow } = await sb.from('user_progress')
+    .select('user_id')
+    .eq('data->>email', email)
+    .maybeSingle();
+
+  if (userRow?.user_id) {
+    await sb.from('user_progress').update({ is_premium: true }).eq('user_id', userRow.user_id);
+  }
+
+  // 3. จ่ายค่าคอม affiliate (ถ้ามี referral_code)
+  if (referralCode) {
+    const commission = Math.round(amount * 0.10);
+    const { data: affRow } = await sb.from('user_progress')
+      .select('user_id, affiliate_earnings, affiliate_count')
+      .eq('referral_code', referralCode)
+      .maybeSingle();
+
+    if (affRow?.user_id) {
+      await sb.from('user_progress').update({
+        affiliate_earnings: (affRow.affiliate_earnings || 0) + commission,
+        affiliate_count: (affRow.affiliate_count || 0) + 1
+      }).eq('user_id', affRow.user_id);
+
+      await sb.from('affiliate_earnings').insert({
+        affiliate_id: affRow.user_id,
+        buyer_email: email,
+        amount: commission,
+        status: 'pending'
+      });
+
+      showToast(`✅ Approved! จ่ายค่าคอม ฿${commission} ให้ affiliate แล้ว`);
+    } else {
+      showToast('✅ Approved! (ไม่พบ affiliate)');
+    }
+  } else {
+    showToast('✅ Approved เรียบร้อย!');
+  }
+
+  // reload orders
+  loadAdminOrders();
 }
 
 async function loadAdminUsers() {

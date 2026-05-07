@@ -1021,9 +1021,7 @@ async function submitOrder() {
     sendLineNotify(fname, phone, email, slipUrl, referralCode)
   ]);
 
-  // Update affiliate stats if referral code used
-  if (referralCode) await updateAffiliateStats(referralCode);
-
+  // Affiliate จะได้รับเมื่อ Admin approve เท่านั้น
   if (btn) { btn.disabled = false; btn.innerHTML = '✅ ยืนยันการสั่งซื้อ — ฿' + selectedPrice; }
   err.textContent = ''; err.style.color = 'var(--red)';
   document.getElementById('success-overlay').classList.add('show');
