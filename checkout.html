@@ -736,7 +736,10 @@ body {
     <a href="https://line.me/ti/p/@ava11" target="_blank" class="btn-line" style="margin-top:0;background:linear-gradient(135deg,#06C755,#02a548);">
       🎁 แอด Line รับของแถม คลิก
     </a>
-    <button onclick="document.getElementById('success-overlay').classList.remove('show');window.location.href='index.html'" style="width:100%;padding:12px;margin-top:10px;background:none;border:1.5px solid var(--paper3);border-radius:12px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;color:var(--ink3)">
+    <button onclick="window.location.href='index.html?action=login'" style="width:100%;padding:14px;margin-top:10px;background:var(--red);color:white;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer">
+      🔑 เข้าสู่ระบบเลย
+    </button>
+    <button onclick="document.getElementById('success-overlay').classList.remove('show');window.location.href='index.html'" style="width:100%;padding:12px;margin-top:8px;background:none;border:1.5px solid var(--paper3);border-radius:12px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;color:var(--ink3)">
       กลับหน้าหลัก
     </button>
     <button onclick="window.location.href='index.html?action=login'" style="width:100%;padding:14px;margin-top:10px;background:var(--red);color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">
@@ -912,6 +915,44 @@ async function updateAffiliateStats(code) {
   } catch(e) { console.log('Affiliate update error:', e); }
 }
 
+
+// ── Session Detection ──
+let currentSessionUser = null;
+
+async function initPage() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return; // ลูกค้าใหม่ — แสดงฟอร์มปกติ
+
+  currentSessionUser = session.user;
+  const userEmail = session.user.email;
+  const userName = session.user.user_metadata?.name || userEmail;
+
+  // ซ่อนฟอร์มเต็มและแสดงแบนเนอร์แทน
+  const formCard = document.querySelector('.card:has(#fname)');
+  if (formCard) {
+    formCard.innerHTML = `
+      <div style="display:flex;align-items:center;gap:12px;padding:14px;background:#f0fdf4;border-radius:12px;border:1.5px solid #4caf50;margin-bottom:0">
+        <div style="font-size:28px">✅</div>
+        <div>
+          <div style="font-size:13px;font-weight:800;color:#2e7d32">เข้าสู่ระบบแล้ว</div>
+          <div style="font-size:12px;color:#555;margin-top:2px">${userName} · ${userEmail}</div>
+          <div style="font-size:11px;color:#888;margin-top:2px">กดยืนยันการสั่งซื้อได้เลย ไม่ต้องกรอกข้อมูลเพิ่ม</div>
+        </div>
+      </div>
+      <input type="hidden" id="fname" value="${userName}">
+      <input type="hidden" id="phone" value="">
+      <input type="hidden" id="email" value="${userEmail}">
+      <input type="hidden" id="password" value="__existing__">
+      <input type="hidden" id="password2" value="__existing__">
+      <div id="form-err" style="color:var(--red);font-size:13px;margin-top:8px;min-height:18px"></div>
+    `;
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  initPage();
+});
+
 async function submitOrder() {
   const fname    = document.getElementById('fname').value.trim();
   const phone    = document.getElementById('phone').value.trim();
@@ -922,27 +963,48 @@ async function submitOrder() {
   const slipErr  = document.getElementById('slip-err');
   const btn      = document.querySelector('.btn-submit');
 
-  // Validate
-  if (!fname)  { err.textContent = 'กรุณากรอกชื่อ-นามสกุล'; return; }
-  if (!phone)  { err.textContent = 'กรุณากรอกเบอร์โทรศัพท์'; return; }
-  if (!email || !email.includes('@')) { err.textContent = 'กรุณากรอกอีเมลให้ถูกต้อง'; return; }
-  if (password.length < 6) { err.textContent = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัว'; return; }
-  if (password !== password2) { err.textContent = 'รหัสผ่านไม่ตรงกัน'; return; }
+  const isLoggedIn = !!currentSessionUser;
+
+  // Validate เฉพาะลูกค้าใหม่
+  if (!isLoggedIn) {
+    if (!fname)  { err.textContent = 'กรุณากรอกชื่อ-นามสกุล'; return; }
+    if (!phone)  { err.textContent = 'กรุณากรอกเบอร์โทรศัพท์'; return; }
+    if (!email || !email.includes('@')) { err.textContent = 'กรุณากรอกอีเมลให้ถูกต้อง'; return; }
+    if (password.length < 6) { err.textContent = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัว'; return; }
+    if (password !== password2) { err.textContent = 'รหัสผ่านไม่ตรงกัน'; return; }
+  }
   if (!slipFile) { slipErr.textContent = 'กรุณาแนบรูปสลิปการโอนเงิน'; document.getElementById('slip-upload-area').style.borderColor='var(--red)'; return; }
 
   err.textContent = ''; slipErr.textContent = '';
   if (btn) { btn.disabled = true; btn.innerHTML = '⏳ กำลังสมัครบัญชี...'; }
 
-  // สมัครบัญชีใน Supabase
-  const { data, error } = await sb.auth.signUp({
-    email, password,
-    options: { data: { name: fname } }
-  });
+  // สมัครบัญชีใน Supabase (ข้ามถ้า login อยู่แล้ว)
+  let error = null;
+  if (!isLoggedIn) {
+    const { error: signUpErr } = await sb.auth.signUp({
+      email, password,
+      options: { data: { name: fname } }
+    });
+    error = signUpErr;
+  }
 
-  if (error) {
-    err.textContent = error.message === 'User already registered' ? 'อีเมลนี้สมัครแล้ว กรุณาใช้อีเมลอื่น' : error.message;
+  const isEmailTaken = error && (
+    error.message.includes('already registered') ||
+    error.message.includes('already been registered') ||
+    error.message.includes('User already')
+  );
+
+  // ถ้า error จริงๆ (ไม่ใช่เมลซ้ำ) → หยุด
+  if (error && !isEmailTaken) {
+    err.textContent = error.message;
     if (btn) { btn.disabled = false; btn.innerHTML = '✅ ยืนยันการสั่งซื้อ — ฿' + selectedPrice; }
     return;
+  }
+
+  // ถ้าเมลซ้ำ = ลูกค้าเก่าอัปเกรด → ดำเนินการต่อได้เลย
+  if (isEmailTaken) {
+    err.style.color = '#0891b2';
+    err.textContent = '✅ พบบัญชีเดิม กำลังดำเนินการ...';
   }
 
   if (btn) btn.innerHTML = '⏳ กำลังอัปโหลดสลิป...';
@@ -966,6 +1028,7 @@ async function submitOrder() {
   if (referralCode) await updateAffiliateStats(referralCode);
 
   if (btn) { btn.disabled = false; btn.innerHTML = '✅ ยืนยันการสั่งซื้อ — ฿' + selectedPrice; }
+  err.textContent = ''; err.style.color = 'var(--red)';
   document.getElementById('success-overlay').classList.add('show');
 }
 
