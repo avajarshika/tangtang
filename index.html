@@ -14015,12 +14015,26 @@ async function loadAdminOrders() {
       </div>
       ${o.slip_url ? `<a href="${o.slip_url}" target="_blank" style="display:inline-block;font-size:11px;color:#1565c0;font-weight:700;margin-bottom:8px">🖼 ดูสลิป</a>` : '<div style="font-size:11px;color:#999;margin-bottom:8px">ไม่มีสลิป</div>'}
       ${hasAffiliate ? `<div style="font-size:11px;background:#fff8e1;border-radius:8px;padding:5px 10px;margin-bottom:8px;color:#f57f17">🤝 Affiliate: <b>${o.referral_code}</b> · ค่าคอม ฿${commission}</div>` : ''}
-      ${isPending ? `<button onclick="approveOrder('${o.id}','${o.email||''}','${o.referral_code||''}',${o.amount||0})"
-        style="width:100%;padding:10px;background:linear-gradient(135deg,#2e7d32,#43a047);color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">
-        ✅ Approve — ปลดล็อค Premium + ${hasAffiliate?'จ่ายค่าคอม':'ไม่มี affiliate'}
-      </button>` : ''}
+      ${isPending ? `<div style="display:flex;gap:8px">
+        <button onclick="approveOrder('${o.id}','${o.email||''}','${o.referral_code||''}',${o.amount||0})"
+          style="flex:1;padding:10px;background:linear-gradient(135deg,#2e7d32,#43a047);color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">
+          ✅ Approve — ปลดล็อค Premium + ${hasAffiliate?'จ่ายค่าคอม':'ไม่มี affiliate'}
+        </button>
+        <button onclick="rejectOrder('${o.id}')"
+          style="padding:10px 16px;background:#fee2e2;color:#dc2626;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">
+          ❌ ไม่อนุมัติ
+        </button>
+      </div>` : ''}
     </div>`;
   }).join('');
+}
+
+async function rejectOrder(orderId) {
+  if (!confirm('ลบ order นี้ออกเลยไหมคะ?')) return;
+  const { error } = await sb.from('orders').delete().eq('id', orderId);
+  if (error) { showToast('❌ ' + error.message); return; }
+  showToast('🗑️ ลบ order แล้ว');
+  loadAdminOrders();
 }
 
 async function approveOrder(orderId, email, referralCode, amount) {
