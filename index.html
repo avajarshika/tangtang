@@ -8652,54 +8652,8 @@ function renderPricing() {
 }
 
 function showPricingDetail(type) {
-  const info = {
-    monthly: { name:'รายเดือน', price:'199', icon:'📅', color:'#0891b2',
-      desc:'ปลดล็อคเนื้อหาทั้งหมด + อีบุค HSK ไล่ระดับ', detail:'โอนเงิน ฿199 พร้อมแจ้งชื่อ-อีเมล' },
-    yearly: { name:'รายปี', price:'990', icon:'⭐', color:'#1565c0',
-      desc:'ทุกฟีเจอร์ + อีบุคครบ + รับอัปเดตตลอดปี', detail:'โอนเงิน ฿990 พร้อมแจ้งชื่อ-อีเมล' },
-    lifetime: { name:'ถาวรตลอดชีพ', price:'2,490', icon:'🌟', color:'#6b1a6b',
-      desc:'ทุกฟีเจอร์ + อีบุคครบ + อัปเดตตลอดชีพ', detail:'โอนเงิน ฿2,490 พร้อมแจ้งชื่อ-อีเมล' },
-  };
-  const i = info[type];
-  const existing = document.getElementById('pricing-detail-modal');
-  if (existing) existing.remove();
-
-  const modal = document.createElement('div');
-  modal.id = 'pricing-detail-modal';
-  modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.6);display:flex;align-items:flex-end;';
-  modal.innerHTML = `
-    <div style="background:white;border-radius:24px 24px 0 0;padding:28px 24px 40px;width:100%;max-height:85vh;overflow-y:auto;">
-      <div style="text-align:center;margin-bottom:20px">
-        <div style="font-size:40px">${i.icon}</div>
-        <div style="font-size:20px;font-weight:900;color:${i.color};margin-top:8px">แพ็กเกจ${i.name}</div>
-        <div style="font-size:13px;color:var(--ink3);margin-top:4px">${i.desc}</div>
-      </div>
-
-      <div style="background:#f8f8f8;border-radius:16px;padding:18px;margin-bottom:20px">
-        <div style="font-size:13px;font-weight:800;color:var(--ink);margin-bottom:12px">📋 วิธีสมัคร:</div>
-        <div style="font-size:13px;color:var(--ink2);line-height:2">
-          <b>1.</b> โอนเงิน <b style="color:${i.color}">฿${i.price}</b><br>
-          <b>ธนาคาร:</b> กสิกรไทย<br>
-          <b>ชื่อ:</b> อรฉัตร ภิรมย์<br>
-          <b>เลขบัญชี:</b> 096-3-42838-9<br><br>
-          <b>2.</b> แจ้งสลิป + อีเมลที่สมัครมาที่<br>
-          LINE: <a href="https://line.me/R/ti/p/@ava11" style="color:#F13596;font-weight:700">@ava11</a><br><br>
-          <b>3.</b> แอดมินเปิดสิทธิ์ให้ภายใน <b>24 ชั่วโมง</b> ค่ะ 🎉
-        </div>
-      </div>
-
-      <a href="https://line.me/R/ti/p/@ava11" target="_blank"
-        style="display:block;width:100%;padding:14px;background:#06C755;color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px;text-align:center;text-decoration:none;box-sizing:border-box">
-        💬 แจ้งชำระเงินทาง LINE
-      </a>
-      <button onclick="document.getElementById('pricing-detail-modal').remove()"
-        style="width:100%;padding:12px;background:#f0f0f0;border:none;border-radius:12px;font-size:13px;color:#666;cursor:pointer;font-family:inherit;">
-        ปิด
-      </button>
-    </div>
-  `;
-  modal.addEventListener('click', (e) => { if(e.target===modal) modal.remove(); });
-  document.body.appendChild(modal);
+  // ไปหน้า checkout พร้อม package param โดยตรง
+  window.location.href = 'checkout.html?pkg=' + type;
 }
 
 function goScreen(s) {
@@ -14816,7 +14770,7 @@ function openBankModal() {
       <div style="display:flex;flex-direction:column;gap:12px">
         <div>
           <div style="font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:5px">ธนาคาร / PromptPay</div>
-          <input id="bank-name-input" placeholder="เช่น PromptPay, กสิกรไทย, SCB" style="width:100%;padding:11px 14px;border:1.5px solid var(--paper3);border-radius:10px;font-size:14px;font-family:inherit;outline:none">
+          <input id="bank-name-input" placeholder="เช่น PromptPay, ไทยพาณิชย์ (SCB), SCB" style="width:100%;padding:11px 14px;border:1.5px solid var(--paper3);border-radius:10px;font-size:14px;font-family:inherit;outline:none">
         </div>
         <div>
           <div style="font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:5px">เลขบัญชี / เบอร์ PromptPay</div>

@@ -581,7 +581,7 @@ body {
             <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #dce8f8">
               <span style="font-size:12px;color:var(--ink3)">เลขบัญชี</span>
               <div style="display:flex;align-items:center;gap:8px">
-                <span style="font-size:14px;font-weight:800;color:var(--blue);letter-spacing:1px" id="bank-acc-num">156-271391-7</span>
+                <span style="font-size:14px;font-weight:800;color:var(--blue);letter-spacing:1px" id="bank-acc-num">283-218-3319</span>
                 <button onclick="copyBankAcc()" style="padding:4px 10px;background:#f0f0f0;color:#111;border:1px solid #ccc;border-radius:8px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer" id="copy-acc-btn">คัดลอก</button>
               </div>
             </div>
@@ -1005,7 +1005,7 @@ function switchPayment(type) {
 
 function copyBankAcc() {
   // ⚠️ ใส่เลขบัญชีธนาคารจริงตรงนี้
-  const acc = '1562713917';
+  const acc = '2832183319';
   navigator.clipboard.writeText(acc).then(() => {
     const btn = document.getElementById('copy-acc-btn');
     if (btn) { btn.textContent = '✅ คัดลอกแล้ว!'; setTimeout(() => btn.textContent = 'คัดลอก', 2000); }
