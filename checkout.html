@@ -895,7 +895,7 @@ async function updateAffiliateStats(code) {
 
     // อัพเดต affiliate_earnings และ affiliate_count ใน user_progress
     const { error: updateErr } = await sb.from('user_progress').update({
-      affiliate_earnings: (data.affiliate_earnings || 0) + 193,
+      affiliate_earnings: (data.affiliate_earnings || 0) + Math.round(selectedAmountInt * 0.10),
       affiliate_count: (data.affiliate_count || 0) + 1
     }).eq('user_id', data.user_id);
     console.log('Affiliate update:', updateErr || 'success');
@@ -904,7 +904,7 @@ async function updateAffiliateStats(code) {
     const { error: insertErr } = await sb.from('affiliate_earnings').insert({
       affiliate_id: data.user_id,
       buyer_email: '',
-      amount: 193,
+      amount: Math.round(selectedAmountInt * 0.10),
       status: 'pending'
     });
     console.log('Affiliate insert:', insertErr || 'success');
