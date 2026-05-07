@@ -14082,6 +14082,24 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+// เปิด login อัตโนมัติถ้ามาจาก checkout
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('action') === 'login') {
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const authScreen = document.getElementById('auth-screen');
+        if (authScreen) {
+          document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+          authScreen.style.display = 'flex';
+          authScreen.classList.add('active');
+          switchAuthTab('login');
+        }
+      }, 500);
+    });
+  }
+})();
+
 // ═══════════════════════════════════
 // JOURNAL — Learning Notes + Calendar
 // ═══════════════════════════════════
