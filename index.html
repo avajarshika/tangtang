@@ -1610,7 +1610,7 @@ body {
   <!-- COMM HUB -->
   <div id="screen-comm-hub" class="screen">
     <div class="page-header" style="padding:14px 16px 10px">
-      <button class="back-btn" onclick="goScreen('home')" style="margin-bottom:6px">← กลับ</button>
+      <button class="back-btn" onclick="playClickSound();goScreen('home')" style="margin-bottom:6px">← กลับ</button>
       <div id="comm-hub-title" style="font-size:18px;font-weight:800;color:var(--ink)">✈️ ท่องเที่ยวและการเดินทาง</div>
       <div id="comm-hub-sub" style="font-size:12px;color:var(--ink3);margin-top:2px">13 บทเรียน · การสื่อสารจริงในชีวิต</div>
     </div>
@@ -1620,7 +1620,7 @@ body {
   <!-- COMM LESSON -->
   <div id="screen-comm-lesson" class="screen">
     <div class="detail-header">
-      <button class="back-btn" id="comm-lesson-back" onclick="goScreen('comm-hub')">← กลับ</button>
+      <button class="back-btn" id="comm-lesson-back" onclick="playClickSound();goScreen('comm-hub')">← กลับ</button>
       <div class="detail-title" id="comm-lesson-title">บทเรียน</div>
       <div class="detail-sub" id="comm-lesson-sub"></div>
       <div class="prog-bar" style="margin-top:10px"><div class="prog-fill" id="comm-lesson-prog" style="width:0%"></div></div>
@@ -1705,6 +1705,16 @@ body {
           <span style="font-size:10px;font-weight:700;color:#6b1a6b;background:#f0e8f4;padding:3px 10px;border-radius:20px">🎧 ระดับกลาง</span>
         </div>
         <!-- Journal — full width -->
+        <!-- Word Map Card -->
+        <div onclick="openGame('wordmap')" style="grid-column:1/-1;background:linear-gradient(135deg,#fff5fb,#fce4f3);border:1.5px solid #f9c0df;border-radius:16px;padding:18px;cursor:pointer;transition:.2s;box-shadow:var(--shadow);display:flex;align-items:center;gap:16px" onmouseover="this.style.borderColor='#F13596';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#f9c0df';this.style.transform='none'">
+          <div style="font-size:42px;flex-shrink:0">🗺️</div>
+          <div style="flex:1">
+            <div style="font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px">Word Mapping</div>
+            <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:8px">ดูความสัมพันธ์ของคำ · กดคำเพื่อดูความหมาย</div>
+            <span style="font-size:10px;font-weight:700;color:#F13596;background:#fce4f3;padding:3px 10px;border-radius:20px">✨ ใหม่! สำรวจคำศัพท์</span>
+          </div>
+          <div style="font-size:24px;opacity:.3">→</div>
+        </div>
         <div onclick="openGame('journal')" style="grid-column:1/-1;background:white;border:1.5px solid var(--paper3);border-radius:16px;padding:18px;cursor:pointer;transition:.2s;box-shadow:var(--shadow);display:flex;align-items:center;gap:16px" onmouseover="this.style.borderColor='#C9A96E';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--paper3)';this.style.transform='none'">
           <div style="font-size:42px;flex-shrink:0">📓</div>
           <div style="flex:1">
@@ -1728,6 +1738,10 @@ body {
 
     <div id="game-pair" style="display:none">
       <div id="pair-game-root"></div>
+    </div>
+
+    <div id="game-wordmap" style="display:none">
+      <div id="wordmap-root"></div>
     </div>
 
     <!-- Game: Listen -->
@@ -1797,7 +1811,7 @@ body {
   <!-- LESSON 0 — PINYIN -->
   <div id="screen-pinyin" class="screen">
     <div class="detail-header">
-      <button class="back-btn" onclick="goScreen('home')">← กลับ</button>
+      <button class="back-btn" onclick="playClickSound();goScreen('home')">← กลับ</button>
       <div class="detail-title">🔤 บทที่ 0 — พินอิน</div>
       <div class="detail-sub">บทนำ · วรรณยุกต์ · พยัญชนะ · สระ · เสียงยาก · ฝึกอ่าน</div>
       <div class="prog-bar" style="margin-top:10px"><div class="prog-fill" id="pinyin-prog" style="width:0%"></div></div>
@@ -1821,7 +1835,7 @@ body {
   <!-- LESSONS (lesson detail) -->
   <div id="screen-lesson" class="screen">
     <div class="detail-header">
-      <button class="back-btn" onclick="goScreen('home')">← กลับ</button>
+      <button class="back-btn" onclick="playClickSound();goScreen('home')">← กลับ</button>
       <div class="detail-title" id="detail-title">บทที่ 1</div>
       <div class="detail-sub" id="detail-sub"></div>
       <div class="prog-bar" style="margin-top:10px"><div class="prog-fill" id="detail-prog" style="width:0%"></div></div>
@@ -2171,22 +2185,22 @@ body {
 
   <!-- Bottom Nav -->
   <div class="bottom-nav">
-    <button class="nav-btn active" id="nav-home" onclick="goScreen('home')">
+    <button class="nav-btn active" id="nav-home" onclick="playClickSound();goScreen('home')">
       <span class="nav-icon">🏠</span>หน้าแรก
     </button>
-    <button class="nav-btn" id="nav-lessons" onclick="goScreen('lessons-hub')">
+    <button class="nav-btn" id="nav-lessons" onclick="playClickSound();goScreen('lessons-hub')">
       <span class="nav-icon">📚</span>บทเรียน
     </button>
-    <button class="nav-btn" id="nav-chat" onclick="goScreen('play');initPlay()">
+    <button class="nav-btn" id="nav-chat" onclick="playClickSound();goScreen('play');initPlay()">
       <span class="nav-icon">🎮</span>เกม
     </button>
-    <button class="nav-btn" id="nav-tangtang" onclick="goScreen('tangtang-chat')">
+    <button class="nav-btn" id="nav-tangtang" onclick="playClickSound();goScreen('tangtang-chat')">
       <span class="nav-icon">🦊</span>ถังถัง
     </button>
-    <button class="nav-btn" id="nav-quiz" onclick="goScreen('quiz');initMainQuiz()">
+    <button class="nav-btn" id="nav-quiz" onclick="playClickSound();goScreen('quiz');initMainQuiz()">
       <span class="nav-icon">🎯</span>ทดสอบ
     </button>
-    <button class="nav-btn" id="nav-profile" onclick="goScreen('profile');renderProfile()">
+    <button class="nav-btn" id="nav-profile" onclick="playClickSound();goScreen('profile');renderProfile()">
       <span class="nav-icon">👤</span>โปรไฟล์
     </button>
   </div>
@@ -10538,7 +10552,7 @@ function updateSpeedBadge() {
 
 function openGame(name) {
   document.getElementById('play-hub').style.display = 'none';
-  ['stroke','daily','sentence','speed','journal','match','listen','listening','pair'].forEach(g => {
+  ['stroke','daily','sentence','speed','journal','match','listen','listening','pair','wordmap'].forEach(g => {
     document.getElementById('game-'+g).style.display = g===name ? 'block' : 'none';
   });
   window.scrollTo(0,0);
@@ -10551,6 +10565,7 @@ function openGame(name) {
   else if (name==='listen') initListenGame();
   else if (name==='listening') initListeningGame();
   else if (name==='pair') initPairGame();
+  else if (name==='wordmap') initWordMap();
 }
 
 function closeGame() {
@@ -10571,7 +10586,7 @@ function closeGame() {
     clearInterval(_speedTimer);
     _speedTimer = null;
   }
-  ['stroke','daily','sentence','speed','journal','match','listen','listening','pair'].forEach(g => {
+  ['stroke','daily','sentence','speed','journal','match','listen','listening','pair','wordmap'].forEach(g => {
     document.getElementById('game-'+g).style.display = 'none';
   });
   document.getElementById('play-hub').style.display = 'block';
@@ -17286,6 +17301,305 @@ function pRestart(){
   document.getElementById('p-combo').textContent='×1';
   document.getElementById('p-combo-msg').textContent='';
 }
+
+
+// ═══════════════════════════════════════
+// WORD MAPPING FEATURE
+// ═══════════════════════════════════════
+const WORD_MAPS = [
+  { char:'好', pinyin:'hǎo', meaning:'ดี / โอเค', color:'#F13596',
+    origin:'好 มาจากภาพอักษรโบราณ รูปผู้หญิง (女) อุ้มเด็ก (子) — แสดงถึงความรัก ความดีงาม และความสุขในครอบครัว',
+    nodes:[
+      { char:'人', pinyin:'rén', combo:'好人', comboPy:'hǎo rén', meaning:'คนดี', th:'เขาเป็นคนดีมาก', sentence:'他是一个好人。' },
+      { char:'看', pinyin:'kàn', combo:'好看', comboPy:'hǎo kàn', meaning:'สวย / น่าดู', th:'ชุดนี้สวยมากเลย', sentence:'这件衣服很好看。' },
+      { char:'听', pinyin:'tīng', combo:'好听', comboPy:'hǎo tīng', meaning:'ไพเราะ', th:'เพลงนี้ไพเราะมาก', sentence:'这首歌很好听。' },
+      { char:'吃', pinyin:'chī', combo:'好吃', comboPy:'hǎo chī', meaning:'อร่อย', th:'อาหารที่นี่อร่อยมาก', sentence:'这里的菜很好吃。' },
+      { char:'意', pinyin:'yì', combo:'好意', comboPy:'hǎo yì', meaning:'เจตนาดี', th:'ฉันมีเจตนาดีนะ', sentence:'我是好意。' },
+    ]
+  },
+  { char:'大', pinyin:'dà', meaning:'ใหญ่ / มาก', color:'#e65100',
+    origin:'大 วาดจากภาพคนยืนกางแขนกางขา แสดงถึงความยิ่งใหญ่ ขนาดใหญ่ หรือปริมาณมาก',
+    nodes:[
+      { char:'家', pinyin:'jiā', combo:'大家', comboPy:'dà jiā', meaning:'ทุกคน', th:'ทุกคนมาเลย', sentence:'大家一起来吧。' },
+      { char:'人', pinyin:'rén', combo:'大人', comboPy:'dà ren', meaning:'ผู้ใหญ่', th:'นี่เป็นเรื่องของผู้ใหญ่', sentence:'这是大人的事。' },
+      { char:'学', pinyin:'xué', combo:'大学', comboPy:'dà xué', meaning:'มหาวิทยาลัย', th:'เขาเรียนมหาวิทยาลัย', sentence:'他在大学读书。' },
+      { char:'声', pinyin:'shēng', combo:'大声', comboPy:'dà shēng', meaning:'เสียงดัง', th:'อย่าพูดเสียงดัง', sentence:'不要大声说话。' },
+      { char:'号', pinyin:'hào', combo:'大号', comboPy:'dà hào', meaning:'ไซส์ใหญ่', th:'มีไซส์ใหญ่ไหม', sentence:'有大号吗？' },
+    ]
+  },
+  { char:'小', pinyin:'xiǎo', meaning:'เล็ก / น้อย', color:'#0288d1',
+    origin:'小 มาจากภาพเม็ดทรายหรือเมล็ดพืชเล็กๆ กระจายอยู่ สื่อถึงสิ่งที่มีขนาดเล็กหรือปริมาณน้อย',
+    nodes:[
+      { char:'心', pinyin:'xīn', combo:'小心', comboPy:'xiǎo xīn', meaning:'ระวัง', th:'ระวังด้วยนะ', sentence:'小心一点！' },
+      { char:'时', pinyin:'shí', combo:'小时', comboPy:'xiǎo shí', meaning:'ชั่วโมง', th:'ใช้เวลาหนึ่งชั่วโมง', sentence:'需要一个小时。' },
+      { char:'吃', pinyin:'chī', combo:'小吃', comboPy:'xiǎo chī', meaning:'อาหารว่าง / สตรีทฟู้ด', th:'ที่นี่มีสตรีทฟู้ดเยอะมาก', sentence:'这里有很多小吃。' },
+      { char:'学', pinyin:'xué', combo:'小学', comboPy:'xiǎo xué', meaning:'โรงเรียนประถม', th:'เขาเรียนอยู่ประถม', sentence:'他在上小学。' },
+      { char:'姐', pinyin:'jiě', combo:'小姐', comboPy:'xiǎo jiě', meaning:'คุณผู้หญิง', th:'คุณผู้หญิงครับ', sentence:'小姐，请问……' },
+    ]
+  },
+  { char:'上', pinyin:'shàng', meaning:'บน / ขึ้น / ไป', color:'#2e7d32',
+    origin:'上 วาดจากเส้นสั้นที่อยู่เหนือเส้นยาว แสดงถึงตำแหน่ง "อยู่ข้างบน" ใช้ได้ทั้งทิศทาง สถานที่ และการกระทำ',
+    nodes:[
+      { char:'班', pinyin:'bān', combo:'上班', comboPy:'shàng bān', meaning:'ไปทำงาน', th:'ฉันไปทำงานทุกวัน', sentence:'我每天上班。' },
+      { char:'学', pinyin:'xué', combo:'上学', comboPy:'shàng xué', meaning:'ไปโรงเรียน', th:'เด็กๆ ไปโรงเรียนทุกวัน', sentence:'孩子们每天上学。' },
+      { char:'午', pinyin:'wǔ', combo:'上午', comboPy:'shàng wǔ', meaning:'ช่วงเช้า', th:'เจอกันช่วงเช้านะ', sentence:'上午见面吧。' },
+      { char:'网', pinyin:'wǎng', combo:'上网', comboPy:'shàng wǎng', meaning:'เล่นอินเทอร์เน็ต', th:'ฉันชอบเล่นเน็ต', sentence:'我喜欢上网。' },
+      { char:'面', pinyin:'miàn', combo:'上面', comboPy:'shàng miàn', meaning:'ด้านบน', th:'อยู่ด้านบนนั้น', sentence:'在上面。' },
+    ]
+  },
+  { char:'下', pinyin:'xià', meaning:'ล่าง / ลง', color:'#6a1b9a',
+    origin:'下 ตรงข้ามกับ 上 เส้นสั้นอยู่ใต้เส้นยาว สื่อถึง "ข้างล่าง" ใช้แทนทิศทาง การลง และการสิ้นสุด',
+    nodes:[
+      { char:'班', pinyin:'bān', combo:'下班', comboPy:'xià bān', meaning:'เลิกงาน', th:'เลิกงานแล้วไปกินข้าว', sentence:'下班后一起吃饭吧。' },
+      { char:'午', pinyin:'wǔ', combo:'下午', comboPy:'xià wǔ', meaning:'บ่าย', th:'นัดบ่ายสองโมง', sentence:'下午两点见。' },
+      { char:'雨', pinyin:'yǔ', combo:'下雨', comboPy:'xià yǔ', meaning:'ฝนตก', th:'ฝนตกแล้ว พกร่มด้วย', sentence:'下雨了，带伞吧。' },
+      { char:'载', pinyin:'zài', combo:'下载', comboPy:'xià zài', meaning:'ดาวน์โหลด', th:'ดาวน์โหลดแอปนี้เลย', sentence:'下载这个App吧。' },
+      { char:'面', pinyin:'miàn', combo:'下面', comboPy:'xià miàn', meaning:'ด้านล่าง', th:'อยู่ด้านล่างนั้น', sentence:'在下面。' },
+    ]
+  },
+  { char:'不', pinyin:'bù', meaning:'ไม่ (ปฏิเสธ)', color:'#bf360c',
+    origin:'不 มาจากภาพรากพืชที่งอกลงดิน สื่อถึง "การปฏิเสธ" หรือ "ทวนกลับ" เป็นคำปฏิเสธที่ใช้บ่อยที่สุดในภาษาจีน',
+    nodes:[
+      { char:'好', pinyin:'hǎo', combo:'不好', comboPy:'bù hǎo', meaning:'ไม่ดี', th:'วันนี้อารมณ์ไม่ดี', sentence:'今天心情不好。' },
+      { char:'行', pinyin:'xíng', combo:'不行', comboPy:'bù xíng', meaning:'ไม่ได้', th:'แบบนี้ไม่ได้นะ', sentence:'这样不行。' },
+      { char:'对', pinyin:'duì', combo:'不对', comboPy:'bù duì', meaning:'ไม่ถูก', th:'นั่นไม่ถูกนะ', sentence:'那不对。' },
+      { char:'要', pinyin:'yào', combo:'不要', comboPy:'bù yào', meaning:'ไม่เอา / ห้าม', th:'ไม่เอาหวานนะ', sentence:'不要加糖。' },
+      { char:'用', pinyin:'yòng', combo:'不用', comboPy:'bú yòng', meaning:'ไม่ต้อง', th:'ไม่ต้องขอบคุณ', sentence:'不用谢。' },
+    ]
+  },
+  { char:'吃', pinyin:'chī', meaning:'กิน', color:'#e91e8c',
+    origin:'吃 ประกอบด้วย 口 (ปาก) + เสียง 乞 สื่อถึงการนำสิ่งของเข้าปาก ขยายความหมายไปถึงการ "ประสบ" หรือ "รับ" สิ่งต่างๆ ได้ด้วย',
+    nodes:[
+      { char:'饭', pinyin:'fàn', combo:'吃饭', comboPy:'chī fàn', meaning:'กินข้าว', th:'ไปกินข้าวกันไหม', sentence:'一起去吃饭吗？' },
+      { char:'药', pinyin:'yào', combo:'吃药', comboPy:'chī yào', meaning:'กินยา', th:'อย่าลืมกินยา', sentence:'别忘了吃药。' },
+      { char:'亏', pinyin:'kuī', combo:'吃亏', comboPy:'chī kuī', meaning:'เสียเปรียบ', th:'ฉันโดนเอาเปรียบ', sentence:'我吃亏了。' },
+      { char:'惊', pinyin:'jīng', combo:'吃惊', comboPy:'chī jīng', meaning:'ตกใจ', th:'ฉันตกใจมาก', sentence:'我很吃惊。' },
+      { char:'醋', pinyin:'cù', combo:'吃醋', comboPy:'chī cù', meaning:'หึงหวง', th:'เธอหึงฉันนะ', sentence:'你在吃醋吗？' },
+    ]
+  },
+  { char:'开', pinyin:'kāi', meaning:'เปิด / เริ่ม', color:'#1565c0',
+    origin:'开 วาดจากภาพมือสองข้างดึงประตูออกจากกัน แสดงถึงการเปิด การเริ่มต้น และการปลดปล่อย',
+    nodes:[
+      { char:'心', pinyin:'xīn', combo:'开心', comboPy:'kāi xīn', meaning:'มีความสุข', th:'ฉันมีความสุขมาก', sentence:'我很开心！' },
+      { char:'始', pinyin:'shǐ', combo:'开始', comboPy:'kāi shǐ', meaning:'เริ่มต้น', th:'เริ่มเรียนได้เลย', sentence:'开始学习吧。' },
+      { char:'车', pinyin:'chē', combo:'开车', comboPy:'kāi chē', meaning:'ขับรถ', th:'ฉันกำลังขับรถ', sentence:'我在开车。' },
+      { char:'门', pinyin:'mén', combo:'开门', comboPy:'kāi mén', meaning:'เปิดประตู', th:'ช่วยเปิดประตูด้วย', sentence:'帮我开门。' },
+      { char:'心', pinyin:'xīn', combo:'开玩笑', comboPy:'kāi wán xiào', meaning:'ล้อเล่น', th:'ฉันแค่ล้อเล่น', sentence:'我只是开玩笑。' },
+    ]
+  },
+  { char:'口', pinyin:'kǒu', meaning:'ปาก / ช่องเปิด', color:'#d32f2f', origin:'口 วาดจากรูปปากที่เปิดออก เป็นคำที่แตกได้มากที่สุดคำหนึ่ง ใช้ทั้งแปลว่าปากคนและช่องเปิดต่างๆ', nodes:[ {char:'水',pinyin:'shuǐ',combo:'口水',comboPy:'kǒu shuǐ',meaning:'น้ำลาย',th:'เห็นอาหารน่ากินจนน้ำลายไหล',sentence:'看到好吃的就流口水。'}, {char:'味',pinyin:'wèi',combo:'口味',comboPy:'kǒu wèi',meaning:'รสชาติ / ความชอบ',th:'รสชาตินี้ถูกปากฉันมาก',sentence:'这个口味很合我的胃口。'}, {char:'袋',pinyin:'dài',combo:'口袋',comboPy:'kǒu dài',meaning:'กระเป๋า (ในเสื้อผ้า)',th:'โทรศัพท์อยู่ในกระเป๋า',sentence:'手机在口袋里。'}, {char:'号',pinyin:'hào',combo:'口号',comboPy:'kǒu hào',meaning:'สโลแกน / คำขวัญ',th:'สโลแกนนี้จำง่ายมาก',sentence:'这个口号很好记。'}, {char:'语',pinyin:'yǔ',combo:'口语',comboPy:'kǒu yǔ',meaning:'ภาษาพูด',th:'ฉันอยากฝึกภาษาพูดให้คล่อง',sentence:'我想练好口语。'}, ] },
+  { char:'手', pinyin:'shǒu', meaning:'มือ', color:'#1976d2', origin:'手 วาดจากรูปมือที่มีนิ้วห้านิ้ว มักใช้เป็นส่วนประกอบซ้ายของอักษรที่เกี่ยวกับการกระทำด้วยมือ', nodes:[ {char:'机',pinyin:'jī',combo:'手机',comboPy:'shǒu jī',meaning:'โทรศัพท์มือถือ',th:'โทรศัพท์ฉันแบตใกล้หมดแล้ว',sentence:'我手机快没电了。'}, {char:'表',pinyin:'biǎo',combo:'手表',comboPy:'shǒu biǎo',meaning:'นาฬิกาข้อมือ',th:'นาฬิกาเรือนนี้สวยมาก',sentence:'这块手表很漂亮。'}, {char:'续',pinyin:'xù',combo:'手续',comboPy:'shǒu xù',meaning:'ขั้นตอน / เอกสาร',th:'ขั้นตอนเยอะมากเลย',sentence:'手续很麻烦。'}, {char:'工',pinyin:'gōng',combo:'手工',comboPy:'shǒu gōng',meaning:'งานทำมือ / งานฝีมือ',th:'ของชิ้นนี้ทำด้วยมือทั้งหมด',sentence:'这个是手工做的。'}, {char:'势',pinyin:'shì',combo:'手势',comboPy:'shǒu shì',meaning:'ท่าทางมือ',th:'เขาใช้ท่าทางมือสื่อสาร',sentence:'他用手势来表达。'}, ] },
+  { char:'心', pinyin:'xīn', meaning:'ใจ / หัวใจ', color:'#c2185b', origin:'心 วาดจากรูปหัวใจที่มีสามจุดแทนเลือด เป็นคำที่เกี่ยวกับความรู้สึกและจิตใจเกือบทั้งหมด', nodes:[ {char:'里',pinyin:'lǐ',combo:'心里',comboPy:'xīn lǐ',meaning:'ในใจ',th:'ในใจฉันยังคิดถึงเธออยู่',sentence:'心里一直想着你。'}, {char:'情',pinyin:'qíng',combo:'心情',comboPy:'xīn qíng',meaning:'อารมณ์ / ความรู้สึก',th:'วันนี้อารมณ์ดีมากเลย',sentence:'今天心情很好。'}, {char:'动',pinyin:'dòng',combo:'心动',comboPy:'xīn dòng',meaning:'ใจสั่น / ประทับใจ',th:'เขาทำให้ฉันใจสั่น',sentence:'他让我心动了。'}, {char:'急',pinyin:'jí',combo:'心急',comboPy:'xīn jí',meaning:'ใจร้อน / รีบร้อน',th:'อย่าใจร้อน ค่อยๆ ทำ',sentence:'别心急，慢慢来。'}, {char:'意',pinyin:'yì',combo:'心意',comboPy:'xīn yì',meaning:'ความตั้งใจ / น้ำใจ',th:'ขอบคุณน้ำใจนะ',sentence:'谢谢你的心意。'}, ] },
+  { char:'眼', pinyin:'yǎn', meaning:'ตา / สายตา', color:'#388e3c', origin:'眼 ประกอบด้วย 目 (ตา) + เสียง 艮 รูปโบราณวาดจากดวงตาที่มองตรง ใช้ทั้งแปลว่าดวงตาและการมองเห็น', nodes:[ {char:'睛',pinyin:'jīng',combo:'眼睛',comboPy:'yǎn jīng',meaning:'ดวงตา',th:'ดวงตาเธอสวยมาก',sentence:'你的眼睛很漂亮。'}, {char:'镜',pinyin:'jìng',combo:'眼镜',comboPy:'yǎn jìng',meaning:'แว่นตา',th:'ฉันลืมแว่นตาไว้บ้าน',sentence:'我把眼镜忘在家里了。'}, {char:'泪',pinyin:'lèi',combo:'眼泪',comboPy:'yǎn lèi',meaning:'น้ำตา',th:'เธอร้องไห้จนน้ำตาไหล',sentence:'她哭了，流下眼泪。'}, {char:'光',pinyin:'guāng',combo:'眼光',comboPy:'yǎn guāng',meaning:'สายตา / รสนิยม',th:'เขามีรสนิยมดีมาก',sentence:'他的眼光很好。'}, {char:'红',pinyin:'hóng',combo:'眼红',comboPy:'yǎn hóng',meaning:'อิจฉา / ตาแดง',th:'เขาอิจฉาฉัน',sentence:'他在眼红我。'}, ] },
+  { char:'耳', pinyin:'ěr', meaning:'หู', color:'#7b1fa2', origin:'耳 วาดจากรูปหูที่มีช่องหูชัดเจน ใช้เป็นส่วนประกอบของอักษรที่เกี่ยวกับการได้ยินและเสียง', nodes:[ {char:'朵',pinyin:'duǒ',combo:'耳朵',comboPy:'ěr duǒ',meaning:'หู (ของคน/สัตว์)',th:'กระต่ายมีหูยาวมาก',sentence:'兔子的耳朵很长。'}, {char:'机',pinyin:'jī',combo:'耳机',comboPy:'ěr jī',meaning:'หูฟัง',th:'ฉันใส่หูฟังฟังเพลง',sentence:'我戴耳机听音乐。'}, {char:'环',pinyin:'huán',combo:'耳环',comboPy:'ěr huán',meaning:'ต่างหู',th:'ต่างหูนี้สวยมาก',sentence:'这对耳环很好看。'}, {char:'语',pinyin:'yǔ',combo:'耳语',comboPy:'ěr yǔ',meaning:'กระซิบ',th:'เขากระซิบบางอย่างในหูฉัน',sentence:'他在我耳边耳语。'}, {char:'目',pinyin:'mù',combo:'耳目',comboPy:'ěr mù',meaning:'หูตา / การรับรู้',th:'เปิดหูเปิดตาให้กว้างขึ้น',sentence:'要开阔耳目。'}, ] },
+  { char:'头', pinyin:'tóu', meaning:'หัว / ส่วนนำ', color:'#f57c00', origin:'头 รูปโบราณวาดจากหัวคนที่มีลักษณะเด่น ปัจจุบันใช้ทั้งแปลว่าหัวและตำแหน่งที่อยู่ด้านหน้าหรืออันดับแรก', nodes:[ {char:'发',pinyin:'fā',combo:'头发',comboPy:'tóu fā',meaning:'ผมศีรษะ',th:'เธอมีผมยาวสวยมาก',sentence:'她的头发又长又漂亮。'}, {char:'疼',pinyin:'téng',combo:'头疼',comboPy:'tóu téng',meaning:'ปวดหัว',th:'ปวดหัวมากเลย',sentence:'我头疼得很厉害。'}, {char:'脑',pinyin:'nǎo',combo:'头脑',comboPy:'tóu nǎo',meaning:'สมอง / ความคิด',th:'เขาคิดเร็วมาก',sentence:'他头脑很灵活。'}, {char:'像',pinyin:'xiàng',combo:'头像',comboPy:'tóu xiàng',meaning:'รูปโปรไฟล์',th:'เปลี่ยนรูปโปรไฟล์ใหม่',sentence:'换了一个新头像。'}, {char:'等',pinyin:'děng',combo:'头等',comboPy:'tóu děng',meaning:'ชั้นหนึ่ง / อันดับหนึ่ง',th:'ที่นั่งชั้นหนึ่งสบายมาก',sentence:'头等舱很舒服。'}, ] },
+  { char:'面', pinyin:'miàn', meaning:'หน้า / ด้าน / บะหมี่', color:'#0097a7', origin:'面 วาดจากรูปใบหน้าคนที่มีโครงหน้าชัดเจน ขยายความหมายเป็น ด้าน และพื้นผิวต่างๆ รวมถึงแป้งที่รีดแบนเหมือนหน้า', nodes:[ {char:'条',pinyin:'tiáo',combo:'面条',comboPy:'miàn tiáo',meaning:'บะหมี่',th:'อยากกินบะหมี่ร้อนๆ',sentence:'我想吃热的面条。'}, {char:'包',pinyin:'bāo',combo:'面包',comboPy:'miàn bāo',meaning:'ขนมปัง',th:'กินขนมปังกับนม',sentence:'吃面包喝牛奶。'}, {char:'前',pinyin:'qián',combo:'面前',comboPy:'miàn qián',meaning:'ตรงหน้า / ข้างหน้า',th:'โอกาสอยู่ตรงหน้าเธอแล้ว',sentence:'机会就在你面前。'}, {char:'试',pinyin:'shì',combo:'面试',comboPy:'miàn shì',meaning:'สัมภาษณ์งาน',th:'พรุ่งนี้มีสัมภาษณ์งาน',sentence:'明天要去面试。'}, {char:'子',pinyin:'zi',combo:'面子',comboPy:'miàn zi',meaning:'หน้าตา / เกียรติ',th:'เรื่องหน้าตาสำคัญในวัฒนธรรมจีน',sentence:'面子在中国文化里很重要。'}, ] },
+  { char:'身', pinyin:'shēn', meaning:'ร่างกาย / ตัวเอง', color:'#455a64', origin:'身 วาดจากรูปคนที่มีท้องนูน สื่อถึงการมีชีวิต ขยายความหมายเป็นร่างกายทั้งหมด และตัวตนของบุคคล', nodes:[ {char:'体',pinyin:'tǐ',combo:'身体',comboPy:'shēn tǐ',meaning:'ร่างกาย / สุขภาพ',th:'ดูแลสุขภาพด้วยนะ',sentence:'要好好照顾身体。'}, {char:'份',pinyin:'fèn',combo:'身份',comboPy:'shēn fèn',meaning:'ตัวตน / สถานะ',th:'ขอดูบัตรประชาชนด้วย',sentence:'请出示身份证。'}, {char:'边',pinyin:'biān',combo:'身边',comboPy:'shēn biān',meaning:'ข้างๆ ตัว / ใกล้ชิด',th:'ดีใจที่เธออยู่ข้างๆ ฉัน',sentence:'很开心你在我身边。'}, {char:'材',pinyin:'cái',combo:'身材',comboPy:'shēn cái',meaning:'รูปร่าง',th:'เธอมีรูปร่างดีมาก',sentence:'她的身材很好。'}, {char:'上',pinyin:'shàng',combo:'身上',comboPy:'shēn shàng',meaning:'บนตัว / ติดตัว',th:'ไม่มีเงินติดตัวเลย',sentence:'身上没有钱。'}, ] },
+  { char:'来', pinyin:'lái', meaning:'มา / ได้รับ', color:'#e91e63', origin:'来 รูปโบราณวาดจากต้นข้าวสาลีที่งอกขึ้นมา สื่อถึงการมาถึง ปัจจุบันใช้แทนทิศทางเข้าหาตัวผู้พูด', nodes:[ {char:'自',pinyin:'zì',combo:'来自',comboPy:'lái zì',meaning:'มาจาก',th:'เธอมาจากประเทศไทย',sentence:'她来自泰国。'}, {char:'得及',pinyin:'de jí',combo:'来得及',comboPy:'lái de jí',meaning:'ทันเวลา',th:'ยังทันนะ ไปเร็วๆ',sentence:'还来得及，快去吧。'}, {char:'回',pinyin:'huí',combo:'来回',comboPy:'lái huí',meaning:'ไปกลับ / ตลอด',th:'ตั๋วไปกลับราคาเท่าไหร่',sentence:'来回票多少钱？'}, {char:'不及',pinyin:'bu jí',combo:'来不及',comboPy:'lái bu jí',meaning:'ไม่ทัน',th:'ไม่ทันแล้ว รีบขึ้น!',sentence:'来不及了，快上车！'}, {char:'年',pinyin:'nián',combo:'来年',comboPy:'lái nián',meaning:'ปีหน้า',th:'ปีหน้าจะดีขึ้นแน่นอน',sentence:'来年会更好的。'}, ] },
+  { char:'去', pinyin:'qù', meaning:'ไป / จากไป', color:'#7b1fa2', origin:'去 รูปโบราณวาดจากคนที่กำลังเดินออกจากถ้ำ สื่อถึงการออกไป จากไป ตรงข้ามกับ 来', nodes:[ {char:'年',pinyin:'nián',combo:'去年',comboPy:'qù nián',meaning:'ปีที่แล้ว',th:'ปีที่แล้วเราเจอกันครั้งแรก',sentence:'去年我们第一次见面。'}, {char:'世',pinyin:'shì',combo:'去世',comboPy:'qù shì',meaning:'เสียชีวิต (สุภาพ)',th:'คุณปู่เพิ่งเสียชีวิต',sentence:'爷爷刚去世了。'}, {char:'掉',pinyin:'diào',combo:'去掉',comboPy:'qù diào',meaning:'เอาออก / ตัดทิ้ง',th:'เอาน้ำตาลออกด้วยนะ',sentence:'把糖去掉。'}, {char:'处',pinyin:'chù',combo:'去处',comboPy:'qù chù',meaning:'จุดหมาย / ที่ไป',th:'วันหยุดนี้ไปไหนดี',sentence:'这个周末有什么好去处？'}, {char:'向',pinyin:'xiàng',combo:'去向',comboPy:'qù xiàng',meaning:'ทิศทาง / ที่อยู่',th:'ไม่รู้ว่าเขาไปไหน',sentence:'不知道他的去向。'}, ] },
+  { char:'看', pinyin:'kàn', meaning:'ดู / มอง / อ่าน', color:'#1565c0', origin:'看 ประกอบจาก 手 (มือ) บังตา + 目 (ตา) ภาพคนเอามือบังแดดแล้วมองออกไปไกลๆ', nodes:[ {char:'见',pinyin:'jiàn',combo:'看见',comboPy:'kàn jiàn',meaning:'มองเห็น',th:'ฉันเห็นเธอแล้ว',sentence:'我看见你了。'}, {char:'法',pinyin:'fǎ',combo:'看法',comboPy:'kàn fǎ',meaning:'ความคิดเห็น',th:'คุณคิดเห็นยังไง',sentence:'你有什么看法？'}, {char:'望',pinyin:'wàng',combo:'看望',comboPy:'kàn wàng',meaning:'เยี่ยมเยียน',th:'ไปเยี่ยมคุณตาคุณยายด้วยนะ',sentence:'去看望爷爷奶奶吧。'}, {char:'起来',pinyin:'qǐ lái',combo:'看起来',comboPy:'kàn qǐ lái',meaning:'ดูเหมือนว่า',th:'เธอดูเหนื่อยมากเลย',sentence:'你看起来很累。'}, {char:'书',pinyin:'shū',combo:'看书',comboPy:'kàn shū',meaning:'อ่านหนังสือ',th:'ฉันชอบอ่านหนังสือก่อนนอน',sentence:'我喜欢睡前看书。'}, ] },
+  { char:'说', pinyin:'shuō', meaning:'พูด / บอก', color:'#2e7d32', origin:'说 ประกอบจาก 言 (คำพูด) + เสียง 兑 สื่อถึงการแสดงออกทางคำพูด เป็นคำกริยาพูดที่ใช้บ่อยที่สุด', nodes:[ {char:'话',pinyin:'huà',combo:'说话',comboPy:'shuō huà',meaning:'พูด / คุย',th:'อย่าพูดเสียงดังในห้องสมุด',sentence:'在图书馆不要大声说话。'}, {char:'明',pinyin:'míng',combo:'说明',comboPy:'shuō míng',meaning:'อธิบาย / ชี้แจง',th:'ช่วยอธิบายให้ฉันฟังด้วย',sentence:'请你说明一下。'}, {char:'不定',pinyin:'bu dìng',combo:'说不定',comboPy:'shuō bu dìng',meaning:'อาจจะ / บอกไม่ได้',th:'อาจจะฝนตกก็ได้',sentence:'说不定会下雨。'}, {char:'谎',pinyin:'huǎng',combo:'说谎',comboPy:'shuō huǎng',meaning:'โกหก',th:'ห้ามโกหกฉันนะ',sentence:'不要对我说谎。'}, {char:'实话',pinyin:'shí huà',combo:'说实话',comboPy:'shuō shí huà',meaning:'พูดความจริง',th:'พูดความจริงเถอะ',sentence:'说实话吧。'}, ] },
+  { char:'做', pinyin:'zuò', meaning:'ทำ / กระทำ', color:'#e65100', origin:'做 ประกอบจาก 人 (คน) + เสียง 乍 สื่อถึงการลงมือทำสิ่งต่างๆ ต่างจาก 作 ที่เน้นผลงานที่สร้างขึ้น', nodes:[ {char:'饭',pinyin:'fàn',combo:'做饭',comboPy:'zuò fàn',meaning:'ทำอาหาร',th:'วันนี้ฉันทำอาหารเอง',sentence:'今天我自己做饭。'}, {char:'梦',pinyin:'mèng',combo:'做梦',comboPy:'zuò mèng',meaning:'ฝัน',th:'เมื่อคืนฉันฝันถึงเธอ',sentence:'昨晚我做梦梦到你了。'}, {char:'到',pinyin:'dào',combo:'做到',comboPy:'zuò dào',meaning:'ทำสำเร็จ / ทำได้',th:'ฉันทำสำเร็จแล้ว!',sentence:'我做到了！'}, {char:'法',pinyin:'fǎ',combo:'做法',comboPy:'zuò fǎ',meaning:'วิธีทำ',th:'วิธีทำแบบนี้ถูกต้องไหม',sentence:'这种做法对吗？'}, {char:'生意',pinyin:'shēng yi',combo:'做生意',comboPy:'zuò shēng yi',meaning:'ทำธุรกิจ',th:'เขาทำธุรกิจของตัวเอง',sentence:'他自己做生意。'}, ] },
+  { char:'买', pinyin:'mǎi', meaning:'ซื้อ', color:'#0097a7', origin:'买 รูปโบราณมีส่วนของตาข่ายและเงิน สื่อถึงการแลกเปลี่ยนด้วยเงิน ตรงข้ามกับ 卖 (ขาย) ต่างกันที่หัวบน', nodes:[ {char:'东西',pinyin:'dōng xi',combo:'买东西',comboPy:'mǎi dōng xi',meaning:'ซื้อของ / ช้อปปิ้ง',th:'ไปซื้อของด้วยกันไหม',sentence:'一起去买东西吗？'}, {char:'单',pinyin:'dān',combo:'买单',comboPy:'mǎi dān',meaning:'จ่ายบิล / เลี้ยง',th:'วันนี้ฉันเลี้ยงเอง',sentence:'今天我来买单。'}, {char:'卖',pinyin:'mài',combo:'买卖',comboPy:'mǎi mài',meaning:'ซื้อขาย / ธุรกิจ',th:'การซื้อขายที่นี่คึกคักมาก',sentence:'这里的买卖很热闹。'}, {char:'票',pinyin:'piào',combo:'买票',comboPy:'mǎi piào',meaning:'ซื้อตั๋ว',th:'ไปซื้อตั๋วหนังกันเถอะ',sentence:'去买电影票吧。'}, {char:'账',pinyin:'zhàng',combo:'买账',comboPy:'mǎi zhàng',meaning:'ยอมรับ / เชื่อ',th:'เขาไม่ยอมรับคำแก้ตัวของฉัน',sentence:'他不买我的账。'}, ] },
+  { char:'走', pinyin:'zǒu', meaning:'เดิน / ไป / จากไป', color:'#4527a0', origin:'走 รูปโบราณวาดจากคนที่กำลังโยกตัวเดิน เน้นการเคลื่อนที่ด้วยขา ต่างจาก 去 ที่เน้นปลายทาง', nodes:[ {char:'路',pinyin:'lù',combo:'走路',comboPy:'zǒu lù',meaning:'เดินถนน / เดินเท้า',th:'เดินไปได้เลย ไม่ไกล',sentence:'走路去就行，不远。'}, {char:'开',pinyin:'kāi',combo:'走开',comboPy:'zǒu kāi',meaning:'ไปให้พ้น / เดินออกไป',th:'ไปให้พ้นเลย!',sentence:'走开！'}, {char:'廊',pinyin:'láng',combo:'走廊',comboPy:'zǒu láng',meaning:'ทางเดิน / โถงทางเดิน',th:'ห้องน้ำอยู่ที่ทางเดิน',sentence:'洗手间在走廊里。'}, {char:'红',pinyin:'hóng',combo:'走红',comboPy:'zǒu hóng',meaning:'โด่งดัง / ฮิต',th:'เพลงนี้กำลังฮิตมาก',sentence:'这首歌正在走红。'}, {char:'失',pinyin:'shī',combo:'走失',comboPy:'zǒu shī',meaning:'หาย / พลัดหลง',th:'สุนัขของฉันหายไป',sentence:'我的狗走失了。'}, ] },
+  { char:'用', pinyin:'yòng', meaning:'ใช้ / ต้องการ', color:'#37474f', origin:'用 รูปโบราณวาดจากถัง (桶) สื่อถึงการนำสิ่งของมาใช้ประโยชน์ ปัจจุบันใช้แทนการใช้งานทุกรูปแบบ', nodes:[ {char:'心',pinyin:'xīn',combo:'用心',comboPy:'yòng xīn',meaning:'ตั้งใจ / ใส่ใจ',th:'เขาตั้งใจเรียนมาก',sentence:'他很用心学习。'}, {char:'力',pinyin:'lì',combo:'用力',comboPy:'yòng lì',meaning:'ออกแรง',th:'ออกแรงดึงเลย',sentence:'用力拉吧。'}, {char:'处',pinyin:'chù',combo:'用处',comboPy:'yòng chù',meaning:'ประโยชน์ / การใช้งาน',th:'ของชิ้นนี้มีประโยชน์มาก',sentence:'这个东西很有用处。'}, {char:'意',pinyin:'yì',combo:'用意',comboPy:'yòng yì',meaning:'เจตนา / ความตั้งใจ',th:'เจตนาของเขาคืออะไรกันแน่',sentence:'他的用意是什么？'}, {char:'餐',pinyin:'cān',combo:'用餐',comboPy:'yòng cān',meaning:'รับประทานอาหาร (สุภาพ)',th:'ขอให้อร่อยนะคะ',sentence:'请慢用餐。'}, ] },
+  { char:'多', pinyin:'duō', meaning:'มาก / หลาย', color:'#e91e63', origin:'多 วาดจากเนื้อสองชิ้น (肉+肉) วางซ้อนกัน สื่อถึงปริมาณที่มากกว่าปกติ', nodes:[ {char:'少',pinyin:'shǎo',combo:'多少',comboPy:'duō shǎo',meaning:'เท่าไหร่ / จำนวนเท่าใด',th:'นี่ราคาเท่าไหร่',sentence:'这个多少钱？'}, {char:'久',pinyin:'jiǔ',combo:'多久',comboPy:'duō jiǔ',meaning:'นานแค่ไหน',th:'รอนานแค่ไหนแล้ว',sentence:'等了多久了？'}, {char:'余',pinyin:'yú',combo:'多余',comboPy:'duō yú',meaning:'เกินความจำเป็น / ฟุ่มเฟือย',th:'พูดมากเกินความจำเป็น',sentence:'说了很多多余的话。'}, {char:'亏',pinyin:'kuī',combo:'多亏',comboPy:'duō kuī',meaning:'โชคดีที่ / ต้องขอบคุณ',th:'โชคดีที่เธอช่วยไว้',sentence:'多亏你帮忙。'}, {char:'数',pinyin:'shù',combo:'多数',comboPy:'duō shù',meaning:'ส่วนใหญ่ / มากที่สุด',th:'ส่วนใหญ่เห็นด้วย',sentence:'多数人都同意。'}, ] },
+  { char:'少', pinyin:'shǎo', meaning:'น้อย / ขาด', color:'#1976d2', origin:'少 วาดจากเม็ดทรายสี่เม็ดที่กระจายอยู่ สื่อถึงปริมาณน้อย ตรงข้ามกับ 多 ใช้ได้ทั้งคุณศัพท์และกริยา', nodes:[ {char:'数',pinyin:'shù',combo:'少数',comboPy:'shǎo shù',meaning:'ส่วนน้อย / ชนกลุ่มน้อย',th:'มีคนเพียงส่วนน้อยที่ไม่เห็นด้วย',sentence:'只有少数人不同意。'}, {char:'见',pinyin:'jiàn',combo:'少见',comboPy:'shǎo jiàn',meaning:'หายาก / ไม่ค่อยเจอ',th:'ทิวทัศน์แบบนี้หายากมาก',sentence:'这样的风景很少见。'}, {char:'女',pinyin:'nǚ',combo:'少女',comboPy:'shào nǚ',meaning:'สาวน้อย / เด็กสาว',th:'เธอยังเป็นสาวน้อยเลย',sentence:'她还是个少女。'}, {char:'量',pinyin:'liàng',combo:'少量',comboPy:'shǎo liàng',meaning:'ปริมาณน้อย',th:'ใส่เกลือแค่นิดเดียว',sentence:'加少量的盐。'}, {char:'爷',pinyin:'ye',combo:'少爷',comboPy:'shào ye',meaning:'คุณชาย / ลูกชายเจ้าของบ้าน',th:'เขาเป็นลูกชายเจ้าของบ้าน',sentence:'他是少爷。'}, ] },
+  { char:'新', pinyin:'xīn', meaning:'ใหม่', color:'#388e3c', origin:'新 ประกอบจาก 斤 (ขวาน) + 木 (ไม้) + 辛 สื่อถึงการตัดไม้ใหม่ที่เพิ่งถาก ขยายความหมายเป็น สิ่งที่ใหม่หรือสด', nodes:[ {char:'闻',pinyin:'wén',combo:'新闻',comboPy:'xīn wén',meaning:'ข่าว',th:'ดูข่าวเช้าทุกวัน',sentence:'每天早上看新闻。'}, {char:'年',pinyin:'nián',combo:'新年',comboPy:'xīn nián',meaning:'ปีใหม่',th:'สวัสดีปีใหม่!',sentence:'新年快乐！'}, {char:'鲜',pinyin:'xiān',combo:'新鲜',comboPy:'xīn xiān',meaning:'สด / ใหม่ / แปลกใหม่',th:'ผักที่นี่สดมาก',sentence:'这里的蔬菜很新鲜。'}, {char:'郎',pinyin:'láng',combo:'新郎',comboPy:'xīn láng',meaning:'เจ้าบ่าว',th:'เจ้าบ่าวหล่อมาก',sentence:'新郎很帅。'}, {char:'娘',pinyin:'niáng',combo:'新娘',comboPy:'xīn niáng',meaning:'เจ้าสาว',th:'เจ้าสาวสวยมากเลย',sentence:'新娘很漂亮。'}, ] },
+  { char:'旧', pinyin:'jiù', meaning:'เก่า / ใช้แล้ว', color:'#5d4037', origin:'旧 รูปโบราณวาดจากนกที่เกาะอยู่บนต้นไม้นาน สื่อถึงสิ่งที่อยู่มานาน ตรงข้ามกับ 新', nodes:[ {char:'货',pinyin:'huò',combo:'旧货',comboPy:'jiù huò',meaning:'ของเก่า / ของมือสอง',th:'ตลาดของมือสองที่นี่น่าเดิน',sentence:'这里的旧货市场很有趣。'}, {char:'友',pinyin:'yǒu',combo:'旧友',comboPy:'jiù yǒu',meaning:'เพื่อนเก่า',th:'ได้เจอเพื่อนเก่าอีกครั้ง',sentence:'重新见到旧友。'}, {char:'事',pinyin:'shì',combo:'旧事',comboPy:'jiù shì',meaning:'เรื่องเก่า / อดีต',th:'อย่าเอาเรื่องเก่ามาพูดอีก',sentence:'别再提旧事了。'}, {char:'式',pinyin:'shì',combo:'旧式',comboPy:'jiù shì',meaning:'รูปแบบเก่า / โบราณ',th:'บ้านหลังนี้สร้างแบบเก่า',sentence:'这房子是旧式建筑。'}, {char:'情',pinyin:'qíng',combo:'旧情',comboPy:'jiù qíng',meaning:'ความรู้สึกเก่า / รักเก่า',th:'เขายังคิดถึงความรักเก่าอยู่',sentence:'他还念着旧情。'}, ] },
+  { char:'快', pinyin:'kuài', meaning:'เร็ว / เกือบจะ', color:'#0097a7', origin:'快 ประกอบจาก 心 (ใจ) + เสียง 夬 สื่อถึงใจที่ตัดสินใจเร็ว ขยายเป็นความเร็วและความสุขใจ', nodes:[ {char:'乐',pinyin:'lè',combo:'快乐',comboPy:'kuài lè',meaning:'มีความสุข / สนุกสนาน',th:'ขอให้มีความสุขมากๆ นะ',sentence:'祝你快乐！'}, {char:'来',pinyin:'lái',combo:'快来',comboPy:'kuài lái',meaning:'มาเร็วๆ',th:'มาเร็วๆ เลย!',sentence:'快来！'}, {char:'门',pinyin:'mén',combo:'快门',comboPy:'kuài mén',meaning:'ชัตเตอร์กล้อง',th:'กดชัตเตอร์เร็วๆ',sentence:'按快门。'}, {char:'递',pinyin:'dì',combo:'快递',comboPy:'kuài dì',meaning:'พัสดุ / ส่งด่วน',th:'พัสดุมาแล้ว',sentence:'快递到了。'}, {char:'餐',pinyin:'cān',combo:'快餐',comboPy:'kuài cān',meaning:'อาหารฟาสต์ฟู้ด',th:'ทานฟาสต์ฟู้ดบ่อยไม่ดีต่อสุขภาพ',sentence:'常吃快餐不健康。'}, ] },
+  { char:'慢', pinyin:'màn', meaning:'ช้า', color:'#c62828', origin:'慢 ประกอบจาก 心 (ใจ) + เสียง 曼 สื่อถึงใจที่ยืดยาด ลากช้า ตรงข้ามกับ 快 ใช้ได้ทั้งบอกความเร็วและท่าทีที่ไม่รีบ', nodes:[ {char:'慢',pinyin:'màn',combo:'慢慢',comboPy:'màn màn',meaning:'ค่อยๆ / ช้าๆ',th:'ค่อยๆ กิน ไม่ต้องรีบ',sentence:'慢慢吃，不用着急。'}, {char:'走',pinyin:'zǒu',combo:'慢走',comboPy:'màn zǒu',meaning:'เดินระวัง / ไปโดยสวัสดิภาพ (ส่งแขก)',th:'ไปโดยสวัสดิภาพนะคะ',sentence:'慢走！'}, {char:'性子',pinyin:'xìng zi',combo:'慢性子',comboPy:'màn xìng zi',meaning:'คนใจเย็น / ช้าเป็นนิสัย',th:'เขาเป็นคนใจเย็นมาก',sentence:'他是个慢性子。'}, {char:'热',pinyin:'rè',combo:'慢热',comboPy:'màn rè',meaning:'ร้อนช้า / ต้องใช้เวลาเปิดใจ',th:'เธอเป็นคนที่ต้องใช้เวลาเปิดใจ',sentence:'她比较慢热。'}, {char:'跑',pinyin:'pǎo',combo:'慢跑',comboPy:'màn pǎo',meaning:'จ็อกกิ้ง',th:'จ็อกกิ้งทุกเช้า',sentence:'每天早上慢跑。'}, ] },
+  { char:'早', pinyin:'zǎo', meaning:'เช้า / แต่เนิ่นๆ', color:'#f57c00', origin:'早 ประกอบจาก 日 (ดวงอาทิตย์) บน + 十 (เส้นตรง) สื่อถึงดวงอาทิตย์ที่เพิ่งขึ้นมาจากพื้นดิน', nodes:[ {char:'上',pinyin:'shàng',combo:'早上',comboPy:'zǎo shàng',meaning:'ตอนเช้า',th:'ตอนเช้าอากาศดีมาก',sentence:'早上空气很好。'}, {char:'饭',pinyin:'fàn',combo:'早饭',comboPy:'zǎo fàn',meaning:'อาหารเช้า',th:'อย่าข้ามมื้อเช้านะ',sentence:'不要不吃早饭。'}, {char:'安',pinyin:'ān',combo:'早安',comboPy:'zǎo ān',meaning:'อรุณสวัสดิ์',th:'อรุณสวัสดิ์จ้า!',sentence:'早安！'}, {char:'知道',pinyin:'zhī dào',combo:'早知道',comboPy:'zǎo zhī dào',meaning:'ถ้ารู้ก่อน / รู้งี้',th:'รู้งี้ไม่มาเลย',sentence:'早知道就不来了。'}, {char:'点',pinyin:'diǎn',combo:'早点',comboPy:'zǎo diǎn',meaning:'เร็วหน่อย / อาหารเช้า (แบบจีน)',th:'มาเร็วหน่อยได้ไหม',sentence:'能早点来吗？'}, ] },
+  { char:'晚', pinyin:'wǎn', meaning:'เย็น / ดึก / สาย', color:'#283593', origin:'晚 ประกอบจาก 日 (ดวงอาทิตย์) + เสียง 免 สื่อถึงดวงอาทิตย์ที่ตกต่ำลง ขยายเป็นเวลาเย็น ดึก และการมาสาย', nodes:[ {char:'上',pinyin:'shàng',combo:'晚上',comboPy:'wǎn shàng',meaning:'ตอนเย็น / ตอนกลางคืน',th:'ตอนเย็นไปกินข้าวด้วยกันไหม',sentence:'晚上一起吃饭吧。'}, {char:'安',pinyin:'ān',combo:'晚安',comboPy:'wǎn ān',meaning:'ราตรีสวัสดิ์',th:'ราตรีสวัสดิ์นะ',sentence:'晚安！'}, {char:'饭',pinyin:'fàn',combo:'晚饭',comboPy:'wǎn fàn',meaning:'อาหารเย็น',th:'อาหารเย็นวันนี้กินอะไร',sentence:'今天晚饭吃什么？'}, {char:'点',pinyin:'diǎn',combo:'晚点',comboPy:'wǎn diǎn',meaning:'ช้าหน่อย / เที่ยวบินล่าช้า',th:'เที่ยวบินล่าช้า 30 นาที',sentence:'航班晚点三十分钟。'}, {char:'会',pinyin:'huì',combo:'晚会',comboPy:'wǎn huì',meaning:'งานกลางคืน / ปาร์ตี้ยามค่ำ',th:'มีงานปาร์ตี้คืนนี้',sentence:'今晚有晚会。'}, ] },
+  { char:'人', pinyin:'rén', meaning:'คน / มนุษย์', color:'#880e4f', origin:'人 วาดจากรูปคนที่กำลังเดินโดยมีขาสองข้าง เป็นหนึ่งในอักษรที่เก่าแก่ที่สุด แตกคำได้มากที่สุดคำหนึ่ง', nodes:[ {char:'们',pinyin:'men',combo:'人们',comboPy:'rén men',meaning:'ผู้คน',th:'ผู้คนที่นี่ใจดีมาก',sentence:'这里的人们很友好。'}, {char:'生',pinyin:'shēng',combo:'人生',comboPy:'rén shēng',meaning:'ชีวิต',th:'ชีวิตสั้น ต้องใช้ให้คุ้ม',sentence:'人生短暂，要好好珍惜。'}, {char:'气',pinyin:'qì',combo:'人气',comboPy:'rén qì',meaning:'ความนิยม',th:'ร้านนี้ได้รับความนิยมมาก',sentence:'这家店很有人气。'}, {char:'才',pinyin:'cái',combo:'人才',comboPy:'rén cái',meaning:'คนเก่ง / บุคลากร',th:'บริษัทนี้ต้องการคนเก่ง',sentence:'这家公司需要人才。'}, {char:'情',pinyin:'qíng',combo:'人情',comboPy:'rén qíng',meaning:'น้ำใจ / ความสัมพันธ์',th:'น้ำใจสำคัญในสังคมจีน',sentence:'人情在中国社会很重要。'}, ] },
+  { char:'水', pinyin:'shuǐ', meaning:'น้ำ', color:'#0277bd', origin:'水 วาดจากภาพน้ำที่ไหล มีเส้นกลางแทนกระแสน้ำและเส้นข้างแทนหยดน้ำ เป็นส่วนซ้ายในอักษรที่เกี่ยวกับน้ำทั้งหมด', nodes:[ {char:'果',pinyin:'guǒ',combo:'水果',comboPy:'shuǐ guǒ',meaning:'ผลไม้',th:'กินผลไม้ทุกวันดีต่อสุขภาพ',sentence:'每天吃水果对身体好。'}, {char:'平',pinyin:'píng',combo:'水平',comboPy:'shuǐ píng',meaning:'ระดับ / มาตรฐาน',th:'ระดับภาษาจีนของเธอสูงมาก',sentence:'她的中文水平很高。'}, {char:'饺',pinyin:'jiǎo',combo:'水饺',comboPy:'shuǐ jiǎo',meaning:'เกี๊ยวต้ม',th:'เกี๊ยวที่นี่อร่อยมาก',sentence:'这里的水饺很好吃。'}, {char:'分',pinyin:'fēn',combo:'水分',comboPy:'shuǐ fēn',meaning:'ความชื้น / น้ำในร่างกาย',th:'ดื่มน้ำเยอะๆ นะ',sentence:'要多喝水，补充水分。'}, {char:'桶',pinyin:'tǒng',combo:'水桶',comboPy:'shuǐ tǒng',meaning:'ถังน้ำ',th:'เอาถังน้ำมาด้วย',sentence:'把水桶拿过来。'}, ] },
+  { char:'火', pinyin:'huǒ', meaning:'ไฟ / ร้อน / โกรธ', color:'#bf360c', origin:'火 วาดจากภาพเปลวไฟที่ลุกโชน เป็นส่วนประกอบล่างในอักษรที่เกี่ยวกับความร้อนและการปรุงอาหาร', nodes:[ {char:'锅',pinyin:'guō',combo:'火锅',comboPy:'huǒ guō',meaning:'หม้อไฟ / ชาบู',th:'ไปกินชาบูด้วยกันไหม',sentence:'一起去吃火锅吧。'}, {char:'车',pinyin:'chē',combo:'火车',comboPy:'huǒ chē',meaning:'รถไฟ',th:'นั่งรถไฟไปปักกิ่ง',sentence:'坐火车去北京。'}, {char:'气',pinyin:'qì',combo:'火气',comboPy:'huǒ qì',meaning:'อารมณ์โกรธ',th:'เขาโกรธมากเลย',sentence:'他火气很大。'}, {char:'红',pinyin:'hóng',combo:'火红',comboPy:'huǒ hóng',meaning:'แดงจัด / กำลังฮิต',th:'ช่วงนี้กำลังฮิตมาก',sentence:'这段时间很火红。'}, {char:'柴',pinyin:'chái',combo:'火柴',comboPy:'huǒ chái',meaning:'ไม้ขีดไฟ',th:'เอาไม้ขีดไฟมาด้วย',sentence:'带火柴来。'}, ] },
+  { char:'日', pinyin:'rì', meaning:'วัน / ดวงอาทิตย์', color:'#f9a825', origin:'日 วาดจากรูปดวงอาทิตย์ที่มีจุดตรงกลางแทนความสว่าง เป็นหนึ่งในภาพอักษรที่เก่าแก่และจำง่ายที่สุด', nodes:[ {char:'本',pinyin:'běn',combo:'日本',comboPy:'Rì běn',meaning:'ประเทศญี่ปุ่น',th:'เธอชอบวัฒนธรรมญี่ปุ่น',sentence:'她喜欢日本文化。'}, {char:'记',pinyin:'jì',combo:'日记',comboPy:'rì jì',meaning:'ไดอารี่',th:'ฉันเขียนไดอารี่ทุกวัน',sentence:'我每天写日记。'}, {char:'常',pinyin:'cháng',combo:'日常',comboPy:'rì cháng',meaning:'ประจำวัน',th:'กิจวัตรประจำวันของเธอ',sentence:'她的日常生活。'}, {char:'期',pinyin:'qī',combo:'日期',comboPy:'rì qī',meaning:'วันที่',th:'วันนี้วันที่เท่าไหร่',sentence:'今天日期是几号？'}, {char:'出',pinyin:'chū',combo:'日出',comboPy:'rì chū',meaning:'พระอาทิตย์ขึ้น',th:'ตื่นขึ้นมาดูพระอาทิตย์ขึ้น',sentence:'起来看日出。'}, ] },
+  { char:'月', pinyin:'yuè', meaning:'เดือน / พระจันทร์', color:'#37474f', origin:'月 วาดจากรูปพระจันทร์เสี้ยว ต่างจาก 日 ที่กลม ใช้ทั้งแทนดวงจันทร์และหน่วยเวลาหนึ่งเดือน', nodes:[ {char:'亮',pinyin:'liàng',combo:'月亮',comboPy:'yuè liàng',meaning:'ดวงจันทร์',th:'คืนนี้พระจันทร์สวยมาก',sentence:'今晚的月亮很美。'}, {char:'饼',pinyin:'bǐng',combo:'月饼',comboPy:'yuè bǐng',meaning:'ขนมไหว้พระจันทร์',th:'ขนมไหว้พระจันทร์หวานมาก',sentence:'月饼很甜。'}, {char:'份',pinyin:'fèn',combo:'月份',comboPy:'yuè fèn',meaning:'เดือน (ช่วงเวลา)',th:'เดือนนี้ยุ่งมาก',sentence:'这个月份很忙。'}, {char:'薪',pinyin:'xīn',combo:'月薪',comboPy:'yuè xīn',meaning:'เงินเดือน',th:'เงินเดือนที่นี่ดีไหม',sentence:'这里的月薪怎么样？'}, {char:'票',pinyin:'piào',combo:'月票',comboPy:'yuè piào',meaning:'ตั๋วรายเดือน',th:'ซื้อตั๋วรถไฟฟ้ารายเดือน',sentence:'买地铁月票。'}, ] },
+  { char:'中', pinyin:'zhōng', meaning:'กลาง / จีน / ใน', color:'#1b5e20', origin:'中 วาดจากเสาธงที่ตั้งตรงกลางค่าย สื่อถึงตำแหน่งกลาง และยังใช้ย่อประเทศจีน (中国) อีกด้วย', nodes:[ {char:'文',pinyin:'wén',combo:'中文',comboPy:'Zhōng wén',meaning:'ภาษาจีน',th:'ฉันกำลังเรียนภาษาจีนอยู่',sentence:'我正在学中文。'}, {char:'国',pinyin:'guó',combo:'中国',comboPy:'Zhōng guó',meaning:'ประเทศจีน',th:'เธออยากไปเที่ยวจีนไหม',sentence:'你想去中国旅游吗？'}, {char:'午',pinyin:'wǔ',combo:'中午',comboPy:'zhōng wǔ',meaning:'ตอนเที่ยง',th:'กินข้าวเที่ยงด้วยกันไหม',sentence:'中午一起吃饭吗？'}, {char:'心',pinyin:'xīn',combo:'中心',comboPy:'zhōng xīn',meaning:'ศูนย์กลาง',th:'ใจกลางเมืองรถติดมาก',sentence:'城市中心很堵车。'}, {char:'间',pinyin:'jiān',combo:'中间',comboPy:'zhōng jiān',meaning:'ตรงกลาง / ระหว่าง',th:'นั่งตรงกลางได้เลย',sentence:'坐中间吧。'}, ] },
+  { char:'学', pinyin:'xué', meaning:'เรียน / ศึกษา', color:'#1a237e', origin:'学 รูปโบราณวาดจากเด็กที่อยู่ใต้หลังคาโรงเรียนและมีมือกำลังรับความรู้ สื่อถึงการรับการสั่งสอน', nodes:[ {char:'生',pinyin:'shēng',combo:'学生',comboPy:'xué shēng',meaning:'นักเรียน / นักศึกษา',th:'ฉันเป็นนักเรียนภาษาจีน',sentence:'我是中文学生。'}, {char:'习',pinyin:'xí',combo:'学习',comboPy:'xué xí',meaning:'เรียนรู้ / ศึกษา',th:'ต้องขยันเรียนนะ',sentence:'要好好学习。'}, {char:'校',pinyin:'xiào',combo:'学校',comboPy:'xué xiào',meaning:'โรงเรียน',th:'โรงเรียนอยู่ใกล้บ้าน',sentence:'学校离家很近。'}, {char:'费',pinyin:'fèi',combo:'学费',comboPy:'xué fèi',meaning:'ค่าเรียน',th:'ค่าเรียนที่นี่แพงไหม',sentence:'这里的学费贵吗？'}, {char:'问',pinyin:'wèn',combo:'学问',comboPy:'xué wèn',meaning:'ความรู้ / การศึกษา',th:'เขามีความรู้กว้างมาก',sentence:'他很有学问。'}, ] },
+  { char:'家', pinyin:'jiā', meaning:'บ้าน / ครอบครัว', color:'#4a148c', origin:'家 วาดจากรูปหมูอยู่ใต้หลังคา ในสมัยโบราณบ้านที่มีสัตว์เลี้ยงถือว่าเป็นบ้านที่มั่งคั่ง', nodes:[ {char:'人',pinyin:'rén',combo:'家人',comboPy:'jiā rén',meaning:'คนในครอบครัว',th:'คนในครอบครัวคือสิ่งสำคัญ',sentence:'家人是最重要的。'}, {char:'里',pinyin:'lǐ',combo:'家里',comboPy:'jiā lǐ',meaning:'ที่บ้าน / ในบ้าน',th:'วันนี้อยู่บ้านเลย',sentence:'今天在家里。'}, {char:'乡',pinyin:'xiāng',combo:'家乡',comboPy:'jiā xiāng',meaning:'บ้านเกิด / ภูมิลำเนา',th:'ฉันคิดถึงบ้านเกิดมาก',sentence:'我很想念家乡。'}, {char:'务',pinyin:'wù',combo:'家务',comboPy:'jiā wù',meaning:'งานบ้าน',th:'ช่วยทำงานบ้านด้วยนะ',sentence:'帮忙做家务吧。'}, {char:'长',pinyin:'zhǎng',combo:'家长',comboPy:'jiā zhǎng',meaning:'ผู้ปกครอง / หัวหน้าครอบครัว',th:'ผู้ปกครองต้องมารับที่โรงเรียน',sentence:'家长要来学校接孩子。'}, ] },
+];
+
+let wmIdx = 0;
+let wmAnimating = false;
+
+function initWordMap() {
+  wmIdx = 0;
+  renderWordMap();
+}
+
+function renderWordMap() {
+  const root = document.getElementById('wordmap-root');
+  const map = WORD_MAPS[wmIdx];
+  root.innerHTML = `
+  <style>
+    #wm-wrap{max-width:480px;margin:0 auto;padding:0 0 40px;font-family:'Noto Sans Thai',sans-serif;background:#fff5fb;min-height:100vh}
+    .wm-header{display:flex;align-items:center;gap:10px;padding:12px 16px;background:white;border-bottom:1.5px solid #f0d0e0;position:sticky;top:56px;z-index:30}
+    .wm-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 0}
+    .wm-nav-btn{background:white;border:1.5px solid #f0d0e0;border-radius:10px;padding:6px 14px;font-size:13px;font-weight:700;cursor:pointer;color:#5a3a4a;font-family:inherit;transition:.15s}
+    .wm-nav-btn:disabled{opacity:.3;cursor:default}
+    .wm-nav-dots{display:flex;gap:5px;align-items:center}
+    .wm-dot{width:7px;height:7px;border-radius:50%;background:#f0d0e0;transition:.2s}
+    .wm-dot.active{background:#F13596;width:18px;border-radius:4px}
+    .wm-center-card{width:88px;height:88px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 24px rgba(241,53,150,.25);transition:transform .2s cubic-bezier(.34,1.56,.64,1);user-select:none;margin:0 auto}
+    .wm-center-card:active{transform:scale(.93)!important}
+    .wm-center-zh{font-family:'Noto Sans SC',sans-serif;font-size:36px;font-weight:700;color:white;line-height:1}
+    .wm-center-py{font-size:11px;color:rgba(255,255,255,.85);margin-top:2px}
+    .wm-nodes{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:16px 16px 0}
+    .wm-node{background:white;border-radius:16px;border:2px solid #f0d0e0;padding:11px 13px;cursor:pointer;transition:all .35s cubic-bezier(.34,1.56,.64,1);box-shadow:0 2px 10px rgba(241,53,150,.07);text-align:center;min-width:78px;opacity:0;transform:scale(.6) translateY(16px);user-select:none}
+    .wm-node.visible{opacity:1;transform:scale(1) translateY(0)}
+    .wm-node:active{transform:scale(.93)!important}
+    .wm-node-combo{font-family:'Noto Sans SC',sans-serif;font-size:19px;font-weight:700;line-height:1.2}
+    .wm-node-py{font-size:9px;color:#9a7a8a;margin-top:2px;font-style:italic}
+    .wm-node-th{font-size:10px;font-weight:600;color:#5a3a4a;margin-top:3px}
+    .wm-tap-hint{font-size:12px;color:#9a7a8a;text-align:center;padding:8px 0 4px;animation:wmPulse 2s infinite}
+    @keyframes wmPulse{0%,100%{opacity:.5}50%{opacity:1}}
+    @keyframes wmCenterPop{0%{transform:scale(1)}40%{transform:scale(1.13)}100%{transform:scale(1)}}
+    .wm-center-card.pop{animation:wmCenterPop .4s cubic-bezier(.34,1.56,.64,1)}
+    .wm-popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:flex-end;justify-content:center;animation:wmFade .2s ease}
+    @keyframes wmFade{from{opacity:0}to{opacity:1}}
+    .wm-popup{background:white;border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-width:480px;animation:wmSlide .3s cubic-bezier(.34,1.56,.64,1)}
+    @keyframes wmSlide{from{transform:translateY(100%)}to{transform:translateY(0)}}
+    .wm-popup-combo{font-family:'Noto Sans SC',sans-serif;font-size:44px;font-weight:700;text-align:center;line-height:1.1}
+    .wm-popup-py{font-size:15px;color:#9a7a8a;text-align:center;margin-top:4px;font-style:italic}
+    .wm-popup-meaning{font-size:18px;font-weight:700;color:#1a0a12;text-align:center;margin:10px 0 16px}
+    .wm-popup-parts{display:flex;gap:8px;justify-content:center;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+    .wm-popup-part{background:#fff5fb;border:1.5px solid #f0d0e0;border-radius:12px;padding:8px 14px;text-align:center}
+    .wm-popup-part-zh{font-family:'Noto Sans SC',sans-serif;font-size:22px;font-weight:700}
+    .wm-popup-part-label{font-size:10px;color:#9a7a8a;margin-top:2px}
+    .wm-popup-op{font-size:22px;color:#9a7a8a;font-weight:700}
+    .wm-popup-sentence{background:#f8f0ff;border-radius:12px;padding:12px 14px;margin-bottom:16px}
+    .wm-popup-sent-zh{font-family:'Noto Sans SC',sans-serif;font-size:16px;font-weight:500;color:#1a0a12;margin-bottom:4px}
+    .wm-popup-sent-th{font-size:13px;color:#5a3a4a}
+    .wm-popup-btns{display:flex;gap:8px}
+    .wm-popup-close{flex:1;padding:12px;border-radius:12px;border:1.5px solid #f0d0e0;background:white;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;color:#5a3a4a}
+    .wm-popup-speak{width:48px;height:48px;border-radius:12px;border:none;background:linear-gradient(135deg,#F13596,#ff7b2f);font-size:20px;cursor:pointer;flex-shrink:0}
+  </style>
+  <div id="wm-wrap">
+    <div class="wm-header">
+      <button onclick="closeGame()" style="background:#f0d0e0;border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">←</button>
+      <div style="font-size:15px;font-weight:700;color:#1a0a12">🗺️ Word Mapping</div>
+    </div>
+    <div class="wm-nav">
+      <button class="wm-nav-btn" onclick="wmPrev()" ${wmIdx===0?'disabled':''}>← ก่อนหน้า</button>
+      <div class="wm-nav-dots" id="wm-dots"></div>
+      <button class="wm-nav-btn" onclick="wmNext()" ${wmIdx===WORD_MAPS.length-1?'disabled':''}>${wmIdx>=7 && !isPremium() ? '🔒 ' : ''}ถัดไป →</button>
+    </div>
+    <div style="text-align:center;padding:24px 16px 8px">
+      <div class="wm-center-card" id="wm-center" style="background:linear-gradient(135deg,${map.color},${map.color}bb)" onclick="wmTriggerAnim()">
+        <div class="wm-center-zh">${map.char}</div>
+        <div class="wm-center-py">${map.pinyin}</div>
+      </div>
+      <div style="font-size:13px;color:#9a7a8a;margin-top:10px">${map.meaning}</div>
+      ${map.origin ? `<div style="margin:10px 16px 0;background:white;border-radius:12px;border:1.5px solid #f0d0e0;padding:11px 14px;font-size:12px;color:#5a3a4a;line-height:1.7;text-align:left">
+        <span style="font-size:11px;font-weight:700;color:#F13596;margin-right:6px">💡 ทริคการจำ</span>${map.origin}
+      </div>` : ''}
+    </div>
+    <div class="wm-tap-hint" id="wm-hint">👆 กดตัวอักษรกลางเพื่อดูความสัมพันธ์</div>
+    <div class="wm-nodes" id="wm-nodes">
+      ${map.nodes.map((n,i) => `
+        <div class="wm-node" id="wm-node-${i}" onclick="wmShowPopup(${i})" style="border-color:${map.color}33">
+          <div class="wm-node-combo" style="color:${map.color}">${n.combo}</div>
+          <div class="wm-node-py">${n.comboPy}</div>
+          <div class="wm-node-th">${n.meaning}</div>
+        </div>
+      `).join('')}
+    </div>
+  </div>`;
+
+  // dots
+  const dots = document.getElementById('wm-dots');
+  WORD_MAPS.forEach((_,i) => {
+    const d = document.createElement('div');
+    d.className = 'wm-dot'+(i===wmIdx?' active':'');
+    dots.appendChild(d);
+  });
+  // แสดง lock badge ถ้า free
+  if(!isPremium()){
+    const lockBadge = document.createElement('div');
+    lockBadge.style.cssText = 'font-size:10px;color:#9a7a8a;text-align:center;margin-top:4px;';
+    lockBadge.innerHTML = '🔒 Premium ปลดล็อก ' + (WORD_MAPS.length - 8) + ' กลุ่มเพิ่มเติม';
+    document.getElementById('wm-dots').parentNode.appendChild(lockBadge);
+  }
+}
+
+function wmTriggerAnim() {
+  playClickSound();
+  const center = document.getElementById('wm-center');
+  center.classList.add('pop');
+  setTimeout(()=>center.classList.remove('pop'),400);
+  const map = WORD_MAPS[wmIdx];
+  map.nodes.forEach((_,i)=>{
+    const node = document.getElementById('wm-node-'+i);
+    if(node){ node.style.transitionDelay=(i*0.08)+'s'; node.classList.add('visible'); }
+  });
+  const hint = document.getElementById('wm-hint');
+  if(hint) hint.textContent='👆 กดคำรวมเพื่อดูความหมาย';
+}
+
+function wmShowPopup(idx) {
+  playClickSound();
+  const map = WORD_MAPS[wmIdx];
+  const n = map.nodes[idx];
+  const overlay = document.createElement('div');
+  overlay.className = 'wm-popup-overlay';
+  overlay.innerHTML = `
+    <div class="wm-popup">
+      <div class="wm-popup-combo" style="color:${map.color}">${n.combo}</div>
+      <div class="wm-popup-py">${n.comboPy}</div>
+      <div class="wm-popup-meaning">${n.meaning}</div>
+      <div class="wm-popup-parts">
+        <div class="wm-popup-part">
+          <div class="wm-popup-part-zh" style="color:${map.color}">${map.char}</div>
+          <div class="wm-popup-part-label">${map.meaning}</div>
+        </div>
+        <div class="wm-popup-op">+</div>
+        <div class="wm-popup-part">
+          <div class="wm-popup-part-zh">${n.char}</div>
+          <div class="wm-popup-part-label">${n.pinyin}</div>
+        </div>
+        <div class="wm-popup-op">=</div>
+        <div class="wm-popup-part" style="background:linear-gradient(135deg,${map.color}15,${map.color}25);border-color:${map.color}55">
+          <div class="wm-popup-part-zh" style="color:${map.color}">${n.combo}</div>
+          <div class="wm-popup-part-label" style="color:${map.color}">${n.meaning}</div>
+        </div>
+      </div>
+      <div class="wm-popup-sentence">
+        <div class="wm-popup-sent-zh">${n.sentence}</div>
+        <div class="wm-popup-sent-th">${n.th}</div>
+      </div>
+      <div class="wm-popup-btns">
+        <button class="wm-popup-speak" onclick="wmSpeak('${n.sentence}')">🔊</button>
+        <button class="wm-popup-close" onclick="playClickSound();this.closest('.wm-popup-overlay').remove()">ปิด</button>
+      </div>
+    </div>`;
+  overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove();});
+  document.body.appendChild(overlay);
+}
+
+function wmSpeak(text) {
+  playClickSound();
+  if('speechSynthesis' in window){
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang='zh-CN'; u.rate=0.8;
+    speechSynthesis.speak(u);
+  }
+}
+
+function wmNext(){
+  if(wmIdx >= WORD_MAPS.length-1) return;
+  const nextIdx = wmIdx + 1;
+  if(nextIdx >= 8 && !isPremium()){
+    showPaymentModal();
+    return;
+  }
+  wmIdx++;
+  playClickSound();
+  renderWordMap();
+}
+function wmPrev(){ if(wmIdx>0){wmIdx--;playClickSound();renderWordMap();} }
 
 </script></body>
 </html>
