@@ -1543,7 +1543,7 @@ body {
         </div>
 
         <button onclick="showPaymentModal()" style="width:100%;padding:13px;background:#F13596;color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">
-          ⚡ เริ่มเรียนเลย — เลือกแพคเกจ
+          🚀 เริ่มเรียนเลย — ฿1,290 ตลอดชีพ
         </button>
         <a href="https://line.me/R/ti/p/@ava11" target="_blank" rel="noopener"
           style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;margin-top:10px;background:#06C755;color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;text-decoration:none;box-sizing:border-box">
@@ -1682,22 +1682,27 @@ body {
           <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:10px">จีน ↔ ไทย จับให้ครบก่อนหมดเวลา!</div>
           <span style="font-size:10px;font-weight:700;color:#e91e8c;background:#fce4f3;padding:3px 10px;border-radius:20px">ฟรี ด่าน 1 ✨</span>
         </div>
+        <!-- Tap the Pair Game -->
+        <div onclick="openGame('pair')" style="background:linear-gradient(145deg,#fff8fc,#ffedf6);border:1.5px solid #f9c0df;border-radius:16px;padding:18px 14px;cursor:pointer;transition:.2s;box-shadow:var(--shadow)" onmouseover="this.style.borderColor='#F13596';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#f9c0df';this.style.transform='none'">
+          <div style="font-size:38px;margin-bottom:10px">🧩</div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">Tap the Pair</div>
+          <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:10px">จับคู่จีน-ไทย ก่อนหมดเวลา! 30 ด่าน</div>
+          <span style="font-size:10px;font-weight:700;color:#F13596;background:#fce4f3;padding:3px 10px;border-radius:20px">🔥 ใหม่! 30 ด่าน</span>
+        </div>
         <!-- Listen Game -->
+        <!-- ฟังแล้วตอบคำถาม -->
         <div onclick="openGame('listen')" style="background:white;border:1.5px solid var(--paper3);border-radius:16px;padding:18px 14px;cursor:pointer;transition:.2s;box-shadow:var(--shadow)" onmouseover="this.style.borderColor='#0097a7';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--paper3)';this.style.transform='none'">
           <div style="font-size:38px;margin-bottom:10px">🔊</div>
           <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">ฟังแล้วตอบคำถาม</div>
           <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:10px">ฟังเสียงจีน แล้วเลือกคำที่ถูก!</div>
           <span style="font-size:10px;font-weight:700;color:#0097a7;background:#e0f7fa;padding:3px 10px;border-radius:20px">ฟรี ด่าน 1 ✨</span>
         </div>
-        <!-- Listening Comprehension Game -->
-        <div onclick="openGame('listening')" style="grid-column:1/-1;background:white;border:1.5px solid var(--paper3);border-radius:16px;padding:18px;cursor:pointer;transition:.2s;box-shadow:var(--shadow);display:flex;align-items:center;gap:16px" onmouseover="this.style.borderColor='#6b1a6b';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--paper3)';this.style.transform='none'">
-          <div style="font-size:42px;flex-shrink:0">🎧</div>
-          <div style="flex:1">
-            <div style="font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px">จับใจความ</div>
-            <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:8px">ฟังบทสนทนาจีน แล้วตอบคำถามความเข้าใจ</div>
-            <span style="font-size:10px;font-weight:700;color:#6b1a6b;background:#f0e8f4;padding:3px 10px;border-radius:20px">🎧 ระดับกลาง HSK 2-3</span>
-          </div>
-          <div style="font-size:24px;opacity:.3">→</div>
+        <!-- จับใจความ — การ์ดปกติ คู่กับฟังแล้วตอบ -->
+        <div onclick="openGame('listening')" style="background:white;border:1.5px solid var(--paper3);border-radius:16px;padding:18px 14px;cursor:pointer;transition:.2s;box-shadow:var(--shadow)" onmouseover="this.style.borderColor='#6b1a6b';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--paper3)';this.style.transform='none'">
+          <div style="font-size:38px;margin-bottom:10px">🎧</div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">จับใจความ</div>
+          <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:10px">ฟังบทสนทนาจีน แล้วตอบความเข้าใจ</div>
+          <span style="font-size:10px;font-weight:700;color:#6b1a6b;background:#f0e8f4;padding:3px 10px;border-radius:20px">🎧 ระดับกลาง</span>
         </div>
         <!-- Journal — full width -->
         <div onclick="openGame('journal')" style="grid-column:1/-1;background:white;border:1.5px solid var(--paper3);border-radius:16px;padding:18px;cursor:pointer;transition:.2s;box-shadow:var(--shadow);display:flex;align-items:center;gap:16px" onmouseover="this.style.borderColor='#C9A96E';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--paper3)';this.style.transform='none'">
@@ -1719,6 +1724,10 @@ body {
         <div style="font-size:15px;font-weight:700;color:var(--ink)">🃏 จับคู่คำศัพท์</div>
       </div>
       <div id="match-content" style="padding:16px"></div>
+    </div>
+
+    <div id="game-pair" style="display:none">
+      <div id="pair-game-root"></div>
     </div>
 
     <!-- Game: Listen -->
@@ -10529,7 +10538,7 @@ function updateSpeedBadge() {
 
 function openGame(name) {
   document.getElementById('play-hub').style.display = 'none';
-  ['stroke','daily','sentence','speed','journal','match','listen','listening'].forEach(g => {
+  ['stroke','daily','sentence','speed','journal','match','listen','listening','pair'].forEach(g => {
     document.getElementById('game-'+g).style.display = g===name ? 'block' : 'none';
   });
   window.scrollTo(0,0);
@@ -10541,10 +10550,11 @@ function openGame(name) {
   else if (name==='match') initMatchGame();
   else if (name==='listen') initListenGame();
   else if (name==='listening') initListeningGame();
+  else if (name==='pair') initPairGame();
 }
 
 function closeGame() {
-  ['stroke','daily','sentence','speed','journal','match','listen','listening'].forEach(g => {
+  ['stroke','daily','sentence','speed','journal','match','listen','listening','pair'].forEach(g => {
     document.getElementById('game-'+g).style.display = 'none';
   });
   document.getElementById('play-hub').style.display = 'block';
@@ -10874,65 +10884,65 @@ const SENTENCE_LEVELS = [
     {th:'ฉันจ่ายด้วย WeChat Pay', words:['我','用','微信支付'], correct:'我用微信支付', py:'Wǒ yòng Wēixìn Zhīfù'},
     {th:'ห่อกลับบ้านด้วยได้ไหม?', words:['可以','打包','吗'], correct:'可以打包吗', py:'Kěyǐ dǎbāo ma'},
   ]},
-  { level:6, name:'ด่านที่ 6 — ชีวิต & ความคิด', color:'#1a2a5a', bg:'#e0e4f0', icon:'🏆', sentences:[
-    {th:'ฉันคิดว่าการเรียนภาษาจีนน่าสนใจมาก', words:['我觉得','学中文','很有意思'], correct:'我觉得学中文很有意思', py:'Wǒ juéde xué Zhōngwén hěn yǒuyìsi'},
-    {th:'แม้ว่าจะยากแต่ฉันก็ไม่ยอมแพ้', words:['虽然','很难','但是','我不放弃'], correct:'虽然很难但是我不放弃', py:'Suīrán hěn nán dànshì wǒ bù fàngqì'},
-    {th:'เพราะฉะนั้นฉันจึงเรียนทุกวัน', words:['所以','我','每天','学习'], correct:'所以我每天学习', py:'Suǒyǐ wǒ měitiān xuéxí'},
-    {th:'ถ้าคุณพยายาม คุณจะสำเร็จ', words:['如果','你努力','就会','成功'], correct:'如果你努力就会成功', py:'Rúguǒ nǐ nǔlì jiù huì chénggōng'},
-    {th:'เขาพูดภาษาจีนได้คล่องมาก', words:['他','说','中文','说得很好'], correct:'他说中文说得很好', py:'Tā shuō Zhōngwén shuō de hěn hǎo'},
-    {th:'ฉันเพิ่งเรียนจบมหาวิทยาลัย', words:['我','刚刚','大学毕业'], correct:'我刚刚大学毕业', py:'Wǒ gānggāng dàxué bìyè'},
-    {th:'เธอกำลังเตรียมสอบ HSK', words:['她','正在','准备','HSK考试'], correct:'她正在准备HSK考试', py:'Tā zhèngzài zhǔnbèi HSK kǎoshì'},
-    {th:'การออกกำลังกายดีต่อสุขภาพ', words:['运动','对','身体','有好处'], correct:'运动对身体有好处', py:'Yùndòng duì shēntǐ yǒu hǎochù'},
-    {th:'ฉันหวังว่าจะได้ไปจีนสักครั้ง', words:['我希望','有机会','去','中国'], correct:'我希望有机会去中国', py:'Wǒ xīwàng yǒu jīhuì qù Zhōngguó'},
-    {th:'ยิ่งฝึกมาก ยิ่งพูดได้คล่อง', words:['练习得越多','说得','越流利'], correct:'练习得越多说得越流利', py:'Liànxí de yuè duō shuō de yuè liúlì'},
+  { level:6, name:'ด่านที่ 6 — ความรู้สึก & สุขภาพ 😊', color:'#e91e8c', bg:'#fce4f3', icon:'🏆', sentences:[
+    {th:'ฉันหิวมากเลย', words:['我','很','饿'], correct:'我很饿', py:'Wǒ hěn è'},
+    {th:'ฉันเหนื่อยมาก อยากนอนพัก', words:['我','很累','想休息'], correct:'我很累想休息', py:'Wǒ hěn lèi xiǎng xiūxi'},
+    {th:'ฉันไม่สบาย ปวดหัว', words:['我','不舒服','头疼'], correct:'我不舒服头疼', py:'Wǒ bù shūfu tóuténg'},
+    {th:'คุณเป็นยังไงบ้าง? สบายดีไหม?', words:['你','怎么样','还好吗？'], correct:'你怎么样还好吗？', py:'Nǐ zěnmeyàng hái hǎo ma'},
+    {th:'ฉันมีความสุขมากวันนี้', words:['我','今天','很开心'], correct:'我今天很开心', py:'Wǒ jīntiān hěn kāixīn'},
+    {th:'ฉันร้อนมาก เปิดแอร์ได้ไหม?', words:['我','很热','可以开空调吗？'], correct:'我很热可以开空调吗？', py:'Wǒ hěn rè kěyǐ kāi kōngtiáo ma'},
+    {th:'เขาดูเหนื่อยมาก ให้เขาพักก่อนนะ', words:['他','看起来很累','让他先休息'], correct:'他看起来很累让他先休息', py:'Tā kànqǐlái hěn lèi ràng tā xiān xiūxi'},
+    {th:'วันนี้ฉันอารมณ์ไม่ดีเลย', words:['我','今天','心情','不好'], correct:'我今天心情不好', py:'Wǒ jīntiān xīnqíng bù hǎo'},
+    {th:'ฉันกินข้าวมากเกินไป อิ่มมาก', words:['我','吃太多了','很饱'], correct:'我吃太多了很饱', py:'Wǒ chī tài duō le hěn bǎo'},
+    {th:'ฉันกลัวหมา คุณมีหมาไหม?', words:['我','怕狗','你有狗吗？'], correct:'我怕狗你有狗吗？', py:'Wǒ pà gǒu nǐ yǒu gǒu ma'},
   ]},
-  { level:7, name:'ด่านที่ 7 — HSK2 ประโยคซับซ้อน', color:'#6a1b9a', bg:'#f3e5f5', icon:'🔥', sentences:[
-    {th:'เขาเพิ่งกลับมาจากต่างประเทศ', words:['他','刚','从','国外','回来了'], correct:'他刚从国外回来了', py:'Tā gāng cóng guówài huílái le'},
-    {th:'ฉันยังไม่ได้กินข้าวเลย', words:['我','还','没有','吃饭'], correct:'我还没有吃饭', py:'Wǒ hái méiyǒu chīfàn'},
-    {th:'เธอพูดภาษาจีนได้ดีกว่าฉัน', words:['她','比我','说中文','说得好'], correct:'她比我说中文说得好', py:'Tā bǐ wǒ shuō Zhōngwén shuō de hǎo'},
-    {th:'วันนี้ฉันไม่อยากออกไปข้างนอก', words:['今天','我','不想','出去'], correct:'今天我不想出去', py:'Jīntiān wǒ bù xiǎng chūqù'},
-    {th:'ฉันใช้เวลาสองชั่วโมงทำการบ้าน', words:['我','用了','两个小时','做作业'], correct:'我用了两个小时做作业', py:'Wǒ yòng le liǎng gè xiǎoshí zuò zuòyè'},
-    {th:'ของที่นี่แพงกว่าที่นั่น', words:['这里的东西','比','那里','贵'], correct:'这里的东西比那里贵', py:'Zhèlǐ de dōngxi bǐ nàlǐ guì'},
-    {th:'คุณควรพักผ่อนให้มากขึ้น', words:['你','应该','多','休息'], correct:'你应该多休息', py:'Nǐ yīnggāi duō xiūxi'},
-    {th:'ฉันกำลังเรียนภาษาจีนอยู่', words:['我','正在','学习','中文'], correct:'我正在学习中文', py:'Wǒ zhèngzài xuéxí Zhōngwén'},
-    {th:'เขาบอกว่าจะมาช้า', words:['他','说','他会','来晚'], correct:'他说他会来晚', py:'Tā shuō tā huì lái wǎn'},
-    {th:'ฉันไม่ค่อยชอบกินผัก', words:['我','不太','喜欢','吃蔬菜'], correct:'我不太喜欢吃蔬菜', py:'Wǒ bù tài xǐhuan chī shūcài'},
+  { level:7, name:'ด่านที่ 7 — โทรศัพท์ & แชท 📱', color:'#0288d1', bg:'#e1f5fe', icon:'🔥', sentences:[
+    {th:'สวัสดี คุณว่างคุยไหมตอนนี้?', words:['你好','现在','有空聊天吗？'], correct:'你好现在有空聊天吗？', py:'Nǐ hǎo xiànzài yǒu kōng liáotiān ma'},
+    {th:'โทรหาฉันด้วยนะ ฉันรอสาย', words:['给我','打电话','我在等'], correct:'给我打电话我在等', py:'Gěi wǒ dǎ diànhuà wǒ zài děng'},
+    {th:'ฉันกำลังส่งข้อความถึงเธออยู่', words:['我','正在','给你','发消息'], correct:'我正在给你发消息', py:'Wǒ zhèngzài gěi nǐ fā xiāoxi'},
+    {th:'รอแป๊บนึงนะ ฉันกำลังขับรถ', words:['等一下','我','在开车'], correct:'等一下我在开车', py:'Děng yīxià wǒ zài kāichē'},
+    {th:'แบตเตอรี่จะหมดแล้ว', words:['手机','快没电了'], correct:'手机快没电了', py:'Shǒujī kuài méi diàn le'},
+    {th:'ส่งที่อยู่มาให้ฉันด้วยนะ', words:['把地址','发给我'], correct:'把地址发给我', py:'Bǎ dìzhǐ fā gěi wǒ'},
+    {th:'เน็ตช้ามาก วิดีโอคอลไม่ได้', words:['网速很慢','不能','视频通话'], correct:'网速很慢不能视频通话', py:'Wǎngsù hěn màn bù néng shìpín tōnghuà'},
+    {th:'ฉันโทรหาเธอไม่ติดเลย', words:['我','打电话给你','打不通'], correct:'我打电话给你打不通', py:'Wǒ dǎ diànhuà gěi nǐ dǎ bu tōng'},
+    {th:'ช่วยส่งรูปมาให้ฉันหน่อยได้ไหม?', words:['可以','把照片','发给我','吗？'], correct:'可以把照片发给我吗？', py:'Kěyǐ bǎ zhàopiàn fā gěi wǒ ma'},
+    {th:'ฉันจะโทรกลับทีหลังนะ', words:['我','待会儿','再打给你'], correct:'我待会儿再打给你', py:'Wǒ dāihuìr zài dǎ gěi nǐ'},
   ]},
-  { level:8, name:'ด่านที่ 8 — HSK2-3 สำนวนชีวิต', color:'#bf360c', bg:'#fbe9e7', icon:'🔥🔥', sentences:[
-    {th:'ยิ่งมากยิ่งดี', words:['越多','越好'], correct:'越多越好', py:'Yuè duō yuè hǎo'},
-    {th:'เขาไม่ได้มาตั้งนานแล้ว', words:['他','好久','没来了'], correct:'他好久没来了', py:'Tā hǎojiǔ méi lái le'},
-    {th:'ฉันพึ่งรู้ว่าเธอแต่งงานแล้ว', words:['我','才知道','她','结婚了'], correct:'我才知道她结婚了', py:'Wǒ cái zhīdào tā jiéhūn le'},
-    {th:'ถ้าไม่พยายามก็ไม่มีวันสำเร็จ', words:['不努力','就不会','成功'], correct:'不努力就不会成功', py:'Bù nǔlì jiù bù huì chénggōng'},
-    {th:'ฉันอยากให้เธอมีความสุข', words:['我希望','你','能','幸福'], correct:'我希望你能幸福', py:'Wǒ xīwàng nǐ néng xìngfú'},
-    {th:'เขาทำงานหนักจนป่วย', words:['他','因为','工作太累','生病了'], correct:'他因为工作太累生病了', py:'Tā yīnwèi gōngzuò tài lèi shēngbìng le'},
-    {th:'ภาษาจีนไม่ยากถ้าฝึกทุกวัน', words:['中文','不难','只要','每天练习'], correct:'中文不难只要每天练习', py:'Zhōngwén bù nán zhǐyào měitiān liànxí'},
-    {th:'เธอกลับมาแล้วหรือยัง?', words:['她','回来了','吗','？'], correct:'她回来了吗？', py:'Tā huílái le ma'},
-    {th:'ฉันไม่แน่ใจว่าเขาจะมาไหม', words:['我不确定','他','会不会来'], correct:'我不确定他会不会来', py:'Wǒ bù quèdìng tā huì bu huì lái'},
-    {th:'ตั้งแต่เรียนจีนฉันมีเพื่อนมากขึ้น', words:['自从','学中文','我','朋友越来越多'], correct:'自从学中文我朋友越来越多', py:'Zìcóng xué Zhōngwén wǒ péngyou yuè lái yuè duō'},
+  { level:8, name:'ด่านที่ 8 — ที่ทำงาน & ในชีวิต 💼', color:'#2e7d32', bg:'#e8f5e9', icon:'🔥🔥', sentences:[
+    {th:'วันนี้งานเยอะมาก ยุ่งสุดๆ', words:['今天','工作很多','忙死了'], correct:'今天工作很多忙死了', py:'Jīntiān gōngzuò hěn duō máng sǐ le'},
+    {th:'ประชุมกี่โมงครับ?', words:['会议','几点','开始？'], correct:'会议几点开始？', py:'Huìyì jǐ diǎn kāishǐ'},
+    {th:'ฉันส่งอีเมลให้คุณแล้ว ลองเช็คดูนะ', words:['我','已经','发邮件给你了','看一下'], correct:'我已经发邮件给你了看一下', py:'Wǒ yǐjīng fā yóujiàn gěi nǐ le kàn yīxià'},
+    {th:'ขอลาหยุดพรุ่งนี้ได้ไหม?', words:['明天','可以','请假','吗？'], correct:'明天可以请假吗？', py:'Míngtiān kěyǐ qǐngjià ma'},
+    {th:'รายงานเสร็จแล้ว จะส่งตอนนี้เลย', words:['报告','写完了','现在就发'], correct:'报告写完了现在就发', py:'Bàogào xiě wán le xiànzài jiù fā'},
+    {th:'คุณช่วยฉันด้วยได้ไหม? ยุ่งมากเลย', words:['你能','帮我','吗','我很忙'], correct:'你能帮我吗我很忙', py:'Nǐ néng bāng wǒ ma wǒ hěn máng'},
+    {th:'ประชุมยกเลิกแล้ว เลื่อนไปวันพรุ่งนี้', words:['会议','取消了','改到','明天'], correct:'会议取消了改到明天', py:'Huìyì qǔxiāo le gǎi dào míngtiān'},
+    {th:'เงินเดือนออกวันไหน?', words:['工资','哪天','发？'], correct:'工资哪天发？', py:'Gōngzī nǎ tiān fā'},
+    {th:'ฉันทำงานที่บ้านวันนี้', words:['我','今天','在家','工作'], correct:'我今天在家工作', py:'Wǒ jīntiān zàijiā gōngzuò'},
+    {th:'นัดหมายลูกค้าวันจันทร์ตอนบ่ายสองโมง', words:['周一','下午两点','见客户'], correct:'周一下午两点见客户', py:'Zhōuyī xiàwǔ liǎng diǎn jiàn kèhù'},
   ]},
-  { level:9, name:'ด่านที่ 9 — HSK3 ไวยากรณ์ขั้นสูง', color:'#1a237e', bg:'#e8eaf6', icon:'🔥🔥🔥', sentences:[
-    {th:'แม้ว่าฉันจะเหนื่อย แต่ก็ยังคงพยายามต่อ', words:['尽管','我很累','但是','仍然坚持'], correct:'尽管我很累但是仍然坚持', py:'Jǐnguǎn wǒ hěn lèi dànshì réngrán jiānchí'},
-    {th:'เธอค่อยๆ เก่งขึ้นทุกวัน', words:['她','每天','都在','逐渐进步'], correct:'她每天都在逐渐进步', py:'Tā měitiān dōu zài zhújiàn jìnbù'},
-    {th:'ตามที่ฉันรู้ เขาเป็นคนดี', words:['据我所知','他','是个','好人'], correct:'据我所知他是个好人', py:'Jù wǒ suǒ zhī tā shì gè hǎo rén'},
-    {th:'ไม่ว่าจะยากแค่ไหน ฉันจะไม่ยอมแพ้', words:['不管','多难','我','都不会放弃'], correct:'不管多难我都不会放弃', py:'Bùguǎn duō nán wǒ dōu bù huì fàngqì'},
-    {th:'เขาดูเหมือนจะไม่พอใจ', words:['他','似乎','不太','满意'], correct:'他似乎不太满意', py:'Tā sìhū bù tài mǎnyì'},
-    {th:'แน่นอนว่าการเรียนสำคัญมาก', words:['当然','学习','非常','重要'], correct:'当然学习非常重要', py:'Dāngrán xuéxí fēicháng zhòngyào'},
-    {th:'ตราบเท่าที่ยังมีความหวัง ก็มีทางออก', words:['只要','有希望','就','有出路'], correct:'只要有希望就有出路', py:'Zhǐyào yǒu xīwàng jiù yǒu chūlù'},
-    {th:'เขาทำสำเร็จได้เพราะมีความพยายาม', words:['他','之所以','成功','是因为努力'], correct:'他之所以成功是因为努力', py:'Tā zhī suǒyǐ chénggōng shì yīnwèi nǔlì'},
-    {th:'สิ่งแวดล้อมมีผลต่อคนมาก', words:['环境','对人','有很大的','影响'], correct:'环境对人有很大的影响', py:'Huánjìng duì rén yǒu hěn dà de yǐngxiǎng'},
-    {th:'ยิ่งรีบ ยิ่งผิดพลาด', words:['越','着急','越','容易出错'], correct:'越着急越容易出错', py:'Yuè zhāojí yuè róngyì chūcuò'},
+  { level:9, name:'ด่านที่ 9 — แผนและนัดหมาย 📅', color:'#f57c00', bg:'#fff3e0', icon:'🔥🔥🔥', sentences:[
+    {th:'เย็นนี้ว่างไหม? ไปกินข้าวกันไหม?', words:['今晚','有空吗？','一起吃饭','好吗？'], correct:'今晚有空吗？一起吃饭好吗？', py:'Jīn wǎn yǒu kōng ma yīqǐ chīfàn hǎo ma'},
+    {th:'เจอกันกี่โมง? ฉันจะรอที่ร้าน', words:['几点','见面？','我在','餐厅等你'], correct:'几点见面？我在餐厅等你', py:'Jǐ diǎn jiànmiàn wǒ zài cāntīng děng nǐ'},
+    {th:'เสาร์นี้ไปดูหนังกันไหม?', words:['这个周六','去','看电影','好吗？'], correct:'这个周六去看电影好吗？', py:'Zhège zhōuliù qù kàn diànyǐng hǎo ma'},
+    {th:'ขอเลื่อนนัดได้ไหม ฉันติดธุระ', words:['可以','改时间吗？','我有事'], correct:'可以改时间吗？我有事', py:'Kěyǐ gǎi shíjiān ma wǒ yǒu shì'},
+    {th:'ฉันจะไปถึงสักสิบห้านาที', words:['我','还要','十五分钟','才到'], correct:'我还要十五分钟才到', py:'Wǒ hái yào shíwǔ fēnzhōng cái dào'},
+    {th:'นัดกันที่สถานีรถไฟฟ้าได้ไหม?', words:['在','地铁站','见面','可以吗？'], correct:'在地铁站见面可以吗？', py:'Zài dìtiě zhàn jiànmiàn kěyǐ ma'},
+    {th:'ฉันยกเลิกไม่ได้ ต้องไปแน่ๆ', words:['我','不能取消','一定要去'], correct:'我不能取消一定要去', py:'Wǒ bù néng qǔxiāo yīdìng yào qù'},
+    {th:'อาทิตย์หน้าคุณมีแพลนอะไรไหม?', words:['下周','你','有什么计划？'], correct:'下周你有什么计划？', py:'Xià zhōu nǐ yǒu shénme jìhuà'},
+    {th:'ฉันจองโต๊ะไว้แล้ว สำหรับสี่คน', words:['我','订好桌了','四个人'], correct:'我订好桌了四个人', py:'Wǒ dìng hǎo zhuō le sì gè rén'},
+    {th:'มาถึงแล้ว อยู่ที่ไหน? หาไม่เจอเลย', words:['我到了','你在哪里？','找不到你'], correct:'我到了你在哪里？找不到你', py:'Wǒ dào le nǐ zài nǎlǐ zhǎo bù dào nǐ'},
   ]},
-  { level:10, name:'ด่านที่ 10 — ขั้นเซียน! HSK3+', color:'#880e4f', bg:'#fce4ec', icon:'👑', sentences:[
-    {th:'ประสบการณ์ที่ดีที่สุดคือการล้มแล้วลุก', words:['最好的经验','是','跌倒后','再站起来'], correct:'最好的经验是跌倒后再站起来', py:'Zuì hǎo de jīngyàn shì diēdǎo hòu zài zhàn qǐlái'},
-    {th:'การสื่อสารที่ดีช่วยแก้ปัญหาทุกอย่างได้', words:['良好的沟通','能','解决','所有问题'], correct:'良好的沟通能解决所有问题', py:'Liánghǎo de gōutōng néng jiějué suǒyǒu wèntí'},
-    {th:'ฉันเชื่อว่าความพยายามไม่เคยทำให้ผิดหวัง', words:['我相信','努力','不会','让人失望'], correct:'我相信努力不会让人失望', py:'Wǒ xiāngxìn nǔlì bù huì ràng rén shīwàng'},
-    {th:'แม้จะยากแค่ไหน เราก็ต้องรับผิดชอบ', words:['无论多难','我们','都要','承担责任'], correct:'无论多难我们都要承担责任', py:'Wúlùn duō nán wǒmen dōu yào chéngdān zérèn'},
-    {th:'สังคมที่ดีเริ่มจากการเคารพซึ่งกันและกัน', words:['好的社会','从','互相尊重','开始'], correct:'好的社会从互相尊重开始', py:'Hǎo de shèhuì cóng hùxiāng zūnzhòng kāishǐ'},
-    {th:'ความรู้คือพลังที่ยิ่งใหญ่ที่สุด', words:['知识','是','最强大的','力量'], correct:'知识是最强大的力量', py:'Zhīshi shì zuì qiángdà de lìliàng'},
-    {th:'อย่าเสียใจกับสิ่งที่ผ่านไปแล้ว', words:['不要','为了','已经过去的事','而遗憾'], correct:'不要为了已经过去的事而遗憾', py:'Bùyào wèile yǐjīng guòqù de shì ér yíhàn'},
-    {th:'ภาษาคือสะพานเชื่อมวัฒนธรรม', words:['语言','是','连接','文化的桥梁'], correct:'语言是连接文化的桥梁', py:'Yǔyán shì liánjié wénhuà de qiáoliáng'},
-    {th:'ไม่มีสิ่งใดสำเร็จได้โดยปราศจากความพยายาม', words:['没有什么','是','不经过努力','就能成功的'], correct:'没有什么是不经过努力就能成功的', py:'Méiyǒu shénme shì bù jīngguò nǔlì jiù néng chénggōng de'},
-    {th:'การเรียนรู้ไม่มีวันสิ้นสุด', words:['学无止境'], correct:'学无止境', py:'Xué wú zhǐjìng'},
+  { level:10, name:'ด่านที่ 10 — บ้าน & ชีวิตประจำวัน 🏠', color:'#6a1b9a', bg:'#f3e5f5', icon:'👑', sentences:[
+    {th:'ช่วยซื้อของกลับบ้านมาด้วยได้ไหม?', words:['能不能','买东西','带回家？'], correct:'能不能买东西带回家？', py:'Néng bu néng mǎi dōngxi dài huíjiā'},
+    {th:'ตู้เย็นของว่างแล้ว ต้องไปซื้อของ', words:['冰箱','空了','要去','买东西'], correct:'冰箱空了要去买东西', py:'Bīngxiāng kōng le yào qù mǎi dōngxi'},
+    {th:'วันนี้ใครทำอาหาร? ฉันทำเองได้', words:['今天','谁做饭？','我可以','自己做'], correct:'今天谁做饭？我可以自己做', py:'Jīntiān shéi zuò fàn wǒ kěyǐ zìjǐ zuò'},
+    {th:'อาบน้ำเสร็จแล้ว คิวถัดไปได้เลย', words:['洗完澡了','下一个','可以了'], correct:'洗完澡了下一个可以了', py:'Xǐ wán zǎo le xià yī gè kěyǐ le'},
+    {th:'บ้านรกมาก ช่วยกันเก็บนะ', words:['家里','很乱','一起','收拾吧'], correct:'家里很乱一起收拾吧', py:'Jiālǐ hěn luàn yīqǐ shōushi ba'},
+    {th:'ไฟดับ เปิดไฟไม่ได้', words:['停电了','开不了灯'], correct:'停电了开不了灯', py:'Tíng diàn le kāi bu liǎo dēng'},
+    {th:'น้ำร้อนหมดแล้ว อาบน้ำเย็นนะ', words:['热水','用完了','要洗冷水'], correct:'热水用完了要洗冷水', py:'Rèshuǐ yòng wán le yào xǐ lěng shuǐ'},
+    {th:'วันนี้ซักผ้าด้วยนะ อย่าลืม', words:['今天','要洗衣服','别忘了'], correct:'今天要洗衣服别忘了', py:'Jīntiān yào xǐ yīfu bié wàng le'},
+    {th:'เพื่อนบ้านเสียงดังมาก นอนไม่หลับ', words:['邻居','很吵','睡不着'], correct:'邻居很吵睡不着', py:'Línjū hěn chǎo shuì bù zháo'},
+    {th:'ฉันทิ้งขยะแล้ว คุณปิดประตูด้วยนะ', words:['我','扔垃圾了','你关门'], correct:'我扔垃圾了你关门', py:'Wǒ rēng lèsè le nǐ guān mén'},
   ]},  { level:11, name:'ด่านที่ 11 — สนทนา: ทักทาย 🗣️', color:'#1565c0', bg:'#e3f2fd', icon:'👋', sentences:[
     {th:'สวัสดี คุณชื่ออะไร?', words:['你好','你叫','什么','名字？'], correct:'你好你叫什么名字？', py:'Nǐ hǎo nǐ jiào shénme míngzi'},
     {th:'ฉันชื่อหมิง ยินดีที่ได้รู้จัก', words:['我叫','小明','很高兴','认识你'], correct:'我叫小明很高兴认识你', py:'Wǒ jiào Xiǎomíng hěn gāoxìng rènshi nǐ'},
@@ -10993,7 +11003,7 @@ const SENTENCE_LEVELS = [
     {th:'ควรพักสองวัน', words:['最好','休息','两天'], correct:'最好休息两天', py:'Zuì hǎo xiūxi liǎng tiān'},
     {th:'ฉันจะออกใบรับรองแพทย์ให้', words:['我帮你','开','证明'], correct:'我帮你开证明', py:'Wǒ bāng nǐ kāi zhèngmíng'},
   ]},
-  { level:16, name:'ด่านที่ 16 — HSK2 เวลาและนัดหมาย ⏰', color:'#0277bd', bg:'#e1f5fe', icon:'⏰', sentences:[
+  { level:16, name:'ด่านที่ 16 — เวลาและนัดหมาย ⏰', color:'#0277bd', bg:'#e1f5fe', icon:'⏰', sentences:[
     {th:'คุณอาทิตย์นี้ว่างไหม?', words:['你','这周末','有空','吗？'], correct:'你这周末有空吗？', py:'Nǐ zhè zhōumò yǒu kōng ma'},
     {th:'วันเสาร์บ่ายว่าง มีอะไรเหรอ?', words:['周六','下午','有空','怎么了？'], correct:'周六下午有空怎么了？', py:'Zhōuliù xiàwǔ yǒu kōng zěnme le'},
     {th:'ไปปีนเขากันไหม อากาศดีมาก', words:['我们','去爬山','吧','天气很好'], correct:'我们去爬山吧天气很好', py:'Wǒmen qù páshān ba tiānqì hěn hǎo'},
@@ -11005,7 +11015,7 @@ const SENTENCE_LEVELS = [
     {th:'ถ้าฝนตกเราก็เปลี่ยนแผน', words:['如果','下雨','我们','就改计划'], correct:'如果下雨我们就改计划', py:'Rúguǒ xià yǔ wǒmen jiù gǎi jìhuà'},
     {th:'โอเค คุยกันพรุ่งนี้เช้า', words:['好的','明天早上','联系'], correct:'好的明天早上联系', py:'Hǎo de míngtiān zǎoshang liánxì'},
   ]},
-  { level:17, name:'ด่านที่ 17 — HSK2 ที่ทำงาน 💼', color:'#37474f', bg:'#eceff1', icon:'💼', sentences:[
+  { level:17, name:'ด่านที่ 17 — สนทนาที่ทำงาน 💼', color:'#37474f', bg:'#eceff1', icon:'💼', sentences:[
     {th:'วันนี้มีประชุมกี่โมง?', words:['今天','会议','几点','开始？'], correct:'今天会议几点开始？', py:'Jīntiān huìyì jǐ diǎn kāishǐ'},
     {th:'บ่ายสองโมงที่ห้องประชุมเบอร์ 3', words:['下午两点','在','三号会议室'], correct:'下午两点在三号会议室', py:'Xiàwǔ liǎng diǎn zài sān hào huìyì shì'},
     {th:'รายงานนี้ต้องส่งวันนี้ไหม?', words:['这份报告','要','今天交','吗？'], correct:'这份报告要今天交吗？', py:'Zhè fèn bàogào yào jīntiān jiāo ma'},
@@ -11029,29 +11039,29 @@ const SENTENCE_LEVELS = [
     {th:'ฉันรู้สึกดีขึ้นมากแล้ว ขอบคุณนะ', words:['我感觉','好多了','谢谢你'], correct:'我感觉好多了谢谢你', py:'Wǒ gǎnjué hǎo duō le xièxie nǐ'},
     {th:'เพื่อนที่ดีคือสมบัติล้ำค่า', words:['好朋友','是','最珍贵的','财富'], correct:'好朋友是最珍贵的财富', py:'Hǎo péngyou shì zuì zhēnguì de cáifù'},
   ]},
-  { level:19, name:'ด่านที่ 19 — HSK3 ไวยากรณ์เชิงลึก 🔬', color:'#1a237e', bg:'#e8eaf6', icon:'🔬', sentences:[
-    {th:'แม้ว่าฝนตก แต่เราก็ไปอยู่ดี', words:['虽然','下雨了','但是','我们还是去了'], correct:'虽然下雨了但是我们还是去了', py:'Suīrán xià yǔ le dànshì wǒmen háishi qù le'},
-    {th:'เพราะเธอพยายาม เธอจึงสำเร็จ', words:['因为','她努力','所以','成功了'], correct:'因为她努力所以成功了', py:'Yīnwèi tā nǔlì suǒyǐ chénggōng le'},
-    {th:'ยิ่งฝึกมาก ยิ่งพูดได้คล่อง', words:['越','练习','越','流利'], correct:'越练习越流利', py:'Yuè liànxí yuè liúlì'},
-    {th:'ไม่ว่าจะยากแค่ไหน ก็ต้องทำ', words:['不管','多难','都要','做'], correct:'不管多难都要做', py:'Bùguǎn duō nán dōu yào zuò'},
-    {th:'เขาค่อยๆ พัฒนาขึ้นทุกวัน', words:['他','每天','都在','逐渐进步'], correct:'他每天都在逐渐进步', py:'Tā měitiān dōu zài zhújiàn jìnbù'},
-    {th:'ตราบเท่าที่ยังมีความหวัง ก็มีทางออก', words:['只要','有希望','就','有出路'], correct:'只要有希望就有出路', py:'Zhǐyào yǒu xīwàng jiù yǒu chūlù'},
-    {th:'ดูเหมือนว่าเขาไม่พอใจ', words:['他','似乎','不太','满意'], correct:'他似乎不太满意', py:'Tā sìhū bù tài mǎnyì'},
-    {th:'ตามที่ฉันรู้ เขาเป็นคนดี', words:['据我所知','他','是个','好人'], correct:'据我所知他是个好人', py:'Jù wǒ suǒ zhī tā shì gè hǎo rén'},
-    {th:'แน่นอนว่าการเรียนสำคัญมาก', words:['当然','学习','非常','重要'], correct:'当然学习非常重要', py:'Dāngrán xuéxí fēicháng zhòngyào'},
-    {th:'ยิ่งรีบ ยิ่งผิดพลาดง่าย', words:['越','着急','越','容易出错'], correct:'越着急越容易出错', py:'Yuè zhāojí yuè róngyì chūcuò'},
+  { level:19, name:'ด่านที่ 19 — อากาศและสภาพแวดล้อม 🌤️', color:'#1a237e', bg:'#e8eaf6', icon:'🌤️', sentences:[
+    {th:'วันนี้อากาศร้อนมากเลย', words:['今天','天气','很热'], correct:'今天天气很热', py:'Jīntiān tiānqì hěn rè'},
+    {th:'ฝนจะตกไหม? เอาร่มไปด้วยดีกว่า', words:['会下雨吗？','最好','带伞'], correct:'会下雨吗？最好带伞', py:'Huì xià yǔ ma zuì hǎo dài sǎn'},
+    {th:'อากาศข้างนอกหนาวมาก ใส่เสื้อกันหนาวด้วยนะ', words:['外面','很冷','穿上','外套'], correct:'外面很冷穿上外套', py:'Wàimiàn hěn lěng chuān shàng wàitào'},
+    {th:'พยากรณ์อากาศบอกว่าพรุ่งนี้มีฝน', words:['天气预报说','明天','会下雨'], correct:'天气预报说明天会下雨', py:'Tiānqì yùbào shuō míngtiān huì xià yǔ'},
+    {th:'อากาศดีมาก ออกไปเดินเล่นกันไหม?', words:['天气真好','出去','散步','好吗？'], correct:'天气真好出去散步好吗？', py:'Tiānqì zhēn hǎo chūqù sànbù hǎo ma'},
+    {th:'ฝนหยุดแล้ว ไปได้แล้ว', words:['雨停了','可以走了'], correct:'雨停了可以走了', py:'Yǔ tíng le kěyǐ zǒu le'},
+    {th:'แดดแรงมาก ทาครีมกันแดดด้วยนะ', words:['太阳很大','要涂','防晒霜'], correct:'太阳很大要涂防晒霜', py:'Tàiyáng hěn dà yào tú fángshài shuāng'},
+    {th:'ลมแรงมากวันนี้ ระวังด้วย', words:['今天','风很大','小心'], correct:'今天风很大小心', py:'Jīntiān fēng hěn dà xiǎoxīn'},
+    {th:'อากาศเย็นสบายมาก เหมาะไปออกกำลังกาย', words:['天气凉快','很适合','运动'], correct:'天气凉快很适合运动', py:'Tiānqì liángkuài hěn shìhé yùndòng'},
+    {th:'หิมะตกด้วย! ไม่เคยเห็นเลย', words:['下雪了！','我','从来没见过'], correct:'下雪了！我从来没见过', py:'Xià xuě le wǒ cónglái méi jiàn guò'},
   ]},
-  { level:20, name:'ด่านที่ 20 — HSK3 สำนวนชีวิต 💡', color:'#bf360c', bg:'#fbe9e7', icon:'💡', sentences:[
-    {th:'เขาไม่ได้มาตั้งนานแล้ว', words:['他','好久','没来了'], correct:'他好久没来了', py:'Tā hǎojiǔ méi lái le'},
-    {th:'ฉันพึ่งรู้ว่าเธอแต่งงานแล้ว', words:['我','才知道','她','结婚了'], correct:'我才知道她结婚了', py:'Wǒ cái zhīdào tā jiéhūn le'},
-    {th:'ถ้าไม่พยายามก็ไม่มีวันสำเร็จ', words:['不努力','就','不会','成功'], correct:'不努力就不会成功', py:'Bù nǔlì jiù bù huì chénggōng'},
-    {th:'ฉันอยากให้เธอมีความสุข', words:['我希望','你','能','幸福'], correct:'我希望你能幸福', py:'Wǒ xīwàng nǐ néng xìngfú'},
-    {th:'เขาทำงานหนักจนป่วย', words:['他','因为','工作太累','生病了'], correct:'他因为工作太累生病了', py:'Tā yīnwèi gōngzuò tài lèi shēngbìng le'},
-    {th:'ตั้งแต่เรียนจีน ฉันมีเพื่อนมากขึ้น', words:['自从','学中文','我','朋友越来越多'], correct:'自从学中文我朋友越来越多', py:'Zìcóng xué Zhōngwén wǒ péngyou yuè lái yuè duō'},
-    {th:'เธอกลับมาแล้วหรือยัง?', words:['她','回来了','吗？'], correct:'她回来了吗？', py:'Tā huílái le ma'},
-    {th:'ฉันไม่แน่ใจว่าเขาจะมาไหม', words:['我','不确定','他','会不会来'], correct:'我不确定他会不会来', py:'Wǒ bù quèdìng tā huì bu huì lái'},
-    {th:'ภาษาจีนไม่ยากถ้าฝึกทุกวัน', words:['中文不难','只要','每天练习'], correct:'中文不难只要每天练习', py:'Zhōngwén bù nán zhǐyào měitiān liànxí'},
-    {th:'ยิ่งมากยิ่งดี', words:['越多','越好'], correct:'越多越好', py:'Yuè duō yuè hǎo'},
+  { level:20, name:'ด่านที่ 20 — ในร้านกาแฟ ☕', color:'#bf360c', bg:'#fbe9e7', icon:'☕', sentences:[
+    {th:'ขอลาเต้ร้อนหนึ่งแก้วครับ', words:['我要','一杯','热拿铁'], correct:'我要一杯热拿铁', py:'Wǒ yào yī bēi rè nátì'},
+    {th:'ใส่น้ำตาลไหม? ใส่นมเพิ่มได้ไหม?', words:['要加糖吗？','可以','多加奶吗？'], correct:'要加糖吗？可以多加奶吗？', py:'Yào jiā táng ma kěyǐ duō jiā nǎi ma'},
+    {th:'นั่งที่ไหนดี? ริมหน้าต่างมีที่ว่างไหม?', words:['坐哪里好？','窗边','有位置吗？'], correct:'坐哪里好？窗边有位置吗？', py:'Zuò nǎlǐ hǎo chuāng biān yǒu wèizhi ma'},
+    {th:'ขอพาสเวิร์ด Wi-Fi ด้วยนะ', words:['请告诉我','Wi-Fi','密码'], correct:'请告诉我Wi-Fi密码', py:'Qǐng gàosu wǒ Wi-Fi mìmǎ'},
+    {th:'กาแฟนี้อร่อยมาก ขอเติมได้ไหม?', words:['这杯咖啡','很好喝','可以','续杯吗？'], correct:'这杯咖啡很好喝可以续杯吗？', py:'Zhè bēi kāfēi hěn hǎohē kěyǐ xùbēi ma'},
+    {th:'ขอเปลี่ยนเป็นเย็นได้ไหม?', words:['可以','换成','冰的吗？'], correct:'可以换成冰的吗？', py:'Kěyǐ huàn chéng bīng de ma'},
+    {th:'เค้กชิ้นนี้อยากลองชิม', words:['我想','尝尝','这块蛋糕'], correct:'我想尝尝这块蛋糕', py:'Wǒ xiǎng chángcháng zhè kuài dàngāo'},
+    {th:'รบกวนช่วยเก็บจานด้วยได้ไหม?', words:['可以','帮我','收盘子吗？'], correct:'可以帮我收盘子吗？', py:'Kěyǐ bāng wǒ shōu pánzi ma'},
+    {th:'ที่นี่เปิดถึงกี่โมง?', words:['这里','营业','到几点？'], correct:'这里营业到几点？', py:'Zhèlǐ yíngyè dào jǐ diǎn'},
+    {th:'เปิดถึงสี่ทุ่มทุกวัน', words:['每天','营业','到晚上十点'], correct:'每天营业到晚上十点', py:'Měitiān yíngyè dào wǎnshang shí diǎn'},
   ]},
   { level:21, name:'ด่านที่ 21 — การเดินทาง ✈️', color:'#1565c0', bg:'#e3f2fd', icon:'✈️', sentences:[
     {th:'ขอตั๋วไปเซี่ยงไฮ้หนึ่งใบ', words:['我要','一张','去上海的票'], correct:'我要一张去上海的票', py:'Wǒ yào yī zhāng qù Shànghǎi de piào'},
@@ -11077,53 +11087,53 @@ const SENTENCE_LEVELS = [
     {th:'ครอบครัวคือสิ่งสำคัญที่สุดในชีวิต', words:['家庭','是','生命中','最重要的'], correct:'家庭是生命中最重要的', py:'Jiātíng shì shēngmìng zhōng zuì zhòngyào de'},
     {th:'เราควรดูแลคนที่เรารักให้ดี', words:['我们应该','好好照顾','我们爱的人'], correct:'我们应该好好照顾我们爱的人', py:'Wǒmen yīnggāi hǎohǎo zhàogù wǒmen ài de rén'},
   ]},
-  { level:23, name:'ด่านที่ 23 — การศึกษาและอาชีพ 🎓', color:'#2e7d32', bg:'#e8f5e9', icon:'🎓', sentences:[
-    {th:'คุณเรียนอยู่ที่ไหน?', words:['你','在哪里','上学？'], correct:'你在哪里上学？', py:'Nǐ zài nǎlǐ shàngxué'},
-    {th:'ฉันเรียนอยู่ที่มหาวิทยาลัยปักกิ่ง', words:['我在','北京大学','读书'], correct:'我在北京大学读书', py:'Wǒ zài Běijīng Dàxué dúshū'},
-    {th:'คุณเรียนสาขาอะไร?', words:['你','学什么','专业？'], correct:'你学什么专业？', py:'Nǐ xué shénme zhuānyè'},
-    {th:'ฉันเรียนภาษาและวรรณคดีจีน', words:['我学','中国语言','文学'], correct:'我学中国语言文学', py:'Wǒ xué Zhōngguó yǔyán wénxué'},
-    {th:'หลังเรียนจบอยากทำงานอะไร?', words:['毕业后','你想','做什么工作？'], correct:'毕业后你想做什么工作？', py:'Bìyè hòu nǐ xiǎng zuò shénme gōngzuò'},
-    {th:'ฉันอยากเป็นนักแปลภาษาจีน-ไทย', words:['我想','成为','中泰','翻译'], correct:'我想成为中泰翻译', py:'Wǒ xiǎng chéngwéi Zhōng Tài fānyì'},
-    {th:'คุณเตรียมตัวสอบ HSK ไหม?', words:['你在','准备','HSK考试','吗？'], correct:'你在准备HSK考试吗？', py:'Nǐ zài zhǔnbèi HSK kǎoshì ma'},
-    {th:'ใช่ ฉันกำลังเตรียมสอบ HSK5', words:['是的','我正在','准备','HSK5'], correct:'是的我正在准备HSK5', py:'Shì de wǒ zhèngzài zhǔnbèi HSK5'},
-    {th:'ขอให้โชคดีในการสอบ', words:['祝你','考试','顺利！'], correct:'祝你考试顺利！', py:'Zhù nǐ kǎoshì shùnlì'},
-    {th:'ขอบคุณ ฉันจะพยายามอย่างเต็มที่', words:['谢谢','我会','尽力的'], correct:'谢谢我会尽力的', py:'Xièxie wǒ huì jìnlì de'},
+  { level:23, name:'ด่านที่ 23 — รถ & การเดินทางในเมือง 🚇', color:'#2e7d32', bg:'#e8f5e9', icon:'🚇', sentences:[
+    {th:'รถไฟฟ้าสายนี้ไปถึงสนามบินไหม?', words:['这条线','能到','机场吗？'], correct:'这条线能到机场吗？', py:'Zhè tiáo xiàn néng dào jīchǎng ma'},
+    {th:'ต้องเปลี่ยนสายที่สถานีไหน?', words:['在哪个站','需要','换乘？'], correct:'在哪个站需要换乘？', py:'Zài nǎge zhàn xūyào huànchéng'},
+    {th:'อีกสองสถานีก็ถึงแล้ว', words:['再过','两站','就到了'], correct:'再过两站就到了', py:'Zài guò liǎng zhàn jiù dào le'},
+    {th:'ตั๋วรายเดือนซื้อที่ไหน?', words:['月票','在哪里','买？'], correct:'月票在哪里买？', py:'Yuèpiào zài nǎlǐ mǎi'},
+    {th:'รถติดมาก กว่าจะถึงอีกนาน', words:['堵车很严重','还要','很久才到'], correct:'堵车很严重还要很久才到', py:'Dǔchē hěn yánzhòng hái yào hěn jiǔ cái dào'},
+    {th:'จอดรถที่นี่ได้ไหม? มีที่จอดไหม?', words:['这里','可以','停车吗？','有停车位吗？'], correct:'这里可以停车吗？有停车位吗？', py:'Zhèlǐ kěyǐ tíngchē ma yǒu tíngchē wèi ma'},
+    {th:'เรียกแท็กซี่ด้วยแอปได้ง่ายกว่า', words:['用App','叫出租车','更方便'], correct:'用App叫出租车更方便', py:'Yòng App jiào chūzū chē gèng fāngbiàn'},
+    {th:'คนขับรถมาแล้ว อีก 2 นาที', words:['司机','来了','还有两分钟'], correct:'司机来了还有两分钟', py:'Sījī lái le hái yǒu liǎng fēnzhōng'},
+    {th:'ราคาค่าโดยสารเท่าไหร่?', words:['车费','多少钱？'], correct:'车费多少钱？', py:'Chēfèi duōshao qián'},
+    {th:'สแกนจ่ายได้ไหม? ไม่มีเงินสด', words:['可以','扫码','付款吗？','没有现金'], correct:'可以扫码付款吗？没有现金', py:'Kěyǐ sǎo mǎ fùkuǎn ma méiyǒu xiànjīn'},
   ]},
-  { level:24, name:'ด่านที่ 24 — HSK3 ความซับซ้อน 🌐', color:'#e65100', bg:'#fff3e0', icon:'🌐', sentences:[
-    {th:'เขาทำสำเร็จได้เพราะมีความพยายาม', words:['他之所以','成功','是因为','努力'], correct:'他之所以成功是因为努力', py:'Tā zhī suǒyǐ chénggōng shì yīnwèi nǔlì'},
-    {th:'สิ่งแวดล้อมมีผลต่อคนมาก', words:['环境','对人','有很大的','影响'], correct:'环境对人有很大的影响', py:'Huánjìng duì rén yǒu hěn dà de yǐngxiǎng'},
-    {th:'การร่วมมือสำคัญกว่าการแข่งขัน', words:['合作','比','竞争','更重要'], correct:'合作比竞争更重要', py:'Hézuò bǐ jìngzhēng gèng zhòngyào'},
-    {th:'แม้ว่าฉันจะเหนื่อย แต่ก็ยังยืนหยัด', words:['尽管','我很累','但是','仍然坚持'], correct:'尽管我很累但是仍然坚持', py:'Jǐnguǎn wǒ hěn lèi dànshì réngrán jiānchí'},
-    {th:'เธอค่อยๆ เก่งขึ้นทุกวัน', words:['她','每天','都在','逐渐进步'], correct:'她每天都在逐渐进步', py:'Tā měitiān dōu zài zhújiàn jìnbù'},
-    {th:'ถ้าไม่มีความพยายาม จะไม่มีวันสำเร็จ', words:['没有','努力','就没有','成功'], correct:'没有努力就没有成功', py:'Méiyǒu nǔlì jiù méiyǒu chénggōng'},
-    {th:'ฉันเชื่อว่าทุกอย่างจะดีขึ้น', words:['我相信','一切','都会','变好的'], correct:'我相信一切都会变好的', py:'Wǒ xiāngxìn yīqiē dōu huì biàn hǎo de'},
-    {th:'ความรับผิดชอบเป็นสิ่งสำคัญ', words:['责任感','是','很重要的'], correct:'责任感是很重要的', py:'Zérèngǎn shì hěn zhòngyào de'},
-    {th:'โอกาสมักมาหาคนที่เตรียมพร้อม', words:['机会','总是','留给','有准备的人'], correct:'机会总是留给有准备的人', py:'Jīhuì zǒng shì liú gěi yǒu zhǔnbèi de rén'},
-    {th:'ยิ่งเรียนมาก ยิ่งรู้ว่าตัวเองยังรู้น้อย', words:['学得越多','越觉得','自己','知道得少'], correct:'学得越多越觉得自己知道得少', py:'Xué de yuè duō yuè juéde zìjǐ zhīdào de shǎo'},
+  { level:24, name:'ด่านที่ 24 — ในซูเปอร์มาร์เก็ต 🛒', color:'#e65100', bg:'#fff3e0', icon:'🛒', sentences:[
+    {th:'ของสดอยู่ชั้นไหน?', words:['新鲜食品','在','几楼？'], correct:'新鲜食品在几楼？', py:'Xīnxiān shípǐn zài jǐ lóu'},
+    {th:'นมหมดอายุยังไหม? ลองเช็คดู', words:['牛奶','过期了吗？','看一下'], correct:'牛奶过期了吗？看一下', py:'Niúnǎi guòqī le ma kàn yīxià'},
+    {th:'มีแผนกอาหารทะเลไหม?', words:['有','海鲜区','吗？'], correct:'有海鲜区吗？', py:'Yǒu hǎixiān qū ma'},
+    {th:'ถุงพลาสติกคิดเงินไหม?', words:['塑料袋','要收费','吗？'], correct:'塑料袋要收费吗？', py:'Sùliào dài yào shōufèi ma'},
+    {th:'ซื้อครบ 300 ได้ส่วนลด 30 บาท', words:['满三百','减三十'], correct:'满三百减三十', py:'Mǎn sān bǎi jiǎn sānshí'},
+    {th:'หาซีอิ๊วไม่เจอ อยู่แถวไหน?', words:['找不到','酱油','在哪里？'], correct:'找不到酱油在哪里？', py:'Zhǎo bu dào jiàngyóu zài nǎlǐ'},
+    {th:'ไข่แผงนี้ราคาเท่าไหร่?', words:['这盒鸡蛋','多少钱？'], correct:'这盒鸡蛋多少钱？', py:'Zhè hé jīdàn duōshao qián'},
+    {th:'ขอถุงหิ้วเพิ่มหน่อยได้ไหม?', words:['可以','再给我','一个袋子','吗？'], correct:'可以再给我一个袋子吗？', py:'Kěyǐ zài gěi wǒ yī gè dàizi ma'},
+    {th:'ชำระด้วย Alipay ได้ไหม?', words:['可以','用支付宝','付款吗？'], correct:'可以用支付宝付款吗？', py:'Kěyǐ yòng Zhīfùbǎo fùkuǎn ma'},
+    {th:'ขอใบเสร็จด้วยนะ', words:['请给我','收据'], correct:'请给我收据', py:'Qǐng gěi wǒ shōujù'},
   ]},
-  { level:25, name:'ด่านที่ 25 — สุภาษิตและปรัชญา 🎭', color:'#4527a0', bg:'#ede7f6', icon:'🎭', sentences:[
-    {th:'ไม่มีอะไรยากถ้าตั้งใจทำ', words:['世上','无难事','只怕','有心人'], correct:'世上无难事只怕有心人', py:'Shì shàng wú nán shì zhǐ pà yǒu xīn rén'},
-    {th:'การเดินทางพันไมล์เริ่มจากก้าวแรก', words:['千里之行','始于','足下'], correct:'千里之行始于足下', py:'Qiānlǐ zhī xíng shǐ yú zú xià'},
-    {th:'การเรียนรู้ไม่มีวันสิ้นสุด', words:['学无止境'], correct:'学无止境', py:'Xué wú zhǐjìng'},
-    {th:'มิตรภาพที่ดีมีค่ายิ่งกว่าทอง', words:['好朋友','胜过','千两金'], correct:'好朋友胜过千两金', py:'Hǎo péngyou shèngguò qiān liǎng jīn'},
-    {th:'ล้มแล้วต้องลุกขึ้นใหม่', words:['跌倒了','就要','再站起来'], correct:'跌倒了就要再站起来', py:'Diēdǎo le jiù yào zài zhàn qǐlái'},
-    {th:'คนฉลาดเรียนจากความผิดพลาด', words:['聪明的人','从','错误中','学习'], correct:'聪明的人从错误中学习', py:'Cōngmíng de rén cóng cuòwù zhōng xuéxí'},
-    {th:'ภาษาคือสะพานเชื่อมระหว่างคน', words:['语言','是','连接人心的','桥梁'], correct:'语言是连接人心的桥梁', py:'Yǔyán shì liánjié rénxīn de qiáoliáng'},
-    {th:'ทำดีได้ดี ทำชั่วได้ชั่ว', words:['善有善报','恶有恶报'], correct:'善有善报恶有恶报', py:'Shàn yǒu shàn bào è yǒu è bào'},
-    {th:'ความสม่ำเสมอชนะความสามารถ', words:['坚持','能够','战胜','天赋'], correct:'坚持能够战胜天赋', py:'Jiānchí nénggòu zhànshèng tiānfù'},
-    {th:'ชีวิตสั้น ต้องทำสิ่งที่มีความหมาย', words:['生命短暂','要做','有意义的事'], correct:'生命短暂要做有意义的事', py:'Shēngmìng duǎnzàn yào zuò yǒu yìyì de shì'},
+  { level:25, name:'ด่านที่ 25 — ร้านทำผม & ความสวยงาม 💇', color:'#4527a0', bg:'#ede7f6', icon:'💇', sentences:[
+    {th:'อยากตัดผมสั้นขึ้นนิดหน่อย', words:['我想','剪短','一点点'], correct:'我想剪短一点点', py:'Wǒ xiǎng jiǎn duǎn yīdiǎndiǎn'},
+    {th:'ช่วยซอยผมด้านข้างให้บางด้วย', words:['帮我','打薄','两侧'], correct:'帮我打薄两侧', py:'Bāng wǒ dǎbáo liǎng cè'},
+    {th:'ทำสีผมได้ไหม? อยากย้อมสีน้ำตาล', words:['可以','染发吗？','我想染','棕色'], correct:'可以染发吗？我想染棕色', py:'Kěyǐ rǎnfà ma wǒ xiǎng rǎn zōng sè'},
+    {th:'ดัดผมใช้เวลานานไหม?', words:['烫发','要多长时间？'], correct:'烫发要多长时间？', py:'Tàngfà yào duō cháng shíjiān'},
+    {th:'ช่วยนวดหนังศีรษะด้วยได้ไหม?', words:['可以','帮我','按摩头皮','吗？'], correct:'可以帮我按摩头皮吗？', py:'Kěyǐ bāng wǒ ànmó tóupí ma'},
+    {th:'ผมเส้นเล็กและแห้งมาก แนะนำทรีทเมนต์ไหม?', words:['我的头发','细而干燥','建议做','护发吗？'], correct:'我的头发细而干燥建议做护发吗？', py:'Wǒ de tóufa xì ér gānzào jiànyì zuò hùfà ma'},
+    {th:'ตัดเสร็จแล้ว สวยมากเลย ขอบคุณ', words:['剪好了','很漂亮','谢谢你'], correct:'剪好了很漂亮谢谢你', py:'Jiǎn hǎo le hěn piàoliang xièxie nǐ'},
+    {th:'ค่าบริการทั้งหมดเท่าไหร่?', words:['总共','多少钱？'], correct:'总共多少钱？', py:'Zǒnggòng duōshao qián'},
+    {th:'จองคิวครั้งหน้าล่วงหน้าได้ไหม?', words:['可以','提前','预约','下次吗？'], correct:'可以提前预约下次吗？', py:'Kěyǐ tíqián yùyuē xià cì ma'},
+    {th:'นัดวันเสาร์บ่ายสองโมงได้ไหม?', words:['周六','下午两点','可以吗？'], correct:'周六下午两点可以吗？', py:'Zhōuliù xiàwǔ liǎng diǎn kěyǐ ma'},
   ]},
-  { level:26, name:'ด่านที่ 26 — HSK3+ ประโยคยาว 📝', color:'#1a237e', bg:'#e8eaf6', icon:'📝', sentences:[
-    {th:'ฉันคิดว่าการเรียนภาษาต้องอาศัยเวลาและความพยายาม', words:['我认为','学语言','需要','时间','和努力'], correct:'我认为学语言需要时间和努力', py:'Wǒ rènwéi xué yǔyán xūyào shíjiān hé nǔlì'},
-    {th:'แม้ว่าจะใช้เวลานาน แต่ผลลัพธ์คุ้มค่า', words:['虽然','需要很长时间','但是','结果','很值得'], correct:'虽然需要很长时间但是结果很值得', py:'Suīrán xūyào hěn cháng shíjiān dànshì jiéguǒ hěn zhídé'},
-    {th:'เขาพูดภาษาจีนได้คล่องมากทั้งที่เพิ่งเรียน', words:['他','虽然刚开始学','但是','中文','说得很流利'], correct:'他虽然刚开始学但是中文说得很流利', py:'Tā suīrán gāng kāishǐ xué dànshì Zhōngwén shuō de hěn liúlì'},
-    {th:'การสื่อสารที่ดีช่วยให้ทุกปัญหาแก้ได้', words:['良好的沟通','能帮助','解决','所有问题'], correct:'良好的沟通能帮助解决所有问题', py:'Liánghǎo de gōutōng néng bāngzhù jiějué suǒyǒu wèntí'},
-    {th:'ประสบการณ์คือครูที่ดีที่สุดในชีวิต', words:['经验','是','生命中','最好的老师'], correct:'经验是生命中最好的老师', py:'Jīngyàn shì shēngmìng zhōng zuì hǎo de lǎoshī'},
-    {th:'ฉันหวังว่าสักวันจะได้ไปเที่ยวจีน', words:['我希望','有一天','能去','中国旅游'], correct:'我希望有一天能去中国旅游', py:'Wǒ xīwàng yǒu yī tiān néng qù Zhōngguó lǚyóu'},
-    {th:'เขาเสียสละเวลาส่วนตัวเพื่อช่วยคนอื่น', words:['他','牺牲','个人时间','去帮助别人'], correct:'他牺牲个人时间去帮助别人', py:'Tā xīshēng gèrén shíjiān qù bāngzhù biérén'},
-    {th:'การพัฒนาตัวเองทุกวันสำคัญมาก', words:['每天','提升自己','非常','重要'], correct:'每天提升自己非常重要', py:'Měitiān tíshēng zìjǐ fēicháng zhòngyào'},
-    {th:'ฉันจะไม่ยอมแพ้ไม่ว่าจะเกิดอะไรขึ้น', words:['不管','发生什么','我都','不会放弃'], correct:'不管发生什么我都不会放弃', py:'Bùguǎn fāshēng shénme wǒ dōu bù huì fàngqì'},
-    {th:'ทุกคนมีโอกาสพัฒนาตัวเองถ้าตั้งใจ', words:['每个人','都有机会','提升自己','只要','用心'], correct:'每个人都有机会提升自己只要用心', py:'Měi gè rén dōu yǒu jīhuì tíshēng zìjǐ zhǐyào yòngxīn'},
+  { level:26, name:'ด่านที่ 26 — ที่โรงพยาบาล & ร้านขายยา 💊', color:'#1a237e', bg:'#e8eaf6', icon:'💊', sentences:[
+    {th:'ขอนัดพบแพทย์หน่อยได้ไหม?', words:['我想','预约','看医生'], correct:'我想预约看医生', py:'Wǒ xiǎng yùyuē kàn yīshēng'},
+    {th:'ฉันมีไข้และไอมาสองวันแล้ว', words:['我','发烧','咳嗽','两天了'], correct:'我发烧咳嗽两天了', py:'Wǒ fāshāo késou liǎng tiān le'},
+    {th:'ปวดท้องมาก กินยาแก้ปวดได้ไหม?', words:['肚子很痛','可以吃','止痛药吗？'], correct:'肚子很痛可以吃止痛药吗？', py:'Dùzi hěn tòng kěyǐ chī zhǐtòng yào ma'},
+    {th:'แพ้ยาเพนิซิลลิน ต้องแจ้งแพทย์', words:['我','对青霉素','过敏','要告诉医生'], correct:'我对青霉素过敏要告诉医生', py:'Wǒ duì qīngméisù guòmǐn yào gàosu yīshēng'},
+    {th:'กินยานี้วันละสองเม็ด หลังอาหาร', words:['这个药','一天吃两次','饭后服用'], correct:'这个药一天吃两次饭后服用', py:'Zhège yào yī tiān chī liǎng cì fàn hòu fúyòng'},
+    {th:'ยานี้มีผลข้างเคียงไหม?', words:['这个药','有','副作用','吗？'], correct:'这个药有副作用吗？', py:'Zhège yào yǒu fùzuòyòng ma'},
+    {th:'ต้องเจาะเลือดหรือเปล่า?', words:['需要','抽血','吗？'], correct:'需要抽血吗？', py:'Xūyào chōuxuè ma'},
+    {th:'ห้องตรวจอยู่ชั้นไหน?', words:['诊室','在几楼？'], correct:'诊室在几楼？', py:'Zhěnshì zài jǐ lóu'},
+    {th:'รอคิวนานไหม? ฉันรีบหน่อย', words:['等候时间','长吗？','我有点急'], correct:'等候时间长吗？我有点急', py:'Děnghòu shíjiān cháng ma wǒ yǒudiǎn jí'},
+    {th:'ต้องนัดครั้งหน้าหรือเปล่า?', words:['需要','再次','预约','吗？'], correct:'需要再次预约吗？', py:'Xūyào zàicì yùyuē ma'},
   ]},
   { level:27, name:'ด่านที่ 27 — วัฒนธรรมจีน 🏮', color:'#b71c1c', bg:'#ffebee', icon:'🏮', sentences:[
     {th:'ตรุษจีนเป็นเทศกาลที่สำคัญที่สุด', words:['春节','是','最重要的','节日'], correct:'春节是最重要的节日', py:'Chūnjié shì zuì zhòngyào de jiérì'},
@@ -11149,29 +11159,29 @@ const SENTENCE_LEVELS = [
     {th:'หวังว่าจะมีความสัมพันธ์ที่ดีในระยะยาว', words:['希望','我们','长期','合作愉快'], correct:'希望我们长期合作愉快', py:'Xīwàng wǒmen chángqī hézuò yúkuài'},
     {th:'เราจะส่งสัญญาให้คุณภายในสัปดาห์นี้', words:['我们','本周内','会把','合同发给你'], correct:'我们本周内会把合同发给你', py:'Wǒmen běn zhōu nèi huì bǎ hétong fā gěi nǐ'},
   ]},
-  { level:29, name:'ด่านที่ 29 — ความฝันและเป้าหมาย 🚀', color:'#4527a0', bg:'#ede7f6', icon:'🚀', sentences:[
-    {th:'ความฝันของฉันคือการพูดจีนได้คล่อง', words:['我的梦想','是','能','流利地说中文'], correct:'我的梦想是能流利地说中文', py:'Wǒ de mèngxiǎng shì néng liúlì de shuō Zhōngwén'},
-    {th:'ฉันตั้งเป้าจะสอบ HSK6 ภายในสองปี', words:['我的目标','是','两年内','考过HSK6'], correct:'我的目标是两年内考过HSK6', py:'Wǒ de mùbiāo shì liǎng nián nèi kǎoguò HSK6'},
-    {th:'เพื่อไปถึงเป้าหมาย ต้องวางแผนให้ดี', words:['为了','达到目标','需要','好好计划'], correct:'为了达到目标需要好好计划', py:'Wèile dádào mùbiāo xūyào hǎohǎo jìhuà'},
-    {th:'ทุกวันฉันฝึกภาษาจีนอย่างน้อย 1 ชั่วโมง', words:['我每天','至少','练习中文','一个小时'], correct:'我每天至少练习中文一个小时', py:'Wǒ měitiān zhìshǎo liànxí Zhōngwén yī gè xiǎoshí'},
-    {th:'ความสำเร็จมาจากการสะสมทีละเล็กทีละน้อย', words:['成功','来自','一点一滴的','积累'], correct:'成功来自一点一滴的积累', py:'Chénggōng láizì yīdiǎn yīdī de jīlěi'},
-    {th:'ฉันอยากทำงานกับบริษัทจีนในอนาคต', words:['我希望','将来','在中国公司','工作'], correct:'我希望将来在中国公司工作', py:'Wǒ xīwàng jiānglái zài Zhōngguó gōngsī gōngzuò'},
-    {th:'ภาษาจีนจะเปิดโอกาสใหม่ๆ ให้ฉัน', words:['中文','将会','给我','带来新机会'], correct:'中文将会给我带来新机会', py:'Zhōngwén jiāng huì gěi wǒ dài lái xīn jīhuì'},
-    {th:'ฉันเชื่อว่าความพยายามไม่เคยทำให้ผิดหวัง', words:['我相信','努力','永远不会','让人失望'], correct:'我相信努力永远不会让人失望', py:'Wǒ xiāngxìn nǔlì yǒngyuǎn bù huì ràng rén shīwàng'},
-    {th:'อีกหน่อยฉันจะพูดจีนได้เก่งขึ้นแน่นอน', words:['再过一段时间','我的中文','一定会','更好'], correct:'再过一段时间我的中文一定会更好', py:'Zài guò yī duàn shíjiān wǒ de Zhōngwén yīdìng huì gèng hǎo'},
-    {th:'ทำทีละก้าว เดี๋ยวก็ถึงจุดหมาย', words:['一步一步走','总会','到达','目的地'], correct:'一步一步走总会到达目的地', py:'Yī bù yī bù zǒu zǒng huì dàodá mùdìdì'},
+  { level:29, name:'ด่านที่ 29 — ช้อปปิ้งออนไลน์ 📦', color:'#4527a0', bg:'#ede7f6', icon:'📦', sentences:[
+    {th:'สินค้านี้ยังมีสต็อกไหม?', words:['这个商品','还有','库存吗？'], correct:'这个商品还有库存吗？', py:'Zhège shāngpǐn hái yǒu kùcún ma'},
+    {th:'สั่งแล้วกี่วันถึงจะได้รับของ?', words:['下单后','几天','能收到货？'], correct:'下单后几天能收到货？', py:'Xià dān hòu jǐ tiān néng shōu dào huò'},
+    {th:'ส่งฟรีไหม? มีเงื่อนไขอะไรบ้าง?', words:['免运费吗？','有什么','条件？'], correct:'免运费吗？有什么条件？', py:'Miǎn yùnfèi ma yǒu shénme tiáojiàn'},
+    {th:'ของยังไม่มาเลย สถานะอยู่ที่ไหนแล้ว?', words:['货还没到','包裹','在哪里了？'], correct:'货还没到包裹在哪里了？', py:'Huò hái méi dào bāoguǒ zài nǎlǐ le'},
+    {th:'ของที่ได้รับผิดไซส์ ขอคืนสินค้าได้ไหม?', words:['收到的尺码不对','可以','退货吗？'], correct:'收到的尺码不对可以退货吗？', py:'Shōu dào de chǐmǎ bù duì kěyǐ tuìhuò ma'},
+    {th:'วิธีขอคืนเงินทำยังไง?', words:['怎么','申请退款？'], correct:'怎么申请退款？', py:'Zěnme shēnqǐng tuìkuǎn'},
+    {th:'รีวิวนี้บอกว่าของดีมาก เชื่อได้ไหม?', words:['这个评价','说很好','可以相信吗？'], correct:'这个评价说很好可以相信吗？', py:'Zhège píngjià shuō hěn hǎo kěyǐ xiāngxìn ma'},
+    {th:'ใส่โค้ดส่วนลดแล้ว แต่ยังไม่ลด', words:['输入优惠码了','但是','没有打折'], correct:'输入优惠码了但是没有打折', py:'Shūrù yōuhuìmǎ le dànshì méiyǒu dǎzhé'},
+    {th:'ฉลากราคาที่บนเว็บกับที่ส่งมาไม่ตรงกัน', words:['网站上的价格','和','收到的','不一样'], correct:'网站上的价格和收到的不一样', py:'Wǎngzhàn shàng de jiàgé hé shōu dào de bù yīyàng'},
+    {th:'ขอบคุณที่แก้ปัญหาให้อย่างรวดเร็ว', words:['谢谢','快速','解决问题'], correct:'谢谢快速解决问题', py:'Xièxie kuàisù jiějué wèntí'},
   ]},
-  { level:30, name:'ด่านที่ 30 — 👑 แกรนด์ฟินาเล่! HSK All-Star', color:'#880e4f', bg:'#fce4ec', icon:'👑', sentences:[
-    {th:'การเรียนภาษาต่างประเทศเปิดโลกทัศน์ใหม่', words:['学习外语','能','开拓','新的视野'], correct:'学习外语能开拓新的视野', py:'Xuéxí wàiyǔ néng kāituò xīn de shìyě'},
-    {th:'ภาษาจีนไม่ใช่แค่ภาษา แต่คือวิถีชีวิต', words:['中文','不只是','语言','更是','一种生活方式'], correct:'中文不只是语言更是一种生活方式', py:'Zhōngwén bù zhǐ shì yǔyán gèng shì yī zhǒng shēnghuó fāngshì'},
-    {th:'คนที่รู้สองภาษาสามารถเข้าใจโลกได้กว้างขึ้น', words:['懂两种语言的人','能够','更好地','理解这个世界'], correct:'懂两种语言的人能够更好地理解这个世界', py:'Dǒng liǎng zhǒng yǔyán de rén nénggòu gèng hǎo de lǐjiě zhège shìjiè'},
-    {th:'การสื่อสารข้ามวัฒนธรรมช่วยสร้างสันติภาพ', words:['跨文化沟通','有助于','促进','世界和平'], correct:'跨文化沟通有助于促进世界和平', py:'Kuà wénhuà gōutōng yǒuzhùyú cùjìn shìjiè hépíng'},
-    {th:'ทุกภาษามีความสวยงามและเอกลักษณ์ของตัวเอง', words:['每种语言','都有','自己的','美丽和独特之处'], correct:'每种语言都有自己的美丽和独特之处', py:'Měi zhǒng yǔyán dōu yǒu zìjǐ de měilì hé dútè zhī chù'},
-    {th:'ฉันภูมิใจที่ได้เรียนภาษาจีนจนถึงระดับนี้', words:['我为自己','学到','这个水平','感到骄傲'], correct:'我为自己学到这个水平感到骄傲', py:'Wǒ wèi zìjǐ xué dào zhège shuǐpíng gǎndào jiāoào'},
-    {th:'การเดินทางพันไมล์เริ่มจากก้าวแรก และฉันก็ทำได้', words:['千里之行','始于足下','我','做到了'], correct:'千里之行始于足下我做到了', py:'Qiānlǐ zhī xíng shǐ yú zú xià wǒ zuò dào le'},
-    {th:'ขอบคุณทุกคนที่สนับสนุนการเรียนของฉัน', words:['感谢','所有','支持','我学习的人'], correct:'感谢所有支持我学习的人', py:'Gǎnxiè suǒyǒu zhīchí wǒ xuéxí de rén'},
-    {th:'ฉันจะยังคงเรียนรู้ต่อไปไม่มีวันหยุด', words:['我会','继续学习','永不停止'], correct:'我会继续学习永不停止', py:'Wǒ huì jìxù xuéxí yǒng bù tíngzhǐ'},
-    {th:'การเรียนรู้ไม่มีวันสิ้นสุด — 学无止境!', words:['学无止境！','永远','保持','求知的心'], correct:'学无止境！永远保持求知的心', py:'Xué wú zhǐjìng yǒngyuǎn bǎochí qiú zhī de xīn'},
+  { level:30, name:'ด่านที่ 30 — 👑 งานปาร์ตี้ & การฉลอง 🎉', color:'#880e4f', bg:'#fce4ec', icon:'🎉', sentences:[
+    {th:'ยินดีด้วยนะ! วันเกิดมีแพลนอะไรบ้าง?', words:['恭喜你！','生日','有什么计划？'], correct:'恭喜你！生日有什么计划？', py:'Gōngxǐ nǐ shēngrì yǒu shénme jìhuà'},
+    {th:'จัดปาร์ตี้เล็กๆ ที่บ้าน มาด้วยนะ!', words:['在家','办个小派对','来吧！'], correct:'在家办个小派对来吧！', py:'Zàijiā bàn gè xiǎo pàiduì lái ba'},
+    {th:'เอาอะไรไปฝากดีนะ? ขนมหรือของขวัญ?', words:['带什么好？','甜点','还是','礼物？'], correct:'带什么好？甜点还是礼物？', py:'Dài shénme hǎo tiándiǎn háishi lǐwù'},
+    {th:'ห้ามมาแบบมือเปล่าเด็ดขาด!', words:['不许','空手来！'], correct:'不许空手来！', py:'Bù xǔ kōngshǒu lái'},
+    {th:'มากี่คน? เตรียมอาหารให้พอนะ', words:['来几个人？','要准备','足够的食物'], correct:'来几个人？要准备足够的食物', py:'Lái jǐ gè rén yào zhǔnbèi zúgòu de shíwù'},
+    {th:'สิบคน ฉันทำอาหารเองเลย', words:['十个人','我自己','做菜'], correct:'十个人我自己做菜', py:'Shí gè rén wǒ zìjǐ zuò cài'},
+    {th:'ขอให้มีความสุขมากๆ นะ! ไชโย!', words:['祝你','非常快乐！','干杯！'], correct:'祝你非常快乐！干杯！', py:'Zhù nǐ fēicháng kuàilè gānbēi'},
+    {th:'งานปาร์ตี้สนุกมาก ขอบคุณที่เชิญ', words:['派对很好玩','谢谢','你的邀请'], correct:'派对很好玩谢谢你的邀请', py:'Pàiduì hěn hǎowán xièxie nǐ de yāoqǐng'},
+    {th:'ของขวัญนี้น่ารักมาก ชอบมากเลย!', words:['这个礼物','很可爱','我很喜欢！'], correct:'这个礼物很可爱我很喜欢！', py:'Zhège lǐwù hěn kě\'ài wǒ hěn xǐhuan'},
+    {th:'เจอกันใหม่นะ! ขับรถกลับบ้านระวังด้วย', words:['下次见！','开车回家','小心'], correct:'下次见！开车回家小心', py:'Xià cì jiàn kāichē huíjiā xiǎoxīn'},
   ]},
 ];
 
@@ -16820,7 +16830,422 @@ function showListeningResult() {
 
 
 
-</script>
+// ═══════════════════════════════════════
+// TAP THE PAIR GAME
+// ═══════════════════════════════════════
+const PAIR_LEVELS = [
+  { name:'ทักทาย & พื้นฐาน', emoji:'👋', words:[
+    {zh:'你好',py:'nǐ hǎo',th:'สวัสดี'},{zh:'谢谢',py:'xiè xie',th:'ขอบคุณ'},
+    {zh:'再见',py:'zài jiàn',th:'ลาก่อน'},{zh:'对不起',py:'duì bu qǐ',th:'ขอโทษ'},
+    {zh:'没关系',py:'méi guān xi',th:'ไม่เป็นไร'},{zh:'请',py:'qǐng',th:'กรุณา'},
+    {zh:'是',py:'shì',th:'ใช่'},{zh:'不是',py:'bù shì',th:'ไม่ใช่'},
+  ]},
+  { name:'ครอบครัว', emoji:'👨‍👩‍👧', words:[
+    {zh:'爸爸',py:'bà ba',th:'พ่อ'},{zh:'妈妈',py:'mā ma',th:'แม่'},
+    {zh:'哥哥',py:'gē ge',th:'พี่ชาย'},{zh:'姐姐',py:'jiě jie',th:'พี่สาว'},
+    {zh:'弟弟',py:'dì di',th:'น้องชาย'},{zh:'妹妹',py:'mèi mei',th:'น้องสาว'},
+    {zh:'朋友',py:'péng yǒu',th:'เพื่อน'},{zh:'男朋友',py:'nán péng yǒu',th:'แฟนหนุ่ม'},
+  ]},
+  { name:'ร่างกาย & สุขภาพ', emoji:'💪', words:[
+    {zh:'头',py:'tóu',th:'หัว'},{zh:'眼睛',py:'yǎn jing',th:'ตา'},
+    {zh:'嘴巴',py:'zuǐ ba',th:'ปาก'},{zh:'手',py:'shǒu',th:'มือ'},
+    {zh:'脚',py:'jiǎo',th:'เท้า'},{zh:'头疼',py:'tóu téng',th:'ปวดหัว'},
+    {zh:'发烧',py:'fā shāo',th:'มีไข้'},{zh:'咳嗽',py:'ké sou',th:'ไอ'},
+  ]},
+  { name:'อาหารเช้า', emoji:'🍳', words:[
+    {zh:'早饭',py:'zǎo fàn',th:'อาหารเช้า'},{zh:'面包',py:'miàn bāo',th:'ขนมปัง'},
+    {zh:'鸡蛋',py:'jī dàn',th:'ไข่'},{zh:'牛奶',py:'niú nǎi',th:'นม'},
+    {zh:'咖啡',py:'kā fēi',th:'กาแฟ'},{zh:'果汁',py:'guǒ zhī',th:'น้ำผลไม้'},
+    {zh:'粥',py:'zhōu',th:'โจ๊ก'},{zh:'包子',py:'bāo zi',th:'ซาลาเปา'},
+  ]},
+  { name:'อาหารกลางวัน & เย็น', emoji:'🍜', words:[
+    {zh:'米饭',py:'mǐ fàn',th:'ข้าวสวย'},{zh:'面条',py:'miàn tiáo',th:'บะหมี่'},
+    {zh:'炒饭',py:'chǎo fàn',th:'ข้าวผัด'},{zh:'火锅',py:'huǒ guō',th:'หมาล่า'},
+    {zh:'饺子',py:'jiǎo zi',th:'เกี๊ยว'},{zh:'好吃',py:'hǎo chī',th:'อร่อย'},
+    {zh:'辣',py:'là',th:'เผ็ด'},{zh:'不辣',py:'bù là',th:'ไม่เผ็ด'},
+  ]},
+  { name:'เครื่องดื่ม', emoji:'🧋', words:[
+    {zh:'水',py:'shuǐ',th:'น้ำ'},{zh:'热水',py:'rè shuǐ',th:'น้ำร้อน'},
+    {zh:'绿茶',py:'lǜ chá',th:'ชาเขียว'},{zh:'奶茶',py:'nǎi chá',th:'ชานม'},
+    {zh:'果汁',py:'guǒ zhī',th:'น้ำผลไม้'},{zh:'啤酒',py:'pí jiǔ',th:'เบียร์'},
+    {zh:'加冰',py:'jiā bīng',th:'ใส่น้ำแข็ง'},{zh:'不加糖',py:'bù jiā táng',th:'ไม่ใส่น้ำตาล'},
+  ]},
+  { name:'ในร้านอาหาร', emoji:'🍽️', words:[
+    {zh:'菜单',py:'cài dān',th:'เมนู'},{zh:'服务员',py:'fú wù yuán',th:'พนักงาน'},
+    {zh:'点菜',py:'diǎn cài',th:'สั่งอาหาร'},{zh:'结账',py:'jié zhàng',th:'เช็กบิล'},
+    {zh:'打包',py:'dǎ bāo',th:'ห่อกลับบ้าน'},{zh:'不要辣',py:'bù yào là',th:'ไม่เอาเผ็ด'},
+    {zh:'加糖',py:'jiā táng',th:'เพิ่มน้ำตาล'},{zh:'好吃',py:'hǎo chī',th:'อร่อยมาก'},
+  ]},
+  { name:'ผลไม้ & ของว่าง', emoji:'🍎', words:[
+    {zh:'苹果',py:'píng guǒ',th:'แอปเปิ้ล'},{zh:'香蕉',py:'xiāng jiāo',th:'กล้วย'},
+    {zh:'西瓜',py:'xī guā',th:'แตงโม'},{zh:'草莓',py:'cǎo méi',th:'สตรอว์เบอร์รี'},
+    {zh:'芒果',py:'máng guǒ',th:'มะม่วง'},{zh:'葡萄',py:'pú tao',th:'องุ่น'},
+    {zh:'零食',py:'líng shí',th:'ของว่าง'},{zh:'甜',py:'tián',th:'หวาน'},
+  ]},
+  { name:'บ้านและห้อง', emoji:'🏠', words:[
+    {zh:'家',py:'jiā',th:'บ้าน'},{zh:'房间',py:'fáng jiān',th:'ห้อง'},
+    {zh:'厨房',py:'chú fáng',th:'ห้องครัว'},{zh:'卫生间',py:'wèi shēng jiān',th:'ห้องน้ำ'},
+    {zh:'客厅',py:'kè tīng',th:'ห้องนั่งเล่น'},{zh:'床',py:'chuáng',th:'เตียง'},
+    {zh:'桌子',py:'zhuō zi',th:'โต๊ะ'},{zh:'冰箱',py:'bīng xiāng',th:'ตู้เย็น'},
+  ]},
+  { name:'กิจวัตรประจำวัน', emoji:'⏰', words:[
+    {zh:'起床',py:'qǐ chuáng',th:'ตื่นนอน'},{zh:'洗澡',py:'xǐ zǎo',th:'อาบน้ำ'},
+    {zh:'刷牙',py:'shuā yá',th:'แปรงฟัน'},{zh:'上班',py:'shàng bān',th:'ไปทำงาน'},
+    {zh:'下班',py:'xià bān',th:'เลิกงาน'},{zh:'睡觉',py:'shuì jiào',th:'นอนหลับ'},
+    {zh:'洗衣服',py:'xǐ yī fu',th:'ซักผ้า'},{zh:'做饭',py:'zuò fàn',th:'ทำอาหาร'},
+  ]},
+  { name:'เวลา & วัน', emoji:'📅', words:[
+    {zh:'今天',py:'jīn tiān',th:'วันนี้'},{zh:'明天',py:'míng tiān',th:'พรุ่งนี้'},
+    {zh:'昨天',py:'zuó tiān',th:'เมื่อวาน'},{zh:'早上',py:'zǎo shang',th:'ตอนเช้า'},
+    {zh:'下午',py:'xià wǔ',th:'ตอนบ่าย'},{zh:'晚上',py:'wǎn shang',th:'ตอนเย็น'},
+    {zh:'周末',py:'zhōu mò',th:'วันหยุดสุดสัปดาห์'},{zh:'假期',py:'jià qī',th:'วันหยุด'},
+  ]},
+  { name:'อากาศ', emoji:'🌤️', words:[
+    {zh:'天气',py:'tiān qì',th:'อากาศ'},{zh:'热',py:'rè',th:'ร้อน'},
+    {zh:'冷',py:'lěng',th:'หนาว'},{zh:'下雨',py:'xià yǔ',th:'ฝนตก'},
+    {zh:'下雪',py:'xià xuě',th:'หิมะตก'},{zh:'晴天',py:'qíng tiān',th:'ฟ้าแจ้ง'},
+    {zh:'刮风',py:'guā fēng',th:'ลมแรง'},{zh:'带伞',py:'dài sǎn',th:'พกร่ม'},
+  ]},
+  { name:'การเดินทาง', emoji:'🚇', words:[
+    {zh:'地铁',py:'dì tiě',th:'รถไฟฟ้า'},{zh:'公共汽车',py:'gōng gòng qì chē',th:'รถเมล์'},
+    {zh:'出租车',py:'chū zū chē',th:'แท็กซี่'},{zh:'堵车',py:'dǔ chē',th:'รถติด'},
+    {zh:'换乘',py:'huàn chéng',th:'เปลี่ยนสาย'},{zh:'终点站',py:'zhōng diǎn zhàn',th:'สถานีปลายทาง'},
+    {zh:'迟到',py:'chí dào',th:'มาสาย'},{zh:'准时',py:'zhǔn shí',th:'ตรงเวลา'},
+  ]},
+  { name:'ช้อปปิ้ง', emoji:'🛍️', words:[
+    {zh:'多少钱',py:'duō shao qián',th:'ราคาเท่าไหร่'},{zh:'贵',py:'guì',th:'แพง'},
+    {zh:'便宜',py:'pián yi',th:'ถูก'},{zh:'打折',py:'dǎ zhé',th:'ลดราคา'},
+    {zh:'试穿',py:'shì chuān',th:'ลองใส่'},{zh:'收据',py:'shōu jù',th:'ใบเสร็จ'},
+    {zh:'退货',py:'tuì huò',th:'คืนสินค้า'},{zh:'颜色',py:'yán sè',th:'สี'},
+  ]},
+  { name:'เสื้อผ้า', emoji:'👗', words:[
+    {zh:'衣服',py:'yī fu',th:'เสื้อผ้า'},{zh:'裤子',py:'kù zi',th:'กางเกง'},
+    {zh:'裙子',py:'qún zi',th:'กระโปรง'},{zh:'鞋子',py:'xié zi',th:'รองเท้า'},
+    {zh:'包',py:'bāo',th:'กระเป๋า'},{zh:'大号',py:'dà hào',th:'ไซส์ใหญ่'},
+    {zh:'小号',py:'xiǎo hào',th:'ไซส์เล็ก'},{zh:'好看',py:'hǎo kàn',th:'สวย/หล่อ'},
+  ]},
+  { name:'โทรศัพท์ & เน็ต', emoji:'📱', words:[
+    {zh:'手机',py:'shǒu jī',th:'โทรศัพท์'},{zh:'充电',py:'chōng diàn',th:'ชาร์จแบต'},
+    {zh:'没电',py:'méi diàn',th:'แบตหมด'},{zh:'密码',py:'mì mǎ',th:'รหัสผ่าน'},
+    {zh:'网速慢',py:'wǎng sù màn',th:'เน็ตช้า'},{zh:'发消息',py:'fā xiāo xi',th:'ส่งข้อความ'},
+    {zh:'视频',py:'shì pín',th:'วิดีโอ'},{zh:'扫码',py:'sǎo mǎ',th:'สแกน QR'},
+  ]},
+  { name:'ที่ทำงาน', emoji:'💼', words:[
+    {zh:'会议',py:'huì yì',th:'ประชุม'},{zh:'老板',py:'lǎo bǎn',th:'เจ้านาย'},
+    {zh:'同事',py:'tóng shì',th:'เพื่อนร่วมงาน'},{zh:'报告',py:'bào gào',th:'รายงาน'},
+    {zh:'请假',py:'qǐng jià',th:'ลาหยุด'},{zh:'加班',py:'jiā bān',th:'ทำงานล่วงเวลา'},
+    {zh:'工资',py:'gōng zī',th:'เงินเดือน'},{zh:'邮件',py:'yóu jiàn',th:'อีเมล'},
+  ]},
+  { name:'ในร้านกาแฟ', emoji:'☕', words:[
+    {zh:'拿铁',py:'ná tiě',th:'ลาเต้'},{zh:'美式',py:'měi shì',th:'อเมริกาโน่'},
+    {zh:'热的',py:'rè de',th:'ร้อน'},{zh:'冰的',py:'bīng de',th:'เย็น'},
+    {zh:'加糖',py:'jiā táng',th:'ใส่น้ำตาล'},{zh:'续杯',py:'xù bēi',th:'เติมแก้ว'},
+    {zh:'甜点',py:'tián diǎn',th:'ของหวาน'},{zh:'外带',py:'wài dài',th:'ซื้อกลับ'},
+  ]},
+  { name:'ซูเปอร์มาร์เก็ต', emoji:'🛒', words:[
+    {zh:'超市',py:'chāo shì',th:'ซูเปอร์มาร์เก็ต'},{zh:'过期',py:'guò qī',th:'หมดอายุ'},
+    {zh:'特价',py:'tè jià',th:'ราคาพิเศษ'},{zh:'购物车',py:'gòu wù chē',th:'รถเข็น'},
+    {zh:'收银台',py:'shōu yín tái',th:'แคชเชียร์'},{zh:'新鲜',py:'xīn xiān',th:'สด'},
+    {zh:'称重',py:'chēng zhòng',th:'ชั่งน้ำหนัก'},{zh:'打包',py:'dǎ bāo',th:'ห่อ'},
+  ]},
+  { name:'นัดหมาย & แผน', emoji:'🗓️', words:[
+    {zh:'有空吗',py:'yǒu kōng ma',th:'ว่างไหม'},{zh:'见面',py:'jiàn miàn',th:'เจอกัน'},
+    {zh:'等一下',py:'děng yī xià',th:'รอแป๊บนึง'},{zh:'迟到',py:'chí dào',th:'มาสาย'},
+    {zh:'取消',py:'qǔ xiāo',th:'ยกเลิก'},{zh:'改时间',py:'gǎi shí jiān',th:'เลื่อนนัด'},
+    {zh:'准时',py:'zhǔn shí',th:'ตรงเวลา'},{zh:'提前',py:'tí qián',th:'ล่วงหน้า'},
+  ]},
+  { name:'ความรู้สึก', emoji:'😊', words:[
+    {zh:'开心',py:'kāi xīn',th:'มีความสุข'},{zh:'难过',py:'nán guò',th:'เศร้า'},
+    {zh:'生气',py:'shēng qì',th:'โกรธ'},{zh:'累',py:'lèi',th:'เหนื่อย'},
+    {zh:'饿',py:'è',th:'หิว'},{zh:'困',py:'kùn',th:'ง่วง'},
+    {zh:'紧张',py:'jǐn zhāng',th:'ตื่นเต้น'},{zh:'放松',py:'fàng sōng',th:'ผ่อนคลาย'},
+  ]},
+  { name:'บันเทิง', emoji:'🎬', words:[
+    {zh:'看电影',py:'kàn diàn yǐng',th:'ดูหนัง'},{zh:'听音乐',py:'tīng yīn yuè',th:'ฟังเพลง'},
+    {zh:'玩游戏',py:'wán yóu xì',th:'เล่นเกม'},{zh:'逛街',py:'guàng jiē',th:'เดินเที่ยว'},
+    {zh:'唱歌',py:'chàng gē',th:'ร้องเพลง'},{zh:'跳舞',py:'tiào wǔ',th:'เต้น'},
+    {zh:'自拍',py:'zì pāi',th:'เซลฟี่'},{zh:'直播',py:'zhí bō',th:'ไลฟ์สด'},
+  ]},
+  { name:'โรงพยาบาล', emoji:'🏥', words:[
+    {zh:'医生',py:'yī shēng',th:'หมอ'},{zh:'护士',py:'hù shi',th:'พยาบาล'},
+    {zh:'药',py:'yào',th:'ยา'},{zh:'打针',py:'dǎ zhēn',th:'ฉีดยา'},
+    {zh:'过敏',py:'guò mǐn',th:'แพ้'},{zh:'预约',py:'yù yuē',th:'จองคิว'},
+    {zh:'检查',py:'jiǎn chá',th:'ตรวจ'},{zh:'挂号',py:'guà hào',th:'ลงทะเบียน'},
+  ]},
+  { name:'ท่องเที่ยว', emoji:'✈️', words:[
+    {zh:'护照',py:'hù zhào',th:'พาสปอร์ต'},{zh:'签证',py:'qiān zhèng',th:'วีซ่า'},
+    {zh:'机票',py:'jī piào',th:'ตั๋วเครื่องบิน'},{zh:'酒店',py:'jiǔ diàn',th:'โรงแรม'},
+    {zh:'景点',py:'jǐng diǎn',th:'สถานที่ท่องเที่ยว'},{zh:'导游',py:'dǎo yóu',th:'ไกด์'},
+    {zh:'行李',py:'xíng lǐ',th:'กระเป๋าเดินทาง'},{zh:'地图',py:'dì tú',th:'แผนที่'},
+  ]},
+  { name:'ธนาคาร & เงิน', emoji:'💰', words:[
+    {zh:'银行',py:'yín háng',th:'ธนาคาร'},{zh:'转账',py:'zhuǎn zhàng',th:'โอนเงิน'},
+    {zh:'取款',py:'qǔ kuǎn',th:'ถอนเงิน'},{zh:'存钱',py:'cún qián',th:'ฝากเงิน'},
+    {zh:'刷卡',py:'shuā kǎ',th:'รูดบัตร'},{zh:'现金',py:'xiàn jīn',th:'เงินสด'},
+    {zh:'手续费',py:'shǒu xù fèi',th:'ค่าธรรมเนียม'},{zh:'汇率',py:'huì lǜ',th:'อัตราแลกเปลี่ยน'},
+  ]},
+  { name:'ออนไลน์ & ดิจิทัล', emoji:'💻', words:[
+    {zh:'外卖',py:'wài mài',th:'สั่ง delivery'},{zh:'快递',py:'kuài dì',th:'พัสดุ'},
+    {zh:'退款',py:'tuì kuǎn',th:'คืนเงิน'},{zh:'评价',py:'píng jià',th:'รีวิว'},
+    {zh:'关注',py:'guān zhù',th:'กดติดตาม'},{zh:'点赞',py:'diǎn zàn',th:'กดไลค์'},
+    {zh:'分享',py:'fēn xiǎng',th:'แชร์'},{zh:'直播',py:'zhí bō',th:'ไลฟ์สด'},
+  ]},
+  { name:'ออกกำลังกาย', emoji:'🏃', words:[
+    {zh:'跑步',py:'pǎo bù',th:'วิ่ง'},{zh:'游泳',py:'yóu yǒng',th:'ว่ายน้ำ'},
+    {zh:'健身房',py:'jiàn shēn fáng',th:'ฟิตเนส'},{zh:'瑜伽',py:'yú jiā',th:'โยคะ'},
+    {zh:'爬山',py:'pá shān',th:'ปีนเขา'},{zh:'出汗',py:'chū hàn',th:'เหงื่อออก'},
+    {zh:'减肥',py:'jiǎn féi',th:'ลดน้ำหนัก'},{zh:'坚持',py:'jiān chí',th:'ทำต่อเนื่อง'},
+  ]},
+  { name:'งานบ้าน', emoji:'🧹', words:[
+    {zh:'打扫',py:'dǎ sǎo',th:'ทำความสะอาด'},{zh:'洗碗',py:'xǐ wǎn',th:'ล้างจาน'},
+    {zh:'倒垃圾',py:'dào lā jī',th:'ทิ้งขยะ'},{zh:'晒衣服',py:'shài yī fu',th:'ตากผ้า'},
+    {zh:'整理',py:'zhěng lǐ',th:'จัดระเบียบ'},{zh:'乱',py:'luàn',th:'รก/ยุ่ง'},
+    {zh:'干净',py:'gān jìng',th:'สะอาด'},{zh:'拖地',py:'tuō dì',th:'ถูพื้น'},
+  ]},
+  { name:'ปาร์ตี้ & การฉลอง', emoji:'🎉', words:[
+    {zh:'生日',py:'shēng rì',th:'วันเกิด'},{zh:'蛋糕',py:'dàn gāo',th:'เค้ก'},
+    {zh:'礼物',py:'lǐ wù',th:'ของขวัญ'},{zh:'干杯',py:'gān bēi',th:'ชนแก้ว'},
+    {zh:'派对',py:'pài duì',th:'ปาร์ตี้'},{zh:'邀请',py:'yāo qǐng',th:'เชิญ'},
+    {zh:'恭喜',py:'gōng xǐ',th:'ยินดีด้วย'},{zh:'快乐',py:'kuài lè',th:'มีความสุข'},
+  ]},
+];
 
-</body>
+const PAIR_DIFF = [
+  { pairs:4, time:45, label:'🌱 ง่าย' },
+  { pairs:6, time:35, label:'🔥 ปานกลาง' },
+  { pairs:8, time:25, label:'💀 ยาก' },
+];
+
+let pairState = {
+  diffIdx:0, round:1, score:0, combo:0, maxCombo:0,
+  pairsLeft:0, timeLeft:0, selected:null, active:false, timer:null
+};
+
+function pairShuffle(arr) {
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+function initPairGame() {
+  const root = document.getElementById('pair-game-root');
+  root.innerHTML = `
+  <style>
+    #pair-wrap{max-width:480px;margin:0 auto;padding:0 14px 40px;font-family:'Noto Sans Thai',sans-serif}
+    #pair-wrap .ph{padding:12px 0 10px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f0d0e0;background:#fff5fb;position:sticky;top:56px;z-index:30;margin:0 -14px;padding-left:14px}
+    .p-top{display:flex;gap:8px;margin:14px 0 10px}
+    .p-stat{flex:1;background:white;border-radius:12px;border:1.5px solid #f0d0e0;padding:8px 6px;text-align:center;box-shadow:0 2px 10px rgba(241,53,150,.08)}
+    .p-stat-v{font-size:20px;font-weight:800;color:#1a0a12;line-height:1}
+    .p-stat-l{font-size:10px;font-weight:600;color:#9a7a8a;margin-top:2px;text-transform:uppercase}
+    .p-diff-row{display:flex;gap:6px;margin-bottom:10px}
+    .p-diff-btn{flex:1;padding:7px 4px;border-radius:10px;border:1.5px solid #f0d0e0;background:white;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;color:#5a3a4a;transition:.15s;line-height:1.4}
+    .p-diff-btn.active{background:linear-gradient(135deg,#F13596,#ff7b2f);color:white;border-color:transparent}
+    .p-level-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .p-badge{background:linear-gradient(135deg,#F13596,#ff7b2f);color:white;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px}
+    .p-left{font-size:12px;font-weight:600;color:#9a7a8a}
+    .p-combo{text-align:center;min-height:24px;margin-bottom:6px;font-size:13px;font-weight:800;color:#ff7b2f}
+    .p-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:14px}
+    .p-tile{border-radius:12px;border:2px solid #f0d0e0;background:white;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s cubic-bezier(.34,1.56,.64,1),border-color .15s,background .15s;padding:6px 3px;aspect-ratio:1;user-select:none;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden;animation:pTileIn .3s cubic-bezier(.34,1.56,.64,1) both}
+    @keyframes pTileIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+    .p-tile.zh-t{background:linear-gradient(145deg,#fff8fc,#ffedf6);border-color:#f9c0df}
+    .p-tile.th-t{background:linear-gradient(145deg,#f8fcff,#e6f4ff);border-color:#b8d9f8}
+    .p-tile.sel{border-color:#F13596;background:linear-gradient(145deg,#ffedf6,#ffd6ef)!important;box-shadow:0 0 0 3px rgba(241,53,150,.2);transform:scale(1.05)}
+    .p-tile.mat{border-color:#06C755;background:linear-gradient(145deg,#f0fff8,#d6f8ea)!important;pointer-events:none;animation:pMatch .4s cubic-bezier(.34,1.56,.64,1)}
+    .p-tile.mat::after{content:'✓';position:absolute;top:3px;right:5px;font-size:11px;color:#06C755;font-weight:800}
+    .p-tile.wrg{border-color:#ff4444;background:linear-gradient(145deg,#fff0f0,#ffd6d6)!important;animation:pShake .35s ease}
+    @keyframes pMatch{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+    @keyframes pShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+    .p-zh{font-family:'Noto Sans SC',sans-serif;font-size:20px;font-weight:700;color:#1a0a12;line-height:1.2}
+    .p-py{font-size:8px;color:#9a7a8a;margin-top:2px;font-style:italic;text-align:center}
+    .p-th{font-size:11px;font-weight:600;color:#1a4a8a;text-align:center;line-height:1.4;padding:0 2px}
+    .p-result{display:none;background:white;border-radius:20px;border:1.5px solid #f0d0e0;box-shadow:0 4px 20px rgba(241,53,150,.1);padding:28px 20px;text-align:center;animation:pTileIn .4s cubic-bezier(.34,1.56,.64,1)}
+    .p-result.show{display:block}
+    .p-res-stats{display:flex;gap:14px;justify-content:center;margin:14px 0 20px}
+    .p-rs-v{font-size:26px;font-weight:800;color:#F13596}
+    .p-rs-l{font-size:10px;color:#9a7a8a;font-weight:600;text-transform:uppercase}
+    .p-btn{width:100%;padding:13px;border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px}
+    .p-btn-pink{background:linear-gradient(135deg,#F13596,#ff7b2f);color:white;box-shadow:0 4px 14px rgba(241,53,150,.3)}
+    .p-btn-out{background:transparent;color:#5a3a4a;border:1.5px solid #f0d0e0}
+    .p-start-btn{width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,#F13596,#ff7b2f);color:white;font-family:inherit;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(241,53,150,.3);margin-top:8px}
+    .p-timer-wrap{position:relative;width:52px;height:52px;margin:0 auto}
+    .p-timer-svg{width:52px;height:52px;transform:rotate(-90deg)}
+    .p-timer-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#1a0a12}
+  </style>
+  <div id="pair-wrap">
+    <div class="ph">
+      <button onclick="closeGame()" style="background:#f0d0e0;border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">←</button>
+      <div style="font-size:15px;font-weight:700;color:#1a0a12">🧩 Tap the Pair</div>
+    </div>
+    <div class="p-diff-row" id="p-diff-row">
+      <button class="p-diff-btn active" onclick="pSetDiff(0,this)">🌱 ง่าย<br><span style="font-weight:400;font-size:9px">45วิ · 4คู่</span></button>
+      <button class="p-diff-btn" onclick="pSetDiff(1,this)">🔥 ปานกลาง<br><span style="font-weight:400;font-size:9px">35วิ · 6คู่</span></button>
+      <button class="p-diff-btn" onclick="pSetDiff(2,this)">💀 ยาก<br><span style="font-weight:400;font-size:9px">25วิ · 8คู่</span></button>
+    </div>
+    <div class="p-top">
+      <div class="p-stat"><div class="p-stat-v" id="p-score">0</div><div class="p-stat-l">⭐ คะแนน</div></div>
+      <div class="p-stat" style="flex:0 0 64px">
+        <div class="p-timer-wrap">
+          <svg class="p-timer-svg" viewBox="0 0 48 48">
+            <circle fill="none" stroke="#f0d0e0" stroke-width="5" cx="24" cy="24" r="20"/>
+            <circle id="p-ring" fill="none" stroke="#F13596" stroke-width="5" stroke-linecap="round" cx="24" cy="24" r="20" stroke-dasharray="125.66" stroke-dashoffset="0" style="transition:stroke-dashoffset .8s linear,stroke .3s"/>
+          </svg>
+          <div class="p-timer-text" id="p-timer">45</div>
+        </div>
+      </div>
+      <div class="p-stat"><div class="p-stat-v" id="p-combo" style="color:#ff7b2f">×1</div><div class="p-stat-l">🔥 Combo</div></div>
+    </div>
+    <div class="p-level-row">
+      <div class="p-badge" id="p-badge">ด่าน 1 👋 ทักทาย</div>
+      <div class="p-left" id="p-left">เหลือ 4 คู่</div>
+    </div>
+    <div class="p-combo" id="p-combo-msg"></div>
+    <div class="p-grid" id="p-grid"></div>
+    <div class="p-result" id="p-result">
+      <div style="font-size:52px;margin-bottom:10px" id="p-res-emoji">🎉</div>
+      <div style="font-size:22px;font-weight:800;color:#1a0a12;margin-bottom:6px" id="p-res-title">ยอดเยี่ยม!</div>
+      <div style="font-size:13px;color:#9a7a8a;margin-bottom:4px" id="p-res-sub">จับคู่ครบ!</div>
+      <div class="p-res-stats">
+        <div class="p-rs"><div class="p-rs-v" id="p-rs-score">0</div><div class="p-rs-l">คะแนน</div></div>
+        <div class="p-rs"><div class="p-rs-v" id="p-rs-time">0</div><div class="p-rs-l">วิเหลือ</div></div>
+        <div class="p-rs"><div class="p-rs-v" id="p-rs-combo">0</div><div class="p-rs-l">Max Combo</div></div>
+      </div>
+      <button class="p-btn p-btn-pink" onclick="pNextRound()">▶ ด่านต่อไป!</button>
+      <button class="p-btn p-btn-out" onclick="pRestart()">🔄 เริ่มใหม่</button>
+    </div>
+    <button class="p-start-btn" id="p-start-btn" onclick="pStartGame()">⚡ เริ่มเลย!</button>
+  </div>`;
+}
+
+function pSetDiff(idx,btn){
+  pairState.diffIdx=idx;
+  document.querySelectorAll('.p-diff-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function pStartGame(){
+  pairState.round=1; pairState.score=0;
+  document.getElementById('p-start-btn').style.display='none';
+  document.getElementById('p-diff-row').style.opacity='.5';
+  document.getElementById('p-diff-row').style.pointerEvents='none';
+  pStartRound();
+}
+
+function pStartRound(){
+  const cfg=PAIR_DIFF[pairState.diffIdx];
+  pairState.timeLeft=cfg.time; pairState.combo=0; pairState.maxCombo=0;
+  pairState.pairsLeft=cfg.pairs; pairState.selected=null; pairState.active=true;
+  clearInterval(pairState.timer);
+
+  const lv=PAIR_LEVELS[(pairState.round-1)%PAIR_LEVELS.length];
+  document.getElementById('p-badge').textContent=`ด่าน ${pairState.round} ${lv.emoji} ${lv.name}`;
+  document.getElementById('p-score').textContent=pairState.score;
+  document.getElementById('p-combo').textContent='×1';
+  document.getElementById('p-left').textContent=`เหลือ ${pairState.pairsLeft} คู่`;
+  document.getElementById('p-combo-msg').textContent='';
+  document.getElementById('p-result').classList.remove('show');
+  document.getElementById('p-grid').style.opacity='1';
+
+  const words=pairShuffle(lv.words).slice(0,cfg.pairs);
+  const tiles=[];
+  words.forEach((w,i)=>{
+    tiles.push({id:i,type:'zh',data:w});
+    tiles.push({id:i,type:'th',data:w});
+  });
+  const grid=document.getElementById('p-grid');
+  grid.innerHTML='';
+  pairShuffle(tiles).forEach((t,idx)=>{
+    const el=document.createElement('div');
+    el.className=`p-tile ${t.type==='zh'?'zh-t':'th-t'}`;
+    el.style.animationDelay=`${idx*0.035}s`;
+    el.dataset.id=t.id; el.dataset.type=t.type;
+    if(t.type==='zh') el.innerHTML=`<div class="p-zh">${t.data.zh}</div><div class="p-py">${t.data.py}</div>`;
+    else el.innerHTML=`<div class="p-th">${t.data.th}</div>`;
+    el.addEventListener('click',()=>pOnTile(el,t));
+    grid.appendChild(el);
+  });
+
+  pUpdateTimer();
+  pairState.timer=setInterval(()=>{ pairState.timeLeft--; pUpdateTimer(); if(pairState.timeLeft<=0) pTimeUp(); },1000);
+}
+
+function pUpdateTimer(){
+  const cfg=PAIR_DIFF[pairState.diffIdx];
+  const pct=pairState.timeLeft/cfg.time;
+  const circ=125.66;
+  document.getElementById('p-ring').style.strokeDashoffset=circ*(1-pct);
+  const urgent=pairState.timeLeft<=10;
+  document.getElementById('p-ring').style.stroke=urgent?'#ff4444':'#F13596';
+  document.getElementById('p-timer').textContent=pairState.timeLeft;
+  document.getElementById('p-timer').style.color=urgent?'#ff4444':'#1a0a12';
+}
+
+function pOnTile(el,tile){
+  if(!pairState.active||el.classList.contains('mat')||el.classList.contains('sel')) return;
+  if(!pairState.selected){
+    el.classList.add('sel'); pairState.selected={el,tile}; return;
+  }
+  const prev=pairState.selected; pairState.selected=null;
+  if(prev.tile.id===tile.id&&prev.tile.type!==tile.type){
+    prev.el.classList.remove('sel'); prev.el.classList.add('mat'); el.classList.add('mat');
+    pairState.combo++; pairState.pairsLeft--;
+    if(pairState.combo>pairState.maxCombo) pairState.maxCombo=pairState.combo;
+    const pts=10*pairState.combo+(pairState.timeLeft>15?5:0);
+    pairState.score+=pts;
+    document.getElementById('p-score').textContent=pairState.score;
+    document.getElementById('p-combo').textContent=`×${pairState.combo}`;
+    document.getElementById('p-left').textContent=`เหลือ ${pairState.pairsLeft} คู่`;
+    const msgs=['','ดี! 👍','เก่ง! ✨','เยี่ยม! 🔥','สุดยอด! 💥','PERFECT! 🚀'];
+    const msg=pairState.combo>=5?`UNSTOPPABLE! 👑 +${pts}`:(pairState.combo>=2?`${msgs[Math.min(pairState.combo,5)]} ×${pairState.combo} +${pts}`:`+${pts}`);
+    document.getElementById('p-combo-msg').textContent=msg;
+    if(pairState.pairsLeft===0) setTimeout(pRoundDone,500);
+  } else {
+    pairState.combo=0;
+    document.getElementById('p-combo').textContent='×1';
+    prev.el.classList.remove('sel'); el.classList.add('wrg'); prev.el.classList.add('wrg');
+    setTimeout(()=>{ el.classList.remove('wrg'); prev.el.classList.remove('wrg'); },400);
+  }
+}
+
+function pRoundDone(){
+  clearInterval(pairState.timer); pairState.active=false;
+  const bonus=pairState.timeLeft*2; pairState.score+=bonus;
+  document.getElementById('p-grid').style.opacity='.3';
+  document.getElementById('p-result').classList.add('show');
+  document.getElementById('p-res-emoji').textContent=pairState.timeLeft>15?'🏆':'🎉';
+  document.getElementById('p-res-title').textContent=pairState.timeLeft>15?'เพอร์เฟค!':'ยอดเยี่ยม!';
+  document.getElementById('p-res-sub').textContent=`จับคู่ครบ! +${bonus} โบนัสเวลา 🔥`;
+  document.getElementById('p-rs-score').textContent=pairState.score;
+  document.getElementById('p-rs-time').textContent=pairState.timeLeft;
+  document.getElementById('p-rs-combo').textContent=pairState.maxCombo;
+}
+
+function pTimeUp(){
+  clearInterval(pairState.timer); pairState.active=false;
+  document.getElementById('p-grid').style.opacity='.3';
+  document.getElementById('p-result').classList.add('show');
+  document.getElementById('p-res-emoji').textContent=pairState.pairsLeft===0?'🎉':'⏰';
+  document.getElementById('p-res-title').textContent=pairState.pairsLeft===0?'ยอดเยี่ยม!':'หมดเวลา!';
+  document.getElementById('p-res-sub').textContent=pairState.pairsLeft>0?`เหลืออีก ${pairState.pairsLeft} คู่ ลองใหม่นะ!`:'จับคู่ครบ!';
+  document.getElementById('p-rs-score').textContent=pairState.score;
+  document.getElementById('p-rs-time').textContent=0;
+  document.getElementById('p-rs-combo').textContent=pairState.maxCombo;
+}
+
+function pNextRound(){ pairState.round++; pStartRound(); }
+
+function pRestart(){
+  clearInterval(pairState.timer);
+  pairState.round=1; pairState.score=0;
+  document.getElementById('p-result').classList.remove('show');
+  document.getElementById('p-grid').innerHTML='';
+  document.getElementById('p-grid').style.opacity='1';
+  document.getElementById('p-start-btn').style.display='block';
+  document.getElementById('p-diff-row').style.opacity='1';
+  document.getElementById('p-diff-row').style.pointerEvents='';
+  document.getElementById('p-score').textContent='0';
+  document.getElementById('p-combo').textContent='×1';
+  document.getElementById('p-combo-msg').textContent='';
+}
+
+</script></body>
 </html>
