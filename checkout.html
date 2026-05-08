@@ -654,21 +654,9 @@ body {
       <div class="price-row">
         <span>TangTang Chinese Premium</span>
       </div>
-      <div class="price-row">
-        <span>ราคาปกติ</span>
-        <span class="price-original">฿1,990</span>
-      </div>
-      <div class="price-row">
-        <span>ส่วนลด</span>
-        <span class="price-save">ลด ฿700</span>
-      </div>
       <div class="price-row" style="border-bottom:none;padding-top:12px">
         <span style="font-size:15px;font-weight:700;color:var(--ink)">ยอดรวม</span>
-        <span class="price-total">฿1,290</span>
-      </div>
-
-      <div style="margin-top:8px;padding:10px 12px;background:var(--green-light);border-radius:8px;font-size:12px;color:var(--green);font-weight:600;text-align:center">
-        🎉 ประหยัดไป ฿700 — ซื้อครั้งเดียวเรียนตลอดชีพ!
+        <span class="price-total">฿990</span>
       </div>
 
       <div class="benefits">
@@ -803,7 +791,7 @@ let selectedPrice = '990';
 let selectedAmountInt = 990;
 const pkgData = {
   monthly: { price: '199', amount: 199, label: 'รายเดือน', origLabel: '' },
-  yearly:  { price: '990', amount: 990, label: 'รายปี', origLabel: 'ราคาปกติ 2,388 บาท' },
+  yearly:  { price: '990', amount: 990, label: 'รายปี' },
   lifetime:{ price: '2,490', amount: 2490, label: 'ถาวรตลอดชีพ', origLabel: '' },
 };
 
@@ -834,10 +822,6 @@ function selectPackage(type) {
   if (qrAmt) qrAmt.textContent = '฿' + pkg.price;
   const bankAmt = document.getElementById('bank-amount');
   if (bankAmt) bankAmt.textContent = '฿' + pkg.price;
-  const sumOrig = document.getElementById('sum-original');
-  if (sumOrig) sumOrig.textContent = pkg.origLabel;
-
-  // update summary total
   const priceTotal = document.querySelector('.price-total');
   if (priceTotal) priceTotal.textContent = '฿' + pkg.price;
 
