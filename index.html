@@ -1543,7 +1543,7 @@ body {
         </div>
 
         <button onclick="showPaymentModal()" style="width:100%;padding:13px;background:#F13596;color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">
-          🚀 เริ่มเรียนเลย — ฿1,290 ตลอดชีพ
+          ⚡ เริ่มเรียนเลย — เลือกแพคเกจ
         </button>
         <a href="https://line.me/R/ti/p/@ava11" target="_blank" rel="noopener"
           style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;margin-top:10px;background:#06C755;color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;text-decoration:none;box-sizing:border-box">
@@ -1687,7 +1687,7 @@ body {
           <div style="font-size:38px;margin-bottom:10px">🧩</div>
           <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">Tap the Pair</div>
           <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:10px">จับคู่จีน-ไทย ก่อนหมดเวลา! 30 ด่าน</div>
-          <span style="font-size:10px;font-weight:700;color:#F13596;background:#fce4f3;padding:3px 10px;border-radius:20px">🔥 ใหม่! 30 ด่าน</span>
+          <span style="font-size:10px;font-weight:700;color:#F13596;background:#fce4f3;padding:3px 10px;border-radius:20px">🔥 ใหม่! ฟรี 3 ด่าน</span>
         </div>
         <!-- Listen Game -->
         <!-- ฟังแล้วตอบคำถาม -->
@@ -10554,6 +10554,23 @@ function openGame(name) {
 }
 
 function closeGame() {
+  // หยุด Tap the Pair timer
+  if (pairState && pairState.timer) {
+    clearInterval(pairState.timer);
+    pairState.timer = null;
+    pairState.active = false;
+  }
+  // หยุด Match game timer
+  if (typeof stopMatchTimer === 'function') stopMatchTimer();
+  // หยุด Speed Quiz timer
+  if (typeof speedTimer !== 'undefined' && speedTimer) {
+    clearInterval(speedTimer);
+    speedTimer = null;
+  }
+  if (typeof _speedTimer !== 'undefined' && _speedTimer) {
+    clearInterval(_speedTimer);
+    _speedTimer = null;
+  }
   ['stroke','daily','sentence','speed','journal','match','listen','listening','pair'].forEach(g => {
     document.getElementById('game-'+g).style.display = 'none';
   });
@@ -15705,7 +15722,14 @@ function startMatchTimer() {
     matchTime++;
     const el = document.getElementById('match-timer');
     if (el) el.textContent = '⏱ '+Math.floor(matchTime/60)+':'+String(matchTime%60).padStart(2,'0');
+    playTickSound();
   }, 1000);
+}
+
+function stopMatchTimer() {
+  clearInterval(matchTimer);
+  matchTimer = null;
+  matchStarted = false;
 }
 
 function selectMatchLeft(idx) {
@@ -17112,7 +17136,7 @@ function initPairGame() {
       <button class="p-btn p-btn-pink" onclick="pNextRound()">▶ ด่านต่อไป!</button>
       <button class="p-btn p-btn-out" onclick="pRestart()">🔄 เริ่มใหม่</button>
     </div>
-    <button class="p-start-btn" id="p-start-btn" onclick="pStartGame()">⚡ เริ่มเลย!</button>
+    <button class="p-start-btn" id="p-start-btn" onclick="playClickSound(); pStartGame()">⚡ เริ่มเลย!</button>
   </div>`;
 }
 
@@ -17160,12 +17184,12 @@ function pStartRound(){
     el.dataset.id=t.id; el.dataset.type=t.type;
     if(t.type==='zh') el.innerHTML=`<div class="p-zh">${t.data.zh}</div><div class="p-py">${t.data.py}</div>`;
     else el.innerHTML=`<div class="p-th">${t.data.th}</div>`;
-    el.addEventListener('click',()=>pOnTile(el,t));
+    el.addEventListener('click',()=>{ playClickSound(); pOnTile(el,t); });
     grid.appendChild(el);
   });
 
   pUpdateTimer();
-  pairState.timer=setInterval(()=>{ pairState.timeLeft--; pUpdateTimer(); if(pairState.timeLeft<=0) pTimeUp(); },1000);
+  pairState.timer=setInterval(()=>{ pairState.timeLeft--; pUpdateTimer(); if(pairState.timeLeft<=10 && pairState.timeLeft>0) playUrgentTick(); else if(pairState.timeLeft>0) playTickSound(); if(pairState.timeLeft<=0) pTimeUp(); },1000);
 }
 
 function pUpdateTimer(){
@@ -17186,7 +17210,7 @@ function pOnTile(el,tile){
   }
   const prev=pairState.selected; pairState.selected=null;
   if(prev.tile.id===tile.id&&prev.tile.type!==tile.type){
-    prev.el.classList.remove('sel'); prev.el.classList.add('mat'); el.classList.add('mat');
+    playCorrectSound(); prev.el.classList.remove('sel'); prev.el.classList.add('mat'); el.classList.add('mat');
     pairState.combo++; pairState.pairsLeft--;
     if(pairState.combo>pairState.maxCombo) pairState.maxCombo=pairState.combo;
     const pts=10*pairState.combo+(pairState.timeLeft>15?5:0);
@@ -17202,25 +17226,30 @@ function pOnTile(el,tile){
     pairState.combo=0;
     document.getElementById('p-combo').textContent='×1';
     prev.el.classList.remove('sel'); el.classList.add('wrg'); prev.el.classList.add('wrg');
-    setTimeout(()=>{ el.classList.remove('wrg'); prev.el.classList.remove('wrg'); },400);
+    playWrongSound(); setTimeout(()=>{ el.classList.remove('wrg'); prev.el.classList.remove('wrg'); },400);
   }
 }
 
 function pRoundDone(){
-  clearInterval(pairState.timer); pairState.active=false;
+  clearInterval(pairState.timer); pairState.active=false; playWinSound();
   const bonus=pairState.timeLeft*2; pairState.score+=bonus;
   document.getElementById('p-grid').style.opacity='.3';
   document.getElementById('p-result').classList.add('show');
   document.getElementById('p-res-emoji').textContent=pairState.timeLeft>15?'🏆':'🎉';
   document.getElementById('p-res-title').textContent=pairState.timeLeft>15?'เพอร์เฟค!':'ยอดเยี่ยม!';
+  const needPremium = pairState.round >= 3 && !isPremium();
   document.getElementById('p-res-sub').textContent=`จับคู่ครบ! +${bonus} โบนัสเวลา 🔥`;
+  const nextBtn = document.querySelector('.p-btn-pink');
+  if (nextBtn) {
+    nextBtn.textContent = needPremium ? '🔒 ปลดล็อคด่านถัดไป (Premium)' : '▶ ด่านต่อไป!';
+  }
   document.getElementById('p-rs-score').textContent=pairState.score;
   document.getElementById('p-rs-time').textContent=pairState.timeLeft;
   document.getElementById('p-rs-combo').textContent=pairState.maxCombo;
 }
 
 function pTimeUp(){
-  clearInterval(pairState.timer); pairState.active=false;
+  clearInterval(pairState.timer); pairState.active=false; if(pairState.pairsLeft>0) playLoseSound(); else playWinSound();
   document.getElementById('p-grid').style.opacity='.3';
   document.getElementById('p-result').classList.add('show');
   document.getElementById('p-res-emoji').textContent=pairState.pairsLeft===0?'🎉':'⏰';
@@ -17231,7 +17260,18 @@ function pTimeUp(){
   document.getElementById('p-rs-combo').textContent=pairState.maxCombo;
 }
 
-function pNextRound(){ pairState.round++; pStartRound(); }
+function pNextRound(){
+  playClickSound();
+  pairState.round++;
+  // ด่าน 4 ขึ้นไปต้อง premium
+  if (pairState.round > 3 && !isPremium()) {
+    // รีเซ็ตกลับไปรอ
+    pairState.round = 3;
+    showPaymentModal();
+    return;
+  }
+  pStartRound();
+}
 
 function pRestart(){
   clearInterval(pairState.timer);
