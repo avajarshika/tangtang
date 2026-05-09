@@ -17427,16 +17427,6 @@ let wmAnimating = false;
 function initWordMap() {
   wmIdx = 0;
   renderWordMap();
-  // iOS fix: ปลุก speechSynthesis ทันทีที่เข้าหน้านี้
-  if('speechSynthesis' in window){
-    speechSynthesis.cancel();
-    const warmup = new SpeechSynthesisUtterance('');
-    warmup.volume = 0;
-    speechSynthesis.speak(warmup);
-    speechSynthesis.cancel();
-    // โหลด voices ล่วงหน้า
-    speechSynthesis.getVoices();
-  }
 }
 
 function renderWordMap() {
@@ -17590,38 +17580,8 @@ function wmShowPopup(idx) {
 
 function wmSpeak(text) {
   playClickSound();
-  if(!('speechSynthesis' in window)) return;
-
-  // iPad/iOS fix: speak() ต้องอยู่ใน synchronous gesture handler เท่านั้น
-  // ห้ามเอาไปใน callback หรือ async ไม่งั้น iPad จะบล็อก
-  speechSynthesis.cancel();
-
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'zh-CN';
-  u.rate = 0.8;
-  u.pitch = 1;
-  u.volume = 1;
-
-  // หา voice จีนที่โหลดแล้ว (ถ้ามี)
-  const voices = speechSynthesis.getVoices();
-  const zhVoice = voices.find(v =>
-    v.lang === 'zh-CN' || v.lang === 'zh_CN' ||
-    v.lang === 'zh-TW' || v.lang.startsWith('zh')
-  );
-  if (zhVoice) u.voice = zhVoice;
-
-  // resume ก่อนเสมอ — แก้ปัญหา iPad pause engine
-  speechSynthesis.resume();
-
-  // speak ทันทีใน gesture handler (สำคัญมากสำหรับ iPad)
-  speechSynthesis.speak(u);
-
-  // iPad bug: บางครั้ง stuck ต้อง resume ซ้ำ
-  const resumeTimer = setInterval(() => {
-    if(!speechSynthesis.speaking){ clearInterval(resumeTimer); return; }
-    speechSynthesis.resume();
-  }, 200);
-  setTimeout(() => clearInterval(resumeTimer), 5000);
+  // ใช้ speakWord() เหมือนกับทั้งแอป (Google TTS ผ่าน Supabase)
+  speakWord(text);
 }
 
 function wmNext(){
