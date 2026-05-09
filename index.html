@@ -16472,28 +16472,86 @@ function showListenDone(){
 }
 
 // ══════════════════════════════════════════════════════
-// 🦊 TANGTANG CHAT — AI แชทกับถังถัง
+// 🦊 TANGTANG CHAT — AI แชทกับถังถัง (Supabase-backed)
 // ══════════════════════════════════════════════════════
-const TANGTANG_HISTORY = [];
-let tangtangWelcomed = false;
+const TANGTANG_URL = 'https://zmshxxmcgbxavzlqmpxd.supabase.co/functions/v1/tangtang-chat';
+const TANGTANG_LIMITS = { monthly: 20, annual: 50, lifetime: 50 };
 
-function initTangTangChat() {
-  updateTangTangUsageDisplay();
-  if (!tangtangWelcomed) {
-    tangtangWelcomed = true;
-    const plan = getTangTangPlan();
-    if (plan === 'free') {
-      appendTangTangMsg('assistant', 'สวัสดีค่า! ฉันคือถังถัง 🦊✨\n\nฟีเจอร์นี้สำหรับสมาชิก Premium นะคะ\n\nสมัครแพ็กเกจเพื่อคุยกับถังถังได้เลยค่า! 💕');
-    } else {
-      const limit = getTangTangLimit();
-      const used = getTangTangUsed();
-      const remaining = Math.max(0, limit - used);
-      appendTangTangMsg('assistant', `นี่หวา! 你好！ ฉันคือถังถังค่า 🦊✨\n\nวันนี้คุยได้อีก ${remaining} ข้อนะคะ\n\nถามได้เลยเช่น:\n• คำศัพท์จีน ความหมาย พินอิน\n• ประโยคที่อยากรู้\n• ไวยากรณ์จีน\n• ฝึกสนทนาภาษาจีน\n\n加油！สู้ๆ นะคะ! 🌸`);
-    }
-  }
+// in-memory history สำหรับส่งให้ AI (context window)
+let TANGTANG_HISTORY = [];
+let tangtangWelcomed = false;
+let ttUsedCache = null; // cache usage ที่ดึงจาก Supabase มาแล้ว
+
+// ── Plan helpers ──
+function getTangTangPlan() {
+  if (!state.user) return 'free';
+  if (isAdmin()) return 'lifetime';
+  const subType = state.user?.data?.subscription_type || 'free';
+  if (subType === 'lifetime') return 'lifetime';
+  if (subType === 'annual') return 'annual';
+  if (subType === 'monthly') return 'monthly';
+  if (state.user.is_premium) return 'monthly';
+  return 'free';
+}
+function getTangTangLimit() {
+  return TANGTANG_LIMITS[getTangTangPlan()] ?? 0;
 }
 
-function appendTangTangMsg(role, text) {
+// ── Usage — อ่าน/เขียน Supabase ──
+async function getTangTangUsed() {
+  if (ttUsedCache !== null) return ttUsedCache;
+  const uid = state.user?.id;
+  if (!uid) return 0;
+  const today = new Date().toISOString().slice(0, 10);
+  const { data } = await sb.from('tangtang_usage')
+    .select('count')
+    .eq('user_id', uid)
+    .eq('date', today)
+    .single();
+  ttUsedCache = data?.count ?? 0;
+  return ttUsedCache;
+}
+
+async function incrementTangTangUsed() {
+  const uid = state.user?.id;
+  if (!uid) return;
+  const today = new Date().toISOString().slice(0, 10);
+  // upsert — ถ้ามีแถวแล้วให้ count+1 ถ้ายังไม่มีให้สร้างใหม่
+  await sb.from('tangtang_usage').upsert(
+    { user_id: uid, date: today, count: (ttUsedCache ?? 0) + 1 },
+    { onConflict: 'user_id,date' }
+  );
+  ttUsedCache = (ttUsedCache ?? 0) + 1;
+}
+
+// ── History — อ่าน/เขียน Supabase ──
+async function loadTangTangHistory() {
+  const uid = state.user?.id;
+  if (!uid) return;
+  const { data } = await sb.from('tangtang_history')
+    .select('role, content')
+    .eq('user_id', uid)
+    .order('created_at', { ascending: true })
+    .limit(40); // โหลด 40 ข้อความล่าสุด
+  if (!data || data.length === 0) return;
+
+  // render ลงหน้าจอ
+  const box = document.getElementById('tangtang-messages');
+  if (box) box.innerHTML = ''; // เคลียร์ก่อน
+  data.forEach(msg => appendTangTangMsg(msg.role, msg.content, false));
+
+  // ใส่ใน TANGTANG_HISTORY เพื่อส่ง context ให้ AI
+  TANGTANG_HISTORY = data.map(m => ({ role: m.role, content: m.content }));
+}
+
+async function saveTangTangMsg(role, content) {
+  const uid = state.user?.id;
+  if (!uid) return;
+  await sb.from('tangtang_history').insert({ user_id: uid, role, content });
+}
+
+// ── UI helpers ──
+function appendTangTangMsg(role, text, save = false) {
   const box = document.getElementById('tangtang-messages');
   if (!box) return;
   const isUser = role === 'user';
@@ -16505,6 +16563,7 @@ function appendTangTangMsg(role, text) {
   `;
   box.appendChild(wrapper);
   box.scrollTop = box.scrollHeight;
+  if (save) saveTangTangMsg(role, text);
 }
 
 function appendTangTangLoading() {
@@ -16527,56 +16586,15 @@ function appendTangTangLoading() {
   box.scrollTop = box.scrollHeight;
 }
 
-// ═══════════════════════════════════
-// AI ถังถัง — ระบบ limit และ Edge Function
-// ═══════════════════════════════════
-const TANGTANG_URL = 'https://zmshxxmcgbxavzlqmpxd.supabase.co/functions/v1/tangtang-chat';
-const TANGTANG_LIMITS = { monthly: 20, annual: 50, lifetime: 50 };
-
-function getTangTangPlan() {
-  if (!state.user) return 'free';
-  // Admin ได้ lifetime เสมอ
-  if (isAdmin()) return 'lifetime';
-  const subType = state.user?.data?.subscription_type || 'free';
-  if (subType === 'lifetime') return 'lifetime';
-  if (subType === 'annual') return 'annual';
-  if (subType === 'monthly') return 'monthly';
-  if (state.user.is_premium) return 'monthly';
-  return 'free';
-}
-
-function getTangTangLimit() {
-  return TANGTANG_LIMITS[getTangTangPlan()] ?? 0;
-}
-
-function getTangTangUsageKey() {
-  const today = new Date().toISOString().slice(0,10);
-  const uid = state.user?.id ?? 'guest';
-  return `tt_usage_${uid}_${today}`;
-}
-
-function getTangTangUsed() {
-  return parseInt(localStorage.getItem(getTangTangUsageKey()) || '0');
-}
-
-function incrementTangTangUsed() {
-  const key = getTangTangUsageKey();
-  const used = getTangTangUsed() + 1;
-  localStorage.setItem(key, used);
-  return used;
-}
-
-function updateTangTangUsageDisplay() {
+async function updateTangTangUsageDisplay() {
   const plan = getTangTangPlan();
   const limit = getTangTangLimit();
-  const used = getTangTangUsed();
   const display = document.getElementById('tangtang-usage-display');
   if (!display) return;
 
   if (plan === 'free') {
     display.textContent = '🔒 Premium เท่านั้น';
     display.style.color = 'white';
-    // ทำ input เป็น overlay คลิกแล้วเด้ง popup
     const input = document.getElementById('tangtang-input');
     const wrap = document.getElementById('tangtang-input-wrap');
     if (input) {
@@ -16586,40 +16604,68 @@ function updateTangTangUsageDisplay() {
       input.onclick = () => showPaymentModal();
     }
     const btn = document.getElementById('tangtang-send-btn');
-    if (btn) {
-      btn.onclick = () => showPaymentModal();
-      btn.style.background = 'linear-gradient(135deg,#F13596,#ff7b2f)';
-    }
-    if (wrap) {
-      wrap.style.cursor = 'pointer';
-      wrap.onclick = () => showPaymentModal();
-    }
-  } else {
-    const remaining = Math.max(0, limit - used);
-    display.textContent = `เหลือ ${remaining}/${limit} ข้อวันนี้`;
-    display.style.color = 'white';
-    const input = document.getElementById('tangtang-input');
-    if (input) {
-      input.disabled = remaining === 0;
-      input.placeholder = remaining === 0 ? 'ครบ limit วันนี้แล้วค่า มาใหม่พรุ่งนี้นะ 🦊' : 'ถามถังถังได้เลยค่า... 🦊';
-    }
-    const btn = input?.nextElementSibling;
-    if (btn) { btn.disabled = remaining === 0; btn.style.opacity = remaining === 0 ? '0.4' : '1'; }
+    if (btn) { btn.onclick = () => showPaymentModal(); }
+    if (wrap) { wrap.style.cursor = 'pointer'; wrap.onclick = () => showPaymentModal(); }
+    return;
+  }
+
+  const used = await getTangTangUsed();
+  const remaining = Math.max(0, limit - used);
+  display.textContent = `เหลือ ${remaining}/${limit} ข้อวันนี้`;
+  display.style.color = 'white';
+  const input = document.getElementById('tangtang-input');
+  if (input) {
+    input.disabled = remaining === 0;
+    input.readOnly = false;
+    input.style.cursor = 'text';
+    input.onclick = null;
+    input.placeholder = remaining === 0 ? 'ครบ limit วันนี้แล้วค่า มาใหม่พรุ่งนี้นะ 🦊' : 'ถามถังถังได้เลยค่า... 🦊';
+  }
+  const btn = document.getElementById('tangtang-send-btn');
+  if (btn) {
+    btn.disabled = remaining === 0;
+    btn.style.opacity = remaining === 0 ? '0.4' : '1';
+    btn.onclick = () => sendToTangTang();
   }
 }
 
+// ── Init ──
+async function initTangTangChat() {
+  ttUsedCache = null; // reset cache ทุกครั้งที่เปิดหน้า
+  await updateTangTangUsageDisplay();
+
+  if (!tangtangWelcomed) {
+    tangtangWelcomed = true;
+    const plan = getTangTangPlan();
+    if (plan === 'free') {
+      appendTangTangMsg('assistant', 'สวัสดีค่า! ฉันคือถังถัง 🦊✨\n\nฟีเจอร์นี้สำหรับสมาชิก Premium นะคะ\n\nสมัครแพ็กเกจเพื่อคุยกับถังถังได้เลยค่า! 💕');
+    } else {
+      // โหลด history จาก Supabase
+      await loadTangTangHistory();
+      // ถ้าไม่มี history แสดง welcome message
+      if (TANGTANG_HISTORY.length === 0) {
+        const used = await getTangTangUsed();
+        const limit = getTangTangLimit();
+        const remaining = Math.max(0, limit - used);
+        appendTangTangMsg('assistant', `นี่หวา! 你好！ ฉันคือถังถังค่า 🦊✨\n\nวันนี้คุยได้อีก ${remaining} ข้อนะคะ\n\nถามได้เลยเช่น:\n• คำศัพท์จีน ความหมาย พินอิน\n• ประโยคที่อยากรู้\n• ไวยากรณ์จีน\n• ฝึกสนทนาภาษาจีน\n\n加油！สู้ๆ นะคะ! 🌸`);
+      }
+    }
+  } else {
+    // กลับมาหน้านี้อีกครั้ง — reload history ใหม่เสมอ
+    if (getTangTangPlan() !== 'free') {
+      await loadTangTangHistory();
+    }
+  }
+}
+
+// ── Send ──
 async function sendToTangTang() {
   const plan = getTangTangPlan();
   const limit = getTangTangLimit();
 
-  // เช็ค free user
-  if (plan === 'free' || limit === 0) {
-    showPaymentModal();
-    return;
-  }
+  if (plan === 'free' || limit === 0) { showPaymentModal(); return; }
 
-  // เช็ค limit
-  const used = getTangTangUsed();
+  const used = await getTangTangUsed();
   if (used >= limit) {
     appendTangTangMsg('assistant', `ถังถังคุยได้ครบ ${limit} ข้อแล้วสำหรับวันนี้ค่า 🦊\nพรุ่งนี้มาคุยกันใหม่ได้เลยนะคะ! ✨`);
     return;
@@ -16631,21 +16677,18 @@ async function sendToTangTang() {
   input.value = '';
   input.focus();
 
-  appendTangTangMsg('user', text);
+  appendTangTangMsg('user', text, true); // save=true → บันทึก Supabase
   TANGTANG_HISTORY.push({ role: 'user', content: text });
   appendTangTangLoading();
 
   try {
     const res = await fetch(TANGTANG_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${SUPABASE_KEY}`
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_KEY}` },
       body: JSON.stringify({
         message: text,
         history: TANGTANG_HISTORY.slice(-10),
-        plan: plan,
+        plan,
         userId: state.user?.id ?? 'guest'
       })
     });
@@ -16661,11 +16704,10 @@ async function sendToTangTang() {
 
     const reply = data.reply || 'ขอโทษนะคะ ลองใหม่ได้เลยค่า 🦊';
     TANGTANG_HISTORY.push({ role: 'assistant', content: reply });
-    appendTangTangMsg('assistant', reply);
+    appendTangTangMsg('assistant', reply, true); // save=true → บันทึก Supabase
 
-    // นับ usage
-    incrementTangTangUsed();
-    updateTangTangUsageDisplay();
+    await incrementTangTangUsed();
+    await updateTangTangUsageDisplay();
 
   } catch(e) {
     document.getElementById('tangtang-loading')?.remove();
