@@ -313,6 +313,8 @@ body {
 /* ── SCREENS ── */
 .screen { display: none; min-height: calc(100vh - 56px - 60px); padding-bottom: 80px; }
 .screen.active { display: block; }
+/* chat screen overrides — needs flex column layout */
+#screen-tangtang-chat.active { display: flex !important; padding-bottom: 0 !important; min-height: 0 !important; }
 
 /* ── HOME ── */
 .home-header {
@@ -2046,23 +2048,182 @@ body {
 
   <!-- ADMIN SCREEN -->
   <!-- TANGTANG CHAT SCREEN -->
+  <style>
+    #screen-tangtang-chat {
+      display: none;
+      flex-direction: column;
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      bottom: 62px;
+      overflow: hidden;
+      background: #FFF0F8;
+      z-index: 20;
+    }
+    #screen-tangtang-chat.active {
+      display: flex;
+    }
+    .tt-header {
+      background: linear-gradient(135deg, #6b1a6b, #F13596);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .tt-header-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.22);
+      padding: 4px;
+      object-fit: contain;
+      flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    .tt-header-info { flex: 1; }
+    .tt-header-name { font-size: 15px; font-weight: 800; color: white; line-height: 1.2; }
+    .tt-header-sub { font-size: 11px; color: rgba(255,255,255,0.8); margin-top: 2px; }
+    .tt-usage-pill {
+      background: rgba(255,255,255,0.25);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: white;
+      white-space: nowrap;
+      flex-shrink: 0;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    #tangtang-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      -webkit-overflow-scrolling: touch;
+    }
+    /* bubble wrapper */
+    .tt-msg-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+    .tt-msg-row.user { flex-direction: row-reverse; }
+    .tt-msg-avatar {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: #fce4f3;
+      padding: 2px;
+      object-fit: contain;
+      flex-shrink: 0;
+      align-self: flex-end;
+    }
+    .tt-bubble {
+      max-width: 72%;
+      padding: 11px 15px;
+      font-size: 14px;
+      line-height: 1.75;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .tt-bubble.assistant {
+      background: white;
+      color: var(--ink);
+      border-radius: 18px 18px 18px 4px;
+      box-shadow: 0 2px 10px rgba(241,53,150,0.08);
+      border: 1px solid #f5d8ec;
+    }
+    .tt-bubble.user {
+      background: linear-gradient(135deg, #F13596, #d4208a);
+      color: white;
+      border-radius: 18px 18px 4px 18px;
+      box-shadow: 0 3px 14px rgba(241,53,150,0.3);
+    }
+    /* timestamp subtle */
+    .tt-time {
+      font-size: 10px;
+      color: #c0a0b0;
+      margin-top: 3px;
+      text-align: right;
+    }
+    .tt-msg-row.assistant .tt-time { text-align: left; padding-left: 38px; }
+    /* input area */
+    #tangtang-input-wrap {
+      flex-shrink: 0;
+      background: white;
+      border-top: 1px solid #f0d8ec;
+      padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #tangtang-input {
+      flex: 1;
+      padding: 11px 16px;
+      border: 1.5px solid #f0d0e0;
+      border-radius: 24px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      background: #FFF8FC;
+      color: var(--ink);
+      transition: border-color .2s, background .2s;
+    }
+    #tangtang-input:focus {
+      border-color: #F13596;
+      background: white;
+    }
+    #tangtang-send-btn {
+      background: linear-gradient(135deg, #F13596, #e0206e);
+      border: none;
+      border-radius: 50%;
+      width: 44px; height: 44px;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 12px rgba(241,53,150,0.35);
+      transition: transform .15s, box-shadow .15s;
+    }
+    #tangtang-send-btn:active { transform: scale(0.92); box-shadow: 0 1px 6px rgba(241,53,150,0.2); }
+    #tangtang-limit-bar {
+      flex-shrink: 0;
+      background: #fff5fb;
+      border-top: 1px solid #f0d0e0;
+      padding: 5px 16px;
+      font-size: 11px;
+      color: #9a7a8a;
+      text-align: center;
+    }
+  </style>
+
   <div id="screen-tangtang-chat" class="screen">
-    <div style="background:linear-gradient(135deg,#6b1a6b,#F13596);padding:16px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:30">
-      <img src="https://avajarshika.github.io/tangtang/tangtang.png" alt="TangTang" style="width:44px;height:44px;object-fit:contain;border-radius:50%;background:rgba(255,255,255,0.2);padding:4px">
-      <div style="flex:1">
-        <div style="font-size:15px;font-weight:800;color:white">ถังถัง 🦊</div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.8)">ผู้ช่วยสอนภาษาจีน AI 🦊</div>
+    <!-- Header -->
+    <div class="tt-header">
+      <img src="https://avajarshika.github.io/tangtang/tangtang.png" alt="TangTang" class="tt-header-avatar">
+      <div class="tt-header-info">
+        <div class="tt-header-name">ถังถัง 🦊</div>
+        <div class="tt-header-sub">ผู้ช่วยสอนภาษาจีน AI</div>
       </div>
+      <div class="tt-usage-pill" id="tangtang-usage-display">กำลังโหลด...</div>
     </div>
-    <div id="tangtang-info-bar" style="background:#fff5fb;border:1.5px solid #f0d0e0;border-radius:12px;margin:12px 16px 0;padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
-      <div style="font-size:12px;color:#9a7a8a">🦊 ถังถัง AI</div>
-      <div id="tangtang-usage-display" style="font-size:12px;font-weight:600;color:#F13596">กำลังโหลด...</div>
-    </div>
-    <div id="tangtang-messages" style="padding:16px;display:flex;flex-direction:column;gap:12px;padding-bottom:100px;min-height:calc(100vh - 260px)"></div>
-    <div id="tangtang-limit-bar" style="background:#fff5fb;border-top:1px solid #f0d0e0;padding:6px 16px;font-size:11px;color:#9a7a8a;text-align:center;display:none"></div>
-    <div id="tangtang-input-wrap" style="position:fixed;bottom:60px;left:0;right:0;background:white;border-top:1px solid var(--paper3);padding:10px 12px;display:flex;gap:8px;z-index:30">
-      <input type="text" id="tangtang-input" placeholder="ถามถังถังได้เลยค่า... 🦊" style="flex:1;padding:12px 14px;border:1.5px solid #f0d0e0;border-radius:24px;font-size:14px;font-family:inherit;outline:none;background:white" onkeydown="if(event.key==='Enter')sendToTangTang()">
-      <button onclick="sendToTangTang()" id="tangtang-send-btn" style="background:linear-gradient(135deg,#F13596,#ff7b2f);border:none;border-radius:50%;width:44px;height:44px;color:white;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center">↑</button>
+
+    <!-- Messages -->
+    <div id="tangtang-messages"></div>
+
+    <!-- Limit bar (hidden by default) -->
+    <div id="tangtang-limit-bar" style="display:none"></div>
+
+    <!-- Input bar — sits inside the flex column, no fixed positioning -->
+    <div id="tangtang-input-wrap">
+      <input type="text" id="tangtang-input" placeholder="ถามถังถังได้เลยค่า... 🦊" onkeydown="if(event.key==='Enter')sendToTangTang()">
+      <button onclick="sendToTangTang()" id="tangtang-send-btn">↑</button>
     </div>
   </div>
 
@@ -8706,7 +8867,14 @@ function goScreen(s) {
   if (s === 'play') initPlay();
   if (s === 'lessons-hub') { renderLessonsHub(); renderHubVocab(); }
   if (s === 'quiz') initMainQuiz();
-  if (s === 'tangtang-chat') initTangTangChat();
+  if (s === 'tangtang-chat') {
+    const nav = document.querySelector('.bottom-nav');
+    if (nav) {
+      const navH = nav.getBoundingClientRect().height;
+      document.getElementById('screen-tangtang-chat').style.bottom = navH + 'px';
+    }
+    initTangTangChat();
+  }
   if (s === 'pricing') renderPricing();
   if (s === 'comm-hub') renderCommHub();
   updateTopbar();
@@ -16329,15 +16497,13 @@ function appendTangTangMsg(role, text) {
   const box = document.getElementById('tangtang-messages');
   if (!box) return;
   const isUser = role === 'user';
-  const div = document.createElement('div');
-  div.style.cssText = `display:flex;gap:8px;align-items:flex-end;${isUser ? 'flex-direction:row-reverse' : ''}`;
-  div.innerHTML = `
-    ${!isUser ? `<img src="https://avajarshika.github.io/tangtang/tangtang.png" style="width:32px;height:32px;object-fit:contain;flex-shrink:0;border-radius:50%;background:#fce4f3;padding:2px">` : ''}
-    <div style="max-width:78%;padding:12px 14px;border-radius:${isUser?'18px 18px 4px 18px':'18px 18px 18px 4px'};background:${isUser?'#F13596':'white'};color:${isUser?'white':'var(--ink)'};font-size:14px;line-height:1.7;box-shadow:0 2px 8px rgba(0,0,0,0.08);white-space:pre-wrap;border:${isUser?'none':'1px solid var(--paper3)'}">
-      ${text}
-    </div>
+  const wrapper = document.createElement('div');
+  wrapper.className = 'tt-msg-row ' + (isUser ? 'user' : 'assistant');
+  wrapper.innerHTML = `
+    ${!isUser ? `<img src="https://avajarshika.github.io/tangtang/tangtang.png" class="tt-msg-avatar" alt="">` : ''}
+    <div class="tt-bubble ${isUser ? 'user' : 'assistant'}">${text}</div>
   `;
-  box.appendChild(div);
+  box.appendChild(wrapper);
   box.scrollTop = box.scrollHeight;
 }
 
@@ -16346,10 +16512,10 @@ function appendTangTangLoading() {
   if (!box) return;
   const div = document.createElement('div');
   div.id = 'tangtang-loading';
-  div.style.cssText = 'display:flex;gap:8px;align-items:flex-end';
+  div.className = 'tt-msg-row assistant';
   div.innerHTML = `
-    <img src="https://avajarshika.github.io/tangtang/tangtang.png" style="width:32px;height:32px;object-fit:contain;flex-shrink:0;border-radius:50%;background:#fce4f3;padding:2px">
-    <div style="padding:12px 16px;border-radius:18px 18px 18px 4px;background:white;border:1px solid var(--paper3);box-shadow:0 2px 8px rgba(0,0,0,0.08)">
+    <img src="https://avajarshika.github.io/tangtang/tangtang.png" class="tt-msg-avatar" alt="">
+    <div class="tt-bubble assistant" style="padding:12px 16px">
       <div style="display:flex;gap:5px;align-items:center">
         <div style="width:8px;height:8px;background:#F13596;border-radius:50%;animation:bounce 1s infinite"></div>
         <div style="width:8px;height:8px;background:#F13596;border-radius:50%;animation:bounce 1s 0.2s infinite"></div>
@@ -16409,7 +16575,7 @@ function updateTangTangUsageDisplay() {
 
   if (plan === 'free') {
     display.textContent = '🔒 Premium เท่านั้น';
-    display.style.color = '#9a7a8a';
+    display.style.color = 'white';
     // ทำ input เป็น overlay คลิกแล้วเด้ง popup
     const input = document.getElementById('tangtang-input');
     const wrap = document.getElementById('tangtang-input-wrap');
@@ -16431,7 +16597,7 @@ function updateTangTangUsageDisplay() {
   } else {
     const remaining = Math.max(0, limit - used);
     display.textContent = `เหลือ ${remaining}/${limit} ข้อวันนี้`;
-    display.style.color = remaining > 5 ? '#F13596' : remaining > 0 ? '#f57c00' : '#e53935';
+    display.style.color = 'white';
     const input = document.getElementById('tangtang-input');
     if (input) {
       input.disabled = remaining === 0;
