@@ -2060,9 +2060,9 @@ body {
     </div>
     <div id="tangtang-messages" style="padding:16px;display:flex;flex-direction:column;gap:12px;padding-bottom:100px;min-height:calc(100vh - 260px)"></div>
     <div id="tangtang-limit-bar" style="background:#fff5fb;border-top:1px solid #f0d0e0;padding:6px 16px;font-size:11px;color:#9a7a8a;text-align:center;display:none"></div>
-    <div style="position:fixed;bottom:60px;left:0;right:0;background:white;border-top:1px solid var(--paper3);padding:10px 12px;display:flex;gap:8px;z-index:30">
+    <div id="tangtang-input-wrap" style="position:fixed;bottom:60px;left:0;right:0;background:white;border-top:1px solid var(--paper3);padding:10px 12px;display:flex;gap:8px;z-index:30">
       <input type="text" id="tangtang-input" placeholder="ถามถังถังได้เลยค่า... 🦊" style="flex:1;padding:12px 14px;border:1.5px solid #f0d0e0;border-radius:24px;font-size:14px;font-family:inherit;outline:none;background:white" onkeydown="if(event.key==='Enter')sendToTangTang()">
-      <button onclick="sendToTangTang()" style="background:linear-gradient(135deg,#F13596,#ff7b2f);border:none;border-radius:50%;width:44px;height:44px;color:white;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center">↑</button>
+      <button onclick="sendToTangTang()" id="tangtang-send-btn" style="background:linear-gradient(135deg,#F13596,#ff7b2f);border:none;border-radius:50%;width:44px;height:44px;color:white;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center">↑</button>
     </div>
   </div>
 
@@ -16369,6 +16369,8 @@ const TANGTANG_LIMITS = { monthly: 20, annual: 50, lifetime: 50 };
 
 function getTangTangPlan() {
   if (!state.user) return 'free';
+  // Admin ได้ lifetime เสมอ
+  if (isAdmin()) return 'lifetime';
   const subType = state.user?.data?.subscription_type || 'free';
   if (subType === 'lifetime') return 'lifetime';
   if (subType === 'annual') return 'annual';
@@ -16408,11 +16410,24 @@ function updateTangTangUsageDisplay() {
   if (plan === 'free') {
     display.textContent = '🔒 Premium เท่านั้น';
     display.style.color = '#9a7a8a';
-    // ปิด input
+    // ทำ input เป็น overlay คลิกแล้วเด้ง popup
     const input = document.getElementById('tangtang-input');
-    if (input) { input.disabled = true; input.placeholder = 'สำหรับสมาชิก Premium เท่านั้น 🔒'; }
-    const btn = input?.nextElementSibling;
-    if (btn) { btn.disabled = true; btn.style.opacity = '0.4'; }
+    const wrap = document.getElementById('tangtang-input-wrap');
+    if (input) {
+      input.readOnly = true;
+      input.placeholder = '🔒 สมัคร Premium เพื่อคุยกับถังถัง';
+      input.style.cursor = 'pointer';
+      input.onclick = () => showPaymentModal();
+    }
+    const btn = document.getElementById('tangtang-send-btn');
+    if (btn) {
+      btn.onclick = () => showPaymentModal();
+      btn.style.background = 'linear-gradient(135deg,#F13596,#ff7b2f)';
+    }
+    if (wrap) {
+      wrap.style.cursor = 'pointer';
+      wrap.onclick = () => showPaymentModal();
+    }
   } else {
     const remaining = Math.max(0, limit - used);
     display.textContent = `เหลือ ${remaining}/${limit} ข้อวันนี้`;
