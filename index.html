@@ -2054,17 +2054,15 @@ body {
         <div style="font-size:11px;color:rgba(255,255,255,0.8)">ผู้ช่วยสอนภาษาจีน AI 🦊</div>
       </div>
     </div>
-    <div style="background:#fff3e0;border:1.5px solid #ff9800;border-radius:12px;margin:16px 16px 0;padding:14px;display:flex;gap:10px;align-items:flex-start">
-      <div style="font-size:22px">🚧</div>
-      <div>
-        <div style="font-size:13px;font-weight:800;color:#e65100">ระบบกำลังพัฒนา</div>
-        <div style="font-size:12px;color:#bf360c;margin-top:4px;line-height:1.5">ยังไม่สามารถใช้งานได้ในขณะนี้ค่า จะเปิดให้บริการเร็วๆ นี้นะคะ 🦊✨</div>
-      </div>
+    <div id="tangtang-info-bar" style="background:#fff5fb;border:1.5px solid #f0d0e0;border-radius:12px;margin:12px 16px 0;padding:10px 14px;display:flex;justify-content:space-between;align-items:center">
+      <div style="font-size:12px;color:#9a7a8a">🦊 ถังถัง AI</div>
+      <div id="tangtang-usage-display" style="font-size:12px;font-weight:600;color:#F13596">กำลังโหลด...</div>
     </div>
     <div id="tangtang-messages" style="padding:16px;display:flex;flex-direction:column;gap:12px;padding-bottom:100px;min-height:calc(100vh - 260px)"></div>
-    <div style="position:fixed;bottom:60px;left:0;right:0;background:white;border-top:1px solid var(--paper3);padding:10px 12px;display:flex;gap:8px;z-index:30;opacity:0.5;pointer-events:none">
-      <input type="text" placeholder="ระบบกำลังพัฒนา ยังไม่สามารถใช้งานได้..." style="flex:1;padding:12px 14px;border:1.5px solid var(--paper3);border-radius:24px;font-size:14px;font-family:inherit;outline:none;background:#f5f5f5" disabled>
-      <button style="background:#ccc;border:none;border-radius:50%;width:44px;height:44px;color:white;font-size:20px;cursor:not-allowed;flex-shrink:0;display:flex;align-items:center;justify-content:center" disabled>↑</button>
+    <div id="tangtang-limit-bar" style="background:#fff5fb;border-top:1px solid #f0d0e0;padding:6px 16px;font-size:11px;color:#9a7a8a;text-align:center;display:none"></div>
+    <div style="position:fixed;bottom:60px;left:0;right:0;background:white;border-top:1px solid var(--paper3);padding:10px 12px;display:flex;gap:8px;z-index:30">
+      <input type="text" id="tangtang-input" placeholder="ถามถังถังได้เลยค่า... 🦊" style="flex:1;padding:12px 14px;border:1.5px solid #f0d0e0;border-radius:24px;font-size:14px;font-family:inherit;outline:none;background:white" onkeydown="if(event.key==='Enter')sendToTangTang()">
+      <button onclick="sendToTangTang()" style="background:linear-gradient(135deg,#F13596,#ff7b2f);border:none;border-radius:50%;width:44px;height:44px;color:white;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center">↑</button>
     </div>
   </div>
 
@@ -16312,9 +16310,18 @@ const TANGTANG_HISTORY = [];
 let tangtangWelcomed = false;
 
 function initTangTangChat() {
+  updateTangTangUsageDisplay();
   if (!tangtangWelcomed) {
     tangtangWelcomed = true;
-    appendTangTangMsg('assistant', 'นี่หวา! 你好！ ฉันคือถังถังค่า 🦊✨\n\nถามฉันได้เลยนะคะ เช่น:\n• คำศัพท์จีน ความหมาย พินอิน\n• ประโยคที่อยากรู้\n• ไวยากรณ์จีน\n• วิธีออกเสียงให้ถูกต้อง\n\n加油！สู้ๆ นะคะ! 🌸');
+    const plan = getTangTangPlan();
+    if (plan === 'free') {
+      appendTangTangMsg('assistant', 'สวัสดีค่า! ฉันคือถังถัง 🦊✨\n\nฟีเจอร์นี้สำหรับสมาชิก Premium นะคะ\n\nสมัครแพ็กเกจเพื่อคุยกับถังถังได้เลยค่า! 💕');
+    } else {
+      const limit = getTangTangLimit();
+      const used = getTangTangUsed();
+      const remaining = Math.max(0, limit - used);
+      appendTangTangMsg('assistant', `นี่หวา! 你好！ ฉันคือถังถังค่า 🦊✨\n\nวันนี้คุยได้อีก ${remaining} ข้อนะคะ\n\nถามได้เลยเช่น:\n• คำศัพท์จีน ความหมาย พินอิน\n• ประโยคที่อยากรู้\n• ไวยากรณ์จีน\n• ฝึกสนทนาภาษาจีน\n\n加油！สู้ๆ นะคะ! 🌸`);
+    }
   }
 }
 
@@ -16354,9 +16361,91 @@ function appendTangTangLoading() {
   box.scrollTop = box.scrollHeight;
 }
 
+// ═══════════════════════════════════
+// AI ถังถัง — ระบบ limit และ Edge Function
+// ═══════════════════════════════════
+const TANGTANG_URL = 'https://zmshxxmcgbxavzlqmpxd.supabase.co/functions/v1/tangtang-chat';
+const TANGTANG_LIMITS = { monthly: 20, annual: 50, lifetime: 50 };
+
+function getTangTangPlan() {
+  if (!state.user) return 'free';
+  const subType = state.user?.data?.subscription_type || 'free';
+  if (subType === 'lifetime') return 'lifetime';
+  if (subType === 'annual') return 'annual';
+  if (subType === 'monthly') return 'monthly';
+  if (state.user.is_premium) return 'monthly';
+  return 'free';
+}
+
+function getTangTangLimit() {
+  return TANGTANG_LIMITS[getTangTangPlan()] ?? 0;
+}
+
+function getTangTangUsageKey() {
+  const today = new Date().toISOString().slice(0,10);
+  const uid = state.user?.id ?? 'guest';
+  return `tt_usage_${uid}_${today}`;
+}
+
+function getTangTangUsed() {
+  return parseInt(localStorage.getItem(getTangTangUsageKey()) || '0');
+}
+
+function incrementTangTangUsed() {
+  const key = getTangTangUsageKey();
+  const used = getTangTangUsed() + 1;
+  localStorage.setItem(key, used);
+  return used;
+}
+
+function updateTangTangUsageDisplay() {
+  const plan = getTangTangPlan();
+  const limit = getTangTangLimit();
+  const used = getTangTangUsed();
+  const display = document.getElementById('tangtang-usage-display');
+  if (!display) return;
+
+  if (plan === 'free') {
+    display.textContent = '🔒 Premium เท่านั้น';
+    display.style.color = '#9a7a8a';
+    // ปิด input
+    const input = document.getElementById('tangtang-input');
+    if (input) { input.disabled = true; input.placeholder = 'สำหรับสมาชิก Premium เท่านั้น 🔒'; }
+    const btn = input?.nextElementSibling;
+    if (btn) { btn.disabled = true; btn.style.opacity = '0.4'; }
+  } else {
+    const remaining = Math.max(0, limit - used);
+    display.textContent = `เหลือ ${remaining}/${limit} ข้อวันนี้`;
+    display.style.color = remaining > 5 ? '#F13596' : remaining > 0 ? '#f57c00' : '#e53935';
+    const input = document.getElementById('tangtang-input');
+    if (input) {
+      input.disabled = remaining === 0;
+      input.placeholder = remaining === 0 ? 'ครบ limit วันนี้แล้วค่า มาใหม่พรุ่งนี้นะ 🦊' : 'ถามถังถังได้เลยค่า... 🦊';
+    }
+    const btn = input?.nextElementSibling;
+    if (btn) { btn.disabled = remaining === 0; btn.style.opacity = remaining === 0 ? '0.4' : '1'; }
+  }
+}
+
 async function sendToTangTang() {
+  const plan = getTangTangPlan();
+  const limit = getTangTangLimit();
+
+  // เช็ค free user
+  if (plan === 'free' || limit === 0) {
+    showPaymentModal();
+    return;
+  }
+
+  // เช็ค limit
+  const used = getTangTangUsed();
+  if (used >= limit) {
+    appendTangTangMsg('assistant', `ถังถังคุยได้ครบ ${limit} ข้อแล้วสำหรับวันนี้ค่า 🦊\nพรุ่งนี้มาคุยกันใหม่ได้เลยนะคะ! ✨`);
+    return;
+  }
+
   const input = document.getElementById('tangtang-input');
-  const text = input.value.trim();
+  const text = input?.value.trim();
   if (!text) return;
   input.value = '';
   input.focus();
@@ -16366,25 +16455,37 @@ async function sendToTangTang() {
   appendTangTangLoading();
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch(TANGTANG_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'anthropic-dangerous-direct-browser-access': 'true' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPABASE_KEY}`
+      },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: `คุณคือ "ถังถัง" จิ้งจอกน้อยสีชมพูน่ารัก ผู้ช่วยสอนภาษาจีนใน TangTang Chinese แอปสำหรับคนไทย
-พูดภาษาไทยเป็นหลัก ใช้คำลงท้าย "ค่า" ร่าเริง น่ารัก กระตือรือร้น ใส่ emoji เล็กน้อย
-เมื่อตอบเรื่องภาษาจีนให้แสดง: ตัวอักษรจีน (พินอิน) = ความหมายไทย
-ถ้าถามนอกเรื่องภาษาจีน ตอบสั้นๆ แล้วดึงกลับมาเรื่องภาษาจีน
-ห้ามตอบยาวเกินไป ตอบกระชับ เข้าใจง่าย`,
-        messages: TANGTANG_HISTORY.slice(-10)
+        message: text,
+        history: TANGTANG_HISTORY.slice(-10),
+        plan: plan,
+        userId: state.user?.id ?? 'guest'
       })
     });
+
     const data = await res.json();
     document.getElementById('tangtang-loading')?.remove();
-    const reply = data.content?.[0]?.text || 'ขอโทษนะคะ ลองใหม่ได้เลยค่า 🦊';
+
+    if (data.error === 'no_access') {
+      appendTangTangMsg('assistant', data.message);
+      showPaymentModal();
+      return;
+    }
+
+    const reply = data.reply || 'ขอโทษนะคะ ลองใหม่ได้เลยค่า 🦊';
     TANGTANG_HISTORY.push({ role: 'assistant', content: reply });
     appendTangTangMsg('assistant', reply);
+
+    // นับ usage
+    incrementTangTangUsed();
+    updateTangTangUsageDisplay();
+
   } catch(e) {
     document.getElementById('tangtang-loading')?.remove();
     appendTangTangMsg('assistant', 'ขอโทษนะคะ เชื่อมต่อไม่ได้ตอนนี้ ลองใหม่อีกครั้งได้เลยค่า 🦊');
