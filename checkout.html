@@ -274,43 +274,24 @@ body { font-family: 'DM Sans', 'Noto Sans Thai', sans-serif; background: var(--p
 
       <!-- PAYMENT METHOD -->
       <div class="section-title" style="margin-top:8px">💳 วิธีการชำระเงิน</div>
-      <div class="pay-opt selected" id="pay-opt-qr" onclick="switchPayment('qr')">
-        <span style="font-size:28px">📱</span>
-        <div style="flex:1">
-          <div style="font-size:14px;font-weight:700">QR พร้อมเพย์</div>
-          <div style="font-size:12px;color:var(--ink3);margin-top:1px">สแกนจ่ายได้เลย รองรับทุกธนาคาร</div>
-        </div>
-        <span style="background:#dcfce7;color:#16a34a;font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px">แนะนำ</span>
-      </div>
-      <div class="pay-opt" id="pay-opt-bank" onclick="switchPayment('bank')">
+      <div class="pay-opt selected" id="pay-opt-bank" style="border-color:var(--red);background:var(--red-light)">
         <span style="font-size:28px">🏦</span>
         <div style="flex:1">
           <div style="font-size:14px;font-weight:700">โอนเข้าบัญชี</div>
           <div style="font-size:12px;color:var(--ink3);margin-top:1px">ธนาคารไทยพาณิชย์ (SCB)</div>
         </div>
-      </div>
-
-      <!-- QR Section -->
-      <div id="payment-qr-section">
-        <div class="qr-section">
-          <div class="qr-img">
-            <img src="https://avajarshika.github.io/tangtang/qr-payment.png" alt="QR PromptPay" onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=170x170&data=0836423619'">
-          </div>
-          <div style="font-size:15px;font-weight:800;color:var(--ink);margin-bottom:2px">จารชิกา แก้ววรรณา</div>
-          <div style="font-size:22px;font-weight:900;color:var(--red);letter-spacing:1px">083-642-3619</div>
-          <div style="font-size:12px;color:var(--ink3);margin-top:4px">PromptPay · ยอดชำระ <span id="qr-amount" style="font-weight:800;color:var(--red)">฿990</span></div>
-        </div>
+        <span style="background:#dcfce7;color:#16a34a;font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px">แนะนำ</span>
       </div>
 
       <!-- Bank Section -->
-      <div id="payment-bank-section" style="display:none;margin-top:12px">
+      <div id="payment-bank-section" style="margin-top:12px">
         <div style="background:var(--blue-light);border:1.5px solid #b8cef0;border-radius:14px;padding:16px">
           <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:12px">🏦 ข้อมูลบัญชีธนาคาร</div>
           <div style="font-size:13px;color:var(--ink);margin-bottom:6px;display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #dce8f8"><span style="color:var(--ink3)">ธนาคาร</span><b>ไทยพาณิชย์ (SCB)</b></div>
           <div style="font-size:13px;color:var(--ink);margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #dce8f8">
             <span style="color:var(--ink3)">เลขบัญชี</span>
             <div style="display:flex;align-items:center;gap:8px">
-              <b style="color:var(--blue);letter-spacing:1px" id="bank-acc-num">283-218-3319</b>
+              <b style="color:var(--blue);letter-spacing:1px" id="bank-acc-num">557-283-5397</b>
               <button onclick="copyBankAcc()" id="copy-acc-btn" style="padding:3px 10px;background:#f0f0f0;border:1px solid #ccc;border-radius:8px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer">คัดลอก</button>
             </div>
           </div>
@@ -500,7 +481,6 @@ function selectPackage(type) {
   document.getElementById('summary-pkg-name').textContent = pkg.label;
   document.getElementById('summary-pkg-desc').textContent = pkg.desc + ' · 🤖 AI ' + pkg.ai;
   document.getElementById('summary-price').textContent = '฿' + pkg.price;
-  document.getElementById('qr-amount').textContent = '฿' + pkg.price;
   document.getElementById('bank-amount').textContent = '฿' + pkg.price;
   document.getElementById('btn-price').textContent = '฿' + pkg.price;
 }
@@ -647,22 +627,8 @@ async function submitOrder() {
   document.getElementById('success-overlay').classList.add('show');
 }
 
-function switchPayment(type) {
-  const qrOpt   = document.getElementById('pay-opt-qr');
-  const bankOpt = document.getElementById('pay-opt-bank');
-  const qrSec   = document.getElementById('payment-qr-section');
-  const bankSec = document.getElementById('payment-bank-section');
-  if (type === 'qr') {
-    qrOpt.classList.add('selected'); bankOpt.classList.remove('selected');
-    qrSec.style.display = 'block';  bankSec.style.display = 'none';
-  } else {
-    bankOpt.classList.add('selected'); qrOpt.classList.remove('selected');
-    qrSec.style.display = 'none';      bankSec.style.display = 'block';
-  }
-}
-
 function copyBankAcc() {
-  navigator.clipboard.writeText('2832183319').then(() => {
+  navigator.clipboard.writeText('5572835397').then(() => {
     const btn = document.getElementById('copy-acc-btn');
     if (btn) { btn.textContent = '✅ คัดลอกแล้ว!'; setTimeout(() => btn.textContent = 'คัดลอก', 2000); }
   });
