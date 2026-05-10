@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>นโยบายความเป็นส่วนตัว — TangTang Chinese</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #F13596;
+  --red-light: #FFF0F8;
+  --purple: #6b1a6b;
+  --ink: #2D1A24;
+  --ink2: #5C3D4E;
+  --ink3: #8C6B7A;
+  --paper: #FFF8FC;
+  --paper2: #FFEDF6;
+  --paper3: #F5C6E0;
+  --green: #1a6b3a;
+  --green-light: #e8f4ed;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', 'Noto Sans Thai', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.8;
+}
+.topbar {
+  background: white;
+  border-bottom: 1px solid var(--paper3);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 2px 12px rgba(241,53,150,.06);
+}
+.logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--red);
+  text-decoration: none;
+}
+.back-btn {
+  font-size: 13px;
+  color: var(--ink3);
+  text-decoration: none;
+}
+.back-btn:hover { color: var(--red); }
+.container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+.hero {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 32px 24px;
+  background: linear-gradient(135deg, var(--red-light), #f8e0f2);
+  border-radius: 20px;
+  border: 1px solid var(--paper3);
+}
+.hero-icon { font-size: 48px; margin-bottom: 12px; }
+.hero h1 {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.hero p {
+  font-size: 14px;
+  color: var(--ink3);
+  line-height: 1.6;
+}
+.updated {
+  display: inline-block;
+  background: var(--green-light);
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-top: 8px;
+}
+.section {
+  background: white;
+  border: 1px solid var(--paper3);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--paper3);
+}
+.section-num {
+  width: 32px;
+  height: 32px;
+  background: var(--red);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.section-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.section p {
+  font-size: 14px;
+  color: var(--ink2);
+  line-height: 1.9;
+  margin-bottom: 10px;
+}
+.section p:last-child { margin-bottom: 0; }
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 8px;
+}
+.data-table th {
+  background: var(--red-light);
+  color: var(--red);
+  font-weight: 700;
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 2px solid var(--paper3);
+}
+.data-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--paper3);
+  color: var(--ink2);
+  vertical-align: top;
+  line-height: 1.7;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:nth-child(even) td { background: var(--paper); }
+.rights-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 8px;
+}
+@media (max-width: 600px) { .rights-grid { grid-template-columns: 1fr; } }
+.right-item {
+  background: var(--paper);
+  border: 1px solid var(--paper3);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.right-icon { font-size: 20px; margin-bottom: 4px; }
+.right-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+.right-desc { font-size: 12px; color: var(--ink3); line-height: 1.5; }
+.highlight-box {
+  background: var(--green-light);
+  border: 1px solid #b2d8c0;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--green);
+  line-height: 1.7;
+  margin-top: 10px;
+}
+.warning-box {
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #7a5c00;
+  line-height: 1.7;
+  margin-top: 10px;
+}
+.contact-card {
+  background: linear-gradient(135deg, var(--purple), #8b2a8b);
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  color: white;
+  margin-top: 8px;
+}
+.contact-card h3 {
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+.contact-item {
+  font-size: 14px;
+  margin-bottom: 8px;
+  opacity: 0.9;
+}
+.contact-item a {
+  color: white;
+  font-weight: 700;
+}
+.pdpa-badge {
+  text-align: center;
+  margin-top: 32px;
+  padding: 20px;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid var(--paper3);
+}
+.pdpa-badge p {
+  font-size: 13px;
+  color: var(--ink3);
+  margin-top: 8px;
+  line-height: 1.6;
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">← กลับหน้าหลัก</a>
+  <a href="index.html" class="logo">糖糖中文</a>
+  <div style="font-size:12px;color:var(--ink3)">Privacy Policy</div>
+</div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-icon">🔐</div>
+    <h1>นโยบายความเป็นส่วนตัว</h1>
+    <p>TangTang Chinese ให้ความสำคัญกับความเป็นส่วนตัวของคุณ<br>เราโปร่งใสเรื่องข้อมูลที่เก็บและวิธีที่นำไปใช้</p>
+    <span class="updated">✅ อัปเดตล่าสุด: พฤษภาคม 2568</span>
+  </div>
+
+  <!-- 1. ใครเป็นผู้ควบคุมข้อมูล -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title">ผู้ควบคุมข้อมูลส่วนบุคคล</div>
+    </div>
+    <p>บริการ <strong>TangTang Chinese (糖糖中文)</strong> ดำเนินการโดยบุคคลธรรมดา ในฐานะผู้พัฒนาและให้บริการแพลตฟอร์มเรียนภาษาจีนออนไลน์</p>
+    <p>หากมีข้อสงสัยเกี่ยวกับการใช้ข้อมูลส่วนบุคคล สามารถติดต่อได้ที่ LINE OA: <strong>@ava11</strong> หรืออีเมลที่ระบุด้านล่าง</p>
+  </div>
+
+  <!-- 2. ข้อมูลที่เก็บ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title">ข้อมูลส่วนบุคคลที่เราเก็บรวบรวม</div>
+    </div>
+    <p>เราเก็บข้อมูลเท่าที่จำเป็นสำหรับการให้บริการเท่านั้น ดังนี้:</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ประเภทข้อมูล</th>
+          <th>รายละเอียด</th>
+          <th>วัตถุประสงค์</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>ข้อมูลบัญชี</strong></td>
+          <td>ชื่อ-นามสกุล, อีเมล, เบอร์โทรศัพท์, รหัสผ่าน (เข้ารหัสแล้ว)</td>
+          <td>สมัครและเข้าสู่ระบบ</td>
+        </tr>
+        <tr>
+          <td><strong>ข้อมูลการเรียน</strong></td>
+          <td>บทเรียนที่เรียนแล้ว, XP สะสม, ความคืบหน้า, streak</td>
+          <td>ติดตามพัฒนาการการเรียน</td>
+        </tr>
+        <tr>
+          <td><strong>ประวัติ AI</strong></td>
+          <td>บทสนทนากับถังถัง AI, จำนวนข้อความที่ใช้</td>
+          <td>แสดงประวัติแชทและนับ limit</td>
+        </tr>
+        <tr>
+          <td><strong>ข้อมูลการชำระเงิน</strong></td>
+          <td>ชื่อ, อีเมล, เบอร์โทร, รูปสลิปโอนเงิน</td>
+          <td>ยืนยันการชำระและปลดล็อค Premium</td>
+        </tr>
+        <tr>
+          <td><strong>ข้อมูล Affiliate</strong></td>
+          <td>รหัสผู้แนะนำ, ยอดขาย, ค่าคอมมิชชั่น</td>
+          <td>คำนวณและจ่ายค่าคอม (สำหรับ Affiliate เท่านั้น)</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="highlight-box">
+      ✅ เราไม่เก็บข้อมูลบัตรเครดิต/เดบิต และไม่มีการเข้าถึงข้อมูลทางการเงินของคุณโดยตรง
+    </div>
+  </div>
+
+  <!-- 3. วิธีที่ใช้ข้อมูล -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title">วัตถุประสงค์การใช้ข้อมูล</div>
+    </div>
+    <p>เราใช้ข้อมูลของคุณเพื่อวัตถุประสงค์ต่อไปนี้เท่านั้น:</p>
+    <p>📚 <strong>ให้บริการแพลตฟอร์มเรียนภาษาจีน</strong> — แสดงบทเรียน ติดตามความคืบหน้า บันทึก XP</p>
+    <p>🤖 <strong>ให้บริการถังถัง AI</strong> — บันทึกประวัติแชทเพื่อให้ AI จำบริบทการสนทนา</p>
+    <p>💳 <strong>ดำเนินการชำระเงิน</strong> — ตรวจสอบสลิปและเปิดใช้งาน Premium</p>
+    <p>📊 <strong>ปรับปรุงบริการ</strong> — วิเคราะห์ข้อมูลการใช้งานเพื่อพัฒนาคุณภาพแอป</p>
+    <p>📣 <strong>ติดต่อสื่อสาร</strong> — แจ้งข่าวสาร อัปเดต หรือตอบคำถามจากคุณ</p>
+    <div class="warning-box">
+      ⚠️ เราไม่ขายข้อมูลส่วนบุคคลของคุณให้บุคคลที่สาม และไม่ใช้ข้อมูลเพื่อการโฆษณาของบุคคลภายนอก
+    </div>
+  </div>
+
+  <!-- 4. การเปิดเผยข้อมูล -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title">การเปิดเผยข้อมูลให้บุคคลที่สาม</div>
+    </div>
+    <p>ข้อมูลของคุณอาจถูกส่งต่อให้บริการของบุคคลที่สาม ดังนี้:</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>บริการ</th>
+          <th>วัตถุประสงค์</th>
+          <th>นโยบายความเป็นส่วนตัว</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Supabase</strong></td>
+          <td>จัดเก็บฐานข้อมูลและ Authentication</td>
+          <td>supabase.com/privacy</td>
+        </tr>
+        <tr>
+          <td><strong>Anthropic (Claude AI)</strong></td>
+          <td>ประมวลผลคำถามถังถัง AI</td>
+          <td>anthropic.com/privacy</td>
+        </tr>
+        <tr>
+          <td><strong>Google Cloud TTS</strong></td>
+          <td>แปลงข้อความเป็นเสียงภาษาจีน</td>
+          <td>cloud.google.com/privacy</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px">บริการเหล่านี้มีนโยบายความเป็นส่วนตัวและมาตรการรักษาความปลอดภัยของตนเอง เราเลือกใช้บริการที่มีมาตรฐานสากลเท่านั้น</p>
+  </div>
+
+  <!-- 5. ระยะเวลาเก็บข้อมูล -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div class="section-title">ระยะเวลาในการเก็บข้อมูล</div>
+    </div>
+    <p>เราเก็บข้อมูลของคุณตราบเท่าที่จำเป็นสำหรับวัตถุประสงค์ที่ระบุ:</p>
+    <p>👤 <strong>ข้อมูลบัญชี</strong> — เก็บตลอดอายุการใช้งาน หรือจนกว่าคุณจะขอลบบัญชี</p>
+    <p>💬 <strong>ประวัติแชท AI</strong> — เก็บเพื่อแสดงประวัติการสนทนา สามารถขอลบได้ทุกเมื่อ</p>
+    <p>📎 <strong>สลิปโอนเงิน</strong> — เก็บไว้เพื่อการตรวจสอบย้อนหลัง อย่างน้อย 1 ปี</p>
+    <p>📊 <strong>ข้อมูลการเรียน</strong> — เก็บตลอดอายุการใช้งาน เพื่อรักษาความคืบหน้าของคุณ</p>
+  </div>
+
+  <!-- 6. สิทธิของเจ้าของข้อมูล -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div class="section-title">สิทธิของคุณในฐานะเจ้าของข้อมูล (PDPA)</div>
+    </div>
+    <p>ตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 คุณมีสิทธิดังนี้:</p>
+    <div class="rights-grid">
+      <div class="right-item">
+        <div class="right-icon">👁️</div>
+        <div class="right-title">สิทธิในการเข้าถึง</div>
+        <div class="right-desc">ขอดูข้อมูลส่วนตัวที่เราเก็บไว้ได้ทุกเมื่อ</div>
+      </div>
+      <div class="right-item">
+        <div class="right-icon">✏️</div>
+        <div class="right-title">สิทธิในการแก้ไข</div>
+        <div class="right-desc">ขอแก้ไขข้อมูลที่ไม่ถูกต้องหรือไม่ครบถ้วนได้</div>
+      </div>
+      <div class="right-item">
+        <div class="right-icon">🗑️</div>
+        <div class="right-title">สิทธิในการลบ</div>
+        <div class="right-desc">ขอลบข้อมูลส่วนตัวและปิดบัญชีได้ทุกเมื่อ</div>
+      </div>
+      <div class="right-item">
+        <div class="right-icon">⛔</div>
+        <div class="right-title">สิทธิในการคัดค้าน</div>
+        <div class="right-desc">คัดค้านการใช้ข้อมูลเพื่อวัตถุประสงค์บางอย่างได้</div>
+      </div>
+      <div class="right-item">
+        <div class="right-icon">📦</div>
+        <div class="right-title">สิทธิในการโอนย้าย</div>
+        <div class="right-desc">ขอรับข้อมูลของคุณในรูปแบบที่ใช้งานได้ทั่วไป</div>
+      </div>
+      <div class="right-item">
+        <div class="right-icon">⏸️</div>
+        <div class="right-title">สิทธิในการระงับ</div>
+        <div class="right-desc">ขอระงับการประมวลผลข้อมูลชั่วคราวได้</div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top:14px">
+      💡 ในการใช้สิทธิ์ใดๆ ติดต่อเราผ่าน LINE OA: @ava11 หรืออีเมล เราจะดำเนินการภายใน 30 วัน
+    </div>
+  </div>
+
+  <!-- 7. ความปลอดภัย -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div class="section-title">มาตรการรักษาความปลอดภัย</div>
+    </div>
+    <p>เราใช้มาตรการทางเทคนิคและองค์กรที่เหมาะสมเพื่อปกป้องข้อมูลของคุณ:</p>
+    <p>🔒 <strong>Row Level Security (RLS)</strong> — แต่ละ user เข้าถึงได้เฉพาะข้อมูลตัวเองเท่านั้น</p>
+    <p>🔑 <strong>API Keys จัดเก็บอย่างปลอดภัย</strong> — ไม่ expose ใน frontend code</p>
+    <p>🛡️ <strong>Supabase Auth</strong> — รหัสผ่านเข้ารหัสด้วยมาตรฐาน bcrypt</p>
+    <p>🔐 <strong>HTTPS</strong> — การสื่อสารทั้งหมดเข้ารหัสด้วย SSL/TLS</p>
+  </div>
+
+  <!-- 8. คุกกี้ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">8</div>
+      <div class="section-title">คุกกี้และ Local Storage</div>
+    </div>
+    <p>เราใช้ <strong>Local Storage</strong> ของเบราว์เซอร์เพื่อเก็บข้อมูล session การเข้าสู่ระบบ เพื่อให้คุณไม่ต้อง login ซ้ำทุกครั้ง</p>
+    <p>คุณสามารถลบข้อมูลเหล่านี้ได้ทุกเมื่อโดยการล้าง cache ของเบราว์เซอร์ หรือกด "ออกจากระบบ" ในแอป</p>
+  </div>
+
+  <!-- 9. การเปลี่ยนแปลงนโยบาย -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">9</div>
+      <div class="section-title">การเปลี่ยนแปลงนโยบาย</div>
+    </div>
+    <p>เราอาจอัปเดตนโยบายนี้เป็นครั้งคราวเพื่อให้สอดคล้องกับการเปลี่ยนแปลงของบริการหรือกฎหมาย หากมีการเปลี่ยนแปลงสำคัญ เราจะแจ้งให้ทราบผ่านแอปหรืออีเมลที่ลงทะเบียนไว้</p>
+    <p>การใช้บริการต่อเนื่องหลังจากมีการอัปเดต ถือว่าคุณยอมรับนโยบายฉบับใหม่แล้ว</p>
+  </div>
+
+  <!-- 10. ติดต่อ -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">10</div>
+      <div class="section-title">ติดต่อเจ้าหน้าที่คุ้มครองข้อมูล</div>
+    </div>
+    <p>หากคุณมีคำถาม ข้อสงสัย หรือต้องการใช้สิทธิ์ตาม PDPA สามารถติดต่อเราได้ที่:</p>
+    <div class="contact-card">
+      <h3>🌸 TangTang Chinese — ติดต่อเรา</h3>
+      <div class="contact-item">💬 LINE OA: <a href="https://line.me/ti/p/@ava11">@ava11</a></div>
+      <div class="contact-item">🌐 เว็บไซต์: <a href="https://tangtangchinese.com">tangtangchinese.com</a></div>
+      <div class="contact-item" style="font-size:12px;opacity:.7;margin-top:8px">เราจะตอบกลับภายใน 3 วันทำการ</div>
+    </div>
+  </div>
+
+  <!-- PDPA Badge -->
+  <div class="pdpa-badge">
+    <div style="font-size:32px">🇹🇭</div>
+    <div style="font-size:15px;font-weight:800;color:var(--ink);margin-top:8px">สอดคล้องกับ พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562</div>
+    <p>นโยบายนี้จัดทำขึ้นให้สอดคล้องกับกฎหมาย PDPA ของประเทศไทย<br>และ GDPR ในระดับสากล</p>
+  </div>
+
+</div>
+
+</body>
+</html>
