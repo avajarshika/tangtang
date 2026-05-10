@@ -291,7 +291,7 @@ body { font-family: 'DM Sans', 'Noto Sans Thai', sans-serif; background: var(--p
           <div style="font-size:13px;color:var(--ink);margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #dce8f8">
             <span style="color:var(--ink3)">เลขบัญชี</span>
             <div style="display:flex;align-items:center;gap:8px">
-              <b style="color:var(--blue);letter-spacing:1px" id="bank-acc-num">557-283-5397</b>
+              <b style="color:var(--blue);letter-spacing:1px" id="bank-acc-num">283-218-3319</b>
               <button onclick="copyBankAcc()" id="copy-acc-btn" style="padding:3px 10px;background:#f0f0f0;border:1px solid #ccc;border-radius:8px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer">คัดลอก</button>
             </div>
           </div>
@@ -628,7 +628,7 @@ async function submitOrder() {
 }
 
 function copyBankAcc() {
-  navigator.clipboard.writeText('5572835397').then(() => {
+  navigator.clipboard.writeText('2832183319').then(() => {
     const btn = document.getElementById('copy-acc-btn');
     if (btn) { btn.textContent = '✅ คัดลอกแล้ว!'; setTimeout(() => btn.textContent = 'คัดลอก', 2000); }
   });
