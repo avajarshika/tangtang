@@ -13749,6 +13749,7 @@ function renderPlacementHistory() {
 }
 
 function startPlacementTest() {
+  playClickSound();
   placementIdx = 0;
   placementScore = { hsk1:0, hsk2:0, hsk3:0, hsk4:0, hsk5:0, hsk6:0 };
   placementTotal = { hsk1:0, hsk2:0, hsk3:0, hsk4:0, hsk5:0, hsk6:0 };
@@ -13901,6 +13902,7 @@ function answerPlacement(chosen) {
   // ใช้ ans จาก shuffled (หลัง shuffle) ไม่ใช่จาก original
   const correctAns = qShuffled.ans;
   const correct = chosen === correctAns;
+  if (correct) playCorrectSound(); else playWrongSound();
   const hskKey = `hsk${qOrig.hsk}`;
   placementTotal[hskKey]++;
   if (correct) placementScore[hskKey]++;
@@ -13936,6 +13938,7 @@ function answerPlacement(chosen) {
 }
 
 function nextPlacementQ() {
+  playClickSound();
   placementIdx++;
   if (placementIdx >= PLACEMENT_QUESTIONS.length) {
     showPlacementResult(true);
