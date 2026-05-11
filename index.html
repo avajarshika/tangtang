@@ -13896,18 +13896,21 @@ function answerPlacement(chosen) {
   if (placementAnswered) return;
   placementAnswered = true;
 
-  const q = PLACEMENT_QUESTIONS[placementIdx];
-  const correct = chosen === q.ans;
-  const hskKey = `hsk${q.hsk}`;
+  const qOrig = PLACEMENT_QUESTIONS[placementIdx];
+  const qShuffled = placementShuffled[placementIdx];
+  // ใช้ ans จาก shuffled (หลัง shuffle) ไม่ใช่จาก original
+  const correctAns = qShuffled.ans;
+  const correct = chosen === correctAns;
+  const hskKey = `hsk${qOrig.hsk}`;
   placementTotal[hskKey]++;
   if (correct) placementScore[hskKey]++;
-  placementAnswers.push({ qid: q.id, correct });
+  placementAnswers.push({ qid: qOrig.id, correct });
 
-  // Color buttons
-  for (let i = 0; i < q.opts.length; i++) {
+  // Color buttons — ใช้ shuffled opts และ shuffled ans
+  for (let i = 0; i < qShuffled.opts.length; i++) {
     const btn = document.getElementById(`placement-opt-${i}`);
     if (!btn) continue;
-    if (i === q.ans) {
+    if (i === correctAns) {
       btn.style.background = '#e8f5e9';
       btn.style.borderColor = '#4caf50';
       btn.style.color = '#1b5e20';
@@ -13924,7 +13927,7 @@ function answerPlacement(chosen) {
   if (fb) {
     fb.innerHTML = correct
       ? `<div style="background:#e8f5e9;border-radius:10px;padding:10px 14px;font-size:13px;color:#1b5e20;font-weight:700">✅ ถูกต้อง! เก่งมากค่า</div>`
-      : `<div style="background:#ffebee;border-radius:10px;padding:10px 14px;font-size:13px;color:#b71c1c;font-weight:700">❌ คำตอบที่ถูกคือ: ${q.opts[q.ans]}</div>`;
+      : `<div style="background:#ffebee;border-radius:10px;padding:10px 14px;font-size:13px;color:#b71c1c;font-weight:700">❌ คำตอบที่ถูกคือ: ${qShuffled.opts[correctAns]}</div>`;
   }
 
   // Show next button
