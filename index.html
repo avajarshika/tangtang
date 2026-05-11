@@ -1991,9 +1991,9 @@ body {
       <div style="text-align:center;margin-bottom:24px">
         <div style="font-size:48px;margin-bottom:12px">🎯</div>
         <div style="font-size:22px;font-weight:900;color:var(--ink)">วัดระดับภาษาจีน</div>
-        <div style="font-size:13px;color:var(--ink3);margin-top:6px">40 ข้อ · ฟัง · แปล · เรียงประโยค · ไวยากรณ์</div>
+        <div style="font-size:13px;color:var(--ink3);margin-top:6px">30 ข้อ · ฟัง · แปล · เรียงประโยค · ไวยากรณ์</div>
       </div>
-      <div style="background:var(--red-light);border-radius:16px;padding:16px;margin-bottom:14px">
+      <div style="background:var(--red-light);border-radius:16px;padding:16px;margin-bottom:20px">
         <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:8px">📋 แบบทดสอบนี้วัดอะไรบ้าง?</div>
         <div style="font-size:12px;color:var(--ink2);line-height:2">
           🔊 การฟัง — ได้ยินแล้วเข้าใจไหม?<br>
@@ -2002,16 +2002,11 @@ body {
           📝 ไวยากรณ์ — เรียงประโยคถูกไหม?
         </div>
       </div>
-      <div style="background:#f0f9ff;border-radius:16px;padding:14px;margin-bottom:14px;font-size:12px;color:#0369a1">
-        ⏱️ ใช้เวลาประมาณ 5-8 นาที · ทำได้ทุกเมื่อ · ผลจะแสดงหลังทำเสร็จทันที
+      <div style="background:#f0f9ff;border-radius:16px;padding:14px;margin-bottom:24px;font-size:12px;color:#0369a1">
+        ⏱️ ใช้เวลาประมาณ 5-8 นาที · ทำได้ทุกเมื่อ · ผลจะแสดงในโปรไฟล์ของคุณ
       </div>
-      <!-- ประวัติคะแนน — แสดงถ้าเคยทำแล้ว -->
-      <div id="placement-history-preview"></div>
       <button onclick="startPlacementTest()" style="width:100%;padding:16px;background:linear-gradient(135deg,var(--red),#c01078);color:white;border:none;border-radius:14px;font-size:16px;font-weight:800;font-family:inherit;cursor:pointer">
         🚀 เริ่มทดสอบเลย!
-      </button>
-      <button id="placement-history-btn" onclick="showPlacementHistoryModal()" style="display:none;width:100%;padding:12px;background:#f0f9ff;border:1.5px solid #bce3f8;border-radius:14px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;color:#0369a1;margin-top:10px">
-        📊 ดูประวัติคะแนนแบบทดสอบ
       </button>
       <button onclick="goScreen('home')" style="width:100%;padding:12px;background:none;border:1.5px solid var(--paper3);border-radius:14px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;color:var(--ink3);margin-top:10px">
         ข้ามไปก่อน
@@ -2095,8 +2090,11 @@ body {
           </div>
         </div>
       </div>
-      <!-- Placement section removed from profile - ดูได้ที่หน้าทดสอบ -->
-      <div id="prof-placement-cta" style="display:none"></div>
+      <div id="prof-placement-cta" style="margin:12px 16px">
+        <button onclick="initPlacementTest()" style="width:100%;padding:14px;background:linear-gradient(135deg,var(--red),#c01078);color:white;border:none;border-radius:14px;font-size:14px;font-weight:800;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+          🎯 วัดระดับภาษาจีนของคุณ!
+        </button>
+      </div>
 
       <!-- LINE ปรึกษาถังถัง -->
       <div style="padding:16px;background:#f0fff4;border-radius:14px;margin:12px 16px;display:flex;align-items:center;gap:14px">
@@ -8485,12 +8483,6 @@ function loadState(uid) {
   return { xp:0, streak:0, completed:[], knownWords:[], srsData:{}, lastActive:'' };
 }
 
-function updateUserData(updates) {
-  if (!state.user) return;
-  Object.assign(state.user.data, updates);
-  saveState();
-}
-
 function saveState() {
   if (!state.user) return;
   // ฝัง name + email ลงใน data เสมอ เพื่อให้ Admin Panel อ่านได้
@@ -9930,9 +9922,43 @@ function renderProfile() {
     achEl.innerHTML = `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px 8px">${achHTML}</div>`;
   }
 
-  // placement section ถูกย้ายไปอยู่ในหน้าทดสอบแล้ว ไม่ต้องแสดงในโปรไฟล์
+  // แสดงผล Placement Test ในโปรไฟล์
   const placementSection = document.getElementById('prof-placement-section');
-  if (placementSection) placementSection.style.display = 'none';
+  const placementCTA = document.getElementById('prof-placement-cta');
+  if (d.placementDone) {
+    if (placementSection) placementSection.style.display = 'block';
+    if (placementCTA) placementCTA.style.display = 'none';
+    const hskColors = { 1:'#4caf50', 2:'#2196f3', 3:'#ff9800', 4:'#9c27b0', 5:'#f44336', 6:'#795548' };
+    const lv = d.placementLevel || 1;
+    const color = hskColors[lv];
+    const content = document.getElementById('prof-placement-content');
+    if (content) {
+      content.innerHTML = `
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+          <div style="width:56px;height:56px;border-radius:14px;background:${color}20;border:2px solid ${color};display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0">
+            <div style="font-size:10px;font-weight:700;color:${color}">HSK</div>
+            <div style="font-size:22px;font-weight:900;color:${color}">${lv}</div>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:800;color:var(--ink)">ระดับ HSK ${lv}</div>
+            <div style="font-size:12px;color:var(--ink3);margin-top:2px">คะแนน ${d.placementScore || 0}/30 (${d.placementPct || 0}%)</div>
+            <div style="font-size:11px;color:var(--ink3);margin-top:2px">📅 ${d.placementDate || ''}</div>
+          </div>
+        </div>
+        ${d.placementWeaknesses?.length > 0 ? `
+        <div style="background:#fff3e0;border-radius:10px;padding:8px 12px;font-size:11px;color:#e65100">
+          🎯 ควรพัฒนา: ${d.placementWeaknesses.join(', ')}
+        </div>` : ''}
+        ${d.placementStrengths?.length > 0 ? `
+        <div style="background:#e8f5e9;border-radius:10px;padding:8px 12px;font-size:11px;color:#2e7d32;margin-top:6px">
+          💪 จุดแข็ง: ${d.placementStrengths.join(', ')}
+        </div>` : ''}
+      `;
+    }
+  } else {
+    if (placementSection) placementSection.style.display = 'none';
+    if (placementCTA) placementCTA.style.display = 'block';
+  }
 
   // แสดง/ซ่อนปุ่ม Admin
   const adminBtn = document.getElementById('admin-btn');
@@ -13611,24 +13637,24 @@ const PLACEMENT_QUESTIONS = [
   { id:4, hsk:1, type:'vocab', q:'ตัวเลข 三 (sān) คือเลขอะไร?', opts:['1','2','3','4'], ans:2 },
   { id:5, hsk:1, type:'vocab', q:'คำว่า 大 (dà) แปลว่าอะไร?', opts:['เล็ก','ใหญ่','สูง','ต่ำ'], ans:1 },
   // ── HSK 1 — การฟัง (ข้อ 6-8) ──
-  { id:6, hsk:1, type:'listen', q:'ฟังแล้วเลือกคำที่ได้ยิน', audio:'nǐ hǎo', opts:['谢谢','再见','对不起','你好'], ans:3 },
+  { id:6, hsk:1, type:'listen', q:'ฟังแล้วเลือกคำที่ได้ยิน', audio:'nǐ hǎo', opts:['你好','谢谢','再见','对不起'], ans:0 },
   { id:7, hsk:1, type:'listen', q:'ฟังแล้วเลือกคำที่ได้ยิน', audio:'wǒ ài nǐ', opts:['我爱你','我喜欢你','我想你','我需要你'], ans:0 },
   { id:8, hsk:1, type:'listen', q:'ฟังแล้วเลือกความหมาย', audio:'míng tiān', opts:['เมื่อวาน','วันนี้','พรุ่งนี้','มะรืน'], ans:2 },
   // ── HSK 2 — คำศัพท์ (ข้อ 9-12) ──
-  { id:9, hsk:2, type:'vocab', q:'คำว่า 高兴 (gāo xìng) แปลว่าอะไร?', opts:['เศร้า','โกรธ','กลัว','ดีใจ'], ans:3 },
+  { id:9, hsk:2, type:'vocab', q:'คำว่า 高兴 (gāo xìng) แปลว่าอะไร?', opts:['เศร้า','ดีใจ','โกรธ','กลัว'], ans:1 },
   { id:10, hsk:2, type:'vocab', q:'คำว่า 但是 (dàn shì) แปลว่าอะไร?', opts:['เพราะว่า','ดังนั้น','แต่','และ'], ans:2 },
   { id:11, hsk:2, type:'vocab', q:'คำว่า 觉得 (juéde) แปลว่าอะไร?', opts:['รู้สึกว่า','รู้จัก','รู้เรื่อง','รู้ทัน'], ans:0 },
-  { id:12, hsk:2, type:'vocab', q:'คำว่า 帮助 (bāng zhù) แปลว่าอะไร?', opts:['ขัดขวาง','รบกวน','ละทิ้ง','ช่วยเหลือ'], ans:3 },
+  { id:12, hsk:2, type:'vocab', q:'คำว่า 帮助 (bāng zhù) แปลว่าอะไร?', opts:['ขัดขวาง','ช่วยเหลือ','รบกวน','ละทิ้ง'], ans:1 },
   // ── HSK 2 — ไวยากรณ์ (ข้อ 13-15) ──
   { id:13, hsk:2, type:'grammar', q:'ประโยคใดถูกต้อง?', opts:['我很是高兴','我是很高兴','我很高兴','高兴我很'], ans:2 },
   { id:14, hsk:2, type:'grammar', q:'填空: 我___去北京了。(ไปแล้ว)', opts:['都','就','已经','还'], ans:2 },
-  { id:15, hsk:2, type:'grammar', q:'คำเชื่อมใดใช้บอกเหตุผล?', opts:['但是','所以','虽然','因为'], ans:3 },
+  { id:15, hsk:2, type:'grammar', q:'คำเชื่อมใดใช้บอกเหตุผล?', opts:['但是','因为','所以','虽然'], ans:1 },
   // ── HSK 2 — การฟัง (ข้อ 16-17) ──
-  { id:16, hsk:2, type:'listen', q:'ฟังแล้วเลือกความหมาย', audio:'tā hěn piào liàng', opts:['เขาร้องเพลงเก่ง','เขาฉลาดมาก','เธอใจดีมาก','เธอสวยมาก'], ans:3 },
+  { id:16, hsk:2, type:'listen', q:'ฟังแล้วเลือกความหมาย', audio:'tā hěn piào liàng', opts:['เขาร้องเพลงเก่ง','เธอสวยมาก','เขาฉลาดมาก','เธอใจดีมาก'], ans:1 },
   { id:17, hsk:2, type:'listen', q:'ฟังแล้วเลือกคำที่ได้ยิน', audio:'chī fàn', opts:['吃饭','喝水','睡觉','工作'], ans:0 },
   // ── HSK 3 — คำศัพท์ (ข้อ 18-21) ──
-  { id:18, hsk:3, type:'vocab', q:'คำว่า 方便 (fāng biàn) แปลว่าอะไร?', opts:['ยุ่งยาก','รวดเร็ว','ช้า','สะดวก'], ans:3 },
-  { id:19, hsk:3, type:'vocab', q:'คำว่า 其实 (qí shí) แปลว่าอะไร?', opts:['บางที','อย่างไรก็ตาม','ดังนั้น','ที่จริงแล้ว'], ans:3 },
+  { id:18, hsk:3, type:'vocab', q:'คำว่า 方便 (fāng biàn) แปลว่าอะไร?', opts:['ยุ่งยาก','สะดวก','รวดเร็ว','ช้า'], ans:1 },
+  { id:19, hsk:3, type:'vocab', q:'คำว่า 其实 (qí shí) แปลว่าอะไร?', opts:['บางที','ที่จริงแล้ว','อย่างไรก็ตาม','ดังนั้น'], ans:1 },
   { id:20, hsk:3, type:'vocab', q:'คำว่า 环境 (huán jìng) แปลว่าอะไร?', opts:['สิ่งแวดล้อม','สภาพอากาศ','ธรรมชาติ','ภูมิทัศน์'], ans:0 },
   { id:21, hsk:3, type:'vocab', q:'คำว่า 影响 (yǐng xiǎng) แปลว่าอะไร?', opts:['สนับสนุน','ส่งเสริม','มีอิทธิพล/ส่งผล','ขัดขวาง'], ans:2 },
   // ── HSK 3 — การฟัง (ข้อ 22) ──
@@ -13645,10 +13671,10 @@ const PLACEMENT_QUESTIONS = [
   { id:29, hsk:4, type:'grammar', q:'填空: 他___努力，___没有通过考试。', opts:['因为...所以','如果...就','虽然...但是','只要...就'], ans:2 },
   { id:30, hsk:4, type:'order', q:'เรียงประโยคให้ถูกต้อง: "ยิ่งเรียนยิ่งสนุก"', opts:['越学越有趣','学越越有趣','越越学有趣','有趣越学越'], ans:0 },
   // ── HSK 4 — การฟัง (ข้อ 31) ──
-  { id:31, hsk:4, type:'listen', q:'ฟังแล้วเลือกความหมาย', audio:'suī rán tā hěn máng dàn shì tā hái shì lái le', opts:['เขาไม่มาเพราะยุ่ง','เขายุ่งมากจนลืมมา','เขามาเพราะไม่ยุ่ง','ถึงแม้เขายุ่งแต่เขาก็ยังมา'], ans:3 },
+  { id:31, hsk:4, type:'listen', q:'ฟังแล้วเลือกความหมาย', audio:'suī rán tā hěn máng dàn shì tā hái shì lái le', opts:['เขาไม่มาเพราะยุ่ง','ถึงแม้เขายุ่งแต่เขาก็ยังมา','เขายุ่งมากจนลืมมา','เขามาเพราะไม่ยุ่ง'], ans:1 },
   // ── HSK 5-6 — คำศัพท์ขั้นสูง (ข้อ 32-35) ──
-  { id:32, hsk:5, type:'vocab', q:'คำว่า 陶醉 (táo zuì) แปลว่าอะไร?', opts:['หลับใหล','เบื่อหน่าย','กังวล','เพลิดเพลิน/หลงใหล'], ans:3 },
-  { id:33, hsk:5, type:'vocab', q:'คำว่า 妥协 (tuǒ xié) แปลว่าอะไร?', opts:['ยืนหยัด','ขัดแย้ง','เพิกเฉย','ประนีประนอม/ยอมความ'], ans:3 },
+  { id:32, hsk:5, type:'vocab', q:'คำว่า 陶醉 (táo zuì) แปลว่าอะไร?', opts:['หลับใหล','เพลิดเพลิน/หลงใหล','เบื่อหน่าย','กังวล'], ans:1 },
+  { id:33, hsk:5, type:'vocab', q:'คำว่า 妥协 (tuǒ xié) แปลว่าอะไร?', opts:['ยืนหยัด','ประนีประนอม/ยอมความ','ขัดแย้ง','เพิกเฉย'], ans:1 },
   { id:34, hsk:6, type:'vocab', q:'คำว่า 瞬息万变 แปลว่าอะไร?', opts:['มั่นคงไม่เปลี่ยน','เปลี่ยนแปลงรวดเร็ว','ช้าและสม่ำเสมอ','คาดเดาได้'], ans:1 },
   { id:35, hsk:6, type:'grammar', q:'สำนวน 半途而废 หมายความว่าอะไร?', opts:['ทำสำเร็จอย่างรวดเร็ว','ทำครึ่งๆ กลางๆ ไม่เสร็จ','ทำอย่างละเอียดรอบคอบ','ทำซ้ำหลายครั้ง'], ans:1 },
   // ── เพิ่ม 5 ข้อสุดท้าย HSK 5-6 (ข้อ 36-40) ──
@@ -13684,44 +13710,42 @@ function initPlacementTest() {
   document.getElementById('placement-intro').style.display = 'block';
   document.getElementById('placement-play').style.display = 'none';
   document.getElementById('placement-result').style.display = 'none';
-  // แสดง/ซ่อนปุ่มประวัติคะแนน
-  const histBtn = document.getElementById('placement-history-btn');
-  if (histBtn) histBtn.style.display = done ? 'block' : 'none';
   if (done) {
     // แสดงประวัติด้วยในหน้า intro
     renderPlacementHistory();
-  } else {
-    const existing = document.getElementById('placement-history-preview');
-    if (existing) existing.innerHTML = '';
   }
 }
 
 function renderPlacementHistory() {
   const history = state.user?.data?.placementHistory || [];
   if (history.length === 0) return;
-  const previewDiv = document.getElementById('placement-history-preview');
-  if (!previewDiv) return;
+  const intro = document.getElementById('placement-intro');
+  const existing = document.getElementById('placement-history-preview');
+  if (existing) existing.remove();
   const hskColors = { 1:'#4caf50', 2:'#2196f3', 3:'#ff9800', 4:'#9c27b0', 5:'#f44336', 6:'#795548' };
   const last = history[history.length - 1];
-  previewDiv.innerHTML = `
-    <div style="background:#f0fdf4;border:1.5px solid #4caf50;border-radius:14px;padding:14px;margin-bottom:14px">
-      <div style="font-size:12px;font-weight:800;color:#1b5e20;margin-bottom:8px">📊 ผลล่าสุดของคุณ</div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:44px;height:44px;border-radius:12px;background:${hskColors[last.level]}20;border:2px solid ${hskColors[last.level]};display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0">
-          <div style="font-size:9px;font-weight:700;color:${hskColors[last.level]}">HSK</div>
-          <div style="font-size:18px;font-weight:900;color:${hskColors[last.level]}">${last.level}</div>
-        </div>
-        <div>
-          <div style="font-size:13px;font-weight:700">${last.score}/${last.total} ข้อ (${last.pct}%)</div>
-          <div style="font-size:11px;color:#666;margin-top:2px">📅 ${last.date} · ครั้งที่ ${history.length}</div>
-        </div>
+  const div = document.createElement('div');
+  div.id = 'placement-history-preview';
+  div.style.cssText = 'background:#f0fdf4;border:1.5px solid #4caf50;border-radius:14px;padding:14px;margin-bottom:16px';
+  div.innerHTML = `
+    <div style="font-size:12px;font-weight:800;color:#1b5e20;margin-bottom:8px">📊 ผลล่าสุดของคุณ</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:44px;height:44px;border-radius:12px;background:${hskColors[last.level]}20;border:2px solid ${hskColors[last.level]};display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0">
+        <div style="font-size:9px;font-weight:700;color:${hskColors[last.level]}">HSK</div>
+        <div style="font-size:18px;font-weight:900;color:${hskColors[last.level]}">${last.level}</div>
       </div>
-      ${history.length > 1 ? `
-      <div style="margin-top:10px;font-size:11px;color:#666">
-        ประวัติทั้งหมด ${history.length} ครั้ง:
-        ${history.map((h,i) => `<span style="display:inline-block;background:${hskColors[h.level]}20;color:${hskColors[h.level]};padding:2px 8px;border-radius:10px;margin:2px;font-weight:700">ครั้ง${i+1}: HSK${h.level} (${h.pct}%)</span>`).join('')}
-      </div>` : ''}
-    </div>`;
+      <div>
+        <div style="font-size:13px;font-weight:700">${last.score}/${last.total} ข้อ (${last.pct}%)</div>
+        <div style="font-size:11px;color:#666;margin-top:2px">📅 ${last.date} · ครั้งที่ ${history.length}</div>
+      </div>
+    </div>
+    ${history.length > 1 ? `
+    <div style="margin-top:10px;font-size:11px;color:#666">
+      ประวัติทั้งหมด ${history.length} ครั้ง →
+      ${history.map((h,i) => `<span style="display:inline-block;background:${hskColors[h.level]}20;color:${hskColors[h.level]};padding:2px 8px;border-radius:10px;margin:2px;font-weight:700">ครั้ง${i+1}: HSK${h.level} (${h.pct}%)</span>`).join('')}
+    </div>` : ''}
+  `;
+  intro.insertBefore(div, intro.querySelector('button'));
 }
 
 function startPlacementTest() {
@@ -18034,59 +18058,121 @@ function initPairGame() {
   const root = document.getElementById('pair-game-root');
   root.innerHTML = `
   <style>
-    #pair-wrap{max-width:480px;margin:0 auto;padding:0 14px 40px;font-family:'Noto Sans Thai',sans-serif}
-    #pair-wrap .ph{padding:12px 0 10px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f0d0e0;background:#fff5fb;position:sticky;top:56px;z-index:30;margin:0 -14px;padding-left:14px}
-    .p-top{display:flex;gap:8px;margin:14px 0 10px}
-    .p-stat{flex:1;background:white;border-radius:12px;border:1.5px solid #f0d0e0;padding:8px 6px;text-align:center;box-shadow:0 2px 10px rgba(241,53,150,.08)}
-    .p-stat-v{font-size:20px;font-weight:800;color:#1a0a12;line-height:1}
-    .p-stat-l{font-size:10px;font-weight:600;color:#9a7a8a;margin-top:2px;text-transform:uppercase}
-    .p-diff-row{display:flex;gap:6px;margin-bottom:10px}
-    .p-diff-btn{flex:1;padding:7px 4px;border-radius:10px;border:1.5px solid #f0d0e0;background:white;font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;color:#5a3a4a;transition:.15s;line-height:1.4}
-    .p-diff-btn.active{background:linear-gradient(135deg,#F13596,#ff7b2f);color:white;border-color:transparent}
-    .p-level-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-    .p-badge{background:linear-gradient(135deg,#F13596,#ff7b2f);color:white;font-size:11px;font-weight:700;padding:3px 12px;border-radius:99px}
-    .p-left{font-size:12px;font-weight:600;color:#9a7a8a}
-    .p-combo{text-align:center;min-height:24px;margin-bottom:6px;font-size:13px;font-weight:800;color:#ff7b2f}
-    .p-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:14px}
-    .p-tile{border-radius:12px;border:2px solid #f0d0e0;background:white;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s cubic-bezier(.34,1.56,.64,1),border-color .15s,background .15s;padding:6px 3px;aspect-ratio:1;user-select:none;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden;animation:pTileIn .3s cubic-bezier(.34,1.56,.64,1) both}
+    /* ── Tap the Pair — Responsive (มือถือ / ไอแพด / คอม) ── */
+    #pair-wrap{max-width:600px;margin:0 auto;padding:0 16px 48px;font-family:'Noto Sans Thai','DM Sans',sans-serif}
+
+    /* Header */
+    #pair-wrap .ph{padding:14px 0 12px;display:flex;align-items:center;gap:12px;border-bottom:1.5px solid #f0d0e0;background:#fff5fb;position:sticky;top:56px;z-index:30;margin:0 -16px;padding-left:16px}
+    #pair-wrap .ph-title{font-size:18px;font-weight:800;color:#1a0a12}
+
+    /* Difficulty buttons */
+    .p-diff-row{display:flex;gap:8px;margin:14px 0 12px}
+    .p-diff-btn{flex:1;padding:10px 6px;border-radius:14px;border:2px solid #f0d0e0;background:white;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;color:#5a3a4a;transition:.15s;line-height:1.5;-webkit-tap-highlight-color:transparent}
+    .p-diff-btn span{font-size:11px;font-weight:500;display:block}
+    .p-diff-btn.active{background:linear-gradient(135deg,#F13596,#ff7b2f);color:white;border-color:transparent;box-shadow:0 4px 14px rgba(241,53,150,.3)}
+
+    /* Stats bar */
+    .p-top{display:flex;gap:10px;margin:0 0 12px}
+    .p-stat{flex:1;background:white;border-radius:14px;border:1.5px solid #f0d0e0;padding:10px 8px;text-align:center;box-shadow:0 2px 10px rgba(241,53,150,.07)}
+    .p-stat-v{font-size:24px;font-weight:800;color:#1a0a12;line-height:1}
+    .p-stat-l{font-size:12px;font-weight:600;color:#9a7a8a;margin-top:3px}
+
+    /* Round badge */
+    .p-level-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .p-badge{background:linear-gradient(135deg,#F13596,#ff7b2f);color:white;font-size:13px;font-weight:700;padding:5px 14px;border-radius:99px}
+    .p-left{font-size:13px;font-weight:700;color:#9a7a8a}
+
+    /* Combo message */
+    .p-combo{text-align:center;min-height:28px;margin-bottom:8px;font-size:16px;font-weight:800;color:#ff7b2f}
+
+    /* ── GRID — 4 คอลัมน์มือถือ, 4 คอลัมน์ทั่วไป ── */
+    .p-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+
+    /* Tile base */
+    .p-tile{
+      border-radius:16px;border:2.5px solid #f0d0e0;background:white;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      cursor:pointer;
+      transition:transform .15s cubic-bezier(.34,1.56,.64,1),border-color .15s,background .15s;
+      padding:10px 6px;aspect-ratio:1;
+      user-select:none;-webkit-tap-highlight-color:transparent;
+      position:relative;overflow:hidden;
+      animation:pTileIn .3s cubic-bezier(.34,1.56,.64,1) both;
+      min-height:72px;
+    }
     @keyframes pTileIn{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
     .p-tile.zh-t{background:linear-gradient(145deg,#fff8fc,#ffedf6);border-color:#f9c0df}
-    .p-tile.th-t{background:linear-gradient(145deg,#f8fcff,#e6f4ff);border-color:#b8d9f8}
-    .p-tile.sel{border-color:#F13596;background:linear-gradient(145deg,#ffedf6,#ffd6ef)!important;box-shadow:0 0 0 3px rgba(241,53,150,.2);transform:scale(1.05)}
+    .p-tile.th-t{background:linear-gradient(145deg,#f0f6ff,#e2eeff);border-color:#b8d9f8}
+    .p-tile.sel{border-color:#F13596;background:linear-gradient(145deg,#ffedf6,#ffd6ef)!important;box-shadow:0 0 0 3px rgba(241,53,150,.25);transform:scale(1.06)}
     .p-tile.mat{border-color:#06C755;background:linear-gradient(145deg,#f0fff8,#d6f8ea)!important;pointer-events:none;animation:pMatch .4s cubic-bezier(.34,1.56,.64,1)}
-    .p-tile.mat::after{content:'✓';position:absolute;top:3px;right:5px;font-size:11px;color:#06C755;font-weight:800}
+    .p-tile.mat::after{content:'✓';position:absolute;top:4px;right:6px;font-size:13px;color:#06C755;font-weight:800}
     .p-tile.wrg{border-color:#ff4444;background:linear-gradient(145deg,#fff0f0,#ffd6d6)!important;animation:pShake .35s ease}
-    @keyframes pMatch{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
-    @keyframes pShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-    .p-zh{font-family:'Noto Sans SC',sans-serif;font-size:20px;font-weight:700;color:#1a0a12;line-height:1.2}
-    .p-py{font-size:8px;color:#9a7a8a;margin-top:2px;font-style:italic;text-align:center}
-    .p-th{font-size:11px;font-weight:600;color:#1a4a8a;text-align:center;line-height:1.4;padding:0 2px}
-    .p-result{display:none;background:white;border-radius:20px;border:1.5px solid #f0d0e0;box-shadow:0 4px 20px rgba(241,53,150,.1);padding:28px 20px;text-align:center;animation:pTileIn .4s cubic-bezier(.34,1.56,.64,1)}
+    @keyframes pMatch{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
+    @keyframes pShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+    /* Text inside tiles */
+    .p-zh{font-family:'Noto Serif SC','Noto Sans SC',sans-serif;font-size:clamp(20px,5vw,28px);font-weight:700;color:#1a0a12;line-height:1.2;text-align:center}
+    .p-py{font-size:clamp(9px,2.2vw,12px);color:#9a7a8a;margin-top:3px;font-style:italic;text-align:center}
+    .p-th{font-size:clamp(12px,3vw,15px);font-weight:700;color:#1a3a8a;text-align:center;line-height:1.4;padding:0 4px}
+
+    /* Result card */
+    .p-result{display:none;background:white;border-radius:24px;border:1.5px solid #f0d0e0;box-shadow:0 8px 32px rgba(241,53,150,.12);padding:32px 24px;text-align:center;animation:pTileIn .4s cubic-bezier(.34,1.56,.64,1)}
     .p-result.show{display:block}
-    .p-res-stats{display:flex;gap:14px;justify-content:center;margin:14px 0 20px}
-    .p-rs-v{font-size:26px;font-weight:800;color:#F13596}
-    .p-rs-l{font-size:10px;color:#9a7a8a;font-weight:600;text-transform:uppercase}
-    .p-btn{width:100%;padding:13px;border:none;border-radius:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px}
-    .p-btn-pink{background:linear-gradient(135deg,#F13596,#ff7b2f);color:white;box-shadow:0 4px 14px rgba(241,53,150,.3)}
-    .p-btn-out{background:transparent;color:#5a3a4a;border:1.5px solid #f0d0e0}
-    .p-start-btn{width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,#F13596,#ff7b2f);color:white;font-family:inherit;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(241,53,150,.3);margin-top:8px}
-    .p-timer-wrap{position:relative;width:52px;height:52px;margin:0 auto}
-    .p-timer-svg{width:52px;height:52px;transform:rotate(-90deg)}
-    .p-timer-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#1a0a12}
+    .p-res-stats{display:flex;gap:18px;justify-content:center;margin:16px 0 24px}
+    .p-rs-v{font-size:30px;font-weight:800;color:#F13596}
+    .p-rs-l{font-size:12px;color:#9a7a8a;font-weight:600;margin-top:3px}
+    .p-btn{width:100%;padding:15px;border:none;border-radius:14px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px;-webkit-tap-highlight-color:transparent}
+    .p-btn-pink{background:linear-gradient(135deg,#F13596,#ff7b2f);color:white;box-shadow:0 4px 16px rgba(241,53,150,.3)}
+    .p-btn-out{background:transparent;color:#5a3a4a;border:2px solid #f0d0e0}
+
+    /* Start button */
+    .p-start-btn{width:100%;padding:17px;border:none;border-radius:16px;background:linear-gradient(135deg,#F13596,#ff7b2f);color:white;font-family:inherit;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(241,53,150,.35);margin-top:10px;-webkit-tap-highlight-color:transparent;letter-spacing:.3px}
+
+    /* Timer */
+    .p-timer-wrap{position:relative;width:58px;height:58px;margin:0 auto}
+    .p-timer-svg{width:58px;height:58px;transform:rotate(-90deg)}
+    .p-timer-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:#1a0a12}
+
+    /* ── iPad (≥768px) — กว้างขึ้น tile ใหญ่ขึ้น ── */
+    @media(min-width:768px){
+      #pair-wrap{max-width:680px;padding:0 24px 56px}
+      .p-grid{gap:14px}
+      .p-tile{border-radius:20px;min-height:96px;padding:14px 10px}
+      .p-diff-btn{font-size:15px;padding:12px 8px}
+      .p-stat-v{font-size:28px}
+      .p-stat-l{font-size:13px}
+      .p-badge{font-size:14px;padding:6px 16px}
+      .p-combo{font-size:18px}
+      .p-btn{font-size:16px;padding:17px}
+      .p-start-btn{font-size:19px;padding:19px}
+      .p-timer-wrap{width:68px;height:68px}
+      .p-timer-svg{width:68px;height:68px}
+      .p-timer-text{font-size:20px}
+    }
+
+    /* ── Desktop (≥1024px) ── */
+    @media(min-width:1024px){
+      #pair-wrap{max-width:760px;padding:0 32px 64px}
+      .p-grid{gap:16px}
+      .p-tile{border-radius:22px;min-height:110px;padding:16px 12px}
+      .p-stat-v{font-size:32px}
+      .p-res-stats{gap:28px}
+      .p-rs-v{font-size:36px}
+    }
   </style>
   <div id="pair-wrap">
     <div class="ph">
-      <button onclick="closeGame()" style="background:#f0d0e0;border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">←</button>
-      <div style="font-size:15px;font-weight:700;color:#1a0a12">🧩 Tap the Pair</div>
+      <button onclick="closeGame()" style="background:#f0d0e0;border:none;border-radius:50%;width:38px;height:38px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">←</button>
+      <div class="ph-title">🧩 Tap the Pair</div>
     </div>
     <div class="p-diff-row" id="p-diff-row">
-      <button class="p-diff-btn active" onclick="pSetDiff(0,this)">🌱 ง่าย<br><span style="font-weight:400;font-size:9px">45วิ · 4คู่</span></button>
-      <button class="p-diff-btn" onclick="pSetDiff(1,this)">🔥 ปานกลาง<br><span style="font-weight:400;font-size:9px">35วิ · 6คู่</span></button>
-      <button class="p-diff-btn" onclick="pSetDiff(2,this)">💀 ยาก<br><span style="font-weight:400;font-size:9px">25วิ · 8คู่</span></button>
+      <button class="p-diff-btn active" onclick="pSetDiff(0,this)">🌱 ง่าย<span>45วิ · 4คู่</span></button>
+      <button class="p-diff-btn" onclick="pSetDiff(1,this)">🔥 ปานกลาง<span>35วิ · 6คู่</span></button>
+      <button class="p-diff-btn" onclick="pSetDiff(2,this)">💀 ยาก<span>25วิ · 8คู่</span></button>
     </div>
     <div class="p-top">
       <div class="p-stat"><div class="p-stat-v" id="p-score">0</div><div class="p-stat-l">⭐ คะแนน</div></div>
-      <div class="p-stat" style="flex:0 0 64px">
+      <div class="p-stat" style="flex:0 0 74px">
         <div class="p-timer-wrap">
           <svg class="p-timer-svg" viewBox="0 0 48 48">
             <circle fill="none" stroke="#f0d0e0" stroke-width="5" cx="24" cy="24" r="20"/>
@@ -18104,9 +18190,9 @@ function initPairGame() {
     <div class="p-combo" id="p-combo-msg"></div>
     <div class="p-grid" id="p-grid"></div>
     <div class="p-result" id="p-result">
-      <div style="font-size:52px;margin-bottom:10px" id="p-res-emoji">🎉</div>
-      <div style="font-size:22px;font-weight:800;color:#1a0a12;margin-bottom:6px" id="p-res-title">ยอดเยี่ยม!</div>
-      <div style="font-size:13px;color:#9a7a8a;margin-bottom:4px" id="p-res-sub">จับคู่ครบ!</div>
+      <div style="font-size:56px;margin-bottom:12px" id="p-res-emoji">🎉</div>
+      <div style="font-size:24px;font-weight:800;color:#1a0a12;margin-bottom:6px" id="p-res-title">ยอดเยี่ยม!</div>
+      <div style="font-size:14px;color:#9a7a8a;margin-bottom:4px" id="p-res-sub">จับคู่ครบ!</div>
       <div class="p-res-stats">
         <div class="p-rs"><div class="p-rs-v" id="p-rs-score">0</div><div class="p-rs-l">คะแนน</div></div>
         <div class="p-rs"><div class="p-rs-v" id="p-rs-time">0</div><div class="p-rs-l">วิเหลือ</div></div>
@@ -18156,6 +18242,8 @@ function pStartRound(){
   });
   const grid=document.getElementById('p-grid');
   grid.innerHTML='';
+  // ระดับยาก 8 คู่ = 16 tiles ลด gap ให้พอดีหน้าจอมือถือ
+  grid.style.gap = cfg.pairs >= 8 ? '7px' : '';
   pairShuffle(tiles).forEach((t,idx)=>{
     const el=document.createElement('div');
     el.className=`p-tile ${t.type==='zh'?'zh-t':'th-t'}`;
