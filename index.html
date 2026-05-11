@@ -73,6 +73,8 @@
 </script>
 <link rel="manifest" href="manifest.json">
 <title>糖糖中文 · Tangtang Chinese</title>
+<!-- Copyright Notice -->
+<meta name="copyright" content="© 2026 TangTang Chinese (糖糖中文). All rights reserved. ตัวการ์ตูนถังถัง เนื้อหาบทเรียน และซอฟต์แวร์ทั้งหมดเป็นลิขสิทธิ์ของ จารชิกา แก้ววรรณา">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+Thai:wght@300;400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -1619,6 +1621,29 @@ body {
     </div>
 
     <div class="section-title">Learning Paths</div>
+
+    <!-- 🎯 Placement Test Banner -->
+    <div id="home-placement-banner" style="margin:0 16px 14px;border-radius:16px;overflow:hidden;cursor:pointer" onclick="initPlacementTest()">
+      <!-- ถ้ายังไม่ได้ทำ -->
+      <div id="placement-banner-new" style="background:linear-gradient(135deg,#6b1a6b,#F13596);padding:14px 16px;display:flex;align-items:center;gap:12px">
+        <div style="font-size:36px;flex-shrink:0">🎯</div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:900;color:white">วัดระดับภาษาจีนของคุณก่อนเลย!</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.85);margin-top:3px">40 ข้อ · ฟัง · อ่าน · ไวยากรณ์ · รู้ระดับ HSK ของคุณทันที</div>
+        </div>
+        <div style="background:white;color:#F13596;font-size:11px;font-weight:800;padding:6px 12px;border-radius:20px;flex-shrink:0">เริ่มเลย →</div>
+      </div>
+      <!-- ถ้าทำแล้ว -->
+      <div id="placement-banner-done" style="display:none;background:linear-gradient(135deg,#1a6b3a,#2e7d32);padding:14px 16px;display:none;align-items:center;gap:12px">
+        <div style="font-size:36px;flex-shrink:0">📊</div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:900;color:white" id="placement-banner-level-text">ระดับของคุณ: HSK 1</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.85);margin-top:3px" id="placement-banner-sub">กดเพื่อวัดระดับใหม่หรือดูประวัติ</div>
+        </div>
+        <div style="background:white;color:#1a6b3a;font-size:11px;font-weight:800;padding:6px 12px;border-radius:20px;flex-shrink:0">ดูผล →</div>
+      </div>
+    </div>
+
     <div style="padding:0 16px 6px;font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase">📚 ตามระดับ HSK</div>
     <div class="path-row" id="path-row-hsk" style="grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px"></div>
     <div style="padding:8px 16px 6px;font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.06em;text-transform:uppercase">💬 การสื่อสารจริง</div>
@@ -1960,6 +1985,42 @@ body {
     </div>
   </div>
 
+  <!-- PLACEMENT TEST SCREEN -->
+  <div id="screen-placement" class="screen">
+    <div id="placement-intro" style="padding:24px 16px">
+      <div style="text-align:center;margin-bottom:24px">
+        <div style="font-size:48px;margin-bottom:12px">🎯</div>
+        <div style="font-size:22px;font-weight:900;color:var(--ink)">วัดระดับภาษาจีน</div>
+        <div style="font-size:13px;color:var(--ink3);margin-top:6px">40 ข้อ · ฟัง · แปล · เรียงประโยค · ไวยากรณ์</div>
+      </div>
+      <div style="background:var(--red-light);border-radius:16px;padding:16px;margin-bottom:14px">
+        <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:8px">📋 แบบทดสอบนี้วัดอะไรบ้าง?</div>
+        <div style="font-size:12px;color:var(--ink2);line-height:2">
+          🔊 การฟัง — ได้ยินแล้วเข้าใจไหม?<br>
+          📖 การอ่าน — อ่านแล้วแปลได้ไหม?<br>
+          ✏️ คำศัพท์ — รู้จักคำศัพท์ HSK กี่คำ?<br>
+          📝 ไวยากรณ์ — เรียงประโยคถูกไหม?
+        </div>
+      </div>
+      <div style="background:#f0f9ff;border-radius:16px;padding:14px;margin-bottom:14px;font-size:12px;color:#0369a1">
+        ⏱️ ใช้เวลาประมาณ 5-8 นาที · ทำได้ทุกเมื่อ · ผลจะแสดงหลังทำเสร็จทันที
+      </div>
+      <!-- ประวัติคะแนน — แสดงถ้าเคยทำแล้ว -->
+      <div id="placement-history-preview"></div>
+      <button onclick="startPlacementTest()" style="width:100%;padding:16px;background:linear-gradient(135deg,var(--red),#c01078);color:white;border:none;border-radius:14px;font-size:16px;font-weight:800;font-family:inherit;cursor:pointer">
+        🚀 เริ่มทดสอบเลย!
+      </button>
+      <button id="placement-history-btn" onclick="showPlacementHistoryModal()" style="display:none;width:100%;padding:12px;background:#f0f9ff;border:1.5px solid #bce3f8;border-radius:14px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;color:#0369a1;margin-top:10px">
+        📊 ดูประวัติคะแนนแบบทดสอบ
+      </button>
+      <button onclick="goScreen('home')" style="width:100%;padding:12px;background:none;border:1.5px solid var(--paper3);border-radius:14px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;color:var(--ink3);margin-top:10px">
+        ข้ามไปก่อน
+      </button>
+    </div>
+    <div id="placement-play" style="display:none;padding:16px"></div>
+    <div id="placement-result" style="display:none;padding:16px"></div>
+  </div>
+
   <!-- QUIZ SCREEN -->
   <div id="screen-quiz" class="screen">
     <div class="page-header" style="padding:14px 16px 12px;display:flex;align-items:center;gap:12px">
@@ -2018,6 +2079,24 @@ body {
           <div class="psb-lbl">🃏 คำที่รู้</div>
         </div>
       </div>
+
+      <!-- Placement Test Result -->
+      <div id="prof-placement-section" style="margin:12px 16px;display:none">
+        <div style="background:white;border:1.5px solid var(--paper3);border-radius:16px;padding:16px">
+          <div style="font-size:13px;font-weight:800;color:var(--ink);margin-bottom:12px">🎯 ผลบททดสอบวัดระดับ</div>
+          <div id="prof-placement-content"></div>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button onclick="showPlacementHistoryModal()" style="flex:1;padding:10px;background:#f0f9ff;border:1px solid #bce3f8;border-radius:10px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;color:#0369a1">
+              📊 ดูประวัติทั้งหมด
+            </button>
+            <button onclick="initPlacementTest()" style="flex:1;padding:10px;background:var(--red-light);border:1px solid var(--paper3);border-radius:10px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;color:var(--red)">
+              🔄 ทำใหม่
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Placement section removed from profile - ดูได้ที่หน้าทดสอบ -->
+      <div id="prof-placement-cta" style="display:none"></div>
 
       <!-- LINE ปรึกษาถังถัง -->
       <div style="padding:16px;background:#f0fff4;border-radius:14px;margin:12px 16px;display:flex;align-items:center;gap:14px">
@@ -8406,6 +8485,12 @@ function loadState(uid) {
   return { xp:0, streak:0, completed:[], knownWords:[], srsData:{}, lastActive:'' };
 }
 
+function updateUserData(updates) {
+  if (!state.user) return;
+  Object.assign(state.user.data, updates);
+  saveState();
+}
+
 function saveState() {
   if (!state.user) return;
   // ฝัง name + email ลงใน data เสมอ เพื่อให้ Admin Panel อ่านได้
@@ -8934,7 +9019,7 @@ function goScreen(s) {
   document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
   document.getElementById('screen-' + s).classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  const navMap = { home:'nav-home', 'lessons-hub':'nav-lessons', play:'nav-chat', chat:'nav-chat', quiz:'nav-quiz', profile:'nav-profile', lesson:'nav-home', pinyin:'nav-home', vocab:'nav-lessons', 'tangtang-chat':'nav-tangtang', 'comm-hub':'nav-lessons', 'comm-lesson':'nav-lessons', 'pricing':'nav-profile' };
+  const navMap = { home:'nav-home', 'lessons-hub':'nav-lessons', play:'nav-chat', chat:'nav-chat', quiz:'nav-quiz', profile:'nav-profile', lesson:'nav-home', pinyin:'nav-home', vocab:'nav-lessons', 'tangtang-chat':'nav-tangtang', 'comm-hub':'nav-lessons', 'comm-lesson':'nav-lessons', 'pricing':'nav-profile', 'placement':'nav-profile' };
   const nb = document.getElementById(navMap[s]);
   if (nb) nb.classList.add('active');
   state.curScreen = s;
@@ -9058,6 +9143,8 @@ function renderHome() {
   document.getElementById('hs-xp').textContent = d.xp || 0;
   document.getElementById('hs-done').textContent = (d.completed || []).length;
   document.getElementById('hs-known').textContent = (d.knownWords || []).length;
+  // อัปเดต placement banner
+  updateHomePlacementBanner();
   // Update level badge
   const _lv = getLevelFromXP(d.xp || 0);
   const lvBadge = document.getElementById('home-level-badge');
@@ -9842,6 +9929,10 @@ function renderProfile() {
     }).join('');
     achEl.innerHTML = `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px 8px">${achHTML}</div>`;
   }
+
+  // placement section ถูกย้ายไปอยู่ในหน้าทดสอบแล้ว ไม่ต้องแสดงในโปรไฟล์
+  const placementSection = document.getElementById('prof-placement-section');
+  if (placementSection) placementSection.style.display = 'none';
 
   // แสดง/ซ่อนปุ่ม Admin
   const adminBtn = document.getElementById('admin-btn');
@@ -13506,6 +13597,449 @@ function getLevelFromXP(xp) {
   let lv = 1;
   while (xpForLevel(lv+1) <= xp) lv++;
   return lv;
+}
+
+// ══════════════════════════════════════════════════════
+// 🎯 PLACEMENT TEST — วัดระดับภาษาจีน 30 ข้อ
+// ══════════════════════════════════════════════════════
+
+const PLACEMENT_QUESTIONS = [
+  // ── HSK 1 — คำศัพท์พื้นฐาน (ข้อ 1-5) ──
+  { id:1, hsk:1, type:'vocab', q:'คำว่า 你好 แปลว่าอะไร?', opts:['สวัสดี','ขอบคุณ','ลาก่อน','ขอโทษ'], ans:0 },
+  { id:2, hsk:1, type:'vocab', q:'คำว่า 谢谢 (xiè xiè) แปลว่าอะไร?', opts:['ขอโทษ','สวัสดี','ขอบคุณ','ไม่เป็นไร'], ans:2 },
+  { id:3, hsk:1, type:'vocab', q:'คำว่า 水 (shuǐ) แปลว่าอะไร?', opts:['ไฟ','น้ำ','ลม','ดิน'], ans:1 },
+  { id:4, hsk:1, type:'vocab', q:'ตัวเลข 三 (sān) คือเลขอะไร?', opts:['1','2','3','4'], ans:2 },
+  { id:5, hsk:1, type:'vocab', q:'คำว่า 大 (dà) แปลว่าอะไร?', opts:['เล็ก','ใหญ่','สูง','ต่ำ'], ans:1 },
+  // ── HSK 1 — การฟัง (ข้อ 6-8) ──
+  { id:6, hsk:1, type:'listen', q:'ฟังแล้วเลือกคำที่ได้ยิน', audio:'nǐ hǎo', opts:['谢谢','再见','对不起','你好'], ans:3 },
+  { id:7, hsk:1, type:'listen', q:'ฟังแล้วเลือกคำที่ได้ยิน', audio:'wǒ ài nǐ', opts:['我爱你','我喜欢你','我想你','我需要你'], ans:0 },
+  { id:8, hsk:1, type:'listen', q:'ฟังแล้วเลือกความหมาย', audio:'míng tiān', opts:['เมื่อวาน','วันนี้','พรุ่งนี้','มะรืน'], ans:2 },
+  // ── HSK 2 — คำศัพท์ (ข้อ 9-12) ──
+  { id:9, hsk:2, type:'vocab', q:'คำว่า 高兴 (gāo xìng) แปลว่าอะไร?', opts:['เศร้า','โกรธ','กลัว','ดีใจ'], ans:3 },
+  { id:10, hsk:2, type:'vocab', q:'คำว่า 但是 (dàn shì) แปลว่าอะไร?', opts:['เพราะว่า','ดังนั้น','แต่','และ'], ans:2 },
+  { id:11, hsk:2, type:'vocab', q:'คำว่า 觉得 (juéde) แปลว่าอะไร?', opts:['รู้สึกว่า','รู้จัก','รู้เรื่อง','รู้ทัน'], ans:0 },
+  { id:12, hsk:2, type:'vocab', q:'คำว่า 帮助 (bāng zhù) แปลว่าอะไร?', opts:['ขัดขวาง','รบกวน','ละทิ้ง','ช่วยเหลือ'], ans:3 },
+  // ── HSK 2 — ไวยากรณ์ (ข้อ 13-15) ──
+  { id:13, hsk:2, type:'grammar', q:'ประโยคใดถูกต้อง?', opts:['我很是高兴','我是很高兴','我很高兴','高兴我很'], ans:2 },
+  { id:14, hsk:2, type:'grammar', q:'填空: 我___去北京了。(ไปแล้ว)', opts:['都','就','已经','还'], ans:2 },
+  { id:15, hsk:2, type:'grammar', q:'คำเชื่อมใดใช้บอกเหตุผล?', opts:['但是','所以','虽然','因为'], ans:3 },
+  // ── HSK 2 — การฟัง (ข้อ 16-17) ──
+  { id:16, hsk:2, type:'listen', q:'ฟังแล้วเลือกความหมาย', audio:'tā hěn piào liàng', opts:['เขาร้องเพลงเก่ง','เขาฉลาดมาก','เธอใจดีมาก','เธอสวยมาก'], ans:3 },
+  { id:17, hsk:2, type:'listen', q:'ฟังแล้วเลือกคำที่ได้ยิน', audio:'chī fàn', opts:['吃饭','喝水','睡觉','工作'], ans:0 },
+  // ── HSK 3 — คำศัพท์ (ข้อ 18-21) ──
+  { id:18, hsk:3, type:'vocab', q:'คำว่า 方便 (fāng biàn) แปลว่าอะไร?', opts:['ยุ่งยาก','รวดเร็ว','ช้า','สะดวก'], ans:3 },
+  { id:19, hsk:3, type:'vocab', q:'คำว่า 其实 (qí shí) แปลว่าอะไร?', opts:['บางที','อย่างไรก็ตาม','ดังนั้น','ที่จริงแล้ว'], ans:3 },
+  { id:20, hsk:3, type:'vocab', q:'คำว่า 环境 (huán jìng) แปลว่าอะไร?', opts:['สิ่งแวดล้อม','สภาพอากาศ','ธรรมชาติ','ภูมิทัศน์'], ans:0 },
+  { id:21, hsk:3, type:'vocab', q:'คำว่า 影响 (yǐng xiǎng) แปลว่าอะไร?', opts:['สนับสนุน','ส่งเสริม','มีอิทธิพล/ส่งผล','ขัดขวาง'], ans:2 },
+  // ── HSK 3 — การฟัง (ข้อ 22) ──
+  { id:22, hsk:3, type:'listen', q:'ฟังแล้วเลือกความหมาย', audio:'wǒ jué de zhè ge diàn yǐng hěn hǎo kàn', opts:['ฉันคิดว่าหนังเรื่องนี้น่าดูมาก','ฉันไม่ชอบหนังเรื่องนี้','เขาไปดูหนังแล้ว','หนังเรื่องนี้ยาวมาก'], ans:0 },
+  // ── HSK 3 — เรียงประโยค (ข้อ 23-24) ──
+  { id:23, hsk:3, type:'order', q:'เรียงประโยคให้ถูกต้อง: "เขาเดินทางมาจากประเทศจีน"', opts:['他从中国来的','中国他从来的','从中国他来的','他来的从中国'], ans:0 },
+  { id:24, hsk:3, type:'order', q:'เรียงประโยคให้ถูกต้อง: "ฉันกำลังเรียนภาษาจีน"', opts:['我学习汉语在','我在学习汉语','学习我在汉语','汉语我在学习'], ans:1 },
+  // ── HSK 4 — คำศัพท์ (ข้อ 25-27) ──
+  { id:25, hsk:4, type:'vocab', q:'คำว่า 尽管 (jǐn guǎn) แปลว่าอะไร?', opts:['เพราะว่า','ถึงแม้ว่า','ดังนั้น','เพื่อที่จะ'], ans:1 },
+  { id:26, hsk:4, type:'vocab', q:'คำว่า 逐渐 (zhú jiàn) แปลว่าอะไร?', opts:['ทันที','บางครั้ง','ค่อยๆ/ทีละน้อย','บ่อยๆ'], ans:2 },
+  { id:27, hsk:4, type:'vocab', q:'คำว่า 坚持 (jiān chí) แปลว่าอะไร?', opts:['ยอมแพ้','ลังเล','ยืนหยัด/ทำต่อเนื่อง','เปลี่ยนใจ'], ans:2 },
+  // ── HSK 4 — ไวยากรณ์ + เรียงประโยค (ข้อ 28-30) ──
+  { id:28, hsk:4, type:'grammar', q:'ประโยคใดใช้ 把 ถูกต้อง?', opts:['我把书读了','我读了把书','把我书读了','我读把了书'], ans:0 },
+  { id:29, hsk:4, type:'grammar', q:'填空: 他___努力，___没有通过考试。', opts:['因为...所以','如果...就','虽然...但是','只要...就'], ans:2 },
+  { id:30, hsk:4, type:'order', q:'เรียงประโยคให้ถูกต้อง: "ยิ่งเรียนยิ่งสนุก"', opts:['越学越有趣','学越越有趣','越越学有趣','有趣越学越'], ans:0 },
+  // ── HSK 4 — การฟัง (ข้อ 31) ──
+  { id:31, hsk:4, type:'listen', q:'ฟังแล้วเลือกความหมาย', audio:'suī rán tā hěn máng dàn shì tā hái shì lái le', opts:['เขาไม่มาเพราะยุ่ง','เขายุ่งมากจนลืมมา','เขามาเพราะไม่ยุ่ง','ถึงแม้เขายุ่งแต่เขาก็ยังมา'], ans:3 },
+  // ── HSK 5-6 — คำศัพท์ขั้นสูง (ข้อ 32-35) ──
+  { id:32, hsk:5, type:'vocab', q:'คำว่า 陶醉 (táo zuì) แปลว่าอะไร?', opts:['หลับใหล','เบื่อหน่าย','กังวล','เพลิดเพลิน/หลงใหล'], ans:3 },
+  { id:33, hsk:5, type:'vocab', q:'คำว่า 妥协 (tuǒ xié) แปลว่าอะไร?', opts:['ยืนหยัด','ขัดแย้ง','เพิกเฉย','ประนีประนอม/ยอมความ'], ans:3 },
+  { id:34, hsk:6, type:'vocab', q:'คำว่า 瞬息万变 แปลว่าอะไร?', opts:['มั่นคงไม่เปลี่ยน','เปลี่ยนแปลงรวดเร็ว','ช้าและสม่ำเสมอ','คาดเดาได้'], ans:1 },
+  { id:35, hsk:6, type:'grammar', q:'สำนวน 半途而废 หมายความว่าอะไร?', opts:['ทำสำเร็จอย่างรวดเร็ว','ทำครึ่งๆ กลางๆ ไม่เสร็จ','ทำอย่างละเอียดรอบคอบ','ทำซ้ำหลายครั้ง'], ans:1 },
+  // ── เพิ่ม 5 ข้อสุดท้าย HSK 5-6 (ข้อ 36-40) ──
+  { id:36, hsk:5, type:'listen', q:'ฟังแล้วเลือกความหมาย', audio:'zhè jiàn shì qing yǒu diǎn fù zá', opts:['เรื่องนี้ง่ายมาก','เรื่องนี้ค่อนข้างซับซ้อน','เรื่องนี้น่าเบื่อ','เรื่องนี้สนุกมาก'], ans:1 },
+  { id:37, hsk:5, type:'order', q:'เรียงประโยคให้ถูกต้อง: "เขายิ่งพูดยิ่งทำให้คนอื่นสับสน"', opts:['他说得越多越让人糊涂','他越多说越人糊涂','越他说越让人糊涂','他说越越让人糊涂'], ans:0 },
+  { id:38, hsk:5, type:'vocab', q:'คำว่า 胸有成竹 หมายความว่าอะไร?', opts:['ลังเลไม่แน่ใจ','มีแผนในใจชัดเจนแล้ว','ทำโดยไม่คิด','ขาดความมั่นใจ'], ans:1 },
+  { id:39, hsk:6, type:'vocab', q:'คำว่า 一石二鸟 หมายความว่าอะไร?', opts:['ทำหลายอย่างแต่ไม่สำเร็จ','ยิงนัดเดียวได้นกสองตัว (ทำสิ่งเดียวได้สองอย่าง)','เสียเวลาโดยเปล่าประโยชน์','ทำอะไรก็ล้มเหลว'], ans:1 },
+  { id:40, hsk:6, type:'listen', q:'ฟังแล้วเลือกความหมาย', audio:'wú lùn rú hé wǒ dōu huì zhī chí nǐ', opts:['ฉันจะไม่สนับสนุนคุณ','ไม่ว่าอย่างไรฉันก็จะสนับสนุนคุณ','บางครั้งฉันสนับสนุนคุณ','ฉันสนับสนุนคุณถ้าคุณสำเร็จ'], ans:1 },
+];
+
+let placementIdx = 0;
+let placementScore = { hsk1:0, hsk2:0, hsk3:0, hsk4:0, hsk5:0, hsk6:0 };
+let placementTotal = { hsk1:0, hsk2:0, hsk3:0, hsk4:0, hsk5:0, hsk6:0 };
+let placementAnswers = [];
+let placementAnswered = false;
+let placementShuffled = []; // เก็บ index ที่สุ่มแล้ว
+
+function shufflePlacementOpts(question) {
+  // สร้าง array ของ {text, isCorrect}
+  const items = question.opts.map((opt, i) => ({ text: opt, isCorrect: i === question.ans }));
+  // Fisher-Yates shuffle
+  for (let i = items.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+  const newAns = items.findIndex(item => item.isCorrect);
+  return { opts: items.map(item => item.text), ans: newAns };
+}
+
+function initPlacementTest() {
+  goScreen('placement');
+  const done = state.user?.data?.placementHistory?.length > 0;
+  document.getElementById('placement-intro').style.display = 'block';
+  document.getElementById('placement-play').style.display = 'none';
+  document.getElementById('placement-result').style.display = 'none';
+  // แสดง/ซ่อนปุ่มประวัติคะแนน
+  const histBtn = document.getElementById('placement-history-btn');
+  if (histBtn) histBtn.style.display = done ? 'block' : 'none';
+  if (done) {
+    // แสดงประวัติด้วยในหน้า intro
+    renderPlacementHistory();
+  } else {
+    const existing = document.getElementById('placement-history-preview');
+    if (existing) existing.innerHTML = '';
+  }
+}
+
+function renderPlacementHistory() {
+  const history = state.user?.data?.placementHistory || [];
+  if (history.length === 0) return;
+  const previewDiv = document.getElementById('placement-history-preview');
+  if (!previewDiv) return;
+  const hskColors = { 1:'#4caf50', 2:'#2196f3', 3:'#ff9800', 4:'#9c27b0', 5:'#f44336', 6:'#795548' };
+  const last = history[history.length - 1];
+  previewDiv.innerHTML = `
+    <div style="background:#f0fdf4;border:1.5px solid #4caf50;border-radius:14px;padding:14px;margin-bottom:14px">
+      <div style="font-size:12px;font-weight:800;color:#1b5e20;margin-bottom:8px">📊 ผลล่าสุดของคุณ</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:44px;height:44px;border-radius:12px;background:${hskColors[last.level]}20;border:2px solid ${hskColors[last.level]};display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0">
+          <div style="font-size:9px;font-weight:700;color:${hskColors[last.level]}">HSK</div>
+          <div style="font-size:18px;font-weight:900;color:${hskColors[last.level]}">${last.level}</div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:700">${last.score}/${last.total} ข้อ (${last.pct}%)</div>
+          <div style="font-size:11px;color:#666;margin-top:2px">📅 ${last.date} · ครั้งที่ ${history.length}</div>
+        </div>
+      </div>
+      ${history.length > 1 ? `
+      <div style="margin-top:10px;font-size:11px;color:#666">
+        ประวัติทั้งหมด ${history.length} ครั้ง:
+        ${history.map((h,i) => `<span style="display:inline-block;background:${hskColors[h.level]}20;color:${hskColors[h.level]};padding:2px 8px;border-radius:10px;margin:2px;font-weight:700">ครั้ง${i+1}: HSK${h.level} (${h.pct}%)</span>`).join('')}
+      </div>` : ''}
+    </div>`;
+}
+
+function startPlacementTest() {
+  placementIdx = 0;
+  placementScore = { hsk1:0, hsk2:0, hsk3:0, hsk4:0, hsk5:0, hsk6:0 };
+  placementTotal = { hsk1:0, hsk2:0, hsk3:0, hsk4:0, hsk5:0, hsk6:0 };
+  placementAnswers = [];
+  placementAnswered = false;
+  // Shuffle options สำหรับทุกข้อ
+  placementShuffled = PLACEMENT_QUESTIONS.map(q => shufflePlacementOpts(q));
+  document.getElementById('placement-intro').style.display = 'none';
+  document.getElementById('placement-result').style.display = 'none';
+  document.getElementById('placement-play').style.display = 'block';
+  renderPlacementQ();
+}
+
+function showPlacementHistoryModal() {
+  const history = state.user?.data?.placementHistory || [];
+  const hskColors = { 1:'#4caf50', 2:'#2196f3', 3:'#ff9800', 4:'#9c27b0', 5:'#f44336', 6:'#795548' };
+  const existing = document.getElementById('placement-history-modal');
+  if (existing) existing.remove();
+  const modal = document.createElement('div');
+  modal.id = 'placement-history-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.6);display:flex;align-items:flex-end';
+  modal.innerHTML = `
+    <div style="background:white;border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-height:85vh;overflow-y:auto">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div style="font-size:18px;font-weight:900;color:var(--ink)">📊 ประวัติการวัดระดับ</div>
+        <button onclick="document.getElementById('placement-history-modal').remove()" style="background:#f0f0f0;border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer">✕</button>
+      </div>
+      ${history.length === 0 ? `<div style="text-align:center;padding:40px;color:var(--ink3)">ยังไม่มีประวัติการทดสอบค่า</div>` :
+        history.slice().reverse().map((h, i) => {
+          const round = history.length - i;
+          const color = hskColors[h.level];
+          return `
+          <div style="background:${color}10;border:1.5px solid ${color}30;border-radius:14px;padding:14px;margin-bottom:10px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:48px;height:48px;border-radius:12px;background:${color}20;border:2px solid ${color};display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0">
+                <div style="font-size:9px;font-weight:700;color:${color}">HSK</div>
+                <div style="font-size:20px;font-weight:900;color:${color}">${h.level}</div>
+              </div>
+              <div style="flex:1">
+                <div style="display:flex;align-items:center;gap:6px">
+                  <div style="font-size:14px;font-weight:800;color:var(--ink)">ครั้งที่ ${round}</div>
+                  ${round === history.length ? '<span style="background:var(--red);color:white;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700">ล่าสุด</span>' : ''}
+                </div>
+                <div style="font-size:13px;font-weight:700;color:${color};margin-top:2px">${h.score}/${h.total} ข้อ · ${h.pct}%</div>
+                <div style="font-size:11px;color:var(--ink3);margin-top:2px">📅 ${h.date}</div>
+              </div>
+            </div>
+            ${h.weaknesses?.length > 0 ? `<div style="margin-top:8px;font-size:11px;background:rgba(255,255,255,.7);border-radius:8px;padding:6px 10px;color:#e65100">🎯 ควรพัฒนา: ${h.weaknesses.join(', ')}</div>` : ''}
+          </div>`;
+        }).join('')
+      }
+      <button onclick="document.getElementById('placement-history-modal').remove();startPlacementTest()" style="width:100%;padding:14px;background:linear-gradient(135deg,var(--red),#c01078);color:white;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;margin-top:8px">
+        🎯 วัดระดับใหม่อีกครั้ง
+      </button>
+    </div>
+  `;
+  modal.addEventListener('click', e => { if(e.target===modal) modal.remove(); });
+  document.body.appendChild(modal);
+}
+
+function updateHomePlacementBanner() {
+  const history = state.user?.data?.placementHistory || [];
+  const newBanner = document.getElementById('placement-banner-new');
+  const doneBanner = document.getElementById('placement-banner-done');
+  if (!newBanner || !doneBanner) return;
+  if (history.length > 0) {
+    const last = history[history.length-1];
+    newBanner.style.display = 'none';
+    doneBanner.style.display = 'flex';
+    const lvText = document.getElementById('placement-banner-level-text');
+    const subText = document.getElementById('placement-banner-sub');
+    if (lvText) lvText.textContent = `ระดับล่าสุด: HSK ${last.level} (${last.pct}%) · ทำมาแล้ว ${history.length} ครั้ง`;
+    if (subText) subText.textContent = 'กดเพื่อวัดระดับใหม่หรือดูประวัติ';
+  } else {
+    newBanner.style.display = 'flex';
+    doneBanner.style.display = 'none';
+  }
+}
+
+function renderPlacementQ() {
+  const qOrig = PLACEMENT_QUESTIONS[placementIdx];
+  const qShuffled = placementShuffled[placementIdx];
+  const q = { ...qOrig, opts: qShuffled.opts, ans: qShuffled.ans };
+  const play = document.getElementById('placement-play');
+  const pct = Math.round((placementIdx / PLACEMENT_QUESTIONS.length) * 100);
+  const hskColors = { 1:'#4caf50', 2:'#2196f3', 3:'#ff9800', 4:'#9c27b0', 5:'#f44336', 6:'#795548' };
+  const typeLabels = { vocab:'📖 คำศัพท์', listen:'🔊 การฟัง', grammar:'📝 ไวยากรณ์', order:'🔀 เรียงประโยค' };
+
+  placementAnswered = false;
+
+  play.innerHTML = `
+    <div style="margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:12px;color:var(--ink3)">ข้อ ${placementIdx+1} / ${PLACEMENT_QUESTIONS.length}</span>
+        <span style="font-size:11px;background:${hskColors[q.hsk]}20;color:${hskColors[q.hsk]};padding:3px 10px;border-radius:20px;font-weight:700">HSK ${q.hsk}</span>
+      </div>
+      <div style="background:#f0f0f0;border-radius:20px;height:6px">
+        <div style="background:linear-gradient(90deg,var(--red),#ff7b2f);width:${pct}%;height:100%;border-radius:20px;transition:.3s"></div>
+      </div>
+    </div>
+
+    <div style="background:white;border-radius:16px;padding:18px;margin-bottom:16px;border:1.5px solid var(--paper3)">
+      <div style="font-size:11px;color:var(--ink3);margin-bottom:8px">${typeLabels[q.type]}</div>
+      ${q.type === 'listen' ? `
+        <button onclick="speakPlacement('${q.audio}')" id="placement-speak-btn"
+          style="width:100%;padding:14px;background:linear-gradient(135deg,#1565c0,#1976d2);color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px">
+          🔊 กดฟังเสียง
+        </button>
+      ` : ''}
+      <div style="font-size:15px;font-weight:700;color:var(--ink);line-height:1.5">${q.q}</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px" id="placement-opts">
+      ${q.opts.map((opt, i) => `
+        <button onclick="answerPlacement(${i})" id="placement-opt-${i}"
+          style="padding:14px 16px;background:white;border:2px solid var(--paper3);border-radius:12px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;text-align:left;transition:.2s">
+          ${['A','B','C','D'][i]}. ${opt}
+        </button>
+      `).join('')}
+    </div>
+
+    <div id="placement-feedback" style="min-height:44px;margin-top:14px"></div>
+
+    <button onclick="nextPlacementQ()" id="placement-next-btn" style="display:none;width:100%;padding:14px;background:linear-gradient(135deg,var(--red),#c01078);color:white;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;margin-top:10px">
+      ${placementIdx < PLACEMENT_QUESTIONS.length - 1 ? 'ข้อถัดไป →' : '🎯 ดูผลการทดสอบ'}
+    </button>
+  `;
+
+  // Auto-speak for listen questions
+  if (q.type === 'listen') {
+    setTimeout(() => speakPlacement(q.audio), 500);
+  }
+}
+
+function speakPlacement(text) {
+  speak(text, null, 0.8);
+  const btn = document.getElementById('placement-speak-btn');
+  if (btn) {
+    btn.innerHTML = '🔊 กำลังเล่น...';
+    setTimeout(() => { if(btn) btn.innerHTML = '🔊 กดฟังอีกครั้ง'; }, 2000);
+  }
+}
+
+function answerPlacement(chosen) {
+  if (placementAnswered) return;
+  placementAnswered = true;
+
+  const q = PLACEMENT_QUESTIONS[placementIdx];
+  const correct = chosen === q.ans;
+  const hskKey = `hsk${q.hsk}`;
+  placementTotal[hskKey]++;
+  if (correct) placementScore[hskKey]++;
+  placementAnswers.push({ qid: q.id, correct });
+
+  // Color buttons
+  for (let i = 0; i < q.opts.length; i++) {
+    const btn = document.getElementById(`placement-opt-${i}`);
+    if (!btn) continue;
+    if (i === q.ans) {
+      btn.style.background = '#e8f5e9';
+      btn.style.borderColor = '#4caf50';
+      btn.style.color = '#1b5e20';
+    } else if (i === chosen && !correct) {
+      btn.style.background = '#ffebee';
+      btn.style.borderColor = '#f44336';
+      btn.style.color = '#b71c1c';
+    }
+    btn.style.cursor = 'default';
+  }
+
+  // Feedback
+  const fb = document.getElementById('placement-feedback');
+  if (fb) {
+    fb.innerHTML = correct
+      ? `<div style="background:#e8f5e9;border-radius:10px;padding:10px 14px;font-size:13px;color:#1b5e20;font-weight:700">✅ ถูกต้อง! เก่งมากค่า</div>`
+      : `<div style="background:#ffebee;border-radius:10px;padding:10px 14px;font-size:13px;color:#b71c1c;font-weight:700">❌ คำตอบที่ถูกคือ: ${q.opts[q.ans]}</div>`;
+  }
+
+  // Show next button
+  const nextBtn = document.getElementById('placement-next-btn');
+  if (nextBtn) nextBtn.style.display = 'block';
+}
+
+function nextPlacementQ() {
+  placementIdx++;
+  if (placementIdx >= PLACEMENT_QUESTIONS.length) {
+    showPlacementResult(true);
+  } else {
+    renderPlacementQ();
+  }
+}
+
+function showPlacementResult(saveResult) {
+  if (saveResult === undefined) saveResult = true;
+  document.getElementById('placement-play').style.display = 'none';
+  document.getElementById('placement-intro').style.display = 'none';
+  var resultDiv = document.getElementById('placement-result');
+  resultDiv.style.display = 'block';
+
+  // คำนวณระดับ
+  var hskLevels = [1,2,3,4,5,6];
+  var detectedLevel = 1;
+  for (var li = 0; li < hskLevels.length; li++) {
+    var lv = hskLevels[li];
+    var key = 'hsk' + lv;
+    var lvTotal = placementTotal[key];
+    var lvScore = placementScore[key];
+    if (lvTotal > 0 && lvScore / lvTotal >= 0.6) detectedLevel = lv;
+  }
+
+  // คะแนนรวม
+  var totalCorrect = 0;
+  var keys = Object.keys(placementScore);
+  for (var ki = 0; ki < keys.length; ki++) totalCorrect += placementScore[keys[ki]];
+  var totalQ = PLACEMENT_QUESTIONS.length;
+  var pct = Math.round(totalCorrect / totalQ * 100);
+
+  // วิเคราะห์ทักษะ
+  var typeScores = { vocab:0, listen:0, grammar:0, order:0 };
+  var typeTotal2 = { vocab:0, listen:0, grammar:0, order:0 };
+  for (var qi = 0; qi < PLACEMENT_QUESTIONS.length; qi++) {
+    var qt = PLACEMENT_QUESTIONS[qi].type;
+    typeTotal2[qt]++;
+    if (placementAnswers[qi] && placementAnswers[qi].correct) typeScores[qt]++;
+  }
+  var typeLabels = { vocab:'📖 คำศัพท์', listen:'🔊 การฟัง', grammar:'📝 ไวยากรณ์', order:'🔀 เรียงประโยค' };
+  var weaknesses = [];
+  var strengths = [];
+  var typeKeys = ['vocab','listen','grammar','order'];
+  for (var ti = 0; ti < typeKeys.length; ti++) {
+    var tp = typeKeys[ti];
+    if (typeTotal2[tp] === 0) continue;
+    var rate = typeScores[tp] / typeTotal2[tp];
+    if (rate < 0.5) weaknesses.push(typeLabels[tp]);
+    else if (rate >= 0.75) strengths.push(typeLabels[tp]);
+  }
+
+  // HSK info
+  var hskInfo = {
+    1: { color:'#4caf50', label:'Beginner', desc:'เพิ่งเริ่มต้น ยังไม่มีพื้นฐาน' },
+    2: { color:'#2196f3', label:'Elementary', desc:'มีพื้นฐานบ้างแล้ว' },
+    3: { color:'#ff9800', label:'Intermediate', desc:'สื่อสารง่ายๆ ได้แล้ว' },
+    4: { color:'#9c27b0', label:'Upper-Intermediate', desc:'สื่อสารได้คล่องพอสมควร' },
+    5: { color:'#f44336', label:'Advanced', desc:'ใช้งานได้ในชีวิตประจำวัน' },
+    6: { color:'#795548', label:'Mastery', desc:'ระดับสูงมาก!' },
+  };
+  var info = hskInfo[detectedLevel];
+
+  // คำแนะนำ
+  var recommendations = [];
+  if (weaknesses.indexOf('🔊 การฟัง') >= 0) recommendations.push('ฝึกฟังเสียงภาษาจีนทุกวัน กดปุ่ม 🔊 ในบทเรียนบ่อยๆ');
+  if (weaknesses.indexOf('📖 คำศัพท์') >= 0) recommendations.push('เล่น Word Map และ Flashcard เพื่อเพิ่มคำศัพท์');
+  if (weaknesses.indexOf('📝 ไวยากรณ์') >= 0) recommendations.push('อ่านบทเรียนไวยากรณ์ใน HSK อย่างละเอียด');
+  if (weaknesses.indexOf('🔀 เรียงประโยค') >= 0) recommendations.push('ฝึกเกมเรียงประโยคในหน้าเกม');
+  if (recommendations.length === 0) recommendations.push('ยอดเยี่ยมมาก! เรียนต่อในระดับถัดไปได้เลย');
+
+  // บันทึกประวัติ
+  if (saveResult && state.user && state.user.id) {
+    var history = (state.user.data && state.user.data.placementHistory) ? state.user.data.placementHistory : [];
+    history.push({
+      level: detectedLevel, score: totalCorrect, total: totalQ, pct: pct,
+      date: new Date().toISOString().slice(0,10),
+      weaknesses: weaknesses, strengths: strengths,
+    });
+    updateUserData({
+      placementDone: true, placementLevel: detectedLevel,
+      placementScore: totalCorrect, placementPct: pct,
+      placementDate: new Date().toISOString().slice(0,10),
+      placementWeaknesses: weaknesses, placementStrengths: strengths,
+      placementHistory: history,
+    });
+    setTimeout(updateHomePlacementBanner, 500);
+  }
+
+  // สร้าง skill bars
+  var skillHtml = '';
+  for (var si = 0; si < typeKeys.length; si++) {
+    var sk = typeKeys[si];
+    if (typeTotal2[sk] === 0) continue;
+    var sc = typeScores[sk];
+    var tt = typeTotal2[sk];
+    var sr = Math.round(sc / tt * 100);
+    var sc2 = sr >= 75 ? '#4caf50' : sr >= 50 ? '#ff9800' : '#f44336';
+    skillHtml += '<div style="margin-bottom:10px">'
+      + '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">'
+      + '<span style="font-weight:600">' + typeLabels[sk] + '</span>'
+      + '<span style="color:' + sc2 + ';font-weight:700">' + sc + '/' + tt + ' (' + sr + '%)</span>'
+      + '</div>'
+      + '<div style="background:#f0f0f0;border-radius:20px;height:8px">'
+      + '<div style="background:' + sc2 + ';width:' + sr + '%;height:100%;border-radius:20px"></div>'
+      + '</div></div>';
+  }
+
+  resultDiv.innerHTML = '<div style="padding-bottom:20px">'
+    + '<div style="text-align:center;margin-bottom:20px">'
+    + '<div style="font-size:48px;margin-bottom:8px">🎯</div>'
+    + '<div style="font-size:20px;font-weight:900;color:var(--ink)">ผลการวัดระดับ</div>'
+    + '</div>'
+    + '<div style="background:' + info.color + '15;border:2px solid ' + info.color + ';border-radius:20px;padding:20px;text-align:center;margin-bottom:16px">'
+    + '<div style="font-size:13px;color:' + info.color + ';font-weight:700;margin-bottom:4px">ระดับภาษาจีนของคุณ</div>'
+    + '<div style="font-size:36px;font-weight:900;color:' + info.color + '">HSK ' + detectedLevel + '</div>'
+    + '<div style="font-size:16px;font-weight:700;color:var(--ink);margin-top:4px">' + info.label + '</div>'
+    + '<div style="font-size:12px;color:var(--ink3);margin-top:4px">' + info.desc + '</div>'
+    + '<div style="font-size:24px;font-weight:900;color:var(--ink);margin-top:12px">' + totalCorrect + '/' + totalQ + ' ข้อ (' + pct + '%)</div>'
+    + '</div>'
+    + '<div style="background:white;border:1px solid var(--paper3);border-radius:16px;padding:16px;margin-bottom:14px">'
+    + '<div style="font-size:13px;font-weight:800;color:var(--ink);margin-bottom:12px">📊 คะแนนแยกตามทักษะ</div>'
+    + skillHtml + '</div>'
+    + (strengths.length > 0 ? '<div style="background:#e8f5e9;border-radius:12px;padding:12px 14px;margin-bottom:10px"><div style="font-size:12px;font-weight:800;color:#1b5e20;margin-bottom:6px">💪 จุดแข็งของคุณ</div>' + strengths.map(function(s){ return '<div style="font-size:12px;color:#2e7d32">✅ ' + s + '</div>'; }).join('') + '</div>' : '')
+    + (weaknesses.length > 0 ? '<div style="background:#fff3e0;border-radius:12px;padding:12px 14px;margin-bottom:10px"><div style="font-size:12px;font-weight:800;color:#e65100;margin-bottom:6px">🎯 ควรพัฒนาเพิ่ม</div>' + weaknesses.map(function(w){ return '<div style="font-size:12px;color:#bf360c">📌 ' + w + '</div>'; }).join('') + '</div>' : '')
+    + '<div style="background:var(--red-light);border-radius:12px;padding:12px 14px;margin-bottom:20px"><div style="font-size:12px;font-weight:800;color:var(--red);margin-bottom:6px">💡 คำแนะนำสำหรับคุณ</div>' + recommendations.map(function(r){ return '<div style="font-size:12px;color:#c01078;margin-bottom:3px">→ ' + r + '</div>'; }).join('') + '</div>'
+    + '<button onclick="goScreen(\'lessons-hub\')" style="width:100%;padding:14px;background:linear-gradient(135deg,var(--red),#c01078);color:white;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;margin-bottom:10px">📚 เริ่มเรียน HSK ' + detectedLevel + ' เลย!</button>'
+    + '<button onclick="showPlacementHistoryModal()" style="width:100%;padding:12px;background:#f0f9ff;border:1.5px solid #bce3f8;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;color:#0369a1;margin-bottom:10px">📊 ดูประวัติการทดสอบทั้งหมด</button>'
+    + '<button onclick="startPlacementTest()" style="width:100%;padding:12px;background:white;border:1.5px solid var(--paper3);border-radius:12px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;color:var(--ink3)">🔄 ทำแบบทดสอบใหม่</button>'
+    + '</div>';
 }
 
 function initMainQuiz() {
