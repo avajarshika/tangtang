@@ -14919,6 +14919,8 @@ async function loadAdminOrders() {
 
   const { data, error } = await sb.from('orders')
     .select('*')
+    .not('referral_code', 'is', null)
+    .neq('referral_code', '')
     .order('created_at', { ascending: false });
 
   if (error) { listEl.innerHTML = '<div style="color:var(--red);padding:20px">❌ ' + error.message + '</div>'; return; }
@@ -15158,7 +15160,7 @@ setTimeout(() => {
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js');
+    navigator.serviceWorker.register('/tangtang/sw.js');
   });
 }
 
