@@ -14814,7 +14814,38 @@ async function loadAffiliateAdmin() {
     return;
   }
 
-  listEl.innerHTML = affiliates.map(a => {
+  // ดึงประวัติการจ่ายทั้งหมดจาก affiliate_earnings
+  const { data: paidHistory } = await sb.from('affiliate_earnings')
+    .select('affiliate_id, buyer_email, amount, status, created_at')
+    .eq('status', 'paid')
+    .order('created_at', { ascending: false });
+
+  const paid = paidHistory || [];
+  const totalPaidEver = paid.reduce((s, p) => s + (p.amount||0), 0);
+
+  // สร้าง map affiliate_id → name/email
+  const affMap = {};
+  affiliates.forEach(a => { affMap[a.user_id] = a.data?.name || a.data?.email || a.user_id?.substring(0,8); });
+
+  // แสดงประวัติการจ่ายทั้งหมดด้านบน
+  const historyHtml = paid.length > 0 ? `
+    <div style="background:white;border:1px solid var(--paper3);border-radius:var(--r);padding:14px;margin-bottom:16px;box-shadow:var(--shadow)">
+      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px">📋 ประวัติจ่ายค่าคอมทั้งหมด · รวม ฿${totalPaidEver}</div>
+      ${paid.map(p => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--paper2);font-size:12px">
+          <div>
+            <span style="font-weight:600;color:var(--ink)">${affMap[p.affiliate_id] || p.affiliate_id?.substring(0,8)+'...'}</span>
+            <span style="color:var(--ink3);margin-left:6px">← ${p.buyer_email}</span>
+          </div>
+          <div style="text-align:right">
+            <span style="font-weight:700;color:var(--green)">+฿${p.amount}</span>
+            <div style="font-size:10px;color:var(--ink3)">${new Date(p.created_at).toLocaleDateString('th-TH',{day:'numeric',month:'short',year:'numeric'})}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>` : '';
+
+  listEl.innerHTML = historyHtml + affiliates.map(a => {
     const email = a.data?.email || a.user_id?.substring(0,8) + '...';
     const name = a.data?.name || a.data?.display_name || (a.data?.email ? a.data.email.split('@')[0] : null) || 'ไม่ระบุ';
     const earnings = a.affiliate_earnings || 0;
