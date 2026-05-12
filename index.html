@@ -11117,7 +11117,7 @@ function renderStrokeGame() {
   box.innerHTML = `
     <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:16px">
       <div style="display:flex;gap:6px;min-width:max-content;padding:2px 2px">
-        ${[1,2,3,4,5,6,7,8,9,10].map(h=>{const lk=!isPremium()&&h>1;return`<button onclick="${lk?'showPaymentModal()':'strokeHSK='+h+';strokeCharIdx=0;renderStrokeGame()'}" style="padding:5px 14px;border-radius:20px;border:1.5px solid ${strokeHSK===h?'#6b1a6b':'var(--paper3)'};background:${strokeHSK===h?'#6b1a6b':lk?'var(--paper2)':'white'};font-size:11px;font-weight:700;color:${strokeHSK===h?'white':lk?'var(--ink3)':'var(--ink3)'};cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0">${lk?'🔒 ':''}ระดับ ${h}</button>`;}).join('')}
+        ${[1,2,3,4,5,6,7,8,9,10].map(h=>{const lk=!isPremium()&&h>1;return`<button onclick="${lk?'playClickSound();showPaymentModal()':'playClickSound();strokeHSK='+h+';strokeCharIdx=0;renderStrokeGame()'}" style="padding:5px 14px;border-radius:20px;border:1.5px solid ${strokeHSK===h?'#6b1a6b':'var(--paper3)'};background:${strokeHSK===h?'#6b1a6b':lk?'var(--paper2)':'white'};font-size:11px;font-weight:700;color:${strokeHSK===h?'white':lk?'var(--ink3)':'var(--ink3)'};cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0">${lk?'🔒 ':''}ระดับ ${h}</button>`;}).join('')}
       </div>
     </div>
     <div style="text-align:center;margin-bottom:8px">
@@ -11136,12 +11136,12 @@ function renderStrokeGame() {
     <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:16px">
       <button onclick="if(hwWriter){playPenSound();hwWriter.animateCharacter()}" style="padding:10px 16px;background:#6b1a6b;color:white;border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">▶ ดูการเขียน</button>
       <button onclick="if(hwWriter){playClickSound();hwWriter.quiz({onComplete:()=>strokeQuizDone()})}" style="padding:10px 16px;background:var(--red);color:white;border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">✏️ ฝึกเขียน</button>
-      <button id="stroke-toggle-btn" onclick="toggleStrokeOutline()" style="padding:10px 16px;background:var(--paper2);color:var(--ink2);border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">👁 แสดง</button>
+      <button id="stroke-toggle-btn" onclick="playClickSound();toggleStrokeOutline()" style="padding:10px 16px;background:var(--paper2);color:var(--ink2);border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">👁 แสดง</button>
     </div>
     <div id="stroke-feedback" style="text-align:center;min-height:36px;margin-bottom:16px"></div>
     <div style="display:flex;gap:10px">
-      <button onclick="strokeCharIdx=Math.max(0,strokeCharIdx-1);renderStrokeGame()" ${strokeCharIdx===0?'disabled style="opacity:.35"':''} style="flex:1;padding:12px;background:var(--paper2);border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">← ก่อนหน้า</button>
-      <button onclick="strokeCharIdx++;renderStrokeGame()" style="flex:1;padding:12px;background:#6b1a6b;color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">ถัดไป →</button>
+      <button onclick="playClickSound();strokeCharIdx=Math.max(0,strokeCharIdx-1);renderStrokeGame()" ${strokeCharIdx===0?'disabled style="opacity:.35"':''} style="flex:1;padding:12px;background:var(--paper2);border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">← ก่อนหน้า</button>
+      <button onclick="playClickSound();strokeCharIdx++;renderStrokeGame()" style="flex:1;padding:12px;background:#6b1a6b;color:white;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">ถัดไป →</button>
     </div>`;
   if (window.HanziWriter) {
     hwWriter = null;
