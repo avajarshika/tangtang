@@ -120,6 +120,13 @@ body {
   color: var(--ink);
   min-height: 100vh;
   overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  touch-action: pan-y;
+}
+html {
+  overflow-x: hidden;
+  touch-action: pan-y;
 }
 
 /* ── AUTH SCREEN ── */
@@ -1991,7 +1998,7 @@ body {
       <div style="text-align:center;margin-bottom:24px">
         <div style="font-size:48px;margin-bottom:12px">🎯</div>
         <div style="font-size:22px;font-weight:900;color:var(--ink)">วัดระดับภาษาจีน</div>
-        <div style="font-size:13px;color:var(--ink3);margin-top:6px">30 ข้อ · ฟัง · แปล · เรียงประโยค · ไวยากรณ์</div>
+        <div style="font-size:13px;color:var(--ink3);margin-top:6px">40 ข้อ · ฟัง · แปล · เรียงประโยค · ไวยากรณ์</div>
       </div>
       <div style="background:var(--red-light);border-radius:16px;padding:16px;margin-bottom:20px">
         <div style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:8px">📋 แบบทดสอบนี้วัดอะไรบ้าง?</div>
@@ -9750,6 +9757,7 @@ function renderQuiz() {
 }
 
 function answerQuiz(chosen) {
+  playClickSound();
   const l = state.curLesson;
   const q = l.quiz[state.quizIdx];
   const correct = chosen === q.ans;
@@ -10756,9 +10764,35 @@ function speakVocab(zh, btn) {
 
 function speakWord(zh) { stopSpeech(); speak(zh); }
 
+// ═══════════════════════════════════════════
+// GLOBAL AUDIO CONTEXT — unlock on first touch
+// ═══════════════════════════════════════════
+let _sharedAudioCtx = null;
+function getAudioCtx() {
+  if (!_sharedAudioCtx) {
+    try { _sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) { return null; }
+  }
+  if (_sharedAudioCtx.state === 'suspended') { try { _sharedAudioCtx.resume(); } catch(e) {} }
+  return _sharedAudioCtx;
+}
+(function() {
+  function unlock() {
+    if (!_sharedAudioCtx) {
+      try { _sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) { return; }
+    }
+    if (_sharedAudioCtx.state === 'suspended') {
+      _sharedAudioCtx.resume().catch(function(){});
+    }
+  }
+  // capture:true ทำให้ iOS Safari รับ event ก่อน — สำคัญมาก!
+  ['touchstart','touchend','mousedown','click'].forEach(function(e){
+    document.addEventListener(e, unlock, { passive: true, capture: true });
+  });
+})();
+
 function playClickSound() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = getAudioCtx(); if(!ctx) return;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.connect(gain); gain.connect(ctx.destination);
@@ -10771,7 +10805,7 @@ function playClickSound() {
 
 function playPenSound() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = getAudioCtx(); if(!ctx) return;
     // เสียงปากกาขีด = noise burst สั้นๆ
     const bufLen = ctx.sampleRate * 0.06;
     const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
@@ -10792,7 +10826,7 @@ function playPenSound() {
 
 function playTickSound() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = getAudioCtx(); if(!ctx) return;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.connect(gain); gain.connect(ctx.destination);
@@ -10807,7 +10841,7 @@ function playTickSound() {
 function playUrgentTick() {
   // เสียงนาฬิกาตอนวินาทีสุดท้าย — เร็วและดังขึ้น
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = getAudioCtx(); if(!ctx) return;
     [0, 0.12].forEach(delay => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
@@ -10824,7 +10858,7 @@ function playUrgentTick() {
 
 function playFlipSound() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = getAudioCtx(); if(!ctx) return;
     // เสียงกระดาษพลิก — swoosh สั้นๆ
     const bufLen = ctx.sampleRate * 0.12;
     const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
@@ -10847,7 +10881,7 @@ function playFlipSound() {
 
 function playCorrectSound() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = getAudioCtx(); if(!ctx) return;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.connect(gain); gain.connect(ctx.destination);
@@ -10864,7 +10898,7 @@ function playCorrectSound() {
 
 function playWrongSound() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = getAudioCtx(); if(!ctx) return;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.connect(gain); gain.connect(ctx.destination);
@@ -10880,7 +10914,7 @@ function playWrongSound() {
 
 function playWinSound() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = getAudioCtx(); if(!ctx) return;
     [523, 659, 784, 1047].forEach((freq, i) => {
       const osc = ctx.createOscillator(), gain = ctx.createGain();
       osc.connect(gain); gain.connect(ctx.destination);
@@ -10896,7 +10930,7 @@ function playWinSound() {
 
 function playLoseSound() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = getAudioCtx(); if(!ctx) return;
     [330, 294, 262].forEach((freq, i) => {
       const osc = ctx.createOscillator(), gain = ctx.createGain();
       osc.connect(gain); gain.connect(ctx.destination);
@@ -11199,13 +11233,14 @@ function renderDailyQ() {
     </div>`;
 }
 function answerDaily(chosen) {
+  playClickSound();
   const q=dailyQuestions[dailyQIdx]; const correct=chosen===q.ans;
   document.querySelectorAll('[id^="dopt-"]').forEach((b,i)=>{
     b.disabled=true;
     if(i===q.ans){b.style.borderColor='var(--green)';b.style.background='var(--green-light)';b.querySelector('span').style.background='var(--green)';b.querySelector('span').style.color='white';}
     else if(i===chosen&&!correct){b.style.borderColor='var(--red)';b.style.background='var(--red-light)';b.querySelector('span').style.background='var(--red)';b.querySelector('span').style.color='white';}
   });
-  if(correct) dailyScore++;
+  if(correct){ dailyScore++; playCorrectSound(); } else { playWrongSound(); }
   setTimeout(()=>{
     dailyQIdx++;
     if(dailyQIdx>=dailyQuestions.length){
@@ -13626,7 +13661,7 @@ function getLevelFromXP(xp) {
 }
 
 // ══════════════════════════════════════════════════════
-// 🎯 PLACEMENT TEST — วัดระดับภาษาจีน 30 ข้อ
+// 🎯 PLACEMENT TEST — วัดระดับภาษาจีน 40 ข้อ
 // ══════════════════════════════════════════════════════
 
 const PLACEMENT_QUESTIONS = [
@@ -13742,7 +13777,7 @@ function renderPlacementHistory() {
     ${history.length > 1 ? `
     <div style="margin-top:10px;font-size:11px;color:#666">
       ประวัติทั้งหมด ${history.length} ครั้ง →
-      ${history.map((h,i) => `<span style="display:inline-block;background:${hskColors[h.level]}20;color:${hskColors[h.level]};padding:2px 8px;border-radius:10px;margin:2px;font-weight:700">ครั้ง${i+1}: HSK${h.level} (${h.pct}%)</span>`).join('')}
+      ${history.map((h,i) => `<span onclick="showPlacementHistoryModal()" style="display:inline-block;background:${hskColors[h.level]}20;color:${hskColors[h.level]};padding:2px 8px;border-radius:10px;margin:2px;font-weight:700;cursor:pointer">ครั้ง${i+1}: ${_lvLabels&&_lvLabels[h.level]?_lvLabels[h.level]:'HSK'+h.level} (${h.pct}%)</span>`).join('')}
     </div>` : ''}
   `;
   intro.insertBefore(div, intro.querySelector('button'));
@@ -13821,7 +13856,8 @@ function updateHomePlacementBanner() {
     doneBanner.style.display = 'flex';
     const lvText = document.getElementById('placement-banner-level-text');
     const subText = document.getElementById('placement-banner-sub');
-    if (lvText) lvText.textContent = `ระดับล่าสุด: HSK ${last.level} (${last.pct}%) · ทำมาแล้ว ${history.length} ครั้ง`;
+    const _lvLabels = {1:'มือใหม่เริ่มต้น',2:'พื้นฐานดี',3:'ระดับกลาง',4:'ระดับสูง',5:'ขั้นเชี่ยวชาญ',6:'ระดับมาสเตอร์'};
+    if (lvText) lvText.textContent = `ระดับล่าสุด: ${_lvLabels[last.level]||'HSK '+last.level} (${last.pct}%) · ทำมาแล้ว ${history.length} ครั้ง`;
     if (subText) subText.textContent = 'กดเพื่อวัดระดับใหม่หรือดูประวัติ';
   } else {
     newBanner.style.display = 'flex';
@@ -13894,6 +13930,7 @@ function speakPlacement(text) {
 }
 
 function answerPlacement(chosen) {
+  playClickSound();
   if (placementAnswered) return;
   placementAnswered = true;
 
@@ -13995,8 +14032,11 @@ function showPlacementResult(saveResult) {
   // ระดับใหม่ — ไม่ใช้ HSK
   var levelInfo = {
     1: { color:'#4caf50', emoji:'🌱', label:'มือใหม่เริ่มต้น', desc:'ยังไม่มีพื้นฐาน เริ่มต้นจากศูนย์ได้เลยค่า!' },
-    2: { color:'#2196f3', emoji:'📚', label:'มีพื้นฐานบ้าง', desc:'รู้บ้างแล้ว แต่ยังเสริมได้อีกเยอะเลยค่า!' },
-    3: { color:'#ff9800', emoji:'💪', label:'พื้นฐานดี', desc:'มีพื้นฐานพอสมควร พร้อมเรียนต่อได้เลยค่า!' },
+    2: { color:'#2196f3', emoji:'📗', label:'ระดับพื้นฐาน', desc:'รู้พื้นฐานแล้ว พร้อมพัฒนาต่อได้เลยค่า!' },
+    3: { color:'#ff9800', emoji:'💪', label:'ระดับกลาง', desc:'มีพื้นฐานพอสมควร พร้อมเรียนต่อได้เลยค่า!' },
+    4: { color:'#9c27b0', emoji:'🔥', label:'ระดับสูง', desc:'ดีมากเลย! พร้อมเรียนเนื้อหาขั้นสูงได้เลยค่า!' },
+    5: { color:'#f44336', emoji:'⭐', label:'ขั้นเชี่ยวชาญ', desc:'เก่งมากเลย! ลองเรียน HSK 5-6 ได้เลยค่า!' },
+    6: { color:'#795548', emoji:'🏆', label:'ระดับมาสเตอร์', desc:'ยอดเยี่ยมมาก! ภาษาจีนคล่องแคล่วมากเลยค่า!' },
   };
   var info = levelInfo[detectedLevel];
 
@@ -14388,7 +14428,7 @@ function renderMainQuizBody(title) {
       <div class="prog-bar" style="margin-bottom:8px"><div class="prog-fill" style="width:${pct}%"></div></div>
       <!-- Row 2: lives (final only) + combo badge -->
       <div style="display:flex;justify-content:space-between;align-items:center;min-height:28px">
-        <div id="quiz-lives" style="display:flex;gap:4px">${isFinalQ ? [0,1,2].map(i=>`<span class="life-heart${i>=quizLives?' lost':''}">❤️</span>`).join('') : ''}</div>
+        <div id="quiz-lives" style="display:none"></div>
         <div id="quiz-combo"></div>
       </div>
     </div>
@@ -14451,12 +14491,7 @@ function updateComboDisplay() {
 
 // Lives display
 function updateLivesDisplay() {
-  const el = document.getElementById('quiz-lives');
-  if (!el) return;
-  if (quizLives < 0) { el.innerHTML = ''; return; }
-  el.innerHTML = [0,1,2].map(i =>
-    `<span class="life-heart${i >= quizLives ? ' lost' : ''}">❤️</span>`
-  ).join('');
+  // hearts hidden
 }
 
 // Speed timer
@@ -14565,10 +14600,12 @@ function getComboMultiplier() {
 }
 
 function answerMainQuiz(chosen, title) {
+  playClickSound();
   const qs = mainQuizQuestions;
   const q = qs[mainQuizIdx];
   q._answered = chosen;
   const correct = chosen === q.ans;
+  if (correct) { setTimeout(playCorrectSound, 80); } else { setTimeout(playWrongSound, 80); }
   stopSpeedTimer();
   const elapsed = (Date.now() - quizSpeedStart) / 1000;
 
