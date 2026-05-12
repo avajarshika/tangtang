@@ -14919,6 +14919,8 @@ async function loadAdminOrders() {
 
   const { data, error } = await sb.from('orders')
     .select('*')
+    .not('referral_code', 'is', null)
+    .neq('referral_code', '')
     .order('created_at', { ascending: false });
 
   if (error) { listEl.innerHTML = '<div style="color:var(--red);padding:20px">❌ ' + error.message + '</div>'; return; }
@@ -14987,17 +14989,57 @@ async function approveOrder(orderId, email, referralCode, amount) {
   const { error: orderErr } = await sb.from('orders').update({ status: 'approved' }).eq('id', orderId);
   if (orderErr) { showToast('❌ ' + orderErr.message); if (btn) btn.disabled = false; return; }
 
-  // 2. หา user_id จาก email แล้ว set premium
-  const { data: userRow } = await sb.from('user_progress')
-    .select('user_id')
-    .eq('data->>email', email)
-    .maybeSingle();
-
-  if (userRow?.user_id) {
-    await sb.from('user_progress').update({ is_premium: true }).eq('user_id', userRow.user_id);
+  // 2. คำนวณ subscription type จาก amount
+  // รายเดือน ฿199, รายปี ฿990, ถาวร ฿2490
+  const now = new Date();
+  let subType = 'monthly';
+  let subEnd = null;
+  if (amount >= 2490) {
+    subType = 'lifetime';
+    subEnd = null;
+  } else if (amount >= 900) {
+    subType = 'yearly';
+    const d = new Date(now);
+    d.setFullYear(d.getFullYear() + 1);
+    subEnd = d.toISOString();
+  } else {
+    subType = 'monthly';
+    const d = new Date(now);
+    d.setMonth(d.getMonth() + 1);
+    subEnd = d.toISOString();
   }
 
-  // 3. จ่ายค่าคอม affiliate (ถ้ามี referral_code)
+  // 3. หา user_id จาก auth users ผ่าน RPC แล้ว set premium + subscription
+  let targetUserId = null;
+  try {
+    const { data: rawData } = await sb.rpc('admin_list_users');
+    let authUsers = [];
+    (rawData || []).forEach(row => {
+      try {
+        const val = row && row.admin_list_users ? row.admin_list_users : row;
+        const parsed = typeof val === 'string' ? JSON.parse(val) : val;
+        if (Array.isArray(parsed)) authUsers = authUsers.concat(parsed);
+        else if (parsed && parsed.id) authUsers.push(parsed);
+      } catch(e) { if (row && row.id) authUsers.push(row); }
+    });
+    if (authUsers.length === 0 && Array.isArray(rawData)) authUsers = rawData;
+    const found = authUsers.find(u => u.email === email);
+    if (found) targetUserId = found.id;
+  } catch(e) { console.warn('lookup failed', e); }
+
+  if (targetUserId) {
+    await sb.from('user_progress').update({
+      is_premium: true,
+      subscription_type: subType,
+      subscription_start: now.toISOString(),
+      subscription_end: subEnd
+    }).eq('user_id', targetUserId);
+    console.log('✅ Set premium:', subType, 'end:', subEnd);
+  } else {
+    showToast('⚠️ Approved แล้ว แต่ไม่พบ user — กรุณา set premium ในหน้าสมาชิกด้วยนะ');
+  }
+
+  // 4. จ่ายค่าคอม affiliate (ถ้ามี referral_code)
   if (referralCode) {
     const commission = Math.round(amount * 0.10);
     const { data: affRow } = await sb.from('user_progress')
@@ -15018,16 +15060,15 @@ async function approveOrder(orderId, email, referralCode, amount) {
         status: 'pending'
       });
 
-      showToast(`✅ Approved! จ่ายค่าคอม ฿${commission} ให้ affiliate แล้ว`);
+      showToast(`✅ Approved! ${subType === 'lifetime' ? '🌟 ถาวร' : subType === 'yearly' ? '⭐ รายปี' : '📅 รายเดือน'} + จ่ายค่าคอม ฿${commission} ให้ affiliate แล้ว`);
     } else {
-      showToast('✅ Approved! (ไม่พบ affiliate)');
+      showToast(`✅ Approved! ${subType === 'lifetime' ? '🌟 ถาวร' : subType === 'yearly' ? '⭐ รายปี' : '📅 รายเดือน'} (ไม่พบ affiliate)`);
     }
   } else {
-    showToast('✅ Approved เรียบร้อย!');
+    showToast(`✅ Approved! ${subType === 'lifetime' ? '🌟 ถาวร' : subType === 'yearly' ? '⭐ รายปี' : '📅 รายเดือน'}`);
   }
 
-  // reload orders
-  loadAdminOrders();
+  await loadAdminOrders();
 }
 
 async function loadAdminUsers() {
@@ -15158,7 +15199,7 @@ setTimeout(() => {
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/tangtang/sw.js');
+    navigator.serviceWorker.register('/sw.js');
   });
 }
 
