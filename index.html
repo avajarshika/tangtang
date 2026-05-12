@@ -14987,50 +14987,14 @@ async function approveOrder(orderId, email, referralCode, amount) {
   const { error: orderErr } = await sb.from('orders').update({ status: 'approved' }).eq('id', orderId);
   if (orderErr) { showToast('❌ ' + orderErr.message); if (btn) btn.disabled = false; return; }
 
-  // 2. หา user_id จาก auth users ผ่าน RPC แล้ว set premium
-  let targetUserId = null;
-  try {
-    const { data: rawData } = await sb.rpc('admin_list_users');
-    let authUsers = [];
-    (rawData || []).forEach(row => {
-      try {
-        const val = row && row.admin_list_users ? row.admin_list_users : row;
-        const parsed = typeof val === 'string' ? JSON.parse(val) : val;
-        if (Array.isArray(parsed)) authUsers = authUsers.concat(parsed);
-        else if (parsed && parsed.id) authUsers.push(parsed);
-      } catch(e) { if (row && row.id) authUsers.push(row); }
-    });
-    if (authUsers.length === 0 && Array.isArray(rawData)) authUsers = rawData;
-    const found = authUsers.find(u => u.email === email);
-    if (found) targetUserId = found.id;
-  } catch(e) { console.warn('lookup auth users failed', e); }
+  // 2. หา user_id จาก email แล้ว set premium
+  const { data: userRow } = await sb.from('user_progress')
+    .select('user_id')
+    .eq('data->>email', email)
+    .maybeSingle();
 
-  // fallback: ลองหาจาก data column
-  if (!targetUserId) {
-    const { data: fallback } = await sb.from('user_progress')
-      .select('user_id, data')
-      .maybeSingle()
-      .filter('data->>email', 'eq', email);
-    if (fallback?.user_id) targetUserId = fallback.user_id;
-  }
-
-  if (targetUserId) {
-    // คำนวณวันหมดอายุตาม amount
-    const now = new Date();
-    let subEnd = null;
-    let subType = 'monthly';
-    if (amount >= 900) { subEnd = new Date(now.setFullYear(now.getFullYear()+1)); subType = 'yearly'; }
-    else if (amount >= 249) { subEnd = null; subType = 'lifetime'; }
-    else { subEnd = new Date(now.setMonth(now.getMonth()+1)); subType = 'monthly'; }
-
-    await sb.from('user_progress').update({
-      is_premium: true,
-      subscription_type: subType,
-      subscription_start: new Date().toISOString(),
-      subscription_end: subEnd ? subEnd.toISOString() : null
-    }).eq('user_id', targetUserId);
-  } else {
-    showToast('⚠️ Approved order แล้ว แต่ไม่พบ user — กรุณา set premium ใน tab สมาชิกด้วยนะ');
+  if (userRow?.user_id) {
+    await sb.from('user_progress').update({ is_premium: true }).eq('user_id', userRow.user_id);
   }
 
   // 3. จ่ายค่าคอม affiliate (ถ้ามี referral_code)
@@ -15062,8 +15026,8 @@ async function approveOrder(orderId, email, referralCode, amount) {
     showToast('✅ Approved เรียบร้อย!');
   }
 
-  // reload orders (รอให้ทุก operation เสร็จก่อน)
-  await loadAdminOrders();
+  // reload orders
+  loadAdminOrders();
 }
 
 async function loadAdminUsers() {
@@ -15194,7 +15158,7 @@ setTimeout(() => {
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/tangtang/sw.js');
+    navigator.serviceWorker.register('/sw.js');
   });
 }
 
