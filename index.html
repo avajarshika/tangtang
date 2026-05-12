@@ -11088,6 +11088,22 @@ function initStrokeGame() {
   } else { renderStrokeGame(); }
 }
 
+let strokeOutlineVisible = true; // ค่าเริ่มต้น: แสดงเส้นจาง
+
+function toggleStrokeOutline() {
+  strokeOutlineVisible = !strokeOutlineVisible;
+  const btn = document.getElementById('stroke-toggle-btn');
+  if (hwWriter) {
+    if (strokeOutlineVisible) {
+      hwWriter.showOutline();
+      if (btn) { btn.textContent = '👁 แสดง'; btn.style.background = 'var(--paper2)'; btn.style.color = 'var(--ink2)'; }
+    } else {
+      hwWriter.hideOutline();
+      if (btn) { btn.textContent = '🙈 ปิด'; btn.style.background = '#6b1a6b'; btn.style.color = 'white'; }
+    }
+  }
+}
+
 function renderStrokeGame() {
   if (!isPremium() && strokeHSK > 2) { strokeHSK = 2; } // Free = Level 1-2 เท่านั้น
   const freeLimit = isPremium() ? 999 : 10;
@@ -11096,9 +11112,13 @@ function renderStrokeGame() {
   const char = chars[strokeCharIdx%chars.length];
   const meaning = STROKE_MEANINGS[char]||'';
   const box = document.getElementById('stroke-content');
+  // reset outline state เมื่อเปลี่ยนตัวอักษร
+  strokeOutlineVisible = true;
   box.innerHTML = `
-    <div style="display:flex;justify-content:center;gap:6px;margin-bottom:16px">
-      ${[1,2,3,4,5,6,7,8,9,10].map(h=>{const lk=!isPremium()&&h>1;return`<button onclick="${lk?'showPaymentModal()':'strokeHSK='+h+';strokeCharIdx=0;renderStrokeGame()'}" style="padding:5px 12px;border-radius:20px;border:1.5px solid ${strokeHSK===h?'#6b1a6b':'var(--paper3)'};background:${strokeHSK===h?'#6b1a6b':lk?'var(--paper2)':'white'};font-size:11px;font-weight:700;color:${strokeHSK===h?'white':lk?'var(--ink3)':'var(--ink3)'};cursor:pointer;font-family:inherit">${lk?'🔒 ':''}ระดับ ${h}</button>`;}).join('')}
+    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px;margin-bottom:16px">
+      <div style="display:flex;gap:6px;min-width:max-content;padding:2px 2px">
+        ${[1,2,3,4,5,6,7,8,9,10].map(h=>{const lk=!isPremium()&&h>1;return`<button onclick="${lk?'showPaymentModal()':'strokeHSK='+h+';strokeCharIdx=0;renderStrokeGame()'}" style="padding:5px 14px;border-radius:20px;border:1.5px solid ${strokeHSK===h?'#6b1a6b':'var(--paper3)'};background:${strokeHSK===h?'#6b1a6b':lk?'var(--paper2)':'white'};font-size:11px;font-weight:700;color:${strokeHSK===h?'white':lk?'var(--ink3)':'var(--ink3)'};cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0">${lk?'🔒 ':''}ระดับ ${h}</button>`;}).join('')}
+      </div>
     </div>
     <div style="text-align:center;margin-bottom:8px">
       <div style="font-size:11px;font-weight:600;color:#6b1a6b;margin-bottom:2px">${STROKE_LEVEL_NAMES[strokeHSK]||''}</div>
@@ -11116,7 +11136,7 @@ function renderStrokeGame() {
     <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:16px">
       <button onclick="if(hwWriter){playPenSound();hwWriter.animateCharacter()}" style="padding:10px 16px;background:#6b1a6b;color:white;border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">▶ ดูการเขียน</button>
       <button onclick="if(hwWriter){playClickSound();hwWriter.quiz({onComplete:()=>strokeQuizDone()})}" style="padding:10px 16px;background:var(--red);color:white;border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">✏️ ฝึกเขียน</button>
-      <button onclick="if(hwWriter){playClickSound();hwWriter.showCharacter()}" style="padding:10px 16px;background:var(--paper2);color:var(--ink2);border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">👁 แสดง</button>
+      <button id="stroke-toggle-btn" onclick="toggleStrokeOutline()" style="padding:10px 16px;background:var(--paper2);color:var(--ink2);border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">👁 แสดง</button>
     </div>
     <div id="stroke-feedback" style="text-align:center;min-height:36px;margin-bottom:16px"></div>
     <div style="display:flex;gap:10px">
