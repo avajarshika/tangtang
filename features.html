@@ -206,6 +206,76 @@ footer{background:var(--ink);padding:60px 24px 40px;}
 .footer-links a{font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s;}
 .footer-links a:hover{color:var(--pink2);}
 .footer-copy{font-size:12px;color:rgba(255,255,255,.2);}
+
+/* ── MOBILE OPTIMIZATIONS ── */
+@media(max-width:480px){
+  /* Nav */
+  nav{padding:10px 16px;}
+
+  /* Hero */
+  .hero{padding:90px 16px 60px;}
+  .hero-title{font-size:32px!important;line-height:1.2;}
+  .hero-tagline{font-size:18px!important;}
+  .hero-sub{font-size:14px!important;}
+  .hero-phones{gap:10px;}
+  .phone-frame{width:140px!important;}
+  .hero-stats{gap:20px;}
+  .stat-num{font-size:22px!important;}
+  .btn-primary,.btn-secondary{font-size:14px!important;padding:12px 24px!important;}
+
+  /* Sections */
+  .section{padding:60px 16px!important;}
+  .section-title{font-size:24px!important;}
+  .section-desc{font-size:14px!important;}
+
+  /* Showcase */
+  .showcase-phone-main{width:180px!important;}
+  .showcase-phone-secondary{width:130px!important;right:-10px!important;}
+  .showcase-title{font-size:22px!important;}
+  .showcase-desc{font-size:14px!important;}
+  .showcase-tangtang{width:70px!important;}
+
+  /* Games */
+  .games-section{padding:60px 16px!important;}
+  .games-grid{grid-template-columns:repeat(2,1fr)!important;gap:10px!important;}
+  .game-name{font-size:13px!important;}
+
+  /* HSK */
+  .hsk-section{padding:60px 16px!important;}
+  .hsk-grid{grid-template-columns:repeat(2,1fr)!important;gap:10px!important;}
+  .hsk-card{padding:18px 12px!important;}
+  .hsk-name{font-size:13px!important;}
+
+  /* Pricing */
+  .pricing-grid{grid-template-columns:1fr!important;}
+  .price-card.featured{transform:none!important;}
+  .price-card.featured:hover{transform:translateY(-6px)!important;}
+  .price-amount{font-size:36px!important;}
+
+  /* Compare */
+  .compare-wrap{overflow-x:auto;}
+  th,td{padding:10px 14px!important;font-size:12px!important;}
+
+  /* eBook */
+  .ebook-section{padding:60px 16px!important;}
+  .ebook-card{flex-direction:column!important;}
+  .ebook-img{width:100%!important;max-width:200px!important;margin:0 auto!important;}
+
+  /* Strip */
+  .tangtang-strip{padding:40px 16px!important;}
+  .strip-text h2{font-size:24px!important;}
+  .strip-cta{padding:13px 24px!important;font-size:14px!important;}
+  .strip-tangtang{display:none!important;}
+
+  /* Footer */
+  footer{padding:40px 16px 24px!important;}
+}
+
+@media(max-width:360px){
+  .hero-title{font-size:28px!important;}
+  .phone-frame{width:120px!important;}
+  .games-grid{grid-template-columns:repeat(2,1fr)!important;}
+}
 </style>
 
 <script type="application/ld+json">
