@@ -15,7 +15,7 @@
 <meta name="twitter:title" content="TangTang Chinese — แอปเรียนจีนสำหรับคนไทย">
 <meta name="twitter:description" content="บทเรียน HSK 1-6 ครบ AI ถังถังอธิบายภาษาไทย 100% เริ่มฟรี">
 <link rel="canonical" href="https://tangtangchinese.com/features">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&family=Cormorant+Garamond:wght@600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
   --pink:#E8609A; --pink2:#F08BB5; --pink3:#F5C0D6;
@@ -52,7 +52,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 40px;display:fl
 .hero-badge{display:inline-flex;align-items:center;gap:6px;background:white;border:1.5px solid var(--border);border-radius:30px;padding:6px 16px;font-size:12px;color:var(--pink);font-weight:700;margin-bottom:24px;box-shadow:var(--shadow);}
 .hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,60px);font-weight:700;color:var(--ink);line-height:1.15;margin-bottom:20px;}
 .hero-title em{font-style:normal;color:var(--pink);}
-.hero-sub{font-size:17px;color:var(--ink3);line-height:1.8;margin-bottom:36px;}
+.hero-tagline{font-size:22px;font-weight:800;color:var(--pink);margin-bottom:12px;letter-spacing:-0.3px;}
+.hero-sub{font-size:16px;color:var(--ink3);line-height:1.8;margin-bottom:36px;}
 .hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
 @media(max-width:900px){.hero-btns{justify-content:center;}}
 .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--pink);color:white;font-size:15px;font-weight:700;padding:14px 32px;border-radius:50px;text-decoration:none;transition:all .3s;box-shadow:0 8px 24px rgba(232,96,154,.35);}
@@ -107,12 +108,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 40px;display:fl
 .games-section .section-title{color:white;}
 .games-section .section-label{color:var(--pink2);}
 .games-section .section-desc{color:rgba(255,255,255,.6);}
-.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:48px;}
-.game-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:20px;transition:all .3s;display:flex;flex-direction:column;gap:10px;}
+.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-top:48px;}
+.game-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px;transition:all .3s;display:flex;flex-direction:column;gap:0;}
 .game-card:hover{background:rgba(232,96,154,.1);border-color:rgba(232,96,154,.3);transform:translateY(-4px);}
-.game-img-wrap{width:60px;height:60px;border-radius:12px;overflow:hidden;background:rgba(255,255,255,.05);}
+.game-img-wrap{width:100%;aspect-ratio:3/4;border-radius:14px;overflow:hidden;background:rgba(255,255,255,.05);margin-bottom:12px;}
 .game-img-wrap img{width:100%;height:100%;object-fit:cover;}
-.game-name{font-size:14px;font-weight:700;color:white;}
+.game-name{font-size:15px;font-weight:700;color:white;}
 .game-desc{font-size:12px;color:rgba(255,255,255,.5);line-height:1.5;}
 
 /* HSK */
@@ -332,8 +333,9 @@ footer{background:var(--ink);padding:60px 24px 40px;}
   <div class="hero-inner">
     <div>
       <div class="hero-badge">🌸 ออกแบบมาเพื่อคนไทยโดยเฉพาะ</div>
-      <h1 class="hero-title">เรียนจีนได้จริง<br>กับ<em>ถังถัง</em></h1>
-      <p class="hero-sub">แอปเรียนภาษาจีนที่เข้าใจคนไทยที่สุด อธิบายภาษาไทย 100% มี AI ช่วยสอน บทเรียน HSK ครบ เกมสนุก และบทสนทนาจากชีวิตจริง</p>
+      <h1 class="hero-title">แอปเรียนจีน<br>ที่เข้าใจ<em>คนไทย</em>ที่สุด</h1>
+      <p class="hero-tagline">เรียนจีนได้จริง กับ ถังถัง</p>
+      <p class="hero-sub">อธิบายภาษาไทย 100% มี AI ช่วยสอน บทเรียน HSK 1-6 ครบ เกมสนุก และบทสนทนาจากชีวิตจริง</p>
       <div class="hero-btns">
         <a href="https://tangtangchinese.com/index.html?action=login" class="btn-primary">🎯 เริ่มเรียนฟรีเลย</a>
         <a href="#features" class="btn-secondary">ดูฟีเจอร์ทั้งหมด</a>
@@ -407,7 +409,7 @@ footer{background:var(--ink);padding:60px 24px 40px;}
           <li>อธิบายภาษาไทย 100% ไม่ต้องเดา</li>
           <li>เปรียบเทียบให้เห็นความแตกต่างของคำ</li>
           <li>ยกตัวอย่างประโยคที่ใช้จริงในชีวิต</li>
-          <li>ถามได้ไม่จำกัด ตลอด 24 ชั่วโมง</li>
+          <li>รายเดือน 20 ข้อ/วัน · รายปีและถาวร 50 ข้อ/วัน</li>
         </ul>
       </div>
     </div>
@@ -497,52 +499,52 @@ footer{background:var(--ink);padding:60px 24px 40px;}
     <div class="games-grid">
       <div class="game-card">
         <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-speed.png" alt="Speed Quiz"></div>
-        <div class="game-name">⚡ Speed Quiz</div>
+        <div class="game-name" style="margin-top:12px;">⚡ Speed Quiz</div>
         <div class="game-desc">ทดสอบความเร็วในการจำคำศัพท์และความหมาย</div>
       </div>
       <div class="game-card">
         <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-match.png" alt="จับคู่"></div>
-        <div class="game-name">🔗 จับคู่คำ</div>
+        <div class="game-name" style="margin-top:12px;">🔗 จับคู่คำ</div>
         <div class="game-desc">จับคู่ภาษาจีนกับความหมายภาษาไทย</div>
       </div>
       <div class="game-card">
         <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-sentence.png" alt="เรียงประโยค"></div>
-        <div class="game-name">📝 เรียงประโยค</div>
+        <div class="game-name" style="margin-top:12px;">📝 เรียงประโยค</div>
         <div class="game-desc">เรียงลำดับคำให้เป็นประโยคที่ถูกต้อง</div>
       </div>
       <div class="game-card">
         <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-stroke.png" alt="ลำดับขีด"></div>
-        <div class="game-name">✏️ ลำดับขีด</div>
+        <div class="game-name" style="margin-top:12px;">✏️ ลำดับขีด</div>
         <div class="game-desc">ฝึกเขียนอักษรจีนตามลำดับขีดที่ถูกต้อง</div>
       </div>
       <div class="game-card">
         <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-listen.png" alt="ฟังและตอบ"></div>
-        <div class="game-name">👂 ฟังและตอบ</div>
+        <div class="game-name" style="margin-top:12px;">👂 ฟังและตอบ</div>
         <div class="game-desc">ฟังแล้วเลือกความหมายที่ถูกต้อง</div>
       </div>
       <div class="game-card">
         <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-listening.png" alt="ฟังจับใจความ"></div>
-        <div class="game-name">🎧 ฟังจับใจความ</div>
+        <div class="game-name" style="margin-top:12px;">🎧 ฟังจับใจความ</div>
         <div class="game-desc">ฟังบทสนทนาแล้วตอบคำถามจากเนื้อหา</div>
       </div>
       <div class="game-card">
         <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-daily.png" alt="คำศัพท์ประจำวัน"></div>
-        <div class="game-name">📖 คำศัพท์ประจำวัน</div>
+        <div class="game-name" style="margin-top:12px;">📖 คำศัพท์ประจำวัน</div>
         <div class="game-desc">เรียนคำศัพท์ใหม่ทุกวันตามระดับของคุณ</div>
       </div>
       <div class="game-card">
         <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-pair.png" alt="สลับคู่"></div>
-        <div class="game-name">🔀 สลับคู่</div>
+        <div class="game-name" style="margin-top:12px;">🔀 สลับคู่</div>
         <div class="game-desc">เกมความจำจับคู่ไพ่ภาษาจีน-ไทย</div>
       </div>
       <div class="game-card">
         <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-wordmap.png" alt="Word Map"></div>
-        <div class="game-name">🗺️ Word Map</div>
+        <div class="game-name" style="margin-top:12px;">🗺️ Word Map</div>
         <div class="game-desc">สำรวจเครือข่ายคำศัพท์แบบ interactive</div>
       </div>
       <div class="game-card">
         <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-journal.png" alt="บันทึกประจำวัน"></div>
-        <div class="game-name">📓 บันทึกประจำวัน</div>
+        <div class="game-name" style="margin-top:12px;">📓 บันทึกประจำวัน</div>
         <div class="game-desc">ฝึกเขียนภาษาจีนจากชีวิตประจำวัน</div>
       </div>
     </div>
@@ -555,14 +557,14 @@ footer{background:var(--ink);padding:60px 24px 40px;}
   <div class="hsk-inner">
     <span class="section-label">บทเรียน</span>
     <h2 class="section-title">ครอบคลุม HSK ทุกระดับ<br>ตั้งแต่ศูนย์ถึงสูงสุด</h2>
-    <p class="section-desc">ไม่ว่าจะเพิ่งเริ่มต้นหรืออยากสอบ HSK 6 ถังถังมีบทเรียนพร้อมรองรับทุกระดับ</p>
+    <p class="section-desc">คัดสรรคำศัพท์ที่ใช้บ่อยที่สุดในชีวิตจริงกว่า 2,000+ คำ ครอบคลุมทุกระดับตั้งแต่เริ่มต้นจนถึงระดับสูง</p>
     <div class="hsk-grid">
-      <div class="hsk-card"><span class="hsk-emoji">🌱</span><span class="hsk-level">HSK 1</span><div class="hsk-name">พื้นฐาน</div><div class="hsk-count">150 คำ · 6 บท</div><span class="hsk-badge hsk-free">ฟรี</span></div>
-      <div class="hsk-card"><span class="hsk-emoji">🌿</span><span class="hsk-level">HSK 2</span><div class="hsk-name">ต้น</div><div class="hsk-count">300 คำ · 6 บท</div><span class="hsk-badge hsk-free">ฟรี</span></div>
-      <div class="hsk-card"><span class="hsk-emoji">🌳</span><span class="hsk-level">HSK 3</span><div class="hsk-name">กลางต้น</div><div class="hsk-count">600 คำ · 10 บท</div><span class="hsk-badge hsk-premium">Premium</span></div>
-      <div class="hsk-card"><span class="hsk-emoji">🌲</span><span class="hsk-level">HSK 4</span><div class="hsk-name">กลาง</div><div class="hsk-count">1,200 คำ · 12 บท</div><span class="hsk-badge hsk-premium">Premium</span></div>
-      <div class="hsk-card"><span class="hsk-emoji">🏔️</span><span class="hsk-level">HSK 5</span><div class="hsk-name">สูง</div><div class="hsk-count">2,500 คำ · 12 บท</div><span class="hsk-badge hsk-premium">Premium</span></div>
-      <div class="hsk-card"><span class="hsk-emoji">👑</span><span class="hsk-level">HSK 6</span><div class="hsk-name">สูงสุด</div><div class="hsk-count">5,000 คำ · 10 บท</div><span class="hsk-badge hsk-premium">Premium</span></div>
+      <div class="hsk-card"><span class="hsk-emoji">🌱</span><span class="hsk-level">HSK 1</span><div class="hsk-name">พื้นฐาน</div><div class="hsk-count">คำศัพท์ที่ใช้บ่อย · 6 บท</div><span class="hsk-badge hsk-free">ฟรี</span></div>
+      <div class="hsk-card"><span class="hsk-emoji">🌿</span><span class="hsk-level">HSK 2</span><div class="hsk-name">ต้น</div><div class="hsk-count">คำศัพท์ชีวิตประจำวัน · 6 บท</div><span class="hsk-badge hsk-free">ฟรี</span></div>
+      <div class="hsk-card"><span class="hsk-emoji">🌳</span><span class="hsk-level">HSK 3</span><div class="hsk-name">กลางต้น</div><div class="hsk-count">คำศัพท์สื่อสารได้จริง · 10 บท</div><span class="hsk-badge hsk-premium">Premium</span></div>
+      <div class="hsk-card"><span class="hsk-emoji">🌲</span><span class="hsk-level">HSK 4</span><div class="hsk-name">กลาง</div><div class="hsk-count">คำศัพท์ระดับกลาง · 12 บท</div><span class="hsk-badge hsk-premium">Premium</span></div>
+      <div class="hsk-card"><span class="hsk-emoji">🏔️</span><span class="hsk-level">HSK 5</span><div class="hsk-name">สูง</div><div class="hsk-count">คำศัพท์ขั้นสูง · 12 บท</div><span class="hsk-badge hsk-premium">Premium</span></div>
+      <div class="hsk-card"><span class="hsk-emoji">👑</span><span class="hsk-level">HSK 6</span><div class="hsk-name">สูงสุด</div><div class="hsk-count">คำศัพท์ระดับเจ้าของภาษา · 10 บท</div><span class="hsk-badge hsk-premium">Premium</span></div>
     </div>
   </div>
 </section>
@@ -596,7 +598,7 @@ footer{background:var(--ink);padding:60px 24px 40px;}
       <div class="price-per">ยกเลิกได้ทุกเมื่อ</div>
       <ul class="price-features">
         <li><span class="check">✓</span> HSK 1-6 ครบ 56 บท</li>
-        <li><span class="check">✓</span> AI ถังถัง ไม่จำกัด</li>
+        <li><span class="check">✓</span> AI ถังถัง 20 ข้อความ/วัน</li>
         <li><span class="check">✓</span> บทสนทนา 59 บท</li>
         <li><span class="check">✓</span> เกมและ Word Map ครบ</li>
         <li><span class="check">✓</span> ยกเลิกได้ทุกเมื่อ</li>
@@ -611,6 +613,7 @@ footer{background:var(--ink);padding:60px 24px 40px;}
       <div class="price-per">เฉลี่ย ฿82.5/เดือน</div>
       <ul class="price-features">
         <li><span class="check">✓</span> ทุกอย่างใน Premium</li>
+        <li><span class="check">✓</span> AI ถังถัง 50 ข้อความ/วัน</li>
         <li><span class="check">✓</span> ประหยัดกว่ารายเดือน 58%</li>
         <li><span class="check">✓</span> ต่ออายุปีต่อปี</li>
         <li><span class="check">✓</span> อัปเดตฟีเจอร์ใหม่ฟรี</li>
@@ -625,6 +628,7 @@ footer{background:var(--ink);padding:60px 24px 40px;}
       <div class="price-per">จ่ายครั้งเดียว ใช้ตลอดชีพ</div>
       <ul class="price-features">
         <li><span class="check">✓</span> ทุกอย่างใน Premium</li>
+        <li><span class="check">✓</span> AI ถังถัง 50 ข้อความ/วัน</li>
         <li><span class="check">✓</span> ไม่มีค่าใช้จ่ายเพิ่ม</li>
         <li><span class="check">✓</span> อัปเดตฟีเจอร์ใหม่ฟรี</li>
         <li><span class="check">✓</span> คุ้มที่สุดระยะยาว</li>
