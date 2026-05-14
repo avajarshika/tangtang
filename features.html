@@ -42,32 +42,32 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 32px;display:fl
 @media(max-width:768px){nav{padding:12px 16px;}.nav-links{display:none;}}
 
 /* HERO */
-.hero{background:linear-gradient(135deg,#FF6BB5 0%,#E8609A 40%,#C84080 100%);padding:120px 24px 80px;text-align:center;position:relative;overflow:hidden;}
+.hero{background:linear-gradient(160deg,#FFF4F9 0%,#FFE8F4 50%,#FDE0F0 100%);padding:120px 24px 80px;text-align:center;position:relative;overflow:hidden;}
 .hero-blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.25;pointer-events:none;}
-.hero-blob-1{width:500px;height:500px;background:white;top:-150px;left:-150px;}
-.hero-blob-2{width:350px;height:350px;background:#FFD6EC;bottom:-80px;right:-80px;}
+.hero-blob-1{width:500px;height:500px;background:#FFF0F8;top:-150px;left:-150px;}
+.hero-blob-2{width:350px;height:350px;background:#FBBDE0;bottom:-80px;right:-80px;}
 .hero-inner{position:relative;z-index:1;max-width:760px;margin:0 auto;}
 .hero-phones{display:flex;justify-content:center;gap:14px;margin-bottom:32px;align-items:flex-start;}
-.hero-phone{width:110px;border-radius:18px;overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.25),0 0 0 3px rgba(255,255,255,.3);}
+.hero-phone{width:110px;border-radius:18px;overflow:hidden;box-shadow:0 16px 40px rgba(232,96,154,.2),0 0 0 4px white,0 0 0 5px var(--border);}
 .hero-phone img{width:100%;display:block;}
 .hero-phone.mid{margin-top:-20px;}
 .hero-tangtang{width:90px;}
 .hero-tangtang img{width:100%;animation:bounce 2s ease-in-out infinite;filter:drop-shadow(0 8px 24px rgba(0,0,0,.25));}
 @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.4);border-radius:50px;padding:7px 18px;font-size:13px;color:white;font-weight:700;margin-bottom:20px;backdrop-filter:blur(10px);}
-.hero-title{font-size:clamp(32px,6vw,60px);font-weight:900;color:white;line-height:1.15;margin-bottom:16px;text-shadow:0 2px 20px rgba(0,0,0,.15);}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(232,96,154,.12);border:1.5px solid rgba(232,96,154,.3);border-radius:50px;padding:7px 18px;font-size:13px;color:var(--pink);font-weight:700;margin-bottom:20px;}
+.hero-title{font-size:clamp(32px,6vw,60px);font-weight:900;color:var(--ink);line-height:1.15;margin-bottom:16px;}
 .hero-title em{font-style:normal;}
-.hero-tagline{font-size:clamp(18px,3vw,24px);font-weight:800;color:rgba(255,255,255,.95);margin-bottom:12px;}
-.hero-sub{font-size:clamp(15px,2.5vw,18px);color:rgba(255,255,255,.85);line-height:1.7;margin-bottom:36px;}
+.hero-tagline{font-size:clamp(18px,3vw,24px);font-weight:800;color:var(--pink);margin-bottom:12px;}
+.hero-sub{font-size:clamp(15px,2.5vw,18px);color:var(--ink3);line-height:1.7;margin-bottom:36px;}
 .hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:40px;}
 .btn-white{display:inline-flex;align-items:center;gap:8px;background:white;color:var(--pink);font-size:16px;font-weight:800;padding:15px 32px;border-radius:50px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.15);transition:all .3s;}
 .btn-white:hover{transform:translateY(-3px);}
-.btn-outline-white{display:inline-flex;align-items:center;gap:8px;background:transparent;color:white;font-size:16px;font-weight:700;padding:15px 32px;border-radius:50px;text-decoration:none;border:2px solid rgba(255,255,255,.5);transition:all .3s;}
+.btn-outline-white{display:inline-flex;align-items:center;gap:8px;background:white;color:var(--ink2);font-size:16px;font-weight:700;padding:15px 32px;border-radius:50px;text-decoration:none;border:2px solid var(--border);transition:all .3s;}
 .btn-outline-white:hover{background:rgba(255,255,255,.15);}
 .hero-stats{display:flex;justify-content:center;gap:36px;flex-wrap:wrap;}
-.stat-num{font-family:'DM Mono',monospace;font-size:28px;font-weight:500;color:white;display:block;line-height:1;}
-.stat-num span{color:rgba(255,255,255,.7);}
-.stat-label{font-size:12px;color:rgba(255,255,255,.6);margin-top:4px;display:block;font-weight:600;letter-spacing:1px;text-transform:uppercase;}
+.stat-num{font-family:'DM Mono',monospace;font-size:28px;font-weight:500;color:var(--ink);display:block;line-height:1;}
+.stat-num span{color:var(--pink);}
+.stat-label{font-size:12px;color:var(--ink4);margin-top:4px;display:block;font-weight:600;letter-spacing:1px;text-transform:uppercase;}
 
 /* DIVIDER */
 .divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--pink3),transparent);}
@@ -97,38 +97,38 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 32px;display:fl
 .point-img img{width:100%;display:block;}
 
 /* WHO */
-.who-section{background:var(--pink);padding:80px 24px;text-align:center;}
-.who-title{font-size:clamp(26px,5vw,44px);font-weight:900;color:white;margin-bottom:10px;}
-.who-sub{font-size:17px;color:rgba(255,255,255,.85);margin-bottom:44px;}
+.who-section{background:linear-gradient(135deg,#FFE8F4,#FDD5EC);padding:80px 24px;text-align:center;}
+.who-title{font-size:clamp(26px,5vw,44px);font-weight:900;color:var(--ink);margin-bottom:10px;}
+.who-sub{font-size:17px;color:var(--ink3);margin-bottom:44px;}
 .who-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;max-width:1000px;margin:0 auto 40px;}
-.who-card{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.25);border-radius:18px;padding:22px;text-align:left;transition:all .3s;}
-.who-card:hover{background:rgba(255,255,255,.25);transform:translateY(-4px);}
-.who-text{font-size:16px;font-weight:700;color:white;line-height:1.4;}
+.who-card{background:white;border:1.5px solid var(--border);border-radius:18px;padding:22px;text-align:left;transition:all .3s;box-shadow:var(--shadow);}
+.who-card:hover{background:var(--pink-pale);transform:translateY(-4px);}
+.who-text{font-size:16px;font-weight:700;color:var(--ink2);line-height:1.4;}
 
 /* INSIDE APP */
-.inside-section{background:var(--ink);padding:80px 24px;}
+.inside-section{background:linear-gradient(160deg,#FFF0F8,#FDE8F4);padding:80px 24px;}
 .inside-inner{max-width:1200px;margin:0 auto;}
 .inside-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:48px;}
-.inside-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:0;overflow:hidden;transition:all .3s;}
-.inside-card:hover{background:rgba(232,96,154,.08);border-color:rgba(232,96,154,.3);transform:translateY(-4px);}
+.inside-card{background:white;border:1.5px solid var(--border);border-radius:18px;padding:0;overflow:hidden;transition:all .3s;box-shadow:var(--shadow);}
+.inside-card:hover{background:var(--pink-pale);border-color:var(--pink3);transform:translateY(-4px);}
 .inside-img{width:100%;aspect-ratio:3/4;overflow:hidden;}
 .inside-img img{width:100%;height:100%;object-fit:cover;display:block;}
 .inside-body{padding:18px;}
-.inside-icon{font-size:26px;margin-bottom:8px;display:block;}
-.inside-card-title{font-size:17px;font-weight:800;color:white;margin-bottom:6px;}
-.inside-card-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.6;}
+.inside-icon{font-size:26px;margin-bottom:8px;display:block;color:var(--pink);}
+.inside-card-title{font-size:17px;font-weight:800;color:var(--ink);margin-bottom:6px;}
+.inside-card-desc{font-size:14px;color:var(--ink3);line-height:1.6;}
 
 /* GAMES */
-.games-section{background:rgba(26,10,18,.97);padding:80px 24px;}
+.games-section{background:linear-gradient(160deg,#F5EEFF,#EDE0FF);padding:80px 24px;}
 .games-inner{max-width:1200px;margin:0 auto;}
 .games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-top:48px;}
-.game-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;transition:all .3s;}
-.game-card:hover{background:rgba(232,96,154,.1);border-color:rgba(232,96,154,.3);transform:translateY(-4px);}
+.game-card{background:white;border:1.5px solid var(--border);border-radius:16px;overflow:hidden;transition:all .3s;box-shadow:var(--shadow);}
+.game-card:hover{background:var(--pink-pale);border-color:var(--pink3);transform:translateY(-4px);}
 .game-img{width:100%;aspect-ratio:3/4;overflow:hidden;}
 .game-img img{width:100%;height:100%;object-fit:cover;display:block;}
 .game-body{padding:14px;}
-.game-name{font-size:15px;font-weight:800;color:white;margin-bottom:4px;}
-.game-desc{font-size:13px;color:rgba(255,255,255,.55);line-height:1.5;}
+.game-name{font-size:15px;font-weight:800;color:var(--ink);margin-bottom:4px;}
+.game-desc{font-size:13px;color:var(--ink3);line-height:1.5;}
 
 /* HSK */
 .hsk-section{background:var(--pink-light);padding:80px 24px;}
@@ -202,11 +202,11 @@ td:first-child{font-weight:700;color:var(--ink);}
 .ebook-link{font-size:14px;font-weight:700;color:var(--pink);text-decoration:none;}
 
 /* CTA */
-.cta-section{padding:80px 24px;text-align:center;background:linear-gradient(135deg,#FF6BB5,#E8609A,#C84080);}
+.cta-section{padding:80px 24px;text-align:center;background:linear-gradient(160deg,#FFE8F4,#FDD5EC,#FBCDE8);}
 .cta-inner{max-width:700px;margin:0 auto;position:relative;z-index:1;}
-.cta-title{font-size:clamp(28px,5vw,50px);font-weight:900;color:white;line-height:1.2;margin-bottom:16px;}
-.cta-sub{font-size:18px;color:rgba(255,255,255,.85);margin-bottom:36px;}
-.btn-white-big{display:inline-flex;align-items:center;gap:10px;background:white;color:var(--pink);font-size:18px;font-weight:900;padding:18px 44px;border-radius:50px;text-decoration:none;box-shadow:0 8px 32px rgba(0,0,0,.2);transition:all .3s;}
+.cta-title{font-size:clamp(28px,5vw,50px);font-weight:900;color:var(--ink);line-height:1.2;margin-bottom:16px;}
+.cta-sub{font-size:18px;color:var(--ink3);margin-bottom:36px;}
+.btn-white-big{display:inline-flex;align-items:center;gap:10px;background:var(--pink);color:white;font-size:18px;font-weight:900;padding:18px 44px;border-radius:50px;text-decoration:none;box-shadow:0 8px 32px rgba(232,96,154,.4);transition:all .3s;}
 .btn-white-big:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.25);}
 
 /* FOOTER */
@@ -395,9 +395,9 @@ footer{background:var(--ink);padding:48px 24px 32px;text-align:center;}
 <!-- INSIDE APP -->
 <section class="inside-section">
   <div class="inside-inner">
-    <span class="sec-label" style="color:var(--pink2);text-align:center;display:block;">ในแอปมีอะไร</span>
-    <h2 class="sec-title" style="color:white;text-align:center;">ครบทุกอย่างในที่เดียว<br>ไม่ต้องเรียนหลายแอป</h2>
-    <p class="sec-desc" style="color:rgba(255,255,255,.6);text-align:center;max-width:560px;margin:0 auto;">แต่ละฟีเจอร์ออกแบบมาเพื่อให้เรียนได้จริง ใช้ได้จริง ในชีวิตประจำวัน</p>
+    <span class="sec-label" style="text-align:center;display:block;">ในแอปมีอะไร</span>
+    <h2 class="sec-title" style="text-align:center;">ครบทุกอย่างในที่เดียว<br>ไม่ต้องเรียนหลายแอป</h2>
+    <p class="sec-desc" style="text-align:center;max-width:560px;margin:0 auto;">แต่ละฟีเจอร์ออกแบบมาเพื่อให้เรียนได้จริง ใช้ได้จริง ในชีวิตประจำวัน</p>
     <div class="inside-grid">
       <div class="inside-card">
         <div class="inside-img"><img src="https://tangtangchinese.com/screen-vocab.png" alt="ท่องศัพท์"></div>
@@ -440,9 +440,9 @@ footer{background:var(--ink);padding:48px 24px 32px;text-align:center;}
 <!-- GAMES -->
 <section class="games-section" id="games">
   <div class="games-inner">
-    <span class="sec-label" style="color:var(--pink2);text-align:center;display:block;">มินิเกม</span>
-    <h2 class="sec-title" style="color:white;text-align:center;">10 เกม ฝึกได้ทุกทักษะ<br>ไม่รู้สึกว่ากำลังเรียน</h2>
-    <p class="sec-desc" style="color:rgba(255,255,255,.6);text-align:center;max-width:560px;margin:0 auto;">สลับเล่นเกมไปเรื่อยๆ แต่ละเกมฝึกคนละทักษะ ทั้งคำศัพท์ ฟัง เขียน และไวยากรณ์</p>
+    <span class="sec-label" style="text-align:center;display:block;">มินิเกม</span>
+    <h2 class="sec-title" style="text-align:center;">10 เกม ฝึกได้ทุกทักษะ<br>ไม่รู้สึกว่ากำลังเรียน</h2>
+    <p class="sec-desc" style="text-align:center;max-width:560px;margin:0 auto;">สลับเล่นเกมไปเรื่อยๆ แต่ละเกมฝึกคนละทักษะ ทั้งคำศัพท์ ฟัง เขียน และไวยากรณ์</p>
     <div class="games-grid">
       <div class="game-card">
         <div class="game-img"><img src="https://tangtangchinese.com/screen-game-speed.png" alt="Speed Quiz"></div>
