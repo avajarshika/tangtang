@@ -76,9 +76,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 40px;display:fl
 
 /* SECTION */
 .section{padding:100px 24px;max-width:1200px;margin:0 auto;}
-.section-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--pink);margin-bottom:10px;display:block;}
+.section-label{font-family:'DM Mono',monospace;font-size:14px;letter-spacing:3px;text-transform:uppercase;color:var(--pink);margin-bottom:12px;display:block;font-weight:600;}
 .section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,44px);font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:14px;}
-.section-desc{font-size:16px;color:var(--ink3);line-height:1.8;max-width:560px;}
+.section-desc{font-size:18px;color:var(--ink3);line-height:1.8;max-width:560px;}
 
 /* FEATURE SHOWCASE */
 .feature-showcase{display:flex;flex-direction:column;gap:120px;margin-top:80px;}
@@ -97,24 +97,24 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 40px;display:fl
 @keyframes floatBounce{0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-12px) rotate(5deg);}}
 .showcase-icon{width:52px;height:52px;border-radius:14px;background:var(--pink-pale);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:18px;}
 .showcase-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--ink);margin-bottom:12px;line-height:1.2;}
-.showcase-desc{font-size:16px;color:var(--ink3);line-height:1.8;margin-bottom:20px;}
+.showcase-desc{font-size:17px;color:var(--ink3);line-height:1.9;margin-bottom:20px;}
 .showcase-points{list-style:none;display:flex;flex-direction:column;gap:8px;}
-.showcase-points li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--ink2);}
+.showcase-points li{display:flex;align-items:flex-start;gap:10px;font-size:16px;color:var(--ink2);}
 .showcase-points li::before{content:'✦';color:var(--pink);font-size:10px;margin-top:4px;flex-shrink:0;}
 
 /* GAMES */
 .games-section{background:var(--ink);padding:100px 24px;}
 .games-inner{max-width:1200px;margin:0 auto;}
 .games-section .section-title{color:white;}
-.games-section .section-label{color:var(--pink2);}
-.games-section .section-desc{color:rgba(255,255,255,.6);}
+.games-section .section-label{color:var(--pink2);font-size:14px;}
+.games-section .section-desc{color:rgba(255,255,255,.7);font-size:18px;}
 .games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-top:48px;}
 .game-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:16px;transition:all .3s;display:flex;flex-direction:column;gap:0;}
 .game-card:hover{background:rgba(232,96,154,.1);border-color:rgba(232,96,154,.3);transform:translateY(-4px);}
 .game-img-wrap{width:100%;aspect-ratio:3/4;border-radius:14px;overflow:hidden;background:rgba(255,255,255,.05);margin-bottom:12px;}
 .game-img-wrap img{width:100%;height:100%;object-fit:cover;}
-.game-name{font-size:15px;font-weight:700;color:white;}
-.game-desc{font-size:12px;color:rgba(255,255,255,.5);line-height:1.5;}
+.game-name{font-size:17px;font-weight:700;color:white;margin-top:14px;}
+.game-desc{font-size:15px;color:rgba(255,255,255,.65);line-height:1.7;}
 
 /* HSK */
 .hsk-section{background:var(--pink-light);padding:100px 24px;}
@@ -122,13 +122,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 40px;display:fl
 .hsk-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:48px;}
 @media(max-width:900px){.hsk-grid{grid-template-columns:repeat(3,1fr);}}
 @media(max-width:500px){.hsk-grid{grid-template-columns:repeat(2,1fr);}}
-.hsk-card{border-radius:20px;padding:24px 16px;text-align:center;background:white;border:1.5px solid var(--border);transition:all .3s;box-shadow:var(--shadow);}
+.hsk-card{border-radius:20px;padding:28px 16px;text-align:center;background:white;border:1.5px solid var(--border);transition:all .3s;box-shadow:var(--shadow);}
 .hsk-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);}
-.hsk-emoji{font-size:26px;margin-bottom:8px;display:block;}
-.hsk-level{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);letter-spacing:2px;margin-bottom:4px;display:block;}
-.hsk-name{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px;}
-.hsk-count{font-size:11px;color:var(--ink3);}
-.hsk-badge{display:inline-block;margin-top:8px;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.hsk-emoji{font-size:32px;margin-bottom:10px;display:block;}
+.hsk-level{font-family:'DM Mono',monospace;font-size:12px;color:var(--ink4);letter-spacing:2px;margin-bottom:6px;display:block;font-weight:600;}
+.hsk-name{font-size:18px;font-weight:800;color:var(--ink);margin-bottom:6px;}
+.hsk-count{font-size:13px;color:var(--ink3);line-height:1.5;}
+.hsk-badge{display:inline-block;margin-top:10px;font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;}
 .hsk-free{background:#E8F8F2;color:#2D8A60;}
 .hsk-premium{background:var(--pink-pale);color:var(--pink);}
 
@@ -143,17 +143,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 40px;display:fl
 .price-badge-wrap{position:absolute;top:-13px;left:50%;transform:translateX(-50%);}
 .price-badge{background:var(--pink);color:white;font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;white-space:nowrap;box-shadow:0 4px 12px rgba(232,96,154,.4);}
 .price-icon{font-size:28px;margin-bottom:10px;display:block;}
-.price-name{font-size:11px;font-weight:700;color:var(--ink4);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
-.price-amount{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--ink);line-height:1;margin-bottom:4px;}
-.price-amount .currency{font-size:20px;}
-.price-amount .period{font-size:14px;color:var(--ink4);}
-.price-per{font-size:12px;color:var(--ink4);margin-bottom:20px;min-height:16px;}
+.price-name{font-size:15px;font-weight:700;color:var(--ink4);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;}
+.price-amount{font-family:'Plus Jakarta Sans',sans-serif;font-size:52px;font-weight:800;color:var(--ink);line-height:1;margin-bottom:6px;}
+.price-amount .currency{font-size:24px;}
+.price-amount .period{font-size:16px;color:var(--ink4);}
+.price-per{font-size:15px;color:var(--ink4);margin-bottom:20px;min-height:20px;}
 .price-features{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:24px;}
-.price-features li{font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--pink-pale);}
+.price-features li{font-size:16px;color:var(--ink2);display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--pink-pale);}
 .price-features li:last-child{border-bottom:none;}
 .check{color:var(--teal);font-size:13px;flex-shrink:0;}
 .cross{color:var(--pink3);font-size:13px;flex-shrink:0;}
-.price-btn{display:block;width:100%;padding:12px;border-radius:50px;font-size:14px;font-weight:700;text-align:center;text-decoration:none;transition:all .3s;}
+.price-btn{display:block;width:100%;padding:14px;border-radius:50px;font-size:16px;font-weight:700;text-align:center;text-decoration:none;transition:all .3s;}
 .price-btn.primary{background:var(--pink);color:white;box-shadow:0 6px 20px rgba(232,96,154,.35);}
 .price-btn.primary:hover{transform:translateY(-2px);}
 .price-btn.outline{border:1.5px solid var(--border);color:var(--ink3);background:transparent;}
@@ -163,9 +163,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 40px;display:fl
 .compare-wrap{margin-top:48px;border-radius:20px;overflow:hidden;border:1.5px solid var(--border);box-shadow:var(--shadow);}
 table{width:100%;border-collapse:collapse;}
 thead tr{background:var(--pink-pale);}
-th{padding:16px 20px;font-size:14px;font-weight:700;text-align:left;color:var(--pink);}
+th{padding:18px 20px;font-size:16px;font-weight:700;text-align:left;color:var(--pink);}
 th:first-child{color:var(--ink2);}
-td{padding:13px 20px;font-size:14px;color:var(--ink2);border-bottom:1px solid var(--border);}
+td{padding:15px 20px;font-size:16px;color:var(--ink2);border-bottom:1px solid var(--border);}
 tr:last-child td{border-bottom:none;}
 tr:nth-child(even) td{background:var(--pink-light);}
 td:first-child{font-weight:600;color:var(--ink);}
@@ -179,10 +179,10 @@ td:first-child{font-weight:600;color:var(--ink);}
 .ebook-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);}
 .ebook-img{width:90px;flex-shrink:0;border-radius:10px;overflow:hidden;box-shadow:0 8px 24px rgba(26,10,18,.12);}
 .ebook-img img{width:100%;display:block;}
-.ebook-tag{display:inline-block;background:var(--pink-pale);color:var(--pink);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:8px;}
-.ebook-title{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px;line-height:1.4;}
-.ebook-desc{font-size:13px;color:var(--ink3);line-height:1.6;margin-bottom:12px;}
-.ebook-link{font-size:13px;font-weight:700;color:var(--pink);text-decoration:none;}
+.ebook-tag{display:inline-block;background:var(--pink-pale);color:var(--pink);font-size:14px;font-weight:700;padding:5px 14px;border-radius:20px;margin-bottom:10px;}
+.ebook-title{font-size:18px;font-weight:700;color:var(--ink);margin-bottom:8px;line-height:1.4;}
+.ebook-desc{font-size:15px;color:var(--ink3);line-height:1.7;margin-bottom:12px;}
+.ebook-link{font-size:16px;font-weight:700;color:var(--pink);text-decoration:none;}
 
 /* CTA STRIP */
 .tangtang-strip{background:var(--pink);padding:60px 24px;position:relative;overflow:hidden;}
@@ -453,12 +453,12 @@ footer{background:var(--ink);padding:60px 24px 40px;}
       <div>
         <div class="showcase-icon">📚</div>
         <h3 class="showcase-title">บทเรียน HSK 1–6<br>ครบ 56 บท</h3>
-        <p class="showcase-desc">เรียนตั้งแต่พื้นฐานจนถึงระดับสูง แต่ละบทมีคำศัพท์ บทสนทนา ไวยากรณ์ และแบบฝึกหัด พร้อมเสียงออกเสียงจาก Google TTS</p>
+        <p class="showcase-desc">เรียนตั้งแต่พื้นฐานจนถึงระดับสูง แต่ละบทมีคำศัพท์ บทสนทนา ไวยากรณ์ และแบบฝึกหัด มีระบบฟังเสียงออกเสียงในทุกคำและประโยค</p>
         <ul class="showcase-points">
           <li>อธิบายทุกอย่างเป็นภาษาไทย 100%</li>
           <li>Breakdown ทุกประโยค เข้าใจหลักไวยากรณ์</li>
           <li>ท่องศัพท์ + Flashcard ในบทเดียวกัน</li>
-          <li>เสียงออกเสียงสำเนียงปักกิ่งที่ถูกต้อง</li>
+          <li>ฟังเสียงและฝึกพูดตามได้ทุกคำทุกประโยค</li>
         </ul>
       </div>
     </div>
@@ -473,10 +473,10 @@ footer{background:var(--ink);padding:60px 24px 40px;}
       </div>
       <div>
         <div class="showcase-icon">🤖</div>
-        <h3 class="showcase-title">AI ถังถัง<br>ครูส่วนตัวภาษาไทย</h3>
-        <p class="showcase-desc">ถามอะไรก็ตอบได้ ไม่ว่าจะเป็นความหมายคำ ไวยากรณ์ หรือวิธีใช้ AI ถังถังอธิบายเป็นภาษาไทย 100%</p>
+        <h3 class="showcase-title">AI ถังถัง<br>เหมือนมีครูสอนพิเศษ<br>ส่วนตัวตลอด 24 ชม.</h3>
+        <p class="showcase-desc">ถามอะไรก็ตอบได้ทันที ไม่ว่าจะเป็นความหมายคำ ไวยากรณ์ วิธีใช้ หรือขอตัวอย่างประโยค เหมือนมีครูอยู่ข้างๆ ตลอดเวลา</p>
         <ul class="showcase-points">
-          <li>อธิบายภาษาไทย 100% ไม่ต้องเดา</li>
+          <li>อธิบายเป็นภาษาไทย ไม่ต้องเดา ไม่ต้องแปล</li>
           <li>เปรียบเทียบให้เห็นความแตกต่างของคำ</li>
           <li>ยกตัวอย่างประโยคที่ใช้จริงในชีวิต</li>
           <li>รายเดือน 20 ข้อ/วัน · รายปีและถาวร 50 ข้อ/วัน</li>
@@ -498,12 +498,12 @@ footer{background:var(--ink);padding:60px 24px 40px;}
       <div>
         <div class="showcase-icon">💬</div>
         <h3 class="showcase-title">บทสนทนาจริง<br>59 บท</h3>
-        <p class="showcase-desc">ฝึกสนทนาจากสถานการณ์จริง พร้อม Grammar Breakdown Flashcard และ Quiz ในบทเดียวกัน</p>
+        <p class="showcase-desc">ฝึกสนทนาจากสถานการณ์จริงในชีวิตประจำวัน พร้อมแบบฝึกหัดตอบคำถามและเติมประโยคจากเนื้อหาที่เรียน</p>
         <ul class="showcase-points">
           <li>ร้านอาหาร โรงแรม ช้อปปิ้ง ที่ทำงาน</li>
-          <li>Grammar Breakdown อธิบายหลักภาษา</li>
-          <li>Flashcard ท่องศัพท์ในบทสนทนา</li>
-          <li>Quiz ทดสอบหลังเรียนทุกบท</li>
+          <li>แบบฝึกหัดตอบคำถามจากเนื้อหาจริง</li>
+          <li>เติมประโยคฝึกความเข้าใจหลังเรียน</li>
+          <li>ฝึกสนทนาจริงจากบทที่เรียน</li>
         </ul>
       </div>
     </div>
@@ -564,8 +564,8 @@ footer{background:var(--ink);padding:60px 24px 40px;}
 <section class="games-section" id="games">
   <div class="games-inner">
     <span class="section-label">มินิเกม</span>
-    <h2 class="section-title">เรียนสนุก จำได้นาน<br>ด้วย 10 เกม</h2>
-    <p class="section-desc">เรียนผ่านเกมช่วยให้จำได้นานกว่าการท่องแบบเดิม ครบทุกทักษะในแบบที่สนุก</p>
+    <h2 class="section-title">10 เกม ฝึกได้ทุกทักษะ<br>ไม่รู้สึกว่ากำลังเรียน</h2>
+    <p class="section-desc">สลับเล่นเกมไปเรื่อยๆ แต่ละเกมฝึกคนละทักษะ ทั้งคำศัพท์ ฟัง เขียน และไวยากรณ์ โดยที่ไม่รู้สึกเลยว่ากำลังเรียนอยู่</p>
     <div class="games-grid">
       <div class="game-card">
         <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-speed.png" alt="Speed Quiz"></div>
