@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ฟีเจอร์ทั้งหมด — 糖糖中文 TangTang Chinese</title>
+<meta name="description" content="ถังถังมีอะไรบ้าง? บทเรียน HSK 1-6 ครบ 56 บท บทสนทนา 59 บท เกม 10 เกม AI ถังถัง Word Map เริ่มต้น 199 บาท/เดือน">
+<meta name="robots" content="index, follow">
+<meta property="og:image" content="https://tangtangchinese.com/tangtang.png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+<meta property="og:locale" content="th_TH">
+<meta property="og:site_name" content="TangTang Chinese">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TangTang Chinese — แอปเรียนจีนสำหรับคนไทย">
+<meta name="twitter:description" content="บทเรียน HSK 1-6 ครบ AI ถังถังอธิบายภาษาไทย 100% เริ่มฟรี">
+<link rel="canonical" href="https://tangtangchinese.com/features">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&family=Cormorant+Garamond:wght@600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --pink:#E8609A; --pink2:#F08BB5; --pink3:#F5C0D6;
+  --pink-pale:#FDF0F5; --pink-light:#FEF6FA; --cream:#FFFBF8;
+  --ink:#1A0A12; --ink2:#3D1F2E; --ink3:#7A5568; --ink4:#B08898;
+  --border:#F2D8E5; --teal:#2DBFA0; --amber:#D4974A;
+  --shadow:0 4px 24px rgba(232,96,154,.08);
+  --shadow-lg:0 12px 48px rgba(232,96,154,.15);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Noto Sans Thai',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;line-height:1.6;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,251,248,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo img{width:36px;height:36px;object-fit:contain;}
+.nav-logo-text{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--ink);}
+.nav-logo-text span{color:var(--pink);}
+.nav-links{display:flex;align-items:center;gap:28px;list-style:none;}
+.nav-links a{font-size:14px;color:var(--ink3);text-decoration:none;font-weight:500;transition:color .2s;}
+.nav-links a:hover{color:var(--pink);}
+.nav-cta{background:var(--pink)!important;color:white!important;padding:10px 24px;border-radius:50px;font-weight:700!important;box-shadow:0 4px 16px rgba(232,96,154,.3);}
+@media(max-width:768px){nav{padding:12px 20px;}.nav-links{display:none;}}
+
+/* HERO */
+.hero{min-height:100vh;padding:120px 24px 80px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(160deg,#FDF0F5 0%,#FEF6FA 40%,#FFF8FC 100%);}
+.hero-blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.4;pointer-events:none;}
+.hero-blob-1{width:600px;height:600px;background:var(--pink3);top:-100px;left:-200px;animation:blobFloat 8s ease-in-out infinite;}
+.hero-blob-2{width:400px;height:400px;background:#C8E8F5;bottom:-100px;right:-100px;animation:blobFloat 10s ease-in-out infinite reverse;}
+@keyframes blobFloat{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-30px) scale(1.05);}}
+.hero-inner{position:relative;z-index:1;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;width:100%;}
+@media(max-width:900px){.hero-inner{grid-template-columns:1fr;gap:48px;text-align:center;}.hero-phones{justify-content:center!important;}}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:white;border:1.5px solid var(--border);border-radius:30px;padding:6px 16px;font-size:12px;color:var(--pink);font-weight:700;margin-bottom:24px;box-shadow:var(--shadow);}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,60px);font-weight:700;color:var(--ink);line-height:1.15;margin-bottom:20px;}
+.hero-title em{font-style:normal;color:var(--pink);}
+.hero-sub{font-size:17px;color:var(--ink3);line-height:1.8;margin-bottom:36px;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+@media(max-width:900px){.hero-btns{justify-content:center;}}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--pink);color:white;font-size:15px;font-weight:700;padding:14px 32px;border-radius:50px;text-decoration:none;transition:all .3s;box-shadow:0 8px 24px rgba(232,96,154,.35);}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(232,96,154,.45);}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;background:white;color:var(--ink2);font-size:15px;font-weight:600;padding:14px 32px;border-radius:50px;text-decoration:none;border:1.5px solid var(--border);transition:all .3s;}
+.btn-secondary:hover{border-color:var(--pink);color:var(--pink);transform:translateY(-2px);}
+.hero-stats{display:flex;gap:32px;margin-top:40px;flex-wrap:wrap;}
+@media(max-width:900px){.hero-stats{justify-content:center;}}
+.stat-num{font-family:'DM Mono',monospace;font-size:28px;font-weight:500;color:var(--ink);display:block;line-height:1;}
+.stat-num span{color:var(--pink);}
+.stat-label{font-size:12px;color:var(--ink4);margin-top:4px;display:block;font-weight:500;}
+.hero-phones{display:flex;gap:16px;align-items:flex-start;justify-content:flex-end;}
+.phone-frame{width:180px;border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(26,10,18,.15),0 0 0 8px white;flex-shrink:0;transition:transform .3s;}
+.phone-frame:hover{transform:translateY(-8px);}
+.phone-frame img{width:100%;display:block;object-fit:cover;}
+.phone-frame.tall{margin-top:-30px;}
+
+/* DIVIDER */
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--pink3),transparent);}
+
+/* SECTION */
+.section{padding:100px 24px;max-width:1200px;margin:0 auto;}
+.section-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--pink);margin-bottom:10px;display:block;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,44px);font-weight:700;color:var(--ink);line-height:1.2;margin-bottom:14px;}
+.section-desc{font-size:16px;color:var(--ink3);line-height:1.8;max-width:560px;}
+
+/* FEATURE SHOWCASE */
+.feature-showcase{display:flex;flex-direction:column;gap:120px;margin-top:80px;}
+.showcase-item{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.showcase-item.reverse{direction:rtl;}
+.showcase-item.reverse > *{direction:ltr;}
+@media(max-width:768px){.showcase-item,.showcase-item.reverse{grid-template-columns:1fr;direction:ltr;gap:40px;}}
+.showcase-phone{position:relative;display:flex;justify-content:center;}
+.showcase-deco-circle{width:320px;height:320px;border-radius:50%;background:var(--pink-pale);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:0;}
+.showcase-phone-main{width:220px;border-radius:32px;overflow:hidden;box-shadow:0 24px 80px rgba(26,10,18,.15),0 0 0 10px white,0 0 0 11px var(--border);position:relative;z-index:2;transition:transform .3s;}
+.showcase-phone-main:hover{transform:translateY(-8px) rotate(-1deg);}
+.showcase-phone-main img{width:100%;display:block;}
+.showcase-phone-secondary{width:160px;border-radius:24px;overflow:hidden;box-shadow:0 16px 48px rgba(26,10,18,.12),0 0 0 8px white;position:absolute;right:0;bottom:-40px;z-index:1;}
+.showcase-phone-secondary img{width:100%;display:block;}
+.showcase-tangtang{width:90px;position:absolute;bottom:-20px;left:-20px;z-index:3;animation:floatBounce 3s ease-in-out infinite;filter:drop-shadow(0 8px 16px rgba(232,96,154,.2));}
+@keyframes floatBounce{0%,100%{transform:translateY(0) rotate(-5deg);}50%{transform:translateY(-12px) rotate(5deg);}}
+.showcase-icon{width:52px;height:52px;border-radius:14px;background:var(--pink-pale);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:18px;}
+.showcase-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--ink);margin-bottom:12px;line-height:1.2;}
+.showcase-desc{font-size:16px;color:var(--ink3);line-height:1.8;margin-bottom:20px;}
+.showcase-points{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.showcase-points li{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--ink2);}
+.showcase-points li::before{content:'✦';color:var(--pink);font-size:10px;margin-top:4px;flex-shrink:0;}
+
+/* GAMES */
+.games-section{background:var(--ink);padding:100px 24px;}
+.games-inner{max-width:1200px;margin:0 auto;}
+.games-section .section-title{color:white;}
+.games-section .section-label{color:var(--pink2);}
+.games-section .section-desc{color:rgba(255,255,255,.6);}
+.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:48px;}
+.game-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:20px;transition:all .3s;display:flex;flex-direction:column;gap:10px;}
+.game-card:hover{background:rgba(232,96,154,.1);border-color:rgba(232,96,154,.3);transform:translateY(-4px);}
+.game-img-wrap{width:60px;height:60px;border-radius:12px;overflow:hidden;background:rgba(255,255,255,.05);}
+.game-img-wrap img{width:100%;height:100%;object-fit:cover;}
+.game-name{font-size:14px;font-weight:700;color:white;}
+.game-desc{font-size:12px;color:rgba(255,255,255,.5);line-height:1.5;}
+
+/* HSK */
+.hsk-section{background:var(--pink-light);padding:100px 24px;}
+.hsk-inner{max-width:1200px;margin:0 auto;}
+.hsk-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:48px;}
+@media(max-width:900px){.hsk-grid{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:500px){.hsk-grid{grid-template-columns:repeat(2,1fr);}}
+.hsk-card{border-radius:20px;padding:24px 16px;text-align:center;background:white;border:1.5px solid var(--border);transition:all .3s;box-shadow:var(--shadow);}
+.hsk-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);}
+.hsk-emoji{font-size:26px;margin-bottom:8px;display:block;}
+.hsk-level{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink4);letter-spacing:2px;margin-bottom:4px;display:block;}
+.hsk-name{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.hsk-count{font-size:11px;color:var(--ink3);}
+.hsk-badge{display:inline-block;margin-top:8px;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.hsk-free{background:#E8F8F2;color:#2D8A60;}
+.hsk-premium{background:var(--pink-pale);color:var(--pink);}
+
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:56px;}
+@media(max-width:1000px){.pricing-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.pricing-grid{grid-template-columns:1fr;}}
+.price-card{border-radius:24px;padding:32px 24px;border:1.5px solid var(--border);background:white;position:relative;transition:all .3s;box-shadow:var(--shadow);}
+.price-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);}
+.price-card.featured{border-color:var(--pink);background:linear-gradient(160deg,#FFF0F7,white);transform:scale(1.02);box-shadow:0 20px 60px rgba(232,96,154,.2);}
+.price-card.featured:hover{transform:scale(1.02) translateY(-6px);}
+.price-badge-wrap{position:absolute;top:-13px;left:50%;transform:translateX(-50%);}
+.price-badge{background:var(--pink);color:white;font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;white-space:nowrap;box-shadow:0 4px 12px rgba(232,96,154,.4);}
+.price-icon{font-size:28px;margin-bottom:10px;display:block;}
+.price-name{font-size:11px;font-weight:700;color:var(--ink4);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
+.price-amount{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;color:var(--ink);line-height:1;margin-bottom:4px;}
+.price-amount .currency{font-size:20px;}
+.price-amount .period{font-size:14px;color:var(--ink4);}
+.price-per{font-size:12px;color:var(--ink4);margin-bottom:20px;min-height:16px;}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:24px;}
+.price-features li{font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--pink-pale);}
+.price-features li:last-child{border-bottom:none;}
+.check{color:var(--teal);font-size:13px;flex-shrink:0;}
+.cross{color:var(--pink3);font-size:13px;flex-shrink:0;}
+.price-btn{display:block;width:100%;padding:12px;border-radius:50px;font-size:14px;font-weight:700;text-align:center;text-decoration:none;transition:all .3s;}
+.price-btn.primary{background:var(--pink);color:white;box-shadow:0 6px 20px rgba(232,96,154,.35);}
+.price-btn.primary:hover{transform:translateY(-2px);}
+.price-btn.outline{border:1.5px solid var(--border);color:var(--ink3);background:transparent;}
+.price-btn.outline:hover{border-color:var(--pink);color:var(--pink);}
+
+/* COMPARE */
+.compare-wrap{margin-top:48px;border-radius:20px;overflow:hidden;border:1.5px solid var(--border);box-shadow:var(--shadow);}
+table{width:100%;border-collapse:collapse;}
+thead tr{background:var(--pink-pale);}
+th{padding:16px 20px;font-size:14px;font-weight:700;text-align:left;color:var(--pink);}
+th:first-child{color:var(--ink2);}
+td{padding:13px 20px;font-size:14px;color:var(--ink2);border-bottom:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+tr:nth-child(even) td{background:var(--pink-light);}
+td:first-child{font-weight:600;color:var(--ink);}
+
+/* EBOOK */
+.ebook-section{background:linear-gradient(160deg,var(--pink-pale),var(--cream));padding:100px 24px;}
+.ebook-inner{max-width:1200px;margin:0 auto;}
+.ebook-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:48px;}
+@media(max-width:700px){.ebook-grid{grid-template-columns:1fr;}}
+.ebook-card{background:white;border-radius:24px;border:1.5px solid var(--border);padding:28px;display:flex;gap:20px;align-items:flex-start;box-shadow:var(--shadow);transition:all .3s;}
+.ebook-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);}
+.ebook-img{width:90px;flex-shrink:0;border-radius:10px;overflow:hidden;box-shadow:0 8px 24px rgba(26,10,18,.12);}
+.ebook-img img{width:100%;display:block;}
+.ebook-tag{display:inline-block;background:var(--pink-pale);color:var(--pink);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:8px;}
+.ebook-title{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px;line-height:1.4;}
+.ebook-desc{font-size:13px;color:var(--ink3);line-height:1.6;margin-bottom:12px;}
+.ebook-link{font-size:13px;font-weight:700;color:var(--pink);text-decoration:none;}
+
+/* CTA STRIP */
+.tangtang-strip{background:var(--pink);padding:60px 24px;position:relative;overflow:hidden;}
+.tangtang-strip-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:40px;}
+@media(max-width:768px){.tangtang-strip-inner{flex-direction:column;text-align:center;}}
+.strip-text h2{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:white;margin-bottom:8px;}
+.strip-text p{font-size:15px;color:rgba(255,255,255,.8);}
+.strip-cta{display:inline-flex;align-items:center;gap:8px;background:white;color:var(--pink);font-size:15px;font-weight:700;padding:16px 36px;border-radius:50px;text-decoration:none;white-space:nowrap;transition:all .3s;box-shadow:0 8px 24px rgba(0,0,0,.15);flex-shrink:0;}
+.strip-cta:hover{transform:translateY(-3px);}
+.strip-tangtang{position:absolute;right:8%;top:50%;transform:translateY(-50%);width:110px;opacity:.15;pointer-events:none;}
+
+/* FOOTER */
+footer{background:var(--ink);padding:60px 24px 40px;}
+.footer-inner{max-width:1200px;margin:0 auto;text-align:center;}
+.footer-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;}
+.footer-logo img{width:38px;height:38px;object-fit:contain;}
+.footer-logo-text{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:white;}
+.footer-logo-text span{color:var(--pink2);}
+.footer-desc{font-size:14px;color:rgba(255,255,255,.4);margin-bottom:24px;}
+.footer-links{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:24px;}
+.footer-links a{font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s;}
+.footer-links a:hover{color:var(--pink2);}
+.footer-copy{font-size:12px;color:rgba(255,255,255,.2);}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "TangTang Chinese (糖糖中文)",
+  "alternateName": "ถังถัง แอปเรียนภาษาจีน",
+  "url": "https://tangtangchinese.com",
+  "description": "แอปเรียนภาษาจีนสำหรับคนไทย บทเรียน HSK 1-6 ครบ 56 บท AI ถังถังช่วยสอนภาษาไทย บทสนทนา 59 บท เกม 10 เกม",
+  "applicationCategory": "EducationApplication",
+  "operatingSystem": "Web, iOS, Android",
+  "inLanguage": "th",
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "แพ็กเกจฟรี",
+      "price": "0",
+      "priceCurrency": "THB",
+      "description": "บทเรียน HSK 1-2 ฟรีตลอดชีพ"
+    },
+    {
+      "@type": "Offer",
+      "name": "แพ็กเกจรายเดือน",
+      "price": "199",
+      "priceCurrency": "THB",
+      "description": "บทเรียน HSK 1-6 ครบ + AI ถังถัง"
+    },
+    {
+      "@type": "Offer",
+      "name": "แพ็กเกจรายปี",
+      "price": "990",
+      "priceCurrency": "THB",
+      "description": "ประหยัดกว่ารายเดือน 58%"
+    },
+    {
+      "@type": "Offer",
+      "name": "แพ็กเกจถาวร",
+      "price": "2490",
+      "priceCurrency": "THB",
+      "description": "จ่ายครั้งเดียวใช้ตลอดชีพ"
+    }
+  ],
+  "featureList": [
+    "บทเรียน HSK 1-6 ครบ 56 บท",
+    "AI ถังถัง อธิบายภาษาไทย 100%",
+    "บทสนทนาจริง 59 บท",
+    "10 มินิเกม",
+    "Word Map 87+ คำ",
+    "แบบทดสอบก่อนและหลังเรียน",
+    "เสียงออกเสียงสำเนียงปักกิ่ง"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "จารชิกา แก้ววรรณา"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5",
+    "reviewCount": "500"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "ถังถังเหมาะกับใคร?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "เหมาะสำหรับคนไทยที่ต้องการเรียนภาษาจีนกลาง ไม่ว่าจะเพิ่งเริ่มต้นหรือต้องการเตรียมสอบ HSK ทุกระดับตั้งแต่ HSK 1 ถึง HSK 6"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "ถังถังแตกต่างจากแอปอื่นยังไง?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ถังถังออกแบบมาเพื่อคนไทยโดยเฉพาะ มี AI ถังถังอธิบายภาษาไทย 100% ไม่ต้องเดาความหมาย พร้อมบทเรียน HSK 1-6 ครบ บทสนทนา 59 บท และ 10 มินิเกม"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "เรียนฟรีได้ไหม?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ได้เลย ถังถังมีแพ็กเกจฟรีตลอดชีพ ได้เรียนบทเรียน HSK 1-2 เล่นเกมทุกเกม และใช้งาน Word Map ฟรีทั้งหมด"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "ต้องโหลดแอปไหม?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ไม่ต้อง เปิดเบราว์เซอร์แล้วเข้า tangtangchinese.com ได้เลย รองรับทั้ง iOS และ Android หรือจะบันทึกเป็นแอปบนหน้าจอ (PWA) ก็ได้"
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<nav>
+  <a href="https://tangtangchinese.com" class="nav-logo">
+    <img src="https://tangtangchinese.com/tangtang.png" alt="ถังถัง">
+    <span class="nav-logo-text">糖糖<span>中文</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">ฟีเจอร์</a></li>
+    <li><a href="#games">เกม</a></li>
+    <li><a href="#hsk">บทเรียน</a></li>
+    <li><a href="#pricing">ราคา</a></li>
+    <li><a href="#ebook">eBook</a></li>
+    <li><a href="https://tangtangchinese.com" class="nav-cta">เริ่มเรียนฟรี</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-blob hero-blob-1"></div>
+  <div class="hero-blob hero-blob-2"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">🌸 ออกแบบมาเพื่อคนไทยโดยเฉพาะ</div>
+      <h1 class="hero-title">เรียนจีนได้จริง<br>กับ<em>ถังถัง</em></h1>
+      <p class="hero-sub">แอปเรียนภาษาจีนที่เข้าใจคนไทยที่สุด อธิบายภาษาไทย 100% มี AI ช่วยสอน บทเรียน HSK ครบ เกมสนุก และบทสนทนาจากชีวิตจริง</p>
+      <div class="hero-btns">
+        <a href="https://tangtangchinese.com/index.html?action=login" class="btn-primary">🎯 เริ่มเรียนฟรีเลย</a>
+        <a href="#features" class="btn-secondary">ดูฟีเจอร์ทั้งหมด</a>
+      </div>
+      <div class="hero-stats">
+        <div><span class="stat-num">56</span><span class="stat-label">บทเรียน HSK</span></div>
+        <div><span class="stat-num">59</span><span class="stat-label">บทสนทนา</span></div>
+        <div><span class="stat-num">10</span><span class="stat-label">มินิเกม</span></div>
+        <div><span class="stat-num">500<span>+</span></span><span class="stat-label">ผู้เรียน</span></div>
+      </div>
+    </div>
+    <div class="hero-phones">
+      <div class="phone-frame">
+        <img src="https://tangtangchinese.com/screen-home.png" alt="หน้าแรกถังถัง">
+      </div>
+      <div class="phone-frame tall">
+        <img src="https://tangtangchinese.com/screen-ai.png" alt="AI ถังถัง">
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="features">
+  <div class="section" style="padding-bottom:0;">
+    <span class="section-label">ฟีเจอร์หลัก</span>
+    <h2 class="section-title">ทุกอย่างที่ต้องการ<br>เรียนจีนได้จริง</h2>
+    <p class="section-desc">ถังถังไม่ใช่แค่แอปท่องศัพท์ แต่ออกแบบมาให้เรียนได้ครบทุกทักษะในที่เดียว</p>
+  </div>
+
+  <div class="section feature-showcase">
+
+    <div class="showcase-item">
+      <div class="showcase-phone">
+        <div class="showcase-deco-circle"></div>
+        <div class="showcase-phone-main">
+          <img src="https://tangtangchinese.com/screen-hsk.png" alt="บทเรียน HSK">
+        </div>
+        <div class="showcase-phone-secondary">
+          <img src="https://tangtangchinese.com/screen-vocab.png" alt="ท่องศัพท์">
+        </div>
+        <img src="https://tangtangchinese.com/tangtang-study.png" alt="ถังถัง" class="showcase-tangtang">
+      </div>
+      <div>
+        <div class="showcase-icon">📚</div>
+        <h3 class="showcase-title">บทเรียน HSK 1–6<br>ครบ 56 บท</h3>
+        <p class="showcase-desc">เรียนตั้งแต่พื้นฐานจนถึงระดับสูง แต่ละบทมีคำศัพท์ บทสนทนา ไวยากรณ์ และแบบฝึกหัด พร้อมเสียงออกเสียงจาก Google TTS</p>
+        <ul class="showcase-points">
+          <li>อธิบายทุกอย่างเป็นภาษาไทย 100%</li>
+          <li>Breakdown ทุกประโยค เข้าใจหลักไวยากรณ์</li>
+          <li>ท่องศัพท์ + Flashcard ในบทเดียวกัน</li>
+          <li>เสียงออกเสียงสำเนียงปักกิ่งที่ถูกต้อง</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="showcase-item reverse">
+      <div class="showcase-phone">
+        <div class="showcase-deco-circle" style="background:#E8F4FE;"></div>
+        <div class="showcase-phone-main">
+          <img src="https://tangtangchinese.com/screen-ai.png" alt="AI ถังถัง">
+        </div>
+        <img src="https://tangtangchinese.com/tangtang-happy.png" alt="ถังถัง" class="showcase-tangtang" style="left:auto;right:-20px;bottom:-10px;">
+      </div>
+      <div>
+        <div class="showcase-icon">🤖</div>
+        <h3 class="showcase-title">AI ถังถัง<br>ครูส่วนตัวภาษาไทย</h3>
+        <p class="showcase-desc">ถามอะไรก็ตอบได้ ไม่ว่าจะเป็นความหมายคำ ไวยากรณ์ หรือวิธีใช้ AI ถังถังอธิบายเป็นภาษาไทย 100%</p>
+        <ul class="showcase-points">
+          <li>อธิบายภาษาไทย 100% ไม่ต้องเดา</li>
+          <li>เปรียบเทียบให้เห็นความแตกต่างของคำ</li>
+          <li>ยกตัวอย่างประโยคที่ใช้จริงในชีวิต</li>
+          <li>ถามได้ไม่จำกัด ตลอด 24 ชั่วโมง</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="showcase-item">
+      <div class="showcase-phone">
+        <div class="showcase-deco-circle" style="background:#FFF0E8;"></div>
+        <div class="showcase-phone-main">
+          <img src="https://tangtangchinese.com/screen-conversation.png" alt="บทสนทนา">
+        </div>
+        <div class="showcase-phone-secondary">
+          <img src="https://tangtangchinese.com/screen-conv-detail.png" alt="รายละเอียด">
+        </div>
+        <img src="https://tangtangchinese.com/tangtang-wow.png" alt="ถังถัง" class="showcase-tangtang">
+      </div>
+      <div>
+        <div class="showcase-icon">💬</div>
+        <h3 class="showcase-title">บทสนทนาจริง<br>59 บท</h3>
+        <p class="showcase-desc">ฝึกสนทนาจากสถานการณ์จริง พร้อม Grammar Breakdown Flashcard และ Quiz ในบทเดียวกัน</p>
+        <ul class="showcase-points">
+          <li>ร้านอาหาร โรงแรม ช้อปปิ้ง ที่ทำงาน</li>
+          <li>Grammar Breakdown อธิบายหลักภาษา</li>
+          <li>Flashcard ท่องศัพท์ในบทสนทนา</li>
+          <li>Quiz ทดสอบหลังเรียนทุกบท</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="showcase-item reverse">
+      <div class="showcase-phone">
+        <div class="showcase-deco-circle" style="background:#E8FFF4;"></div>
+        <div class="showcase-phone-main">
+          <img src="https://tangtangchinese.com/screen-roadmap.png" alt="Roadmap">
+        </div>
+        <div class="showcase-phone-secondary">
+          <img src="https://tangtangchinese.com/screen-profile.png" alt="โปรไฟล์">
+        </div>
+        <img src="https://tangtangchinese.com/tangtang-laugh.png" alt="ถังถัง" class="showcase-tangtang" style="left:auto;right:-20px;">
+      </div>
+      <div>
+        <div class="showcase-icon">🗺️</div>
+        <h3 class="showcase-title">Roadmap & XP<br>ติดตามพัฒนาการ</h3>
+        <p class="showcase-desc">ระบบ Learning Path บอกเส้นทางการเรียนที่ชัดเจน สะสม XP รักษา Streak และดูพัฒนาการในหน้าโปรไฟล์</p>
+        <ul class="showcase-points">
+          <li>Roadmap บอกระดับและสิ่งที่ต้องเรียนต่อ</li>
+          <li>สะสม XP ทุกครั้งที่เรียนหรือทำกิจกรรม</li>
+          <li>Streak รักษาวินัยการเรียนต่อเนื่อง</li>
+          <li>Placement Test วัดระดับก่อนเริ่มเรียน</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="showcase-item">
+      <div class="showcase-phone">
+        <div class="showcase-deco-circle" style="background:#F5F0FF;"></div>
+        <div class="showcase-phone-main">
+          <img src="https://tangtangchinese.com/screen-test-before.png" alt="แบบทดสอบก่อนเรียน">
+        </div>
+        <div class="showcase-phone-secondary">
+          <img src="https://tangtangchinese.com/screen-test-after.png" alt="แบบทดสอบหลังเรียน">
+        </div>
+        <img src="https://tangtangchinese.com/tangtang-sad.png" alt="ถังถัง" class="showcase-tangtang">
+      </div>
+      <div>
+        <div class="showcase-icon">📝</div>
+        <h3 class="showcase-title">แบบทดสอบ<br>ก่อนและหลังเรียน</h3>
+        <p class="showcase-desc">วัดระดับก่อนเริ่มเรียนด้วย Placement Test และทดสอบหลังเรียนทุกบท เพื่อให้รู้ว่าเข้าใจจริงหรือยัง</p>
+        <ul class="showcase-points">
+          <li>Placement Test วัดระดับก่อนเริ่ม</li>
+          <li>Quiz หลังเรียนทุกบทเรียนและบทสนทนา</li>
+          <li>เห็นผลคะแนนและ feedback ทันที</li>
+          <li>ทบทวนซ้ำในส่วนที่ยังไม่เข้าใจ</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="games-section" id="games">
+  <div class="games-inner">
+    <span class="section-label">มินิเกม</span>
+    <h2 class="section-title">เรียนสนุก จำได้นาน<br>ด้วย 10 เกม</h2>
+    <p class="section-desc">เรียนผ่านเกมช่วยให้จำได้นานกว่าการท่องแบบเดิม ครบทุกทักษะในแบบที่สนุก</p>
+    <div class="games-grid">
+      <div class="game-card">
+        <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-speed.png" alt="Speed Quiz"></div>
+        <div class="game-name">⚡ Speed Quiz</div>
+        <div class="game-desc">ทดสอบความเร็วในการจำคำศัพท์และความหมาย</div>
+      </div>
+      <div class="game-card">
+        <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-match.png" alt="จับคู่"></div>
+        <div class="game-name">🔗 จับคู่คำ</div>
+        <div class="game-desc">จับคู่ภาษาจีนกับความหมายภาษาไทย</div>
+      </div>
+      <div class="game-card">
+        <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-sentence.png" alt="เรียงประโยค"></div>
+        <div class="game-name">📝 เรียงประโยค</div>
+        <div class="game-desc">เรียงลำดับคำให้เป็นประโยคที่ถูกต้อง</div>
+      </div>
+      <div class="game-card">
+        <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-stroke.png" alt="ลำดับขีด"></div>
+        <div class="game-name">✏️ ลำดับขีด</div>
+        <div class="game-desc">ฝึกเขียนอักษรจีนตามลำดับขีดที่ถูกต้อง</div>
+      </div>
+      <div class="game-card">
+        <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-listen.png" alt="ฟังและตอบ"></div>
+        <div class="game-name">👂 ฟังและตอบ</div>
+        <div class="game-desc">ฟังแล้วเลือกความหมายที่ถูกต้อง</div>
+      </div>
+      <div class="game-card">
+        <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-listening.png" alt="ฟังจับใจความ"></div>
+        <div class="game-name">🎧 ฟังจับใจความ</div>
+        <div class="game-desc">ฟังบทสนทนาแล้วตอบคำถามจากเนื้อหา</div>
+      </div>
+      <div class="game-card">
+        <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-daily.png" alt="คำศัพท์ประจำวัน"></div>
+        <div class="game-name">📖 คำศัพท์ประจำวัน</div>
+        <div class="game-desc">เรียนคำศัพท์ใหม่ทุกวันตามระดับของคุณ</div>
+      </div>
+      <div class="game-card">
+        <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-pair.png" alt="สลับคู่"></div>
+        <div class="game-name">🔀 สลับคู่</div>
+        <div class="game-desc">เกมความจำจับคู่ไพ่ภาษาจีน-ไทย</div>
+      </div>
+      <div class="game-card">
+        <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-wordmap.png" alt="Word Map"></div>
+        <div class="game-name">🗺️ Word Map</div>
+        <div class="game-desc">สำรวจเครือข่ายคำศัพท์แบบ interactive</div>
+      </div>
+      <div class="game-card">
+        <div class="game-img-wrap"><img src="https://tangtangchinese.com/screen-game-journal.png" alt="บันทึกประจำวัน"></div>
+        <div class="game-name">📓 บันทึกประจำวัน</div>
+        <div class="game-desc">ฝึกเขียนภาษาจีนจากชีวิตประจำวัน</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="hsk-section" id="hsk">
+  <div class="hsk-inner">
+    <span class="section-label">บทเรียน</span>
+    <h2 class="section-title">ครอบคลุม HSK ทุกระดับ<br>ตั้งแต่ศูนย์ถึงสูงสุด</h2>
+    <p class="section-desc">ไม่ว่าจะเพิ่งเริ่มต้นหรืออยากสอบ HSK 6 ถังถังมีบทเรียนพร้อมรองรับทุกระดับ</p>
+    <div class="hsk-grid">
+      <div class="hsk-card"><span class="hsk-emoji">🌱</span><span class="hsk-level">HSK 1</span><div class="hsk-name">พื้นฐาน</div><div class="hsk-count">150 คำ · 6 บท</div><span class="hsk-badge hsk-free">ฟรี</span></div>
+      <div class="hsk-card"><span class="hsk-emoji">🌿</span><span class="hsk-level">HSK 2</span><div class="hsk-name">ต้น</div><div class="hsk-count">300 คำ · 6 บท</div><span class="hsk-badge hsk-free">ฟรี</span></div>
+      <div class="hsk-card"><span class="hsk-emoji">🌳</span><span class="hsk-level">HSK 3</span><div class="hsk-name">กลางต้น</div><div class="hsk-count">600 คำ · 10 บท</div><span class="hsk-badge hsk-premium">Premium</span></div>
+      <div class="hsk-card"><span class="hsk-emoji">🌲</span><span class="hsk-level">HSK 4</span><div class="hsk-name">กลาง</div><div class="hsk-count">1,200 คำ · 12 บท</div><span class="hsk-badge hsk-premium">Premium</span></div>
+      <div class="hsk-card"><span class="hsk-emoji">🏔️</span><span class="hsk-level">HSK 5</span><div class="hsk-name">สูง</div><div class="hsk-count">2,500 คำ · 12 บท</div><span class="hsk-badge hsk-premium">Premium</span></div>
+      <div class="hsk-card"><span class="hsk-emoji">👑</span><span class="hsk-level">HSK 6</span><div class="hsk-name">สูงสุด</div><div class="hsk-count">5,000 คำ · 10 บท</div><span class="hsk-badge hsk-premium">Premium</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section" id="pricing">
+  <span class="section-label">ราคา</span>
+  <h2 class="section-title">เริ่มต้นได้เลย ฟรี<br>ไม่ต้องใส่บัตรเครดิต</h2>
+  <p class="section-desc">เลือกแพ็กเกจที่เหมาะกับคุณ อัปเกรดหรือยกเลิกได้ทุกเมื่อ</p>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <span class="price-icon">🌱</span>
+      <div class="price-name">ฟรี</div>
+      <div class="price-amount"><span class="currency">฿</span>0</div>
+      <div class="price-per">ตลอดชีพ</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span> บทเรียน HSK 1-2</li>
+        <li><span class="check">✓</span> บทสนทนาพื้นฐาน</li>
+        <li><span class="check">✓</span> เกมทุกเกม</li>
+        <li><span class="cross">✗</span> AI ถังถัง</li>
+        <li><span class="cross">✗</span> HSK 3-6</li>
+      </ul>
+      <a href="https://tangtangchinese.com/index.html?action=login" class="price-btn outline">เริ่มเรียนฟรี</a>
+    </div>
+    <div class="price-card featured">
+      <div class="price-badge-wrap"><span class="price-badge">🔥 ยอดนิยม</span></div>
+      <span class="price-icon">⭐</span>
+      <div class="price-name">รายเดือน</div>
+      <div class="price-amount"><span class="currency">฿</span>199<span class="period">/เดือน</span></div>
+      <div class="price-per">ยกเลิกได้ทุกเมื่อ</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span> HSK 1-6 ครบ 56 บท</li>
+        <li><span class="check">✓</span> AI ถังถัง ไม่จำกัด</li>
+        <li><span class="check">✓</span> บทสนทนา 59 บท</li>
+        <li><span class="check">✓</span> เกมและ Word Map ครบ</li>
+        <li><span class="check">✓</span> ยกเลิกได้ทุกเมื่อ</li>
+      </ul>
+      <a href="https://tangtangchinese.com/checkout.html?pkg=monthly" class="price-btn primary">สมัครเดี๋ยวนี้</a>
+    </div>
+    <div class="price-card">
+      <div class="price-badge-wrap"><span class="price-badge" style="background:var(--amber);">💰 ประหยัด 58%</span></div>
+      <span class="price-icon">🌟</span>
+      <div class="price-name">รายปี</div>
+      <div class="price-amount"><span class="currency">฿</span>990<span class="period">/ปี</span></div>
+      <div class="price-per">เฉลี่ย ฿82.5/เดือน</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span> ทุกอย่างใน Premium</li>
+        <li><span class="check">✓</span> ประหยัดกว่ารายเดือน 58%</li>
+        <li><span class="check">✓</span> ต่ออายุปีต่อปี</li>
+        <li><span class="check">✓</span> อัปเดตฟีเจอร์ใหม่ฟรี</li>
+        <li><span class="check">✓</span> คุ้มสำหรับระยะยาว</li>
+      </ul>
+      <a href="https://tangtangchinese.com/checkout.html?pkg=yearly" class="price-btn outline">เลือกรายปี</a>
+    </div>
+    <div class="price-card">
+      <span class="price-icon">👑</span>
+      <div class="price-name">ถาวร</div>
+      <div class="price-amount"><span class="currency">฿</span>2,490</div>
+      <div class="price-per">จ่ายครั้งเดียว ใช้ตลอดชีพ</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span> ทุกอย่างใน Premium</li>
+        <li><span class="check">✓</span> ไม่มีค่าใช้จ่ายเพิ่ม</li>
+        <li><span class="check">✓</span> อัปเดตฟีเจอร์ใหม่ฟรี</li>
+        <li><span class="check">✓</span> คุ้มที่สุดระยะยาว</li>
+        <li><span class="check">✓</span> เป็นเจ้าของตลอดไป</li>
+      </ul>
+      <a href="https://tangtangchinese.com/checkout.html?pkg=lifetime" class="price-btn outline">เลือกถาวร</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="section">
+  <span class="section-label">เปรียบเทียบ</span>
+  <h2 class="section-title">ทำไมถึงเลือกถังถัง?</h2>
+  <p class="section-desc">เปรียบเทียบกับแอปเรียนภาษาจีนอื่นๆ ในตลาด</p>
+  <div class="compare-wrap">
+    <table>
+      <thead><tr><th>ฟีเจอร์</th><th>🌸 ถังถัง</th><th>แอปทั่วไป</th></tr></thead>
+      <tbody>
+        <tr><td>อธิบายภาษาไทย 100%</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td></tr>
+        <tr><td>AI ตอบคำถามภาษาจีนเป็นไทย</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td></tr>
+        <tr><td>บทเรียน HSK 1-6 ครบทุกระดับ</td><td><span class="check">✓</span></td><td>บางส่วน</td></tr>
+        <tr><td>บทสนทนาจากชีวิตจริง 59 บท</td><td><span class="check">✓</span></td><td>บางส่วน</td></tr>
+        <tr><td>แบบทดสอบก่อนและหลังเรียน</td><td><span class="check">✓</span></td><td>บางแอป</td></tr>
+        <tr><td>เสียงสำเนียงปักกิ่งที่ถูกต้อง</td><td><span class="check">✓</span></td><td>บางแอป</td></tr>
+        <tr><td>ไม่ต้องโหลดแอป เปิดเบราว์เซอร์ได้เลย</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td></tr>
+        <tr><td>ราคาเริ่มต้น</td><td>ฟรี / ฿199/เดือน</td><td>฿300-800/เดือน</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section class="ebook-section" id="ebook">
+  <div class="ebook-inner">
+    <span class="section-label">eBook</span>
+    <h2 class="section-title">หนังสือประกอบการเรียน<br>จากถังถัง</h2>
+    <p class="section-desc">เรียนเสริมด้วย eBook ที่ออกแบบมาเพื่อคนไทยโดยเฉพาะ</p>
+    <div class="ebook-grid">
+      <div class="ebook-card">
+        <div class="ebook-img"><img src="https://tangtangchinese.com/ebook-1.png" alt="eBook เล่มที่ 1"></div>
+        <div>
+          <span class="ebook-tag">📘 eBook เล่มที่ 1</span>
+          <div class="ebook-title">เริ่มจาก 0 พูดจีนได้จริง</div>
+          <div class="ebook-desc">คู่มือเริ่มต้นเรียนภาษาจีนสำหรับคนไทยที่ไม่มีพื้นฐานเลย ครบทั้งพินอิน วรรณยุกต์ คำศัพท์พื้นฐาน และประโยคที่ใช้จริง</div>
+          <a href="https://tangtangchinese.com/checkout.html?pkg=monthly" class="ebook-link">ดูรายละเอียด →</a>
+        </div>
+      </div>
+      <div class="ebook-card">
+        <div class="ebook-img"><img src="https://tangtangchinese.com/ebook-2.png" alt="eBook เล่มที่ 2"></div>
+        <div>
+          <span class="ebook-tag">📗 eBook เล่มที่ 2</span>
+          <div class="ebook-title">แบบฝึกหัดเขียนภาษาจีน 150 คำ</div>
+          <div class="ebook-desc">ฝึกเขียนอักษรจีน 150 คำพื้นฐานที่ใช้บ่อยที่สุด พร้อมลำดับขีดที่ถูกต้องและตัวอย่างประโยค</div>
+          <a href="https://tangtangchinese.com/checkout.html?pkg=monthly" class="ebook-link">ดูรายละเอียด →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tangtang-strip">
+  <div class="tangtang-strip-inner">
+    <div class="strip-text">
+      <h2>พร้อมเริ่มเรียนจีนแล้วหรือยัง?</h2>
+      <p>เริ่มต้นฟรีวันนี้ ไม่ต้องใส่บัตรเครดิต ยกเลิกได้ทุกเมื่อ</p>
+    </div>
+    <a href="https://tangtangchinese.com/index.html?action=login" class="strip-cta">🎯 เริ่มเรียนฟรีเลย</a>
+  </div>
+  <img src="https://tangtangchinese.com/tangtang-happy.png" alt="ถังถัง" class="strip-tangtang">
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="https://tangtangchinese.com/tangtang.png" alt="ถังถัง">
+      <span class="footer-logo-text">糖糖<span>中文</span></span>
+    </div>
+    <p class="footer-desc">แอปเรียนภาษาจีนที่ออกแบบมาเพื่อคนไทยโดยเฉพาะ</p>
+    <div class="footer-links">
+      <a href="https://tangtangchinese.com">หน้าหลัก</a>
+      <a href="https://tangtangchinese.com/features">ฟีเจอร์</a>
+      <a href="https://tangtangchinese.com">เริ่มเรียน</a>
+    </div>
+    <p class="footer-copy">© 2569 TangTang Chinese (糖糖中文) สงวนลิขสิทธิ์ทั้งหมด จารชิกา แก้ววรรณา</p>
+  </div>
+</footer>
+
+</body>
+</html>
