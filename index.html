@@ -8601,7 +8601,7 @@ async function showForgotPassword() {
   
   err.textContent = 'กำลังส่ง Email...';
   const { error } = await sb.auth.resetPasswordForEmail(email, {
-    redirectTo: 'https://avajarshika.github.io/tangtang/'
+    redirectTo: 'https://tangtangchinese.com/'
   });
   
   if (error) {
@@ -8620,6 +8620,14 @@ async function doLogout() {
   document.getElementById('app').classList.remove('visible');
 }
 
+// Handle password recovery จาก email link
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (event === 'PASSWORD_RECOVERY') {
+    // แสดง modal ให้ตั้งรหัสผ่านใหม่
+    showResetPasswordModal();
+  }
+});
+
 // Check if already logged in
 sb.auth.getSession().then(({ data }) => {
   if (data.session) {
@@ -8628,6 +8636,71 @@ sb.auth.getSession().then(({ data }) => {
     loginUser({ id: u.id, name, email: u.email });
   }
 });
+
+// แสดง modal ตั้งรหัสผ่านใหม่
+function showResetPasswordModal() {
+  // สร้าง modal
+  const modal = document.createElement('div');
+  modal.id = 'reset-password-modal';
+  modal.style.cssText = `
+    position:fixed;inset:0;background:rgba(0,0,0,0.6);
+    display:flex;align-items:center;justify-content:center;
+    z-index:99999;backdrop-filter:blur(4px);
+  `;
+  modal.innerHTML = `
+    <div style="background:white;border-radius:20px;padding:32px;width:90%;max-width:400px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+      <div style="font-size:40px;margin-bottom:12px;">🔒</div>
+      <h2 style="font-size:20px;font-weight:800;color:#1A0A12;margin-bottom:8px;">ตั้งรหัสผ่านใหม่</h2>
+      <p style="font-size:14px;color:#7A5568;margin-bottom:20px;">กรุณากรอกรหัสผ่านใหม่ของคุณ</p>
+      <input id="new-password-input" type="password" placeholder="รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)"
+        style="width:100%;padding:12px 16px;border:1.5px solid #F2D8E5;border-radius:12px;font-size:15px;margin-bottom:10px;outline:none;font-family:inherit;">
+      <input id="confirm-password-input" type="password" placeholder="ยืนยันรหัสผ่านใหม่"
+        style="width:100%;padding:12px 16px;border:1.5px solid #F2D8E5;border-radius:12px;font-size:15px;margin-bottom:16px;outline:none;font-family:inherit;">
+      <p id="reset-err" style="color:#E8609A;font-size:13px;margin-bottom:12px;min-height:18px;"></p>
+      <button onclick="doResetPassword()"
+        style="width:100%;padding:14px;background:#E8609A;color:white;border:none;border-radius:50px;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;">
+        ✅ ยืนยันรหัสผ่านใหม่
+      </button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+}
+
+async function doResetPassword() {
+  const newPass = document.getElementById('new-password-input').value;
+  const confirmPass = document.getElementById('confirm-password-input').value;
+  const err = document.getElementById('reset-err');
+
+  if (newPass.length < 6) {
+    err.textContent = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';
+    return;
+  }
+  if (newPass !== confirmPass) {
+    err.textContent = 'รหัสผ่านไม่ตรงกัน กรุณาลองใหม่';
+    return;
+  }
+
+  err.style.color = '#7A5568';
+  err.textContent = 'กำลังบันทึก...';
+
+  const { error } = await sb.auth.updateUser({ password: newPass });
+
+  if (error) {
+    err.style.color = '#E8609A';
+    err.textContent = 'เกิดข้อผิดพลาด: ' + error.message;
+  } else {
+    // สำเร็จ ลบ modal แล้ว login เลย
+    document.getElementById('reset-password-modal')?.remove();
+    showToast('✅ เปลี่ยนรหัสผ่านสำเร็จแล้ว!');
+    // เข้าสู่ระบบอัตโนมัติ
+    const { data } = await sb.auth.getSession();
+    if (data.session) {
+      const u = data.session.user;
+      const name = u.user_metadata?.name || u.email.split('@')[0];
+      loginUser({ id: u.id, name, email: u.email });
+    }
+  }
+}
 
 function updateStreak() {
   const d = state.user.data;
