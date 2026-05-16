@@ -1803,6 +1803,13 @@ html {
         </div>
         <!-- Journal — full width -->
         <!-- Word Map Card -->
+        <!-- Radical Game -->
+        <div onclick="openGame('radical')" style="background:linear-gradient(145deg,#fff8f0,#ffeedd);border:1.5px solid #f5c89a;border-radius:16px;padding:18px 14px;cursor:pointer;transition:.2s;box-shadow:var(--shadow)" onmouseover="this.style.borderColor='#e67e22';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#f5c89a';this.style.transform='none'">
+          <div style="font-size:38px;margin-bottom:10px">🏮</div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">อักษรข้าง</div>
+          <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:10px">รู้รากคำ จำคำใหม่ได้เร็วขึ้น!</div>
+          <span style="font-size:10px;font-weight:700;color:#e67e22;background:#fef3e2;padding:3px 10px;border-radius:20px">🆕 ใหม่! ฟรี ✨</span>
+        </div>
         <div onclick="openGame('wordmap')" style="grid-column:1/-1;background:linear-gradient(135deg,#fff5fb,#fce4f3);border:1.5px solid #f9c0df;border-radius:16px;padding:18px;cursor:pointer;transition:.2s;box-shadow:var(--shadow);display:flex;align-items:center;gap:16px" onmouseover="this.style.borderColor='#F13596';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#f9c0df';this.style.transform='none'">
           <div style="font-size:42px;flex-shrink:0">🗺️</div>
           <div style="flex:1">
@@ -1896,6 +1903,15 @@ html {
     </div>
 
     <!-- Game: Journal -->
+    <!-- Game: Radical -->
+    <div id="game-radical" style="display:none">
+      <div style="padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--paper3);background:white;position:sticky;top:56px;z-index:30">
+        <button onclick="closeGame()" style="background:var(--paper2);border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center">←</button>
+        <div style="font-size:15px;font-weight:700;color:var(--ink)">🏮 เกมอักษรข้าง</div>
+      </div>
+      <div id="radical-content" style="padding:16px"></div>
+    </div>
+
     <div id="game-journal" style="display:none">
       <div style="padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--paper3);background:white;position:sticky;top:56px;z-index:30">
         <button onclick="closeGame()" style="background:var(--paper2);border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center">←</button>
@@ -11048,7 +11064,7 @@ function updateSpeedBadge() {
 
 function openGame(name) {
   document.getElementById('play-hub').style.display = 'none';
-  ['stroke','daily','sentence','speed','journal','match','listen','listening','pair','wordmap'].forEach(g => {
+  ['stroke','daily','sentence','speed','journal','match','listen','listening','pair','wordmap','radical'].forEach(g => {
     document.getElementById('game-'+g).style.display = g===name ? 'block' : 'none';
   });
   window.scrollTo(0,0);
@@ -11062,6 +11078,7 @@ function openGame(name) {
   else if (name==='listening') initListeningGame();
   else if (name==='pair') initPairGame();
   else if (name==='wordmap') initWordMap();
+  else if (name==='radical') initRadicalGame();
 }
 
 function closeGame() {
@@ -11082,7 +11099,7 @@ function closeGame() {
     clearInterval(_speedTimer);
     _speedTimer = null;
   }
-  ['stroke','daily','sentence','speed','journal','match','listen','listening','pair','wordmap'].forEach(g => {
+  ['stroke','daily','sentence','speed','journal','match','listen','listening','pair','wordmap','radical'].forEach(g => {
     document.getElementById('game-'+g).style.display = 'none';
   });
   document.getElementById('play-hub').style.display = 'block';
@@ -17354,7 +17371,7 @@ function showListenDone(){
 // 🦊 TANGTANG CHAT — AI แชทกับถังถัง (Supabase-backed)
 // ══════════════════════════════════════════════════════
 const TANGTANG_URL = 'https://zmshxxmcgbxavzlqmpxd.supabase.co/functions/v1/tangtang-chat';
-const TANGTANG_LIMITS = { monthly: 20, annual: 50, lifetime: 50 };
+const TANGTANG_LIMITS = { monthly: 20, annual: 50, yearly: 50, lifetime: 50 };
 
 // in-memory history สำหรับส่งให้ AI (context window)
 let TANGTANG_HISTORY = [];
@@ -17368,6 +17385,7 @@ function getTangTangPlan() {
   const subType = state.user?.data?.subscription_type || 'free';
   if (subType === 'lifetime') return 'lifetime';
   if (subType === 'annual') return 'annual';
+  if (subType === 'yearly') return 'yearly';
   if (subType === 'monthly') return 'monthly';
   if (state.user.is_premium) return 'monthly';
   return 'free';
@@ -18965,6 +18983,415 @@ function wmNext(){
   renderWordMap();
 }
 function wmPrev(){ if(wmIdx>0){wmIdx--;playClickSound();renderWordMap();} }
+
+
+
+// ===== RADICAL GAME SOUNDS =====
+function rPlaySound(type) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g);
+    g.connect(ctx.destination);
+
+    if (type === 'tap') {
+      o.frequency.setValueAtTime(600, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.08);
+      g.gain.setValueAtTime(0.15, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+      o.start(ctx.currentTime);
+      o.stop(ctx.currentTime + 0.08);
+    } else if (type === 'correct') {
+      // เสียงดัง ฟัง 2 โน้ต
+      const o2 = ctx.createOscillator();
+      const g2 = ctx.createGain();
+      o2.connect(g2);
+      g2.connect(ctx.destination);
+      o.frequency.setValueAtTime(523, ctx.currentTime); // C5
+      g.gain.setValueAtTime(0.25, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.2);
+      o.start(ctx.currentTime);
+      o.stop(ctx.currentTime + 0.2);
+      o2.frequency.setValueAtTime(784, ctx.currentTime + 0.15); // G5
+      g2.gain.setValueAtTime(0.25, ctx.currentTime + 0.15);
+      g2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+      o2.start(ctx.currentTime + 0.15);
+      o2.stop(ctx.currentTime + 0.45);
+    } else if (type === 'wrong') {
+      o.type = 'sawtooth';
+      o.frequency.setValueAtTime(200, ctx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(120, ctx.currentTime + 0.25);
+      g.gain.setValueAtTime(0.2, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+      o.start(ctx.currentTime);
+      o.stop(ctx.currentTime + 0.25);
+    } else if (type === 'finish') {
+      // เสียงฉลอง 3 โน้ต
+      [0, 0.18, 0.36].forEach((t, i) => {
+        const oi = ctx.createOscillator();
+        const gi = ctx.createGain();
+        oi.connect(gi); gi.connect(ctx.destination);
+        oi.frequency.setValueAtTime([523, 659, 784][i], ctx.currentTime + t);
+        gi.gain.setValueAtTime(0.2, ctx.currentTime + t);
+        gi.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.25);
+        oi.start(ctx.currentTime + t);
+        oi.stop(ctx.currentTime + t + 0.25);
+      });
+    }
+  } catch(e) {}
+}
+
+// ===== RADICAL GAME =====
+function initRadicalGame() {
+  const questions = [
+    // 氵น้ำ
+    { char:'河', pinyin:'hé', meaning:'แม่น้ำ', group:'กลุ่มน้ำและของเหลว', hint:'สังเกตด้านซ้าย 3 จุดเล็กๆ คล้ายหยดน้ำ',
+      correct:{radical:'氵',meaning:'น้ำ (3 จุด)'}, wrong:[{radical:'木',meaning:'ไม้'},{radical:'口',meaning:'ปาก'},{radical:'火',meaning:'ไฟ'}],
+      examples:[{char:'海',pinyin:'hǎi',meaning:'ทะเล'},{char:'洗',pinyin:'xǐ',meaning:'ล้าง'},{char:'游',pinyin:'yóu',meaning:'ว่ายน้ำ'},{char:'汤',pinyin:'tāng',meaning:'ซุป'},{char:'泡',pinyin:'pào',meaning:'แช่/ฟอง'}],
+      explain:'อักษรข้าง 氵 (น้ำ) → คำที่เกี่ยวกับน้ำ ของเหลว การชำระล้าง เช่น ทะเล แม่น้ำ ว่ายน้ำ ล้าง ดื่ม' },
+    { char:'泳', pinyin:'yǒng', meaning:'ว่ายน้ำ', group:'กลุ่มน้ำและของเหลว', hint:'ดูด้านซ้าย มี 3 จุดเล็กๆ คล้ายน้ำ',
+      correct:{radical:'氵',meaning:'น้ำ (3 จุด)'}, wrong:[{radical:'火',meaning:'ไฟ'},{radical:'木',meaning:'ไม้'},{radical:'土',meaning:'ดิน'}],
+      examples:[{char:'海',pinyin:'hǎi',meaning:'ทะเล'},{char:'河',pinyin:'hé',meaning:'แม่น้ำ'},{char:'汤',pinyin:'tāng',meaning:'ซุป'},{char:'洗',pinyin:'xǐ',meaning:'ล้าง'},{char:'漂',pinyin:'piào',meaning:'ลอย/สวย'}],
+      explain:'อักษรข้าง 氵 (น้ำ) → ทุกคำที่มี 氵 เกี่ยวกับน้ำหรือของเหลวทั้งนั้นเลย!' },
+    // 口ปาก
+    { char:'吃', pinyin:'chī', meaning:'กิน', group:'กลุ่มปากและเสียง', hint:'ดูด้านซ้าย มีอะไรที่คล้ายปากไหม?',
+      correct:{radical:'口',meaning:'ปาก'}, wrong:[{radical:'氵',meaning:'น้ำ (3 จุด)'},{radical:'木',meaning:'ไม้'},{radical:'心',meaning:'ใจ/หัวใจ'}],
+      examples:[{char:'喝',pinyin:'hē',meaning:'ดื่ม'},{char:'叫',pinyin:'jiào',meaning:'ร้องเรียก'},{char:'唱',pinyin:'chàng',meaning:'ร้องเพลง'},{char:'问',pinyin:'wèn',meaning:'ถาม'},{char:'喜',pinyin:'xǐ',meaning:'ชอบ/ยินดี'}],
+      explain:'อักษรข้าง 口 (ปาก) → คำที่ใช้ปากทำ เช่น กิน ดื่ม ร้องเพลง ตะโกน พูด เรียก ถาม' },
+    { char:'唱', pinyin:'chàng', meaning:'ร้องเพลง', group:'กลุ่มปากและเสียง', hint:'ดูด้านซ้าย มีรูปทรงคล้ายปากไหม?',
+      correct:{radical:'口',meaning:'ปาก'}, wrong:[{radical:'讠',meaning:'คำพูด'},{radical:'心',meaning:'ใจ'},{radical:'氵',meaning:'น้ำ'}],
+      examples:[{char:'吃',pinyin:'chī',meaning:'กิน'},{char:'喝',pinyin:'hē',meaning:'ดื่ม'},{char:'叫',pinyin:'jiào',meaning:'เรียก'},{char:'问',pinyin:'wèn',meaning:'ถาม'},{char:'哭',pinyin:'kū',meaning:'ร้องไห้'}],
+      explain:'อักษรข้าง 口 (ปาก) → ทุกกิจกรรมที่ใช้ปาก ไม่ว่าจะร้องเพลง กิน ดื่ม หรือพูด!' },
+    // 木ไม้
+    { char:'树', pinyin:'shù', meaning:'ต้นไม้', group:'กลุ่มไม้และเฟอร์นิเจอร์', hint:'ดูด้านซ้าย มีอะไรที่คล้ายต้นไม้ไหม?',
+      correct:{radical:'木',meaning:'ไม้/ต้นไม้'}, wrong:[{radical:'氵',meaning:'น้ำ (3 จุด)'},{radical:'口',meaning:'ปาก'},{radical:'土',meaning:'ดิน'}],
+      examples:[{char:'椅',pinyin:'yǐ',meaning:'เก้าอี้'},{char:'桌',pinyin:'zhuō',meaning:'โต๊ะ'},{char:'林',pinyin:'lín',meaning:'ป่าไม้'},{char:'床',pinyin:'chuáng',meaning:'เตียง'},{char:'板',pinyin:'bǎn',meaning:'กระดาน'}],
+      explain:'อักษรข้าง 木 (ไม้) → คำที่เกี่ยวกับไม้หรือสิ่งทำจากไม้ เช่น เฟอร์นิเจอร์ ต้นไม้ ป่า' },
+    { char:'桌', pinyin:'zhuō', meaning:'โต๊ะ', group:'กลุ่มไม้และเฟอร์นิเจอร์', hint:'ดูด้านล่าง มีอะไรที่คล้ายไม้ไหม?',
+      correct:{radical:'木',meaning:'ไม้/ต้นไม้'}, wrong:[{radical:'土',meaning:'ดิน'},{radical:'口',meaning:'ปาก'},{radical:'火',meaning:'ไฟ'}],
+      examples:[{char:'树',pinyin:'shù',meaning:'ต้นไม้'},{char:'椅',pinyin:'yǐ',meaning:'เก้าอี้'},{char:'床',pinyin:'chuáng',meaning:'เตียง'},{char:'柜',pinyin:'guì',meaning:'ตู้'},{char:'梯',pinyin:'tī',meaning:'บันได'}],
+      explain:'อักษรข้าง 木 (ไม้) → เฟอร์นิเจอร์ส่วนใหญ่ทำจากไม้ เลยมี 木 เป็นอักษรข้าง!' },
+    // 女ผู้หญิง
+    { char:'妈', pinyin:'mā', meaning:'แม่', group:'กลุ่มครอบครัวและผู้หญิง', hint:'ดูด้านซ้าย มีอะไรเกี่ยวกับผู้หญิงไหม?',
+      correct:{radical:'女',meaning:'ผู้หญิง'}, wrong:[{radical:'木',meaning:'ไม้'},{radical:'氵',meaning:'น้ำ (3 จุด)'},{radical:'口',meaning:'ปาก'}],
+      examples:[{char:'她',pinyin:'tā',meaning:'เธอ'},{char:'姐',pinyin:'jiě',meaning:'พี่สาว'},{char:'姓',pinyin:'xìng',meaning:'นามสกุล'},{char:'妹',pinyin:'mèi',meaning:'น้องสาว'},{char:'奶',pinyin:'nǎi',meaning:'ย่า/นม'}],
+      explain:'อักษรข้าง 女 (ผู้หญิง) → คำที่เกี่ยวกับผู้หญิงหรือครอบครัว เช่น แม่ พี่สาว น้องสาว เธอ' },
+    { char:'姐', pinyin:'jiě', meaning:'พี่สาว', group:'กลุ่มครอบครัวและผู้หญิง', hint:'ดูด้านซ้าย เกี่ยวกับใครนะ?',
+      correct:{radical:'女',meaning:'ผู้หญิง'}, wrong:[{radical:'口',meaning:'ปาก'},{radical:'心',meaning:'ใจ'},{radical:'木',meaning:'ไม้'}],
+      examples:[{char:'妈',pinyin:'mā',meaning:'แม่'},{char:'她',pinyin:'tā',meaning:'เธอ'},{char:'妹',pinyin:'mèi',meaning:'น้องสาว'},{char:'姓',pinyin:'xìng',meaning:'นามสกุล'},{char:'婆',pinyin:'pó',meaning:'ยาย/แม่สามี'}],
+      explain:'อักษรข้าง 女 (ผู้หญิง) → พี่สาว น้องสาว แม่ เธอ ยาย ล้วนมี 女 ทั้งนั้น!' },
+    // 心ใจ
+    { char:'想', pinyin:'xiǎng', meaning:'คิด/อยากได้', group:'กลุ่มความรู้สึกและอารมณ์', hint:'ดูด้านล่าง มีอะไรที่เกี่ยวกับความรู้สึกไหม?',
+      correct:{radical:'心',meaning:'ใจ/หัวใจ'}, wrong:[{radical:'女',meaning:'ผู้หญิง'},{radical:'木',meaning:'ไม้'},{radical:'口',meaning:'ปาก'}],
+      examples:[{char:'忙',pinyin:'máng',meaning:'ยุ่ง'},{char:'怕',pinyin:'pà',meaning:'กลัว'},{char:'爱',pinyin:'ài',meaning:'รัก'},{char:'忘',pinyin:'wàng',meaning:'ลืม'},{char:'感',pinyin:'gǎn',meaning:'รู้สึก'}],
+      explain:'อักษรข้าง 心 (ใจ) → คำที่เกี่ยวกับความรู้สึก อารมณ์ เช่น คิด กลัว รัก ยุ่ง ลืม รู้สึก' },
+    { char:'怕', pinyin:'pà', meaning:'กลัว', group:'กลุ่มความรู้สึกและอารมณ์', hint:'ดูด้านซ้าย มีอะไรเกี่ยวกับความรู้สึกไหม?',
+      correct:{radical:'忄',meaning:'ใจ (รูปด้านข้าง)'}, wrong:[{radical:'女',meaning:'ผู้หญิง'},{radical:'口',meaning:'ปาก'},{radical:'讠',meaning:'คำพูด'}],
+      examples:[{char:'想',pinyin:'xiǎng',meaning:'คิด'},{char:'忙',pinyin:'máng',meaning:'ยุ่ง'},{char:'快',pinyin:'kuài',meaning:'เร็ว'},{char:'忘',pinyin:'wàng',meaning:'ลืม'},{char:'懂',pinyin:'dǒng',meaning:'เข้าใจ'}],
+      explain:'อักษรข้าง 忄 (ใจ รูปด้านข้าง) → เมื่อ 心 อยู่ด้านซ้ายจะเปลี่ยนรูปเป็น 忄 แต่ยังเกี่ยวกับความรู้สึกเหมือนเดิม!' },
+    // 土ดิน
+    { char:'地', pinyin:'dì', meaning:'พื้น/แผ่นดิน', group:'กลุ่มดินและสถานที่', hint:'ดูด้านซ้าย มีอะไรที่คล้ายดินไหม?',
+      correct:{radical:'土',meaning:'ดิน/แผ่นดิน'}, wrong:[{radical:'心',meaning:'ใจ/หัวใจ'},{radical:'女',meaning:'ผู้หญิง'},{radical:'火',meaning:'ไฟ'}],
+      examples:[{char:'城',pinyin:'chéng',meaning:'เมือง'},{char:'坐',pinyin:'zuò',meaning:'นั่ง'},{char:'块',pinyin:'kuài',meaning:'ก้อน'},{char:'场',pinyin:'chǎng',meaning:'สนาม/ลาน'},{char:'墙',pinyin:'qiáng',meaning:'กำแพง'}],
+      explain:'อักษรข้าง 土 (ดิน) → คำที่เกี่ยวกับพื้นดิน สถานที่ สิ่งที่อยู่บนพื้น เช่น เมือง นั่ง สนาม กำแพง' },
+    // 火ไฟ
+    { char:'烧', pinyin:'shāo', meaning:'เผา/ปรุงอาหาร', group:'กลุ่มไฟและความร้อน', hint:'ดูด้านซ้าย มีจุดๆ ที่คล้ายเปลวไฟไหม?',
+      correct:{radical:'火',meaning:'ไฟ (4 จุด)'}, wrong:[{radical:'氵',meaning:'น้ำ (3 จุด)'},{radical:'土',meaning:'ดิน'},{radical:'木',meaning:'ไม้'}],
+      examples:[{char:'热',pinyin:'rè',meaning:'ร้อน'},{char:'炒',pinyin:'chǎo',meaning:'ผัด'},{char:'烤',pinyin:'kǎo',meaning:'ย่าง'},{char:'煮',pinyin:'zhǔ',meaning:'ต้ม'},{char:'灯',pinyin:'dēng',meaning:'ไฟ/โคม'}],
+      explain:'อักษรข้าง 火 (ไฟ) → คำที่เกี่ยวกับไฟ ความร้อน การปรุงอาหาร เช่น เผา ผัด ย่าง ต้ม ร้อน' },
+    { char:'炒', pinyin:'chǎo', meaning:'ผัด', group:'กลุ่มไฟและความร้อน', hint:'ดูด้านซ้าย เกี่ยวกับอะไรนะ?',
+      correct:{radical:'火',meaning:'ไฟ (4 จุด)'}, wrong:[{radical:'氵',meaning:'น้ำ'},{radical:'口',meaning:'ปาก'},{radical:'木',meaning:'ไม้'}],
+      examples:[{char:'烧',pinyin:'shāo',meaning:'เผา'},{char:'烤',pinyin:'kǎo',meaning:'ย่าง'},{char:'热',pinyin:'rè',meaning:'ร้อน'},{char:'煮',pinyin:'zhǔ',meaning:'ต้ม'},{char:'煎',pinyin:'jiān',meaning:'ทอด'}],
+      explain:'อักษรข้าง 火 (ไฟ) → วิธีปรุงอาหารที่ใช้ความร้อน ผัด ย่าง เผา ต้ม ทอด ล้วนมี 火!' },
+    // 讠คำพูด
+    { char:'说', pinyin:'shuō', meaning:'พูด', group:'กลุ่มภาษาและการสื่อสาร', hint:'ดูด้านซ้าย มีอะไรที่คล้ายการสื่อสารไหม?',
+      correct:{radical:'讠',meaning:'คำพูด/ภาษา'}, wrong:[{radical:'口',meaning:'ปาก'},{radical:'心',meaning:'ใจ/หัวใจ'},{radical:'女',meaning:'ผู้หญิง'}],
+      examples:[{char:'话',pinyin:'huà',meaning:'คำพูด'},{char:'语',pinyin:'yǔ',meaning:'ภาษา'},{char:'请',pinyin:'qǐng',meaning:'โปรด'},{char:'读',pinyin:'dú',meaning:'อ่าน'},{char:'谢',pinyin:'xiè',meaning:'ขอบคุณ'}],
+      explain:'อักษรข้าง 讠 (คำพูด) → คำที่เกี่ยวกับภาษาและการสื่อสาร เช่น พูด ภาษา คำ อ่าน ขอบคุณ' },
+    { char:'语', pinyin:'yǔ', meaning:'ภาษา', group:'กลุ่มภาษาและการสื่อสาร', hint:'ดูด้านซ้าย เกี่ยวกับการสื่อสารไหม?',
+      correct:{radical:'讠',meaning:'คำพูด/ภาษา'}, wrong:[{radical:'口',meaning:'ปาก'},{radical:'女',meaning:'ผู้หญิง'},{radical:'木',meaning:'ไม้'}],
+      examples:[{char:'说',pinyin:'shuō',meaning:'พูด'},{char:'话',pinyin:'huà',meaning:'คำพูด'},{char:'读',pinyin:'dú',meaning:'อ่าน'},{char:'谢',pinyin:'xiè',meaning:'ขอบคุณ'},{char:'请',pinyin:'qǐng',meaning:'โปรด/เชิญ'}],
+      explain:'อักษรข้าง 讠 (คำพูด) → 中文ภาษาจีน 英语ภาษาอังกฤษ 泰语ภาษาไทย ล้วนมี 语!' },
+    // 亻คน
+    { char:'他', pinyin:'tā', meaning:'เขา (ผู้ชาย)', group:'กลุ่มคนและบุคคล', hint:'ดูด้านซ้าย มีอะไรที่คล้ายคนไหม?',
+      correct:{radical:'亻',meaning:'คน (รูปด้านข้าง)'}, wrong:[{radical:'女',meaning:'ผู้หญิง'},{radical:'口',meaning:'ปาก'},{radical:'心',meaning:'ใจ'}],
+      examples:[{char:'你',pinyin:'nǐ',meaning:'คุณ'},{char:'们',pinyin:'men',meaning:'พวก (พหูพจน์)'},{char:'做',pinyin:'zuò',meaning:'ทำ'},{char:'休',pinyin:'xiū',meaning:'พัก'},{char:'位',pinyin:'wèi',meaning:'ที่นั่ง/ท่าน'}],
+      explain:'อักษรข้าง 亻 (คน) → เขา คุณ พวกเขา ทำ พัก ล้วนเกี่ยวกับคนทั้งหมด!' },
+    { char:'做', pinyin:'zuò', meaning:'ทำ', group:'กลุ่มคนและบุคคล', hint:'ดูด้านซ้าย มีรูปคนยืนไหม?',
+      correct:{radical:'亻',meaning:'คน (รูปด้านข้าง)'}, wrong:[{radical:'口',meaning:'ปาก'},{radical:'木',meaning:'ไม้'},{radical:'土',meaning:'ดิน'}],
+      examples:[{char:'他',pinyin:'tā',meaning:'เขา'},{char:'你',pinyin:'nǐ',meaning:'คุณ'},{char:'休',pinyin:'xiū',meaning:'พัก'},{char:'们',pinyin:'men',meaning:'พวก'},{char:'位',pinyin:'wèi',meaning:'ท่าน/ที่นั่ง'}],
+      explain:'อักษรข้าง 亻 (คน) → คำที่เกี่ยวกับคนและการกระทำของคน เช่น ทำ พัก เขา คุณ!' },
+    // 手มือ - ใหม่!
+    { char:'打', pinyin:'dǎ', meaning:'ตี/โทรศัพท์', group:'กลุ่มมือและการกระทำ', hint:'ดูด้านซ้าย มีอะไรที่คล้ายมือไหม?',
+      correct:{radical:'扌',meaning:'มือ (รูปด้านข้าง)'}, wrong:[{radical:'口',meaning:'ปาก'},{radical:'木',meaning:'ไม้'},{radical:'氵',meaning:'น้ำ'}],
+      examples:[{char:'拿',pinyin:'ná',meaning:'หยิบ/ถือ'},{char:'找',pinyin:'zhǎo',meaning:'หา'},{char:'推',pinyin:'tuī',meaning:'ดัน'},{char:'拉',pinyin:'lā',meaning:'ดึง'},{char:'接',pinyin:'jiē',meaning:'รับ'}],
+      explain:'อักษรข้าง 扌 (มือ) → คำที่ใช้มือทำ เช่น ตี หยิบ หา ดัน ดึง รับ โทร ใส่ ล้วนมี 扌!' },
+    { char:'拿', pinyin:'ná', meaning:'หยิบ/ถือ', group:'กลุ่มมือและการกระทำ', hint:'ดูด้านล่าง มีอะไรที่คล้ายมือไหม?',
+      correct:{radical:'手',meaning:'มือ'}, wrong:[{radical:'火',meaning:'ไฟ'},{radical:'女',meaning:'ผู้หญิง'},{radical:'心',meaning:'ใจ'}],
+      examples:[{char:'打',pinyin:'dǎ',meaning:'ตี/โทร'},{char:'找',pinyin:'zhǎo',meaning:'หา'},{char:'推',pinyin:'tuī',meaning:'ดัน'},{char:'拉',pinyin:'lā',meaning:'ดึง'},{char:'握',pinyin:'wò',meaning:'จับ/ยึด'}],
+      explain:'อักษรข้าง 手/扌 (มือ) → คำที่เกี่ยวกับการใช้มือ หยิบ จับ ดัน ดึง ทุกอย่างที่มือทำได้!' },
+    // 目ตา - ใหม่!
+    { char:'看', pinyin:'kàn', meaning:'ดู/มอง', group:'กลุ่มตาและการมอง', hint:'ดูด้านล่าง มีอะไรที่คล้ายตาไหม?',
+      correct:{radical:'目',meaning:'ตา'}, wrong:[{radical:'口',meaning:'ปาก'},{radical:'心',meaning:'ใจ'},{radical:'木',meaning:'ไม้'}],
+      examples:[{char:'眼',pinyin:'yǎn',meaning:'ตา'},{char:'睡',pinyin:'shuì',meaning:'นอนหลับ'},{char:'眉',pinyin:'méi',meaning:'คิ้ว'},{char:'盲',pinyin:'máng',meaning:'ตาบอด'},{char:'相',pinyin:'xiāng',meaning:'มอง/ลักษณะ'}],
+      explain:'อักษรข้าง 目 (ตา) → คำที่เกี่ยวกับตาและการมอง เช่น ดู ตา นอนหลับ คิ้ว ตาบอด!' },
+    { char:'睡', pinyin:'shuì', meaning:'นอนหลับ', group:'กลุ่มตาและการมอง', hint:'ดูด้านซ้าย มีอะไรเกี่ยวกับตาไหม?',
+      correct:{radical:'目',meaning:'ตา'}, wrong:[{radical:'木',meaning:'ไม้'},{radical:'氵',meaning:'น้ำ'},{radical:'土',meaning:'ดิน'}],
+      examples:[{char:'看',pinyin:'kàn',meaning:'ดู'},{char:'眼',pinyin:'yǎn',meaning:'ตา'},{char:'眉',pinyin:'méi',meaning:'คิ้ว'},{char:'盯',pinyin:'dīng',meaning:'จ้องมอง'},{char:'瞧',pinyin:'qiáo',meaning:'มองดู'}],
+      explain:'อักษรข้าง 目 (ตา) → นอนหลับเกี่ยวกับตาเพราะต้องหลับตา! คำเกี่ยวกับตาล้วนมี 目!' },
+    // 言คำพูด (เต็ม) - ใหม่!
+    { char:'诶', pinyin:'éi', meaning:'เฮ้/เอ๊ะ', group:'กลุ่มภาษาและการสื่อสาร', hint:'ดูด้านซ้าย มีอักษรข้างเดียวกับ 说 ไหม?',
+      correct:{radical:'讠',meaning:'คำพูด/ภาษา'}, wrong:[{radical:'口',meaning:'ปาก'},{radical:'心',meaning:'ใจ'},{radical:'女',meaning:'ผู้หญิง'}],
+      examples:[{char:'说',pinyin:'shuō',meaning:'พูด'},{char:'谢',pinyin:'xiè',meaning:'ขอบคุณ'},{char:'请',pinyin:'qǐng',meaning:'โปรด'},{char:'认',pinyin:'rèn',meaning:'จำได้/รู้จัก'},{char:'识',pinyin:'shí',meaning:'รู้จัก'}],
+      explain:'อักษรข้าง 讠 (คำพูด) → คำทักทาย คำสุภาพ คำขอบคุณ ล้วนเกี่ยวกับการสื่อสารทั้งนั้น!' },
+    // 金/钅โลหะ - ใหม่!
+    { char:'钱', pinyin:'qián', meaning:'เงิน', group:'กลุ่มโลหะและวัสดุ', hint:'ดูด้านซ้าย มีอะไรที่เกี่ยวกับโลหะไหม?',
+      correct:{radical:'钅',meaning:'โลหะ/ทอง'}, wrong:[{radical:'木',meaning:'ไม้'},{radical:'氵',meaning:'น้ำ'},{radical:'土',meaning:'ดิน'}],
+      examples:[{char:'银',pinyin:'yín',meaning:'เงิน (โลหะ)'},{char:'铁',pinyin:'tiě',meaning:'เหล็ก'},{char:'锁',pinyin:'suǒ',meaning:'กุญแจล็อค'},{char:'针',pinyin:'zhēn',meaning:'เข็ม'},{char:'铃',pinyin:'líng',meaning:'กระดิ่ง'}],
+      explain:'อักษรข้าง 钅 (โลหะ) → เงิน ทอง เหล็ก กุญแจ เข็ม ล้วนทำจากโลหะ เลยมี 钅!' },
+    // 食อาหาร - ใหม่!
+    { char:'饿', pinyin:'è', meaning:'หิว', group:'กลุ่มอาหารและการกิน', hint:'ดูด้านซ้าย มีอะไรเกี่ยวกับอาหารไหม?',
+      correct:{radical:'饣',meaning:'อาหาร'}, wrong:[{radical:'口',meaning:'ปาก'},{radical:'心',meaning:'ใจ'},{radical:'氵',meaning:'น้ำ'}],
+      examples:[{char:'饭',pinyin:'fàn',meaning:'ข้าว/อาหาร'},{char:'饮',pinyin:'yǐn',meaning:'ดื่ม'},{char:'馆',pinyin:'guǎn',meaning:'ร้าน/โรงแรม'},{char:'饱',pinyin:'bǎo',meaning:'อิ่ม'},{char:'饺',pinyin:'jiǎo',meaning:'เกี๊ยว'}],
+      explain:'อักษรข้าง 饣 (อาหาร) → คำที่เกี่ยวกับอาหารและการกิน เช่น หิว อิ่ม ข้าว เกี๊ยว ร้านอาหาร!' },
+    { char:'饭', pinyin:'fàn', meaning:'ข้าว/อาหาร', group:'กลุ่มอาหารและการกิน', hint:'ดูด้านซ้าย มีอะไรเกี่ยวกับอาหารไหม?',
+      correct:{radical:'饣',meaning:'อาหาร'}, wrong:[{radical:'木',meaning:'ไม้'},{radical:'火',meaning:'ไฟ'},{radical:'土',meaning:'ดิน'}],
+      examples:[{char:'饿',pinyin:'è',meaning:'หิว'},{char:'饱',pinyin:'bǎo',meaning:'อิ่ม'},{char:'饮',pinyin:'yǐn',meaning:'ดื่ม'},{char:'馆',pinyin:'guǎn',meaning:'ร้านอาหาร'},{char:'饺',pinyin:'jiǎo',meaning:'เกี๊ยว'}],
+      explain:'อักษรข้าง 饣 (อาหาร) → ข้าว หิว อิ่ม เกี๊ยว ร้านอาหาร ล้วนเกี่ยวกับอาหารทั้งนั้น!' },
+    // 车รถ - ใหม่!
+    { char:'辆', pinyin:'liàng', meaning:'คัน (ลักษณนาม)', group:'กลุ่มยานพาหนะ', hint:'ดูด้านซ้าย มีอะไรที่เกี่ยวกับรถไหม?',
+      correct:{radical:'车',meaning:'รถ/ยานพาหนะ'}, wrong:[{radical:'木',meaning:'ไม้'},{radical:'金',meaning:'โลหะ'},{radical:'口',meaning:'ปาก'}],
+      examples:[{char:'轻',pinyin:'qīng',meaning:'เบา'},{char:'转',pinyin:'zhuǎn',meaning:'หมุน/เลี้ยว'},{char:'较',pinyin:'jiào',meaning:'ค่อนข้าง'},{char:'轮',pinyin:'lún',meaning:'ล้อ'},{char:'载',pinyin:'zài',meaning:'บรรทุก'}],
+      explain:'อักษรข้าง 车 (รถ) → คำที่เกี่ยวกับยานพาหนะ การเดินทาง ล้อ บรรทุก หมุน!' },
+    // 言พูด (แบบเต็ม) - ใหม่!
+    { char:'课', pinyin:'kè', meaning:'บทเรียน/คาบเรียน', group:'กลุ่มการเรียนรู้', hint:'ดูด้านซ้าย เกี่ยวกับการสื่อสารไหม?',
+      correct:{radical:'讠',meaning:'คำพูด/ภาษา'}, wrong:[{radical:'木',meaning:'ไม้'},{radical:'火',meaning:'ไฟ'},{radical:'土',meaning:'ดิน'}],
+      examples:[{char:'说',pinyin:'shuō',meaning:'พูด'},{char:'读',pinyin:'dú',meaning:'อ่าน'},{char:'语',pinyin:'yǔ',meaning:'ภาษา'},{char:'话',pinyin:'huà',meaning:'คำพูด'},{char:'谈',pinyin:'tán',meaning:'คุย/สนทนา'}],
+      explain:'อักษรข้าง 讠 (คำพูด) → บทเรียนเกี่ยวกับการพูด! คำที่เกี่ยวกับการเรียนรู้ภาษา ล้วนมี 讠!' },
+    // 走เดิน - ใหม่!
+    { char:'跑', pinyin:'pǎo', meaning:'วิ่ง', group:'กลุ่มการเคลื่อนที่', hint:'ดูด้านซ้าย มีอะไรที่เกี่ยวกับเท้าไหม?',
+      correct:{radical:'足',meaning:'เท้า/ขา'}, wrong:[{radical:'手',meaning:'มือ'},{radical:'口',meaning:'ปาก'},{radical:'木',meaning:'ไม้'}],
+      examples:[{char:'走',pinyin:'zǒu',meaning:'เดิน'},{char:'跳',pinyin:'tiào',meaning:'กระโดด'},{char:'踢',pinyin:'tī',meaning:'เตะ'},{char:'路',pinyin:'lù',meaning:'ถนน'},{char:'踏',pinyin:'tà',meaning:'เหยียบ'}],
+      explain:'อักษรข้าง 足 (เท้า) → คำที่เกี่ยวกับการเคลื่อนที่ด้วยเท้า วิ่ง เดิน กระโดด เตะ เหยียบ!' },
+    { char:'跳', pinyin:'tiào', meaning:'กระโดด', group:'กลุ่มการเคลื่อนที่', hint:'ดูด้านซ้าย เกี่ยวกับเท้าไหม?',
+      correct:{radical:'足',meaning:'เท้า/ขา'}, wrong:[{radical:'手',meaning:'มือ'},{radical:'心',meaning:'ใจ'},{radical:'火',meaning:'ไฟ'}],
+      examples:[{char:'跑',pinyin:'pǎo',meaning:'วิ่ง'},{char:'走',pinyin:'zǒu',meaning:'เดิน'},{char:'踢',pinyin:'tī',meaning:'เตะ'},{char:'路',pinyin:'lù',meaning:'ถนน'},{char:'距',pinyin:'jù',meaning:'ระยะทาง'}],
+      explain:'อักษรข้าง 足 (เท้า) → กระโดด วิ่ง เดิน เตะ ถนน ล้วนเกี่ยวกับเท้าทั้งนั้น!' },
+    // 日ดวงอาทิตย์ - ใหม่!
+    { char:'明', pinyin:'míng', meaning:'สว่าง/ฉลาด', group:'กลุ่มแสงและเวลา', hint:'ดูด้านซ้าย มีอะไรที่คล้ายดวงอาทิตย์ไหม?',
+      correct:{radical:'日',meaning:'ดวงอาทิตย์/วัน'}, wrong:[{radical:'月',meaning:'ดวงจันทร์'},{radical:'木',meaning:'ไม้'},{radical:'口',meaning:'ปาก'}],
+      examples:[{char:'时',pinyin:'shí',meaning:'เวลา/ชั่วโมง'},{char:'晴',pinyin:'qíng',meaning:'แดดออก'},{char:'早',pinyin:'zǎo',meaning:'เช้า'},{char:'暖',pinyin:'nuǎn',meaning:'อบอุ่น'},{char:'晚',pinyin:'wǎn',meaning:'เย็น/ดึก'}],
+      explain:'อักษรข้าง 日 (ดวงอาทิตย์) → คำที่เกี่ยวกับแสง เวลา สภาพอากาศ เช้า เย็น แดดออก!' },
+    { char:'晴', pinyin:'qíng', meaning:'แดดออก/ท้องฟ้าโปร่ง', group:'กลุ่มแสงและเวลา', hint:'ดูด้านซ้าย เกี่ยวกับดวงอาทิตย์ไหม?',
+      correct:{radical:'日',meaning:'ดวงอาทิตย์/วัน'}, wrong:[{radical:'氵',meaning:'น้ำ'},{radical:'风',meaning:'ลม'},{radical:'木',meaning:'ไม้'}],
+      examples:[{char:'明',pinyin:'míng',meaning:'สว่าง'},{char:'早',pinyin:'zǎo',meaning:'เช้า'},{char:'时',pinyin:'shí',meaning:'เวลา'},{char:'暖',pinyin:'nuǎn',meaning:'อบอุ่น'},{char:'昨',pinyin:'zuó',meaning:'เมื่อวาน'}],
+      explain:'อักษรข้าง 日 (ดวงอาทิตย์) → สภาพอากาศและเวลาของวัน เช้า เย็น แดด อบอุ่น ล้วนมี 日!' },
+    // 月ดวงจันทร์ - ใหม่!
+    { char:'胖', pinyin:'pàng', meaning:'อ้วน', group:'กลุ่มร่างกาย', hint:'ดูด้านซ้าย อักษรข้างนี้แปลว่าอะไรนะ?',
+      correct:{radical:'月',meaning:'เนื้อ/ร่างกาย (รูปเหมือนเดือน)'}, wrong:[{radical:'日',meaning:'ดวงอาทิตย์'},{radical:'心',meaning:'ใจ'},{radical:'氵',meaning:'น้ำ'}],
+      examples:[{char:'脸',pinyin:'liǎn',meaning:'หน้า'},{char:'背',pinyin:'bèi',meaning:'หลัง'},{char:'腿',pinyin:'tuǐ',meaning:'ขา'},{char:'脚',pinyin:'jiǎo',meaning:'เท้า'},{char:'肚',pinyin:'dù',meaning:'ท้อง'}],
+      explain:'อักษรข้าง 月 เมื่ออยู่ในคำ หมายถึง เนื้อ/ร่างกาย → หน้า หลัง ขา เท้า ท้อง อ้วน!' },
+    { char:'脸', pinyin:'liǎn', meaning:'หน้า/ใบหน้า', group:'กลุ่มร่างกาย', hint:'ดูด้านซ้าย เกี่ยวกับร่างกายไหม?',
+      correct:{radical:'月',meaning:'เนื้อ/ร่างกาย'}, wrong:[{radical:'目',meaning:'ตา'},{radical:'口',meaning:'ปาก'},{radical:'女',meaning:'ผู้หญิง'}],
+      examples:[{char:'胖',pinyin:'pàng',meaning:'อ้วน'},{char:'背',pinyin:'bèi',meaning:'หลัง'},{char:'腿',pinyin:'tuǐ',meaning:'ขา'},{char:'肚',pinyin:'dù',meaning:'ท้อง'},{char:'胸',pinyin:'xiōng',meaning:'อก'}],
+      explain:'อักษรข้าง 月 (เนื้อ/ร่างกาย) → ส่วนต่างๆ ของร่างกาย หน้า หลัง ขา ท้อง อก ล้วนมี 月!' },
+    // 草หญ้า/พืช - ใหม่!
+    { char:'花', pinyin:'huā', meaning:'ดอกไม้', group:'กลุ่มพืชและธรรมชาติ', hint:'ดูด้านบน มีอะไรที่คล้ายหญ้าหรือพืชไหม?',
+      correct:{radical:'艹',meaning:'หญ้า/พืช'}, wrong:[{radical:'木',meaning:'ไม้'},{radical:'氵',meaning:'น้ำ'},{radical:'土',meaning:'ดิน'}],
+      examples:[{char:'草',pinyin:'cǎo',meaning:'หญ้า'},{char:'菜',pinyin:'cài',meaning:'ผัก'},{char:'茶',pinyin:'chá',meaning:'ชา'},{char:'药',pinyin:'yào',meaning:'ยา'},{char:'蓝',pinyin:'lán',meaning:'สีน้ำเงิน'}],
+      explain:'อักษรข้าง 艹 (หญ้า/พืช) → ดอกไม้ หญ้า ผัก ชา ยา ล้วนเป็นพืชจึงมี 艹 อยู่บนสุด!' },
+    { char:'茶', pinyin:'chá', meaning:'ชา', group:'กลุ่มพืชและธรรมชาติ', hint:'ดูด้านบน มีอะไรคล้ายพืชไหม?',
+      correct:{radical:'艹',meaning:'หญ้า/พืช'}, wrong:[{radical:'氵',meaning:'น้ำ'},{radical:'木',meaning:'ไม้'},{radical:'饣',meaning:'อาหาร'}],
+      examples:[{char:'花',pinyin:'huā',meaning:'ดอกไม้'},{char:'草',pinyin:'cǎo',meaning:'หญ้า'},{char:'菜',pinyin:'cài',meaning:'ผัก'},{char:'药',pinyin:'yào',meaning:'ยา'},{char:'芒',pinyin:'máng',meaning:'มะม่วง (ใช้ใน 芒果)'}],
+      explain:'อักษรข้าง 艹 (หญ้า/พืช) → ชามาจากใบชาซึ่งเป็นพืช! คำที่เกี่ยวกับพืชล้วนมี 艹 อยู่บน!' },
+    // 雨ฝน - ใหม่!
+    { char:'雪', pinyin:'xuě', meaning:'หิมะ', group:'กลุ่มสภาพอากาศ', hint:'ดูด้านบน มีอะไรที่คล้ายฝนหรือน้ำฟ้าไหม?',
+      correct:{radical:'雨',meaning:'ฝน'}, wrong:[{radical:'氵',meaning:'น้ำ'},{radical:'日',meaning:'ดวงอาทิตย์'},{radical:'云',meaning:'เมฆ'}],
+      examples:[{char:'雨',pinyin:'yǔ',meaning:'ฝน'},{char:'云',pinyin:'yún',meaning:'เมฆ'},{char:'雷',pinyin:'léi',meaning:'ฟ้าร้อง'},{char:'霜',pinyin:'shuāng',meaning:'น้ำค้างแข็ง'},{char:'露',pinyin:'lù',meaning:'น้ำค้าง'}],
+      explain:'อักษรข้าง 雨 (ฝน) → หิมะ เมฆ ฟ้าร้อง น้ำค้าง ล้วนเป็นปรากฏการณ์ทางอากาศ มี 雨 ทั้งนั้น!' },
+    // 石หิน - ใหม่!
+    { char:'破', pinyin:'pò', meaning:'แตก/ทำลาย', group:'กลุ่มหินและวัสดุแข็ง', hint:'ดูด้านซ้าย มีอะไรที่คล้ายหินไหม?',
+      correct:{radical:'石',meaning:'หิน'}, wrong:[{radical:'木',meaning:'ไม้'},{radical:'土',meaning:'ดิน'},{radical:'金',meaning:'โลหะ'}],
+      examples:[{char:'碗',pinyin:'wǎn',meaning:'ชาม'},{char:'研',pinyin:'yán',meaning:'ค้นคว้า'},{char:'硬',pinyin:'yìng',meaning:'แข็ง'},{char:'砖',pinyin:'zhuān',meaning:'อิฐ'},{char:'碰',pinyin:'pèng',meaning:'ชน/ปะทะ'}],
+      explain:'อักษรข้าง 石 (หิน) → ของที่แข็งหรือทำจากหิน เช่น ชาม อิฐ แตก แข็ง ปะทะ!' },
+    // 门ประตู - ใหม่!
+    { char:'问', pinyin:'wèn', meaning:'ถาม', group:'กลุ่มพื้นที่และสิ่งปลูกสร้าง', hint:'ดูรอบนอก มีอะไรที่คล้ายประตูไหม?',
+      correct:{radical:'门',meaning:'ประตู'}, wrong:[{radical:'口',meaning:'ปาก'},{radical:'木',meaning:'ไม้'},{radical:'土',meaning:'ดิน'}],
+      examples:[{char:'间',pinyin:'jiān',meaning:'ห้อง/ระหว่าง'},{char:'闹',pinyin:'nào',meaning:'อึกทึก'},{char:'闻',pinyin:'wén',meaning:'ได้กลิ่น/ได้ยิน'},{char:'闭',pinyin:'bì',meaning:'ปิด'},{char:'开',pinyin:'kāi',meaning:'เปิด'}],
+      explain:'อักษรข้าง 门 (ประตู) → ถาม ห้อง เปิด ปิด ล้วนเกี่ยวกับพื้นที่หรือประตู!' },
+    // 耳หู - ใหม่!
+    { char:'听', pinyin:'tīng', meaning:'ฟัง', group:'กลุ่มหูและการได้ยิน', hint:'คำนี้ใช้อวัยวะไหนในการกระทำ?',
+      correct:{radical:'耳',meaning:'หู'}, wrong:[{radical:'目',meaning:'ตา'},{radical:'口',meaning:'ปาก'},{radical:'心',meaning:'ใจ'}],
+      examples:[{char:'耳',pinyin:'ěr',meaning:'หู'},{char:'聪',pinyin:'cōng',meaning:'ฉลาด/หูดี'},{char:'联',pinyin:'lián',meaning:'ติดต่อ/เชื่อม'},{char:'职',pinyin:'zhí',meaning:'หน้าที่/ตำแหน่ง'},{char:'耻',pinyin:'chǐ',meaning:'อาย'}],
+      explain:'อักษรข้าง 耳 (หู) → ฟัง หู ฉลาด ล้วนเกี่ยวกับการได้ยินและหู!' },
+    // 言พูด (เต็ม) - เพิ่มเติม
+    { char:'谢', pinyin:'xiè', meaning:'ขอบคุณ', group:'กลุ่มภาษาและการสื่อสาร', hint:'ดูด้านซ้าย เกี่ยวกับคำพูดหรือภาษาไหม?',
+      correct:{radical:'讠',meaning:'คำพูด/ภาษา'}, wrong:[{radical:'女',meaning:'ผู้หญิง'},{radical:'心',meaning:'ใจ'},{radical:'木',meaning:'ไม้'}],
+      examples:[{char:'说',pinyin:'shuō',meaning:'พูด'},{char:'请',pinyin:'qǐng',meaning:'โปรด/เชิญ'},{char:'语',pinyin:'yǔ',meaning:'ภาษา'},{char:'读',pinyin:'dú',meaning:'อ่าน'},{char:'认',pinyin:'rèn',meaning:'จำได้/รู้จัก'}],
+      explain:'อักษรข้าง 讠 (คำพูด) → ขอบคุณคือการแสดงออกด้วยคำพูด เลยมี 讠! คำสุภาพมักมี 讠!' }
+  ];
+
+  let rState = { questions:[], current:0, score:0, answered:false };
+
+  function rShuffle(arr){ return [...arr].sort(()=>Math.random()-0.5); }
+
+  function rStart(){
+    rState.questions = rShuffle(questions);
+    rState.current = 0; rState.score = 0; rState.answered = false;
+    rRender();
+  }
+
+  function rRender(){
+    const q = rState.questions[rState.current];
+    const pct = Math.round((rState.current/rState.questions.length)*100);
+    const choices = rShuffle([q.correct,...q.wrong.slice(0,3)]);
+    const isLast = rState.current === rState.questions.length-1;
+
+    document.getElementById('radical-content').innerHTML = `
+      <div style="background:linear-gradient(135deg,#fff3e0,#ffe0b2);border-radius:14px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px">
+        <div style="flex:1;background:rgba(255,255,255,.5);border-radius:8px;height:8px;overflow:hidden">
+          <div style="background:#e67e22;height:100%;width:${pct}%;border-radius:8px;transition:width .4s"></div>
+        </div>
+        <span style="font-size:12px;color:#e67e22;font-weight:700">${rState.current}/${rState.questions.length}</span>
+        <span style="font-size:12px;color:#e67e22;font-weight:700">⭐ ${rState.score}</span>
+      </div>
+
+      <div style="background:white;border-radius:20px;padding:24px;text-align:center;box-shadow:0 4px 20px rgba(230,126,34,.1);border:1.5px solid #fde8c8;margin-bottom:12px">
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px">
+          <span style="font-size:11px;color:#e67e22;font-weight:700;letter-spacing:1px">อักษรข้างอะไร?</span>
+          <span style="font-size:10px;background:#fff3e0;color:#e67e22;border-radius:20px;padding:2px 8px;font-weight:700">${q.group}</span>
+        </div>
+        <div style="font-family:'Noto Serif SC',serif;font-size:80px;color:#1A0A12;line-height:1;margin-bottom:8px">${q.char}</div>
+        <div style="font-size:17px;color:#e67e22;font-weight:700;margin-bottom:4px">${q.pinyin}</div>
+        <div style="font-size:14px;color:#7A5568;margin-bottom:12px">${q.meaning}</div>
+        <div style="background:#fff8f0;border-radius:10px;padding:8px 14px;font-size:13px;color:#3D1F2E">💡 ${q.hint}</div>
+      </div>
+
+      <div style="font-size:13px;font-weight:700;color:#3D1F2E;text-align:center;margin-bottom:10px">เลือกอักษรข้างที่ถูกต้อง</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px" id="r-choices">
+        ${choices.map(c=>`
+          <button onclick="rPlaySound('tap');rSelect(this,'${c.radical}','${q.correct.radical}')" data-rad="${c.radical}"
+            style="background:white;border:2px solid #F2D8E5;border-radius:16px;padding:16px 12px;text-align:center;cursor:pointer;font-family:inherit;transition:all .15s;-webkit-tap-highlight-color:transparent">
+            <span style="font-family:'Noto Serif SC',serif;font-size:36px;display:block;margin-bottom:6px;color:#1A0A12">${c.radical}</span>
+            <span style="font-size:13px;color:#7A5568">${c.meaning}</span>
+          </button>`).join('')}
+      </div>
+
+      <div id="r-feedback" style="display:none;background:white;border-radius:16px;padding:16px;border:1.5px solid #F2D8E5;margin-bottom:12px">
+        <div id="r-fb-icon" style="font-size:32px;text-align:center;margin-bottom:6px"></div>
+        <div id="r-fb-title" style="font-size:16px;font-weight:800;text-align:center;margin-bottom:6px"></div>
+        <div id="r-fb-desc" style="font-size:13px;color:#7A5568;line-height:1.6;text-align:center;margin-bottom:12px"></div>
+        <div style="font-size:12px;color:#7A5568;margin-bottom:8px;font-weight:600">คำอื่นที่มีอักษรข้างเดียวกัน:</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="r-fb-ex"></div>
+        <button onclick="rNext()" style="background:#e67e22;color:white;border:none;border-radius:50px;padding:13px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;width:100%">
+          ${isLast ? 'ดูผลคะแนน 🎉' : 'ข้อถัดไป →'}
+        </button>
+      </div>
+    `;
+    window._rState = rState;
+    window._rQ = q;
+  }
+
+  window.rSelect = function(btn, selected, correct){
+    if(window._rState.answered) return;
+    window._rState.answered = true;
+    const q = window._rQ;
+    document.querySelectorAll('#r-choices button').forEach(b=>{
+      b.style.pointerEvents='none';
+      if(b.dataset.rad===correct){ b.style.borderColor='#2DBF90'; b.style.background='#E8FFF5'; }
+    });
+    const isCorrect = selected===correct;
+    if(!isCorrect){ btn.style.borderColor='#E85050'; btn.style.background='#FFF0F0'; rPlaySound('wrong'); }
+    else { window._rState.score++; rPlaySound('correct'); }
+
+    const fb = document.getElementById('r-feedback');
+    document.getElementById('r-fb-icon').textContent = isCorrect?'🎉':'💡';
+    document.getElementById('r-fb-title').textContent = isCorrect?'ถูกต้อง! เก่งมาก!':'ยังไม่ใช่ ดูเฉลยนะ!';
+    document.getElementById('r-fb-desc').textContent = q.explain;
+    document.getElementById('r-fb-ex').innerHTML = q.examples.map(e=>
+      `<div style="background:#fff8f0;border-radius:8px;padding:6px 10px;text-align:center">
+        <span style="font-family:'Noto Serif SC',serif;font-size:22px;color:#e67e22;display:block">${e.char}</span>
+        <span style="font-size:11px;color:#e67e22;display:block">${e.pinyin}</span>
+        <span style="font-size:11px;color:#7A5568">${e.meaning}</span>
+      </div>`).join('');
+    fb.style.display='block';
+  };
+
+  window.rNext = function(){
+    window._rState.current++;
+    if(window._rState.current >= window._rState.questions.length){
+      rShowResult();
+    } else {
+      window._rState.answered = false;
+      rRender();
+    }
+  };
+
+  function rShowResult(){ rPlaySound('finish');
+    const s = window._rState.score;
+    const t = window._rState.questions.length;
+    const pct = s/t;
+    let icon,title,msg,stars;
+    if(pct===1){icon='🏆';title='สมบูรณ์แบบ!';stars='⭐⭐⭐';msg='ว้าว! ตอบถูกทุกข้อ! ตอนนี้รู้จักอักษรข้างพื้นฐาน 8 ตัวแล้ว!';}
+    else if(pct>=.75){icon='🎉';title='เก่งมากเลย!';stars='⭐⭐⭐';msg='ดีมาก! เล่นอีกครั้งเพื่อทำคะแนนให้สมบูรณ์แบบ!';}
+    else if(pct>=.5){icon='😊';title='ไม่เลวเลย!';stars='⭐⭐';msg='ผ่านได้! เล่นอีกครั้งแล้วจะจำได้มากขึ้นเรื่อยๆ!';}
+    else{icon='💪';title='สู้ต่อไป!';stars='⭐';msg='อักษรข้างยากนิดนึงในตอนแรก ลองอีกครั้งนะ!';}
+    const xp = s*10;
+    if(typeof addXP==='function') addXP(xp);
+    document.getElementById('radical-content').innerHTML = `
+      <div style="text-align:center;padding:32px 16px">
+        <div style="font-size:40px;letter-spacing:4px;margin-bottom:12px">${stars}</div>
+        <div style="font-size:64px;margin-bottom:12px">${icon}</div>
+        <div style="font-size:24px;font-weight:800;color:#e67e22;margin-bottom:12px">${title}</div>
+        <div style="font-size:56px;font-weight:800;color:#1A0A12;line-height:1">${s}</div>
+        <div style="font-size:16px;color:#7A5568;margin-bottom:12px">จาก ${t} ข้อ</div>
+        <div style="background:linear-gradient(135deg,#e67e22,#e85050);color:white;border-radius:20px;padding:8px 20px;display:inline-block;font-size:15px;font-weight:700;margin-bottom:20px">+${xp} XP</div>
+        <div style="font-size:15px;color:#7A5568;line-height:1.7;margin-bottom:28px">${msg}</div>
+        <button onclick="rPlaySound('tap');rStart()" style="background:#e67e22;color:white;border:none;border-radius:50px;padding:14px 40px;font-size:16px;font-weight:800;font-family:inherit;cursor:pointer;width:100%;max-width:280px;box-shadow:0 6px 20px rgba(230,126,34,.35)">เล่นอีกครั้ง 🔄</button>
+      </div>`;
+  }
+
+  window.rStart = rStart;
+  window.rNext = window.rNext || rNext;
+
+  // เริ่มเกม
+  document.getElementById('radical-content').innerHTML = `
+    <div style="text-align:center;padding:32px 16px">
+      <div style="font-size:64px;margin-bottom:16px">🏮</div>
+      <div style="font-size:22px;font-weight:800;color:#e67e22;margin-bottom:10px">เกมอักษรข้าง</div>
+      <div style="font-size:15px;color:#7A5568;line-height:1.7;margin-bottom:20px">อักษรข้าง (部首) คือรากของตัวอักษรจีน<br>รู้อักษรข้าง จำคำใหม่ได้เร็วขึ้นมาก!</div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:16px">
+        <div style="background:white;border:1.5px solid #F2D8E5;border-radius:12px;padding:10px 12px;text-align:center;min-width:72px">
+          <span style="font-family:'Noto Serif SC',serif;font-size:26px;color:#e67e22;display:block;margin-bottom:2px">氵</span>
+          <div style="font-size:10px;color:#7A5568">น้ำ</div>
+        </div>
+        <div style="background:white;border:1.5px solid #F2D8E5;border-radius:12px;padding:10px 12px;text-align:center;min-width:72px">
+          <span style="font-family:'Noto Serif SC',serif;font-size:26px;color:#e67e22;display:block;margin-bottom:2px">口</span>
+          <div style="font-size:10px;color:#7A5568">ปาก</div>
+        </div>
+        <div style="background:white;border:1.5px solid #F2D8E5;border-radius:12px;padding:10px 12px;text-align:center;min-width:72px">
+          <span style="font-family:'Noto Serif SC',serif;font-size:26px;color:#e67e22;display:block;margin-bottom:2px">木</span>
+          <div style="font-size:10px;color:#7A5568">ไม้</div>
+        </div>
+        <div style="background:white;border:1.5px solid #F2D8E5;border-radius:12px;padding:10px 12px;text-align:center;min-width:72px">
+          <span style="font-family:'Noto Serif SC',serif;font-size:26px;color:#e67e22;display:block;margin-bottom:2px">心</span>
+          <div style="font-size:10px;color:#7A5568">ใจ</div>
+        </div>
+        <div style="background:white;border:1.5px solid #F2D8E5;border-radius:12px;padding:10px 12px;text-align:center;min-width:72px">
+          <span style="font-family:'Noto Serif SC',serif;font-size:26px;color:#e67e22;display:block;margin-bottom:2px">亻</span>
+          <div style="font-size:10px;color:#7A5568">คน</div>
+        </div>
+        <div style="background:white;border:1.5px solid #F2D8E5;border-radius:12px;padding:10px 12px;text-align:center;min-width:72px">
+          <span style="font-family:'Noto Serif SC',serif;font-size:26px;color:#e67e22;display:block;margin-bottom:2px">火</span>
+          <div style="font-size:10px;color:#7A5568">ไฟ</div>
+        </div>
+      </div>
+      <div style="background:#fff8f0;border-radius:10px;padding:8px 14px;font-size:12px;color:#e67e22;margin-bottom:16px;font-weight:600">🏮 41 คำ · 14 กลุ่มอักษรข้าง · สุ่มข้อทุกรอบ!</div>
+      <button onclick="rPlaySound('tap');rStart()" style="background:#e67e22;color:white;border:none;border-radius:50px;padding:16px 48px;font-size:17px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 8px 24px rgba(230,126,34,.35)">เริ่มเล่นเลย!</button>
+    </div>`;
+}
 
 </script></body>
 </html>
