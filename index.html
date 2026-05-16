@@ -19244,7 +19244,11 @@ function initRadicalGame() {
 
   function rRender(){
     const q = rState.questions[rState.current];
-    const pct = Math.round((rState.current/rState.questions.length)*100);
+    const isPremiumUser = (state.user?.is_premium === true) ||
+      ['monthly','yearly','annual','lifetime'].includes(state.user?.data?.subscription_type);
+    const FREE_LIMIT = 3;
+    const displayTotal = isPremiumUser ? rState.questions.length : FREE_LIMIT;
+    const pct = Math.round((rState.current / displayTotal)*100);
     const choices = rShuffle([q.correct,...q.wrong.slice(0,3)]);
     const isLast = rState.current === rState.questions.length-1;
 
@@ -19253,7 +19257,7 @@ function initRadicalGame() {
         <div style="flex:1;background:rgba(255,255,255,.5);border-radius:8px;height:8px;overflow:hidden">
           <div style="background:#e67e22;height:100%;width:${pct}%;border-radius:8px;transition:width .4s"></div>
         </div>
-        <span style="font-size:12px;color:#e67e22;font-weight:700">${rState.current}/${rState.questions.length}</span>
+        <span style="font-size:12px;color:#e67e22;font-weight:700">${rState.current}/${displayTotal}</span>
         <span style="font-size:12px;color:#e67e22;font-weight:700">⭐ ${rState.score}</span>
       </div>
 
@@ -19321,6 +19325,16 @@ function initRadicalGame() {
 
   window.rNext = function(){
     window._rState.current++;
+    const FREE_LIMIT = 3;
+    const isPremium = (state.user?.is_premium === true) ||
+      ['monthly','yearly','annual','lifetime'].includes(state.user?.data?.subscription_type);
+
+    // ถ้าฟรีและเล่นครบ 3 ข้อแล้ว → show premium popup
+    if (!isPremium && window._rState.current >= FREE_LIMIT) {
+      rShowPremiumWall();
+      return;
+    }
+
     if(window._rState.current >= window._rState.questions.length){
       rShowResult();
     } else {
@@ -19328,6 +19342,33 @@ function initRadicalGame() {
       rRender();
     }
   };
+
+  function rShowPremiumWall() {
+    document.getElementById('radical-content').innerHTML = `
+      <div style="text-align:center;padding:32px 16px">
+        <div style="font-size:56px;margin-bottom:16px">🔒</div>
+        <div style="font-size:22px;font-weight:800;color:#1A0A12;margin-bottom:8px">เล่นได้อีกเยอะมากเลย!</div>
+        <div style="font-size:15px;color:#7A5568;line-height:1.7;margin-bottom:6px">คุณเล่นฟรีได้ 3 ข้อแล้วค่ะ</div>
+        <div style="font-size:15px;color:#7A5568;line-height:1.7;margin-bottom:20px">สมัคร Premium เพื่อเล่นครบทุกข้อ<br>และปลดล็อคทุกฟีเจอร์ของถังถัง!</div>
+
+        <div style="background:linear-gradient(135deg,#FFF0F8,#FDE8F4);border:1.5px solid #F5C0D6;border-radius:16px;padding:16px;margin-bottom:20px;text-align:left">
+          <div style="font-size:13px;font-weight:800;color:#E8609A;margin-bottom:10px">✨ Premium ได้อะไรเพิ่ม?</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:13px;color:#3D1F2E;display:flex;align-items:center;gap:8px"><span>🏮</span> เกมอักษรข้าง 40 คำ ครบทุกกลุ่ม</div>
+            <div style="font-size:13px;color:#3D1F2E;display:flex;align-items:center;gap:8px"><span>📚</span> บทเรียน HSK 1-6 ครบ 56 บท</div>
+            <div style="font-size:13px;color:#3D1F2E;display:flex;align-items:center;gap:8px"><span>🤖</span> AI ถังถัง 20-50 ข้อ/วัน</div>
+            <div style="font-size:13px;color:#3D1F2E;display:flex;align-items:center;gap:8px"><span>🎮</span> มินิเกมทุกเกมไม่จำกัด</div>
+          </div>
+        </div>
+
+        <button onclick="showPaymentModal()" style="background:#E8609A;color:white;border:none;border-radius:50px;padding:15px 36px;font-size:16px;font-weight:800;font-family:inherit;cursor:pointer;width:100%;box-shadow:0 6px 20px rgba(232,96,154,.35);margin-bottom:10px">
+          🌸 สมัคร Premium เลย!
+        </button>
+        <button onclick="closeGame()" style="background:transparent;color:#7A5568;border:1.5px solid #F2D8E5;border-radius:50px;padding:12px 36px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;width:100%">
+          กลับหน้าหลัก
+        </button>
+      </div>`;
+  }
 
   function rShowResult(){ rPlaySound('finish');
     const s = window._rState.score;
