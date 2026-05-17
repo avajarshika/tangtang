@@ -7017,7 +7017,7 @@ const COMM_LESSONS = [
     dialog: [
       { speaker: 'พนักงาน', zh: '欢迎光临！请问您有预订吗？', py: 'Huānyíng guānglín! Qǐngwèn nín yǒu yùdìng ma?', th: 'ยินดีต้อนรับค่ะ ขอถามว่าคุณมีการจองไว้ไหมคะ?' },
       { speaker: 'คุณ', zh: '有，我叫阿华，预订了三晚的标准间。', py: 'Yǒu, wǒ jiào Ā Huá, yùdìng le sān wǎn de biāozhǔn jiān.', th: 'มีค่ะ ฉันชื่ออ้ายหวา จองห้องมาตรฐานสามคืนค่ะ' },
-      { speaker: 'พนักงาน', zh: '好的，请给我看一下护照。退房时间是明天中午十二点。', py: 'Hǎo de, qǐng gěi wǒ kàn yīxià hùzhào. Tuìfáng shíjiān shì míngtiān zhōngwǔ shí èr diǎn.', th: 'ได้ค่ะ กรุณาให้ดูหนังสือเดินทางหน่อยนะคะ เวลาเช็คเอาท์คือเที่ยงวันพรุ่งนี้ค่ะ' },
+      { speaker: 'พนักงาน', zh: '好的，请给我看一下护照。您住三晚，退房时间是后天中午十二点。', py: 'Hǎo de, qǐng gěi wǒ kàn yīxià hùzhào. Nín zhù sān wǎn, tuìfáng shíjiān shì hòutiān zhōngwǔ shí èr diǎn.', th: 'ได้ค่ะ กรุณาให้ดูหนังสือเดินทางหน่อยนะคะ คุณพักสามคืน เวลาเช็คเอาท์คือเที่ยงวันมะรืนนี้ค่ะ' },
       { speaker: 'คุณ', zh: '好的。请问房间有WiFi吗？密码是多少？', py: 'Hǎo de. Qǐngwèn fángjiān yǒu WiFi ma? Mìmǎ shì duōshǎo?', th: 'ได้ค่ะ ขอถามว่าในห้องมี WiFi ไหมคะ รหัสผ่านคืออะไรคะ?' },
       { speaker: 'พนักงาน', zh: 'WiFi密码在这张卡上，房间是八零八。', py: 'WiFi mìmǎ zài zhè zhāng kǎ shàng, fángjiān shì bā líng bā.', th: 'รหัส WiFi อยู่บนการ์ดใบนี้ค่ะ ห้องคือ 808 ค่ะ' },
       { speaker: 'คุณ', zh: '谢谢！早餐几点开始？', py: 'Xièxiè! Zǎocān jǐ diǎn kāishǐ?', th: 'ขอบคุณค่ะ อาหารเช้าเริ่มกี่โมงคะ?' },
@@ -15345,22 +15345,10 @@ async function adminSetSubscription(userId, type) {
   // ส่ง Email ยืนยันอัตโนมัติ (เฉพาะตอน set premium)
   if (isPrem) {
     try {
-      // หา email จาก admin_list_users
-      const { data: rawData } = await sb.rpc('admin_list_users');
-      let authUsers = [];
-      (rawData || []).forEach(row => {
-        try {
-          const val = row && row.admin_list_users ? row.admin_list_users : row;
-          const parsed = typeof val === 'string' ? JSON.parse(val) : val;
-          if (Array.isArray(parsed)) authUsers = authUsers.concat(parsed);
-          else if (parsed && parsed.id) authUsers.push(parsed);
-        } catch(e) { if (row && row.id) authUsers.push(row); }
-      });
-      if (authUsers.length === 0 && Array.isArray(rawData)) authUsers = rawData;
-
-      const found = authUsers.find(u => u.id === userId);
-      const userEmail = found?.email || '';
-      const userName = found?.name || found?.user_metadata?.name || userEmail.split('@')[0];
+      // หา email จาก user_progress.data (เร็วกว่าและไม่ต้อง admin RPC)
+      const { data: upData } = await sb.from('user_progress').select('data').eq('user_id', userId).single();
+      const userEmail = upData?.data?.email || '';
+      const userName = upData?.data?.name || userEmail.split('@')[0];
 
       if (userEmail) {
         const amountMap = { monthly: 199, yearly: 990, lifetime: 2490 };
