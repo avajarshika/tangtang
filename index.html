@@ -15192,6 +15192,39 @@ async function approveOrder(orderId, email, referralCode, amount) {
     showToast(`✅ Approved! ${subType === 'lifetime' ? '🌟 ถาวร' : subType === 'yearly' ? '⭐ รายปี' : '📅 รายเดือน'}`);
   }
 
+  // 5. ส่ง Email ยืนยันอัตโนมัติ
+  try {
+    if (btn) btn.textContent = '📧 กำลังส่ง email...';
+    const emailRes = await fetch(
+      'https://zmshxxmcgbxavzlqmpxd.supabase.co/functions/v1/send-welcome-email',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${(await sb.auth.getSession()).data.session?.access_token}`
+        },
+        body: JSON.stringify({
+          email: email,
+          name: email.split('@')[0],
+          package_type: subType,
+          expiry_date: subEnd,
+          amount: amount,
+          start_date: now.toISOString()
+        })
+      }
+    );
+    const emailData = await emailRes.json();
+    if (emailData.success) {
+      showToast('📧 ส่ง email ยืนยันให้ลูกค้าแล้ว ✅');
+    } else {
+      console.warn('Email error:', emailData.error);
+      showToast('⚠️ Approved แล้ว แต่ส่ง email ไม่สำเร็จ: ' + emailData.error);
+    }
+  } catch(e) {
+    console.warn('Email send failed:', e);
+    showToast('⚠️ Approved แล้ว แต่ส่ง email ไม่สำเร็จ');
+  }
+
   await loadAdminOrders();
 }
 
