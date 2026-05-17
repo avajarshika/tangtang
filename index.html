@@ -2469,9 +2469,12 @@ html {
         <div style="margin-bottom:12px">
           <div style="font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:6px">ประเภทข้อมูล</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button onclick="setExportType('all')" id="exp-type-all" style="padding:7px 14px;background:var(--red);color:white;border:none;border-radius:20px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">👥 สมาชิกทั้งหมด</button>
-            <button onclick="setExportType('affiliate')" id="exp-type-affiliate" style="padding:7px 14px;background:var(--paper2);color:var(--ink2);border:1px solid var(--paper3);border-radius:20px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">🤝 Affiliate เท่านั้น</button>
-            <button onclick="setExportType('premium')" id="exp-type-premium" style="padding:7px 14px;background:var(--paper2);color:var(--ink2);border:1px solid var(--paper3);border-radius:20px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">⭐ Premium เท่านั้น</button>
+            <button onclick="setExportType('all')" id="exp-type-all" style="padding:7px 14px;background:var(--red);color:white;border:none;border-radius:20px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">👥 ทั้งหมด</button>
+            <button onclick="setExportType('monthly')" id="exp-type-monthly" style="padding:7px 14px;background:var(--paper2);color:var(--ink2);border:1px solid var(--paper3);border-radius:20px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">📅 รายเดือน</button>
+            <button onclick="setExportType('yearly')" id="exp-type-yearly" style="padding:7px 14px;background:var(--paper2);color:var(--ink2);border:1px solid var(--paper3);border-radius:20px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">📆 รายปี</button>
+            <button onclick="setExportType('lifetime')" id="exp-type-lifetime" style="padding:7px 14px;background:var(--paper2);color:var(--ink2);border:1px solid var(--paper3);border-radius:20px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">👑 ถาวร</button>
+            <button onclick="setExportType('affiliate')" id="exp-type-affiliate" style="padding:7px 14px;background:var(--paper2);color:var(--ink2);border:1px solid var(--paper3);border-radius:20px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">🤝 Affiliate</button>
+            <button onclick="setExportType('premium')" id="exp-type-premium" style="padding:7px 14px;background:var(--paper2);color:var(--ink2);border:1px solid var(--paper3);border-radius:20px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">⭐ Premium ทั้งหมด</button>
           </div>
         </div>
 
@@ -16311,11 +16314,12 @@ let exportType = 'all';
 
 function setExportType(type) {
   exportType = type;
-  ['all','affiliate','premium'].forEach(t => {
+  ['all','affiliate','premium','monthly','yearly','lifetime'].forEach(t => {
     const btn = document.getElementById('exp-type-' + t);
     if (!btn) return;
     if (t === type) {
-      btn.style.background = t === 'all' ? 'var(--red)' : t === 'affiliate' ? 'var(--amber)' : 'var(--green)';
+      const colors = { all:'var(--red)', affiliate:'var(--amber)', premium:'var(--green)', monthly:'#3B82F6', yearly:'#8B5CF6', lifetime:'#F59E0B' };
+      btn.style.background = colors[t] || 'var(--pink)';
       btn.style.color = 'white';
       btn.style.border = 'none';
     } else {
@@ -16343,7 +16347,7 @@ async function previewExportData() {
     // ดึงจาก user_progress โดยตรง (มีข้อมูลครบกว่า)
     const { data: progressData, error: progErr } = await sb
       .from('user_progress')
-      .select('user_id, data, updated_at, is_premium, referral_code, referred_by, affiliate_earnings, affiliate_count, bank_name, bank_account, bank_owner');
+      .select('user_id, data, updated_at, is_premium, referral_code, referred_by, affiliate_earnings, affiliate_count, bank_name, bank_account, bank_owner, subscription_type, subscription_end');
     if (progErr) throw progErr;
 
     // ดึง auth users สำหรับ email
@@ -16384,12 +16388,17 @@ async function previewExportData() {
     // merge ข้อมูล
     let users = (progressData || []).map(p => {
       const d = p.data || {};
+      const subType = p.subscription_type || d.subscription_type || (p.is_premium ? 'premium' : 'free');
+      const subLabel = subType === 'monthly' ? '📅 รายเดือน' : subType === 'yearly' ? '📆 รายปี' : subType === 'lifetime' ? '👑 ถาวร' : subType === 'annual' ? '📆 รายปี' : p.is_premium ? '⭐ Premium' : '🆓 ฟรี';
       return {
         user_id: p.user_id,
         email: emailMap[p.user_id] || d.email || '-',
         name: nameMap[p.user_id] || d.name || '-',
         updated_at: p.updated_at,
         is_premium: p.is_premium || false,
+        subscription_type: subType,
+        subscription_label: subLabel,
+        subscription_end: p.subscription_end || d.subscription_end || '-',
         xp: d.xp || 0,
         referral_code: p.referral_code || '-',
         affiliate_count: p.affiliate_count || 0,
@@ -16403,6 +16412,9 @@ async function previewExportData() {
     // filter ตามประเภท
     if (exportType === 'affiliate') users = users.filter(u => u.referral_code && u.referral_code !== '-');
     if (exportType === 'premium') users = users.filter(u => u.is_premium);
+    if (exportType === 'monthly') users = users.filter(u => u.subscription_type === 'monthly');
+    if (exportType === 'yearly') users = users.filter(u => u.subscription_type === 'yearly' || u.subscription_type === 'annual');
+    if (exportType === 'lifetime') users = users.filter(u => u.subscription_type === 'lifetime');
 
     // filter ตามวันที่
     if (dateFrom) users = users.filter(u => !u.updated_at || u.updated_at >= dateFrom);
@@ -16412,6 +16424,8 @@ async function previewExportData() {
     exportData = users.map(u => ({
       'Email': u.email,
       'ชื่อ': u.name,
+      'แพ็กเกจ': u.subscription_label,
+      'หมดอายุ': u.subscription_end && u.subscription_end !== '-' ? new Date(u.subscription_end).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'}) : (u.subscription_type === 'lifetime' ? 'ถาวร' : '-'),
       'อัปเดตล่าสุด': u.updated_at ? new Date(u.updated_at).toLocaleDateString('th-TH', {day:'numeric',month:'long',year:'numeric'}) : '-',
       'สถานะ': u.is_premium ? '⭐ Premium' : 'ฟรี',
       'XP': u.xp,
@@ -16424,7 +16438,8 @@ async function previewExportData() {
     }));
 
     // แสดง preview table
-    const typeLabel = exportType === 'all' ? 'สมาชิกทั้งหมด' : exportType === 'affiliate' ? 'Affiliate' : 'Premium';
+    const typeLabelMap = { all:'สมาชิกทั้งหมด', affiliate:'Affiliate', premium:'Premium ทั้งหมด', monthly:'รายเดือน', yearly:'รายปี', lifetime:'ถาวร' };
+    const typeLabel = typeLabelMap[exportType] || exportType;
     titleEl.textContent = '📊 ตัวอย่างข้อมูล — ' + typeLabel;
     countEl.textContent = exportData.length + ' รายการ';
 
