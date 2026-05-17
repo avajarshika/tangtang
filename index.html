@@ -10698,7 +10698,7 @@ function markPinyinDone() {
 // TTS ENGINE
 // ═══════════════════════════════════
 const SUPABASE_TTS_URL = 'https://zmshxxmcgbxavzlqmpxd.supabase.co/functions/v1/clever-service';
-const SUPABASE_TTS_KEY = 'sb_publishable_keEZg6pZ0l3BPbTSHNLlUQ_A9K-E6bO';
+const SUPABASE_TTS_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inptc2h4eG1jZ2J4YXZ6bHFtcHhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NzkwODEsImV4cCI6MjA5MjA1NTA4MX0.USeFzW09aOqqtwtYFaC9lgmcLkpkjz12ciQLrG3IhZQ';
 
 let currentAudio = null;
 
@@ -15201,7 +15201,7 @@ async function approveOrder(orderId, email, referralCode, amount) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer sb_publishable_keEZg6pZ0l3BPbTSHNLlUQ_A9K-E6bO`
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inptc2h4eG1jZ2J4YXZ6bHFtcHhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NzkwODEsImV4cCI6MjA5MjA1NTA4MX0.USeFzW09aOqqtwtYFaC9lgmcLkpkjz12ciQLrG3IhZQ`
         },
         body: JSON.stringify({
           email: email,
@@ -15370,7 +15370,7 @@ async function adminSetSubscription(userId, type) {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer sb_publishable_keEZg6pZ0l3BPbTSHNLlUQ_A9K-E6bO`
+              'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inptc2h4eG1jZ2J4YXZ6bHFtcHhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NzkwODEsImV4cCI6MjA5MjA1NTA4MX0.USeFzW09aOqqtwtYFaC9lgmcLkpkjz12ciQLrG3IhZQ`
             },
             body: JSON.stringify({
               email: userEmail,
