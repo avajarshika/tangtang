@@ -9051,15 +9051,15 @@ function renderPricing() {
 
       <!-- รายปี (แนะนำ) -->
       <div onclick="showPricingDetail('yearly')" style="background:linear-gradient(135deg,#1565c0,#1976d2);border:2px solid #1565c0;border-radius:20px;padding:20px;cursor:pointer;transition:.2s;position:relative">
-        <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#ff9800;color:white;font-size:11px;font-weight:800;padding:3px 16px;border-radius:20px;white-space:nowrap">🔥 ประหยัดที่สุด</div>
+        <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#ff9800;color:white;font-size:14px;font-weight:800;padding:4px 16px;border-radius:20px;white-space:nowrap">🔥 ประหยัดเพิ่ม</div>
         ${currentType==='yearly' ? '<div style="position:absolute;top:-10px;right:16px;background:white;color:#1565c0;font-size:11px;font-weight:800;padding:3px 12px;border-radius:20px">แพ็กเกจปัจจุบัน</div>' : ''}
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
           <div>
             <div style="font-size:16px;font-weight:900;color:white">⭐ รายปี</div>
-            <div style="font-size:12px;color:rgba(255,255,255,.8);margin-top:2px">คุ้มค่าที่สุด เซฟ ฿1,398</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.8);margin-top:2px">โปรพิเศษ เซฟ ฿300</div>
           </div>
           <div style="text-align:right">
-            <div style="font-size:13px;color:rgba(255,255,255,.6);text-decoration:line-through">฿2,388</div>
+            <div style="font-size:13px;color:rgba(255,255,255,.6);text-decoration:line-through">฿1,290</div>
             <div style="font-size:28px;font-weight:900;color:white">฿990</div>
             <div style="font-size:11px;color:rgba(255,255,255,.7)">/ปี</div>
           </div>
@@ -9080,6 +9080,7 @@ function renderPricing() {
             <div style="font-size:12px;color:var(--ink3);margin-top:2px">จ่ายครั้งเดียว ใช้ได้ตลอด</div>
           </div>
           <div style="text-align:right">
+            <div style="font-size:13px;color:#bbb;text-decoration:line-through">฿3,590</div>
             <div style="font-size:28px;font-weight:900;color:#6b1a6b">฿2,490</div>
             <div style="font-size:11px;color:var(--ink3)">ครั้งเดียว</div>
           </div>
@@ -9534,7 +9535,7 @@ function showPaymentModal() {
         <!-- รายปี (แนะนำ) -->
         <div onclick="document.getElementById('payment-modal').remove();showPricingDetail('yearly')"
           style="background:linear-gradient(135deg,#1565c0,#1976d2);border:2px solid #ff9800;border-radius:16px;padding:14px 16px;cursor:pointer;position:relative">
-          <div style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#ff9800;color:white;font-size:10px;font-weight:800;padding:2px 12px;border-radius:20px;white-space:nowrap">🔥 ประหยัดที่สุด — เซฟ ฿1,398</div>
+          <div style="position:absolute;top:-9px;left:50%;transform:translateX(-50%);background:#ff9800;color:white;font-size:14px;font-weight:800;padding:4px 16px;border-radius:20px;white-space:nowrap">🔥 ประหยัดเพิ่ม ฿300</div>
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
             <div style="width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">⭐</div>
             <div style="flex:1">
@@ -9542,7 +9543,7 @@ function showPaymentModal() {
               <div style="font-size:11px;color:rgba(255,255,255,.8);margin-top:1px">เพียง ฿83/เดือน ประหยัด 58%</div>
             </div>
             <div style="text-align:right;flex-shrink:0">
-              <div style="font-size:12px;color:rgba(255,255,255,.5);text-decoration:line-through">฿2,388</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.5);text-decoration:line-through">฿1,290</div>
               <div style="font-size:18px;font-weight:900;color:white">฿990</div>
               <div style="font-size:10px;color:rgba(255,255,255,.6)">/ปี</div>
             </div>
@@ -9563,6 +9564,7 @@ function showPaymentModal() {
               <div style="font-size:11px;color:#888;margin-top:1px">จ่ายครั้งเดียว ใช้ได้ตลอดชีวิต</div>
             </div>
             <div style="text-align:right;flex-shrink:0">
+              <div style="font-size:12px;color:#bbb;text-decoration:line-through">฿3,590</div>
               <div style="font-size:18px;font-weight:900;color:#6b1a6b">฿2,490</div>
               <div style="font-size:10px;color:#aaa">ครั้งเดียว</div>
             </div>
@@ -18897,11 +18899,11 @@ function renderWordMap() {
     .wm-center-card{width:96px;height:96px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 28px rgba(241,53,150,.28);transition:transform .2s cubic-bezier(.34,1.56,.64,1);user-select:none}
     .wm-center-card:active{transform:scale(.93)!important}
     .wm-center-zh{font-family:'Noto Sans SC',sans-serif;font-size:40px;font-weight:700;color:white;line-height:1}
-    .wm-center-py{font-size:12px;color:rgba(255,255,255,.9);margin-top:3px}
+    .wm-center-py{font-size:18px;color:rgba(255,255,255,.95);margin-top:4px;font-weight:600}
     .wm-meaning{font-size:14px;color:#5a3a4a;font-weight:600;margin-top:8px}
     /* ทริคการจำ — compact */
-    .wm-trick{margin:10px 14px 0;background:white;border-radius:12px;border:1.5px solid #f0d0e0;padding:10px 13px;font-size:12px;color:#5a3a4a;line-height:1.65;text-align:left}
-    .wm-trick-label{font-size:10px;font-weight:700;color:#F13596;margin-right:5px}
+    .wm-trick{margin:10px 14px 0;background:white;border-radius:12px;border:1.5px solid #f0d0e0;padding:12px 14px;font-size:15px;color:#5a3a4a;line-height:1.8;text-align:left}
+    .wm-trick-label{font-size:13px;font-weight:700;color:#F13596;margin-right:5px}
     /* hint */
     .wm-hint{font-size:11px;color:#9a7a8a;text-align:center;padding:8px 0 4px;animation:wmPulse 2s infinite}
     @keyframes wmPulse{0%,100%{opacity:.4}50%{opacity:1}}
