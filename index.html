@@ -15342,6 +15342,58 @@ async function adminSetSubscription(userId, type) {
   const msgs = { lifetime:'🌟 ให้สิทธิ์ถาวรแล้ว!', yearly:'⭐ ให้รายปีแล้ว!', monthly:'📅 ให้รายเดือนแล้ว!', free:'🔒 ถอด Premium แล้ว' };
   showToast(msgs[type] || '✅ อัปเดตแล้ว');
 
+  // ส่ง Email ยืนยันอัตโนมัติ (เฉพาะตอน set premium)
+  if (isPrem) {
+    try {
+      // หา email จาก admin_list_users
+      const { data: rawData } = await sb.rpc('admin_list_users');
+      let authUsers = [];
+      (rawData || []).forEach(row => {
+        try {
+          const val = row && row.admin_list_users ? row.admin_list_users : row;
+          const parsed = typeof val === 'string' ? JSON.parse(val) : val;
+          if (Array.isArray(parsed)) authUsers = authUsers.concat(parsed);
+          else if (parsed && parsed.id) authUsers.push(parsed);
+        } catch(e) { if (row && row.id) authUsers.push(row); }
+      });
+      if (authUsers.length === 0 && Array.isArray(rawData)) authUsers = rawData;
+
+      const found = authUsers.find(u => u.id === userId);
+      const userEmail = found?.email || '';
+      const userName = found?.name || found?.user_metadata?.name || userEmail.split('@')[0];
+
+      if (userEmail) {
+        const amountMap = { monthly: 199, yearly: 990, lifetime: 2490 };
+        const emailRes = await fetch(
+          'https://zmshxxmcgbxavzlqmpxd.supabase.co/functions/v1/send-welcome-email',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${(await sb.auth.getSession()).data.session?.access_token}`
+            },
+            body: JSON.stringify({
+              email: userEmail,
+              name: userName,
+              package_type: type,
+              expiry_date: subEnd,
+              amount: amountMap[type] || 0,
+              start_date: now.toISOString()
+            })
+          }
+        );
+        const emailData = await emailRes.json();
+        if (emailData.success) {
+          showToast('📧 ส่ง email ยืนยันให้ลูกค้าแล้ว ✅');
+        } else {
+          console.warn('Email error:', emailData.error);
+        }
+      }
+    } catch(e) {
+      console.warn('Email send failed:', e);
+    }
+  }
+
   // อัปเดต summary
   loadAdminUsers();
 }
