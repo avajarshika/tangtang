@@ -15201,7 +15201,7 @@ async function approveOrder(orderId, email, referralCode, amount) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${(await sb.auth.getSession()).data.session?.access_token}`
+          'Authorization': `Bearer sb_publishable_keEZg6pZ0l3BPbTSHNLlUQ_A9K-E6bO`
         },
         body: JSON.stringify({
           email: email,
@@ -15370,7 +15370,7 @@ async function adminSetSubscription(userId, type) {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${(await sb.auth.getSession()).data.session?.access_token}`
+              'Authorization': `Bearer sb_publishable_keEZg6pZ0l3BPbTSHNLlUQ_A9K-E6bO`
             },
             body: JSON.stringify({
               email: userEmail,
