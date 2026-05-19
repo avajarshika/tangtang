@@ -20335,9 +20335,9 @@ function speechSaveProgress() {
 }
 
 function speechGetUnlocked(type) {
-  // Premium = ปลดล็อคทุกด่าน
-  if (isPremium()) return 999;
-  // Free = ด่าน 1 เท่านั้น
+  // Free = ด่าน 1 เท่านั้นเสมอ ไม่สนใจ localStorage
+  if (!isPremium()) return 1;
+  // Premium = ดึงจาก localStorage
   return type === 'vocab' ? speechState.unlockedVocab : speechState.unlockedSentence;
 }
 
