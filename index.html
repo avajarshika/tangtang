@@ -1810,6 +1810,23 @@ html {
           <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:10px">รู้รากคำ จำคำใหม่ได้เร็วขึ้น!</div>
           <span style="font-size:10px;font-weight:700;color:#e67e22;background:#fef3e2;padding:3px 10px;border-radius:20px">🆕 ใหม่! ฟรี ✨</span>
         </div>
+        <!-- ฝึกพูด Speech Game -->
+        <div onclick="openGame('speech')" style="background:linear-gradient(145deg,#f0f8ff,#e0f0ff);border:1.5px solid #90caf9;border-radius:16px;padding:18px 14px;cursor:pointer;transition:.2s;box-shadow:var(--shadow)" onmouseover="this.style.borderColor='#1976d2';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#90caf9';this.style.transform='none'">
+          <div style="font-size:38px;margin-bottom:10px">🎤</div>
+          <div style="font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px">ฝึกพูด</div>
+          <div style="font-size:11px;color:var(--ink3);line-height:1.5;margin-bottom:10px">พูดออกเสียงจีน AI ตรวจให้เลย!</div>
+          <span style="font-size:10px;font-weight:700;color:#1976d2;background:#e3f2fd;padding:3px 10px;border-radius:20px">🆕 ใหม่! ฟรี ✨</span>
+        </div>
+        <!-- AI Conversation Game -->
+        <div onclick="openGame('aichat')" style="grid-column:1/-1;background:linear-gradient(135deg,#1a0a2e,#3b0a6b);border:1.5px solid #7c3aed;border-radius:16px;padding:18px;cursor:pointer;transition:.2s;box-shadow:var(--shadow);display:flex;align-items:center;gap:16px" onmouseover="this.style.borderColor='#a855f7';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#7c3aed';this.style.transform='none'">
+          <div style="font-size:42px;flex-shrink:0">🎙️</div>
+          <div style="flex:1">
+            <div style="font-size:15px;font-weight:700;color:white;margin-bottom:4px">สนทนากับ AI</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.7);line-height:1.5;margin-bottom:8px">ฝึกพูดจีนกับ AI · AI พูดออกเสียงให้ฟัง · มีหลายสถานการณ์</div>
+            <span style="font-size:10px;font-weight:700;color:#e879f9;background:rgba(232,121,249,.15);border:1px solid rgba(232,121,249,.3);padding:3px 10px;border-radius:20px">✨ ใหม่! AI สนทนา 🎙️</span>
+          </div>
+          <div style="font-size:24px;opacity:.4;color:white">→</div>
+        </div>
         <div onclick="openGame('wordmap')" style="grid-column:1/-1;background:linear-gradient(135deg,#fff5fb,#fce4f3);border:1.5px solid #f9c0df;border-radius:16px;padding:18px;cursor:pointer;transition:.2s;box-shadow:var(--shadow);display:flex;align-items:center;gap:16px" onmouseover="this.style.borderColor='#F13596';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='#f9c0df';this.style.transform='none'">
           <div style="font-size:42px;flex-shrink:0">🗺️</div>
           <div style="flex:1">
@@ -1918,6 +1935,20 @@ html {
         <div style="font-size:15px;font-weight:700;color:var(--ink)">📓 บันทึกการเรียนรู้</div>
       </div>
       <div id="journal-content" style="padding:16px"></div>
+    </div>
+
+    <!-- Game: AI Chat -->
+    <!-- Game: ฝึกพูด -->
+    <div id="game-speech" style="display:none">
+      <div style="padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--paper3);background:white;position:sticky;top:56px;z-index:30">
+        <button onclick="closeGame()" style="background:var(--paper2);border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center">←</button>
+        <div style="font-size:15px;font-weight:700;color:var(--ink)">🎤 ฝึกพูด</div>
+      </div>
+      <div id="speech-game-root" style="padding:16px;max-width:480px;margin:0 auto"></div>
+    </div>
+
+    <div id="game-aichat" style="display:none;flex-direction:column;height:calc(100vh - 56px - 60px)">
+      <div id="aichat-content" style="display:flex;flex-direction:column;height:100%"></div>
     </div>
   </div>
 
@@ -11069,7 +11100,7 @@ function updateSpeedBadge() {
 
 function openGame(name) {
   document.getElementById('play-hub').style.display = 'none';
-  ['stroke','daily','sentence','speed','journal','match','listen','listening','pair','wordmap','radical'].forEach(g => {
+  ['stroke','daily','sentence','speed','journal','match','listen','listening','pair','wordmap','radical','aichat','speech'].forEach(g => {
     document.getElementById('game-'+g).style.display = g===name ? 'block' : 'none';
   });
   window.scrollTo(0,0);
@@ -11084,6 +11115,8 @@ function openGame(name) {
   else if (name==='pair') initPairGame();
   else if (name==='wordmap') initWordMap();
   else if (name==='radical') initRadicalGame();
+  else if (name==='aichat') initAIChatGame();
+  else if (name==='speech') initSpeechGame();
 }
 
 function closeGame() {
@@ -11104,7 +11137,7 @@ function closeGame() {
     clearInterval(_speedTimer);
     _speedTimer = null;
   }
-  ['stroke','daily','sentence','speed','journal','match','listen','listening','pair','wordmap','radical'].forEach(g => {
+  ['stroke','daily','sentence','speed','journal','match','listen','listening','pair','wordmap','radical','aichat','speech'].forEach(g => {
     document.getElementById('game-'+g).style.display = 'none';
   });
   document.getElementById('play-hub').style.display = 'block';
@@ -19549,5 +19582,679 @@ function initRadicalGame() {
     </div>`;
 }
 
+
+// ══════════════════════════════════════════════════════
+// 🎙️ AI CHAT GAME — สนทนากับ AI ฝึกภาษาจีน
+// ══════════════════════════════════════════════════════
+// ⚙️ ต้องสร้าง Supabase Edge Functions 2 ตัว:
+//   1. aichat-game  → รับ { message, history, scenario, level } → คืน { reply, zh, py, th, feedback }
+//   2. stt-service  → รับ { audioBase64, mimeType } → คืน { transcript }
+// ══════════════════════════════════════════════════════
+
+const AICHAT_URL = 'https://zmshxxmcgbxavzlqmpxd.supabase.co/functions/v1/aichat-game';
+const STT_URL    = 'https://zmshxxmcgbxavzlqmpxd.supabase.co/functions/v1/stt-service';
+
+const AICHAT_SCENARIOS = [
+  { id:'restaurant', icon:'🍜', name:'ร้านอาหาร',   role:'พนักงานเสิร์ฟ',        situation:'ลูกค้าเข้าร้านอาหารจีนมาสั่งอาหาร' },
+  { id:'airport',   icon:'✈️', name:'สนามบิน',      role:'พนักงานสายการบิน',     situation:'ผู้โดยสารมาเช็คอินที่เคาน์เตอร์สนามบิน' },
+  { id:'shopping',  icon:'🛍️', name:'ช้อปปิ้ง',    role:'พ่อค้าในตลาด',         situation:'ลูกค้าต่อราคาซื้อของในตลาดจีน' },
+  { id:'hotel',     icon:'🏨', name:'โรงแรม',       role:'พนักงาน Front Desk',   situation:'แขกมาเช็คอินที่โรงแรม' },
+  { id:'doctor',    icon:'🏥', name:'หาหมอ',        role:'แพทย์',                situation:'คนไข้มาพบแพทย์ที่คลินิก บอกอาการ' },
+  { id:'friend',    icon:'👫', name:'คุยกับเพื่อน', role:'เพื่อนชาวจีน',          situation:'เพื่อนชาวจีนคุยกันแบบสบายๆ' },
+];
+
+const AICHAT_LEVELS = [
+  { id:'easy',   label:'🟢 เริ่มต้น',  desc:'ประโยคสั้น คำง่าย' },
+  { id:'medium', label:'🟡 ปานกลาง',  desc:'ประโยคยาวขึ้น มีสำนวน' },
+  { id:'hard',   label:'🔴 ยาก',       desc:'ภาษาเร็ว สำนวนเยอะ' },
+];
+
+let _ac = {
+  scenario: null, level: 'easy',
+  history: [], loading: false,
+  mediaRecorder: null, recording: false, audioChunks: [],
+};
+
+// ── INIT ──
+function initAIChatGame() {
+  _ac = { scenario:null, level:'easy', history:[], loading:false, mediaRecorder:null, recording:false, audioChunks:[] };
+  const el = document.getElementById('aichat-content');
+  if (!el) return;
+  el.style.display = 'flex';
+  el.style.flexDirection = 'column';
+  el.style.height = '100%';
+  _acRenderPicker();
+}
+
+// ── SCENARIO PICKER ──
+function _acRenderPicker() {
+  const el = document.getElementById('aichat-content');
+  el.innerHTML = `
+    <div style="padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--paper3);background:white;position:sticky;top:56px;z-index:30;flex-shrink:0">
+      <button onclick="closeGame()" style="background:var(--paper2);border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer">←</button>
+      <div style="font-size:15px;font-weight:700;color:var(--ink)">🎙️ สนทนากับ AI</div>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:16px">
+      <div style="background:linear-gradient(135deg,#fff7ed,#fef3c7);border:1.5px solid #fcd34d;border-radius:14px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:flex-start;gap:10px">
+        <div style="font-size:24px;flex-shrink:0">🚧</div>
+        <div>
+          <div style="font-size:13px;font-weight:800;color:#92400e;margin-bottom:4px">ฟีเจอร์นี้กำลังพัฒนาอยู่นะคะ</div>
+          <div style="font-size:12px;color:#b45309;line-height:1.6;font-family:Noto Sans Thai,sans-serif">ขณะนี้ยังไม่เปิดให้ใช้งาน ทีมงานกำลังปรับปรุงระบบให้สมบูรณ์ที่สุด รอติดตามอัปเดตได้เร็วๆ นี้ค่ะ ✨</div>
+        </div>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:10px">เลือกระดับ</div>
+      <div style="display:flex;gap:8px;margin-bottom:20px">
+        ${AICHAT_LEVELS.map(l=>`
+          <div id="lvl-${l.id}" onclick="_acSetLevel('${l.id}')"
+            style="flex:1;border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;transition:.15s;border:1.5px solid ${l.id==='easy'?'#7c3aed':'var(--paper3)'};background:${l.id==='easy'?'#f3e8ff':'white'}">
+            <div style="font-size:12px;font-weight:700;color:var(--ink)">${l.label}</div>
+            <div style="font-size:10px;color:var(--ink3);margin-top:2px;font-family:'Noto Sans Thai',sans-serif">${l.desc}</div>
+          </div>`).join('')}
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:10px">เลือกสถานการณ์</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+        ${AICHAT_SCENARIOS.map(s=>`
+          <div id="sc-${s.id}" onclick="_acSetScenario('${s.id}')"
+            style="background:white;border:1.5px solid var(--paper3);border-radius:14px;padding:14px;cursor:pointer;transition:.15s;text-align:center">
+            <div style="font-size:30px;margin-bottom:6px">${s.icon}</div>
+            <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px">${s.name}</div>
+            <div style="font-size:10px;color:var(--ink3);font-family:'Noto Sans Thai',sans-serif">${s.role}</div>
+          </div>`).join('')}
+      </div>
+      <button id="ac-start-btn" onclick="_acStartChat()" disabled
+        style="width:100%;padding:14px;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;border:none;border-radius:50px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;opacity:.4;transition:.2s;box-shadow:0 6px 20px rgba(124,58,237,.3)">
+        🎙️ เริ่มสนทนาเลย!
+      </button>
+    </div>`;
+}
+
+function _acSetLevel(id) {
+  _ac.level = id;
+  AICHAT_LEVELS.forEach(l => {
+    const el = document.getElementById('lvl-' + l.id);
+    if (!el) return;
+    el.style.borderColor = l.id === id ? '#7c3aed' : 'var(--paper3)';
+    el.style.background   = l.id === id ? '#f3e8ff' : 'white';
+  });
+}
+
+function _acSetScenario(id) {
+  _ac.scenario = AICHAT_SCENARIOS.find(s => s.id === id);
+  AICHAT_SCENARIOS.forEach(s => {
+    const el = document.getElementById('sc-' + s.id);
+    if (!el) return;
+    el.style.borderColor = s.id === id ? '#7c3aed' : 'var(--paper3)';
+    el.style.background   = s.id === id ? '#f3e8ff' : 'white';
+  });
+  const btn = document.getElementById('ac-start-btn');
+  if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+}
+
+// ── START CHAT ──
+async function _acStartChat() {
+  if (!_ac.scenario) return;
+  _ac.history = [];
+  _acRenderChat();
+  await _acAIFirst();
+}
+
+// ── CHAT UI ──
+function _acRenderChat() {
+  const sc = _ac.scenario;
+  const lvlLabel = AICHAT_LEVELS.find(l => l.id === _ac.level)?.label || '';
+  const el = document.getElementById('aichat-content');
+  el.innerHTML = `
+    <div style="padding:10px 16px;background:white;border-bottom:1.5px solid var(--paper3);display:flex;align-items:center;gap:10px;flex-shrink:0">
+      <button onclick="_acRenderPicker()" style="background:var(--paper2);border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer">←</button>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:700;color:var(--ink)">${sc.icon} ${sc.name}</div>
+        <div style="font-size:11px;color:var(--ink3);font-family:'Noto Sans Thai',sans-serif">AI รับบท: ${sc.role} · ${lvlLabel}</div>
+      </div>
+      <span style="font-size:11px;background:#f3e8ff;color:#7c3aed;border:1px solid #c4b5fd;border-radius:50px;padding:3px 10px;font-weight:700">🎙️ AI</span>
+    </div>
+    <div id="ac-messages" style="flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px;background:var(--paper2)"></div>
+    <div style="padding:10px 12px;background:white;border-top:1.5px solid var(--paper3);flex-shrink:0;padding-bottom:max(10px,env(safe-area-inset-bottom))">
+      <div style="font-size:11px;color:var(--ink3);text-align:center;margin-bottom:6px;font-family:'Noto Sans Thai',sans-serif" id="ac-hint">พิมพ์ภาษาจีนหรือไทย หรือกด 🎙️ เพื่อบันทึกเสียง</div>
+      <div style="display:flex;gap:8px;align-items:flex-end">
+        <textarea id="ac-input" placeholder="พิมพ์ตอบที่นี่..." rows="1"
+          style="flex:1;background:var(--paper);border:1.5px solid var(--paper3);border-radius:20px;padding:10px 14px;font-size:15px;font-family:'DM Sans','Noto Serif SC','Noto Sans Thai',sans-serif;color:var(--ink);outline:none;resize:none;max-height:90px;min-height:44px;transition:.15s;line-height:1.4"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();_acSend()}"
+          oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,90)+'px'"></textarea>
+        <button id="ac-mic" onclick="_acToggleMic()"
+          style="width:44px;height:44px;border-radius:50%;background:#f3e8ff;border:1.5px solid #c4b5fd;color:#7c3aed;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s">🎙️</button>
+        <button id="ac-send" onclick="_acSend()"
+          style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;border:none;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(124,58,237,.35);transition:.15s">▶</button>
+      </div>
+    </div>`;
+}
+
+// ── MESSAGES ──
+function _acAddAIMsg(data) {
+  const box = document.getElementById('ac-messages');
+  if (!box) return;
+  const id = 'acm' + Date.now();
+  const fb = data.feedback ? `
+    <div style="background:${data.feedback_type==='warn'?'#fef3c7':'#e8f4ed'};border:1px solid ${data.feedback_type==='warn'?'#fcd34d':'#86efac'};border-radius:10px;padding:8px 12px;margin-top:8px;font-size:12px;color:${data.feedback_type==='warn'?'#92400e':'#1a6b3a'};font-family:'Noto Sans Thai',sans-serif;line-height:1.6">
+      ${data.feedback_type==='warn'?'💡':'✅'} ${data.feedback}
+    </div>` : '';
+  box.innerHTML += `
+    <div style="display:flex;flex-direction:column;max-width:85%;align-self:flex-start;animation:floatIn .25s ease">
+      <div style="font-size:10px;font-weight:700;color:var(--ink3);margin-bottom:4px;padding-left:2px;font-family:'Noto Sans Thai',sans-serif">🏮 ${_ac.scenario?.role||'AI'}</div>
+      <div style="background:white;border:1.5px solid var(--pink-mid);border-radius:18px;border-bottom-left-radius:4px;padding:12px 14px">
+        ${data.zh?`<div style="font-family:'Noto Serif SC',serif;font-size:20px;color:var(--ink);margin-bottom:4px;letter-spacing:.5px">${data.zh}</div>`:''}
+        ${data.py?`<div style="font-size:12px;font-weight:600;color:var(--pink);margin-bottom:2px">${data.py}</div>`:''}
+        ${data.th?`<div style="font-size:12px;color:var(--ink3);font-family:'Noto Sans Thai',sans-serif;line-height:1.5">${data.th}</div>`:''}
+        <button id="${id}" onclick="speak('${(data.zh||'').replace(/'/g,"\\'")}');document.querySelectorAll('.ac-play-btn').forEach(b=>b.textContent='🔊');this.textContent='📢'"
+          class="ac-play-btn" style="margin-top:8px;background:var(--pink-soft);border:1px solid var(--pink-mid);color:var(--pink);border-radius:50px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">
+          🔊 ฟังอีกครั้ง
+        </button>
+      </div>
+      ${fb}
+    </div>`;
+  box.scrollTop = box.scrollHeight;
+}
+
+function _acAddUserMsg(text) {
+  const box = document.getElementById('ac-messages');
+  if (!box) return;
+  box.innerHTML += `
+    <div style="display:flex;flex-direction:column;max-width:85%;align-self:flex-end;animation:floatIn .25s ease">
+      <div style="font-size:10px;font-weight:700;color:var(--ink3);margin-bottom:4px;padding-right:2px;text-align:right;font-family:'Noto Sans Thai',sans-serif">คุณ</div>
+      <div style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;border-radius:18px;border-bottom-right-radius:4px;padding:12px 14px">
+        <div style="font-family:'Noto Serif SC','Noto Sans Thai',sans-serif;font-size:16px">${text}</div>
+      </div>
+    </div>`;
+  box.scrollTop = box.scrollHeight;
+}
+
+function _acSetLoading(val) {
+  _ac.loading = val;
+  const btn = document.getElementById('ac-send');
+  if (btn) btn.style.opacity = val ? '.4' : '1';
+  const box = document.getElementById('ac-messages');
+  if (!box) return;
+  if (val) {
+    box.innerHTML += `<div id="ac-typing" style="display:flex;align-self:flex-start">
+      <div style="background:white;border:1.5px solid var(--pink-mid);border-radius:18px;border-bottom-left-radius:4px;padding:12px 16px;display:flex;gap:5px;align-items:center">
+        <div style="width:7px;height:7px;background:var(--pink-mid);border-radius:50%;animation:bounce 1s infinite"></div>
+        <div style="width:7px;height:7px;background:var(--pink-mid);border-radius:50%;animation:bounce 1s .2s infinite"></div>
+        <div style="width:7px;height:7px;background:var(--pink-mid);border-radius:50%;animation:bounce 1s .4s infinite"></div>
+      </div></div>`;
+    box.scrollTop = box.scrollHeight;
+  } else {
+    document.getElementById('ac-typing')?.remove();
+  }
+}
+
+// ── AI FIRST MESSAGE ──
+async function _acAIFirst() {
+  _acSetLoading(true);
+  try {
+    const res = await fetch(AICHAT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_KEY}` },
+      body: JSON.stringify({
+        message: '__START__',
+        history: [],
+        scenario: _ac.scenario?.id,
+        scenarioRole: _ac.scenario?.role,
+        scenarioSituation: _ac.scenario?.situation,
+        level: _ac.level,
+        userId: state.user?.id ?? 'guest'
+      })
+    });
+    const data = await res.json();
+    _acSetLoading(false);
+    const parsed = _acParseReply(data.reply || '');
+    _acAddAIMsg(parsed);
+    _ac.history.push({ role:'assistant', content: data.reply || '' });
+    if (parsed.zh) speak(parsed.zh);
+  } catch(e) {
+    _acSetLoading(false);
+    _acAddAIMsg({ zh:'你好！', py:'Nǐ hǎo!', th:'สวัสดีค่ะ!', feedback:null });
+  }
+}
+
+// ── SEND USER MESSAGE ──
+async function _acSend() {
+  if (_ac.loading) return;
+  const input = document.getElementById('ac-input');
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  input.style.height = 'auto';
+  stopSpeech();
+
+  _acAddUserMsg(text);
+  _ac.history.push({ role:'user', content: text });
+  _acSetLoading(true);
+
+  try {
+    const res = await fetch(AICHAT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_KEY}` },
+      body: JSON.stringify({
+        message: text,
+        history: _ac.history.slice(-10),
+        scenario: _ac.scenario?.id,
+        scenarioRole: _ac.scenario?.role,
+        scenarioSituation: _ac.scenario?.situation,
+        level: _ac.level,
+        userId: state.user?.id ?? 'guest'
+      })
+    });
+    const data = await res.json();
+    _acSetLoading(false);
+    const parsed = _acParseReply(data.reply || '');
+    _acAddAIMsg(parsed);
+    _ac.history.push({ role:'assistant', content: data.reply || '' });
+    if (parsed.zh) speak(parsed.zh);
+  } catch(e) {
+    _acSetLoading(false);
+    _acAddAIMsg({ zh:'', py:'', th:'ขอโทษค่ะ เชื่อมต่อไม่ได้ กรุณาลองใหม่', feedback:null });
+  }
+}
+
+// ── PARSE AI REPLY ──
+function _acParseReply(text) {
+  try {
+    const clean = text.replace(/```json|```/g,'').trim();
+    const parsed = JSON.parse(clean);
+    return parsed;
+  } catch {
+    const m = text.match(/\{[\s\S]*?\}/);
+    if (m) { try { return JSON.parse(m[0]); } catch {} }
+    // fallback: treat as plain Chinese text
+    return { zh: text, py: '', th: '', feedback: null, feedback_type: null };
+  }
+}
+
+// ── VOICE RECORDING (MediaRecorder → Supabase STT) ──
+async function _acToggleMic() {
+  if (_ac.recording) {
+    _ac.mediaRecorder?.stop();
+    return;
+  }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    _ac.audioChunks = [];
+    _ac.mediaRecorder = new MediaRecorder(stream);
+    _ac.mediaRecorder.ondataavailable = e => { if (e.data.size > 0) _ac.audioChunks.push(e.data); };
+    _ac.mediaRecorder.onstop = async () => {
+      _ac.recording = false;
+      const btn = document.getElementById('ac-mic');
+      if (btn) { btn.textContent = '🎙️'; btn.style.background = '#f3e8ff'; }
+      stream.getTracks().forEach(t => t.stop());
+      document.getElementById('ac-hint').textContent = '⏳ กำลังถอดเสียง...';
+      const blob = new Blob(_ac.audioChunks, { type: 'audio/webm' });
+      await _acTranscribe(blob);
+    };
+    _ac.mediaRecorder.start();
+    _ac.recording = true;
+    const btn = document.getElementById('ac-mic');
+    if (btn) { btn.textContent = '⏹'; btn.style.background = '#fecaca'; btn.style.borderColor = '#f87171'; btn.style.color = '#dc2626'; }
+    document.getElementById('ac-hint').textContent = '🔴 กำลังบันทึก... กด ⏹ เพื่อหยุด';
+  } catch(e) {
+    showToast('⚠️ ไม่สามารถเข้าถึงไมค์ได้ กรุณาอนุญาตการใช้งาน');
+  }
+}
+
+
+// ═══════════════════════════════════════════════════════
+// 🎤 SPEECH GAME — ฝึกพูดออกเสียงภาษาจีน (Google TTS)
+// ═══════════════════════════════════════════════════════
+
+const SPEECH_WORDS = [
+  // HSK1 — ง่ายมาก
+  { char:'你好', pinyin:'nǐ hǎo', meaning:'สวัสดี', level:1 },
+  { char:'谢谢', pinyin:'xiè xie', meaning:'ขอบคุณ', level:1 },
+  { char:'米饭', pinyin:'mǐ fàn', meaning:'ข้าว', level:1 },
+  { char:'水', pinyin:'shuǐ', meaning:'น้ำ', level:1 },
+  { char:'妈妈', pinyin:'māma', meaning:'แม่', level:1 },
+  { char:'爸爸', pinyin:'bàba', meaning:'พ่อ', level:1 },
+  { char:'朋友', pinyin:'péng you', meaning:'เพื่อน', level:1 },
+  { char:'老师', pinyin:'lǎo shī', meaning:'ครู', level:1 },
+  { char:'学生', pinyin:'xué shēng', meaning:'นักเรียน', level:1 },
+  { char:'中国', pinyin:'Zhōng guó', meaning:'จีน', level:1 },
+  { char:'我爱你', pinyin:'wǒ ài nǐ', meaning:'ฉันรักเธอ', level:1 },
+  { char:'再见', pinyin:'zài jiàn', meaning:'ลาก่อน', level:1 },
+  // HSK2
+  { char:'明天', pinyin:'míng tiān', meaning:'พรุ่งนี้', level:2 },
+  { char:'今天', pinyin:'jīn tiān', meaning:'วันนี้', level:2 },
+  { char:'天气', pinyin:'tiān qì', meaning:'อากาศ', level:2 },
+  { char:'喜欢', pinyin:'xǐ huān', meaning:'ชอบ', level:2 },
+  { char:'学习', pinyin:'xué xí', meaning:'เรียน', level:2 },
+  { char:'工作', pinyin:'gōng zuò', meaning:'ทำงาน', level:2 },
+  { char:'医院', pinyin:'yī yuàn', meaning:'โรงพยาบาล', level:2 },
+  { char:'公司', pinyin:'gōng sī', meaning:'บริษัท', level:2 },
+  // HSK3
+  { char:'经济', pinyin:'jīng jì', meaning:'เศรษฐกิจ', level:3 },
+  { char:'环境', pinyin:'huán jìng', meaning:'สิ่งแวดล้อม', level:3 },
+  { char:'发展', pinyin:'fā zhǎn', meaning:'พัฒนา', level:3 },
+  { char:'文化', pinyin:'wén huà', meaning:'วัฒนธรรม', level:3 },
+  // HSK4
+  { char:'积极', pinyin:'jī jí', meaning:'กระตือรือร้น', level:4 },
+  { char:'竞争', pinyin:'jìng zhēng', meaning:'แข่งขัน', level:4 },
+  { char:'影响', pinyin:'yǐng xiǎng', meaning:'ส่งผลกระทบ', level:4 },
+];
+
+let speechState = {
+  idx: 0,
+  words: [],
+  recognizing: false,
+  recognition: null,
+  streak: 0,
+  score: 0,
+};
+
+function initSpeechGame() {
+  speechState.words = [...SPEECH_WORDS].sort((a,b) => a.level - b.level);
+  speechState.idx = 0;
+  speechState.streak = 0;
+  speechState.score = 0;
+  renderSpeechGame();
+}
+
+function renderSpeechGame() {
+  const root = document.getElementById('speech-game-root');
+  if (!root) return;
+  const w = speechState.words[speechState.idx];
+  const total = speechState.words.length;
+  const pct = Math.round((speechState.idx / total) * 100);
+
+  root.innerHTML = `
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:12px;color:var(--ink3);margin-bottom:6px">คำที่ ${speechState.idx+1} / ${total} &nbsp;|&nbsp; 🔥 ${speechState.streak} คำต่อเนื่อง &nbsp;|&nbsp; ⭐ ${speechState.score} แต้ม</div>
+      <div style="background:#f0e8f4;border-radius:20px;height:6px;overflow:hidden">
+        <div style="background:linear-gradient(90deg,#F13596,#a855f7);height:100%;width:${pct}%;transition:width .4s"></div>
+      </div>
+    </div>
+
+    <div style="background:linear-gradient(145deg,#f0f8ff,#e0f0ff);border:2px solid #90caf9;border-radius:24px;padding:32px 20px;text-align:center;margin-bottom:20px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#1976d2;margin-bottom:12px">HSK ${w.level}</div>
+      <div style="font-size:72px;font-family:'Noto Serif SC',serif;font-weight:700;color:#1a1a2e;line-height:1;margin-bottom:12px">${w.char}</div>
+      <div style="font-size:22px;color:#1976d2;font-weight:600;margin-bottom:8px;letter-spacing:2px">${w.pinyin}</div>
+      <div style="font-size:16px;color:var(--ink2)">${w.meaning}</div>
+    </div>
+
+    <!-- ปุ่มฟังเสียง -->
+    <button id="sp-listen-btn" onclick="speechPlayTTS()" style="width:100%;padding:14px;background:linear-gradient(135deg,#1976d2,#42a5f5);color:white;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px">
+      🔊 ฟังเสียงต้นแบบ
+    </button>
+
+    <!-- ปุ่มพูด -->
+    <button id="sp-mic-btn" onclick="speechStartRec()" style="width:100%;padding:14px;background:linear-gradient(135deg,#e91e8c,#F13596);color:white;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px">
+      🎤 กดแล้วพูดตาม
+    </button>
+
+    <!-- ผล -->
+    <div id="sp-result" style="min-height:60px;text-align:center;font-size:15px;padding:10px"></div>
+
+    <!-- ปุ่มข้าม -->
+    <button onclick="speechSkip()" style="width:100%;padding:10px;background:transparent;color:var(--ink3);border:1.5px solid var(--paper3);border-radius:12px;font-size:13px;cursor:pointer;font-family:inherit;margin-top:4px">
+      ข้ามคำนี้ →
+    </button>
+  `;
+}
+
+async function speechPlayTTS() {
+  const w = speechState.words[speechState.idx];
+  const btn = document.getElementById('sp-listen-btn');
+  if (btn) { btn.textContent = '⏳ กำลังโหลดเสียง...'; btn.disabled = true; }
+  await speak(w.char, () => {
+    if (btn) { btn.textContent = '🔊 ฟังเสียงต้นแบบ'; btn.disabled = false; }
+  }, 0.8);
+  if (btn) { btn.textContent = '🔊 ฟังเสียงต้นแบบ'; btn.disabled = false; }
+}
+
+function speechFallbackTTS(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'zh-CN';
+  utt.rate = 0.85;
+  const voices = window.speechSynthesis.getVoices().filter(v => v.lang.startsWith('zh'));
+  if (voices.length) utt.voice = voices[0];
+  window.speechSynthesis.speak(utt);
+}
+
+// ── บันทึกเสียงด้วย MediaRecorder แล้วส่ง STT จริง ──
+async function speechStartRec() {
+  if (speechState.recognizing) return;
+  const w = speechState.words[speechState.idx];
+  const resultEl = document.getElementById('sp-result');
+  const micBtn   = document.getElementById('sp-mic-btn');
+
+  // ขอ permission ไมค์
+  let stream;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch(e) {
+    resultEl.innerHTML = `<div style="background:#fff3cd;border-radius:12px;padding:12px;color:#7a5e00">
+      ⚠️ ขอ permission ไมค์ไม่ได้ กรุณาอนุญาตในเบราว์เซอร์ก่อนนะคะ</div>`;
+    return;
+  }
+
+  speechState.recognizing = true;
+  if (micBtn) {
+    micBtn.innerHTML = '🔴 กำลังฟัง... กดอีกครั้งเพื่อหยุด';
+    micBtn.style.background = 'linear-gradient(135deg,#c62828,#e53935)';
+  }
+  resultEl.innerHTML = `<div style="text-align:center;color:var(--ink3);padding:8px">
+    <span style="font-size:24px">👂</span><br>กำลังฟังอยู่นะคะ...</div>`;
+
+  // เลือก mimeType ที่รองรับ
+  const mime = ['audio/webm;codecs=opus','audio/webm','audio/ogg','audio/mp4']
+    .find(m => MediaRecorder.isTypeSupported(m)) || '';
+
+  const chunks = [];
+  const recorder = new MediaRecorder(stream, mime ? { mimeType: mime } : {});
+  speechState.recorder = recorder;
+  recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+
+  recorder.onstop = async () => {
+    stream.getTracks().forEach(t => t.stop());
+    speechState.recognizing = false;
+    if (micBtn) {
+      micBtn.innerHTML = '🎤 กดแล้วพูดตาม';
+      micBtn.style.background = 'linear-gradient(135deg,#e91e8c,#F13596)';
+      micBtn.disabled = false;
+    }
+    resultEl.innerHTML = `<div style="text-align:center;color:var(--ink3);padding:8px">⏳ AI กำลังตรวจเสียง...</div>`;
+
+    const blob = new Blob(chunks, { type: mime || 'audio/webm' });
+    await speechSendSTT(blob, mime || 'audio/webm', w);
+  };
+
+  recorder.start();
+
+  // กด mic อีกครั้ง = หยุดบันทึก
+  if (micBtn) {
+    micBtn.disabled = false;
+    micBtn.onclick = () => {
+      if (speechState.recognizing && recorder.state === 'recording') {
+        recorder.stop();
+        micBtn.onclick = () => speechStartRec(); // reset
+      }
+    };
+  }
+
+  // หยุดอัตโนมัติหลัง 5 วินาที
+  speechState.autoStopTimer = setTimeout(() => {
+    if (recorder.state === 'recording') recorder.stop();
+  }, 5000);
+}
+
+// ── ส่งเสียงไป STT แล้วตรวจพินอิน ──
+async function speechSendSTT(blob, mimeType, w) {
+  const resultEl = document.getElementById('sp-result');
+  try {
+    // แปลง blob → base64
+    const base64 = await new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onloadend = () => res(r.result.split(',')[1]);
+      r.onerror   = rej;
+      r.readAsDataURL(blob);
+    });
+
+    const resp = await fetch(STT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPABASE_KEY}`
+      },
+      body: JSON.stringify({ audioBase64: base64, mimeType, language: 'zh-CN' })
+    });
+    const data = await resp.json();
+    const transcript = (data.transcript || '').trim();
+
+    if (!transcript) {
+      resultEl.innerHTML = `<div style="background:#fce4ec;border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:20px">🤫</div>
+        <div style="color:#c62828;font-weight:700;margin-top:4px">ไม่ได้ยินเสียงค่ะ</div>
+        <div style="font-size:12px;color:#ad1457;margin-top:4px">ลองพูดชัดๆ ดังขึ้นอีกนิดนะคะ</div>
+      </div>`;
+      // reset mic button
+      const micBtn = document.getElementById('sp-mic-btn');
+      if (micBtn) { micBtn.onclick = () => speechStartRec(); }
+      return;
+    }
+
+    speechCheckPinyin(transcript, w);
+
+  } catch(e) {
+    resultEl.innerHTML = `<div style="background:#fff3cd;border-radius:12px;padding:12px;color:#7a5e00;text-align:center">
+      ⚠️ เชื่อมต่อไม่ได้ ลองใหม่อีกครั้งนะคะ</div>`;
+    const micBtn = document.getElementById('sp-mic-btn');
+    if (micBtn) { micBtn.onclick = () => speechStartRec(); }
+  }
+}
+
+// ── ตรวจความถูกต้องโดยเทียบตัวอักษรจีน + พินอิน ──
+function speechCheckPinyin(transcript, w) {
+  // 1) เทียบตัวอักษรจีนตรงๆ (STT คืนมาเป็น 汉字)
+  const targetChar = w.char.replace(/\s/g, '');
+  const gotChar    = transcript.replace(/\s/g, '');
+
+  // ต้องตรงทุกตัว — ไม่มี partial pass
+  const charMatch = gotChar === targetChar;
+
+  // 2) เทียบพินอิน (strip tone marks → เสียงพยัญชนะ+สระ)
+  const stripTones = s => s.toLowerCase()
+    .replace(/[āáǎà]/g,'a').replace(/[ēéěè]/g,'e')
+    .replace(/[īíǐì]/g,'i').replace(/[ōóǒò]/g,'o')
+    .replace(/[ūúǔù]/g,'u').replace(/[ǖǘǚǜü]/g,'u')
+    .replace(/\s/g,'');
+
+  // พินอินจาก STT ไม่มี → ใช้ char match อย่างเดียว
+  const passed = charMatch;
+
+  // feedback ละเอียด
+  let heardLabel = transcript;
+  let hint = '';
+  if (!passed) {
+    // บอกว่าได้ยินอะไร
+    if (gotChar.length === targetChar.length) {
+      // ตัวอักษรเท่ากัน แต่ผิด → ผิดวรรณยุกต์
+      hint = '💡 เสียงวรรณยุกต์อาจยังไม่แม่น ลองฟังอีกครั้งแล้วเน้นเสียงสูง-ต่ำนะคะ';
+    } else {
+      hint = '💡 ลองพูดให้ชัดขึ้น หรือกด 🔊 ฟังเสียงต้นแบบก่อนนะคะ';
+    }
+  }
+
+  speechResult(passed, heardLabel, hint);
+}
+
+function speechResult(passed, heard='', hint='') {
+  const w = speechState.words[speechState.idx];
+  const resultEl = document.getElementById('sp-result');
+  // reset mic button onclick
+  const micBtn = document.getElementById('sp-mic-btn');
+  if (micBtn) micBtn.onclick = () => speechStartRec();
+
+  if (passed) {
+    speechState.streak++;
+    speechState.score += (10 + speechState.streak);
+    const bonus = speechState.streak >= 3 ? ` 🔥 ${speechState.streak} combo!` : '';
+    resultEl.innerHTML = `
+      <div style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);border:2px solid #66bb6a;border-radius:16px;padding:16px;text-align:center;animation:fadeIn .3s">
+        <div style="font-size:32px;margin-bottom:4px">✅</div>
+        <div style="font-size:16px;font-weight:800;color:#1b5e20">ถูกต้อง!${bonus}</div>
+        ${heard ? `<div style="font-size:12px;color:#388e3c;margin-top:6px;background:rgba(255,255,255,.6);border-radius:8px;padding:4px 10px;display:inline-block">AI ได้ยิน: <b>${heard}</b></div>` : ''}
+        <div style="font-size:13px;color:#2e7d32;margin-top:6px">+${10+speechState.streak} แต้ม ⭐</div>
+      </div>
+    `;
+    setTimeout(() => speechNext(), 1800);
+  } else {
+    speechState.streak = 0;
+    resultEl.innerHTML = `
+      <div style="background:linear-gradient(135deg,#fce4ec,#f8bbd9);border:2px solid #f48fb1;border-radius:16px;padding:16px;text-align:center;animation:fadeIn .3s">
+        <div style="font-size:32px;margin-bottom:4px">❌</div>
+        <div style="font-size:15px;font-weight:800;color:#880e4f">ยังไม่ถูกค่ะ ลองใหม่!</div>
+        ${heard ? `<div style="font-size:12px;color:#c2185b;margin-top:6px;background:rgba(255,255,255,.6);border-radius:8px;padding:4px 10px;display:inline-block">AI ได้ยิน: <b>${heard}</b> แต่ต้องการ <b>${w.char}</b></div>` : ''}
+        ${hint ? `<div style="font-size:12px;color:#ad1457;margin-top:8px">${hint}</div>` : ''}
+        <button onclick="speechPlayTTS()" style="margin-top:10px;padding:8px 24px;background:#e91e8c;color:white;border:none;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">🔊 ฟังอีกครั้ง</button>
+      </div>
+    `;
+  }
+}
+
+function speechNext() {
+  const total = speechState.words.length;
+  if (speechState.idx + 1 >= total) {
+    speechFinish();
+    return;
+  }
+  speechState.idx++;
+  renderSpeechGame();
+}
+
+function speechSkip() {
+  speechState.streak = 0;
+  speechNext();
+}
+
+function speechFinish() {
+  const root = document.getElementById('speech-game-root');
+  if (!root) return;
+  root.innerHTML = `
+    <div style="text-align:center;padding:40px 20px;animation:fadeIn .4s">
+      <div style="font-size:64px;margin-bottom:16px">🎉</div>
+      <div style="font-size:22px;font-weight:800;color:var(--ink);margin-bottom:8px">เก่งมากเลย!</div>
+      <div style="font-size:15px;color:var(--ink2);margin-bottom:24px">ผ่านครบ ${speechState.words.length} คำแล้วค่ะ</div>
+      <div style="background:linear-gradient(135deg,#f0f8ff,#e3f2fd);border:2px solid #90caf9;border-radius:20px;padding:24px;margin-bottom:24px;display:inline-block;min-width:220px">
+        <div style="font-size:13px;color:var(--ink3);margin-bottom:4px">คะแนนรวม</div>
+        <div style="font-size:48px;font-weight:900;color:#1976d2">⭐ ${speechState.score}</div>
+      </div>
+      <br>
+      <button onclick="initSpeechGame()" style="padding:14px 32px;background:linear-gradient(135deg,#1976d2,#42a5f5);color:white;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">
+        🔄 เล่นอีกครั้ง
+      </button>
+    </div>
+  `;
+}
+
+async function _acTranscribe(blob) {
+  try {
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const base64 = reader.result.split(',')[1];
+      const res = await fetch(STT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_KEY}` },
+        body: JSON.stringify({ audioBase64: base64, mimeType: 'audio/webm', language: 'zh-CN' })
+      });
+      const data = await res.json();
+      const transcript = data.transcript || '';
+      const input = document.getElementById('ac-input');
+      if (input) input.value = transcript;
+      document.getElementById('ac-hint').textContent = transcript ? '✅ ถอดเสียงเสร็จแล้ว กด ▶ เพื่อส่ง' : '⚠️ ไม่ได้ยินเสียง ลองพูดใหม่';
+    };
+    reader.readAsDataURL(blob);
+  } catch(e) {
+    document.getElementById('ac-hint').textContent = '⚠️ ถอดเสียงไม่ได้ ลองพิมพ์แทนนะคะ';
+  }
+}
 </script></body>
 </html>
