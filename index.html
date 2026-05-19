@@ -20526,6 +20526,8 @@ async function speechStartRec() {
 
     const blob = new Blob(chunks, { type: mime || 'audio/mp4' });
 
+    console.log('🎤 DEBUG — mime:', mime, '| blob size:', blob.size, 'bytes | chunks:', chunks.length);
+
     // ถ้า blob เล็กเกินไป = ไม่มีเสียงจริง
     if (blob.size < 1000) {
       resultEl.innerHTML = `<div style="background:#fce4ec;border-radius:12px;padding:14px;text-align:center">
