@@ -20498,24 +20498,13 @@ async function speechStartRec() {
   resultEl.innerHTML = `<div style="text-align:center;color:var(--ink3);padding:8px">
     <span style="font-size:24px">👂</span><br>กำลังฟังอยู่นะคะ...</div>`;
 
-  // เลือก mimeType — iPhone Safari รองรับแค่ audio/mp4
-  const mimePrefs = [
+  // เลือก mimeType ให้รองรับทุกอุปกรณ์
+  const mime = [
     'audio/mp4',                  // iOS Safari ✅
     'audio/webm;codecs=opus',     // Chrome/Android ✅
     'audio/webm',                 // Chrome fallback ✅
-    'audio/ogg;codecs=opus',      // Firefox ✅
-  ];
-  const mime = mimePrefs.find(m => {
-    try { return MediaRecorder.isTypeSupported(m); } catch(e) { return false; }
-  }) || '';
-
-  // เลือก mimeType ให้รองรับทุกอุปกรณ์
-  const mime = [
-    'audio/webm;codecs=opus',
-    'audio/webm',
-    'audio/mp4',
-    'audio/ogg',
-  ].find(m => MediaRecorder.isTypeSupported(m)) || '';
+    'audio/ogg',                  // Firefox ✅
+  ].find(m => { try { return MediaRecorder.isTypeSupported(m); } catch(e) { return false; } }) || '';
 
   const chunks = [];
   const recorder = mime
