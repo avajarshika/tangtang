@@ -20498,18 +20498,19 @@ async function speechStartRec() {
   resultEl.innerHTML = `<div style="text-align:center;color:var(--ink3);padding:8px">
     <span style="font-size:24px">👂</span><br>กำลังฟังอยู่นะคะ...</div>`;
 
-  // เลือก mimeType ให้รองรับทุกอุปกรณ์
-  const mime = [
+  // เลือก mimeType — iPhone Safari รองรับแค่ audio/mp4
+  const mimePrefs = [
     'audio/mp4',                  // iOS Safari ✅
     'audio/webm;codecs=opus',     // Chrome/Android ✅
     'audio/webm',                 // Chrome fallback ✅
-    'audio/ogg',                  // Firefox ✅
-  ].find(m => { try { return MediaRecorder.isTypeSupported(m); } catch(e) { return false; } }) || '';
+    'audio/ogg;codecs=opus',      // Firefox ✅
+  ];
+  const mime = mimePrefs.find(m => {
+    try { return MediaRecorder.isTypeSupported(m); } catch(e) { return false; }
+  }) || '';
 
   const chunks = [];
-  const recorder = mime
-    ? new MediaRecorder(stream, { mimeType: mime })
-    : new MediaRecorder(stream);
+  const recorder = new MediaRecorder(stream, mime ? { mimeType: mime } : {});
   speechState.recorder = recorder;
   recorder.ondataavailable = e => {
     if (e.data.size > 0) chunks.push(e.data);
@@ -20525,12 +20526,39 @@ async function speechStartRec() {
     }
     resultEl.innerHTML = `<div style="text-align:center;color:var(--ink3);padding:8px">⏳ AI กำลังตรวจเสียง...</div>`;
 
-    const actualMime = recorder.mimeType || mime || 'audio/webm';
-    const blob = new Blob(chunks, { type: actualMime });
-    await speechSendSTT(blob, actualMime, w);
+    const blob = new Blob(chunks, { type: mime || 'audio/mp4' });
+
+    if (blob.size < 100) {
+      resultEl.innerHTML = `<div style="background:#fce4ec;border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:20px">🤫</div>
+        <div style="color:#c62828;font-weight:700;margin-top:4px">ไม่ได้ยินเสียงค่ะ</div>
+        <div style="font-size:12px;color:#ad1457;margin-top:4px">ลองกดปุ่มแล้วรอ 1 วินาทีก่อนพูดนะคะ</div>
+      </div>`;
+      const micBtn2 = document.getElementById('sp-mic-btn');
+      if (micBtn2) micBtn2.onclick = () => speechStartRec();
+      return;
+    }
+
+    await speechSendSTT(blob, mime || 'audio/mp4', w);
   };
 
-  recorder.start(1000); // ส่ง data ทุก 1 วินาที รองรับ iPhone ด้วย
+  recorder.start(250);
+
+  // กด mic อีกครั้ง = หยุดบันทึก
+  if (micBtn) {
+    micBtn.disabled = false;
+    micBtn.onclick = () => {
+      if (speechState.recognizing && recorder.state === 'recording') {
+        recorder.stop();
+        micBtn.onclick = () => speechStartRec();
+      }
+    };
+  }
+
+  // หยุดอัตโนมัติหลัง 7 วินาที
+  speechState.autoStopTimer = setTimeout(() => {
+    if (recorder.state === 'recording') recorder.stop();
+  }, 7000);
 
   // กด mic อีกครั้ง = หยุดบันทึก
   if (micBtn) {
