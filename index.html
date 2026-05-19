@@ -20753,13 +20753,17 @@ function speechFinish() {
   const nextIdx = speechState.levelIdx + 1;
   const hasNext = nextIdx < levels.length;
 
-  // ปลดล็อกด่านถัดไป
-  if (isVocab) {
-    speechState.unlockedVocab    = Math.max(speechState.unlockedVocab,    nextIdx + 1);
-  } else {
-    speechState.unlockedSentence = Math.max(speechState.unlockedSentence, nextIdx + 1);
+  // ปลดล็อกด่านถัดไป (เฉพาะ Premium)
+  if (isPremium()) {
+    if (isVocab) {
+      speechState.unlockedVocab = Math.max(speechState.unlockedVocab, nextIdx + 1);
+    } else {
+      speechState.unlockedSentence = Math.max(speechState.unlockedSentence, nextIdx + 1);
+    }
+    speechSaveProgress();
   }
-  speechSaveProgress();
+
+  const showUpgrade = !isPremium();
 
   root.innerHTML = `
     <div style="text-align:center;padding:32px 16px;animation:fadeIn .4s">
@@ -20770,8 +20774,21 @@ function speechFinish() {
         <div style="font-size:12px;color:var(--ink3)">คะแนนรวม</div>
         <div style="font-size:44px;font-weight:900;color:#1976d2">⭐ ${speechState.score}</div>
       </div>
+
+      ${showUpgrade ? `
+      <div style="background:linear-gradient(135deg,#1565c0,#1976d2);border-radius:20px;padding:20px;margin-bottom:16px">
+        <div style="font-size:24px;margin-bottom:8px">🔓</div>
+        <div style="font-size:16px;font-weight:800;color:white;margin-bottom:6px">ปลดล็อค ${isVocab ? '19 ด่าน' : '9 หมวด'}ที่เหลือ!</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.8);margin-bottom:14px">สมัคร Premium เพื่อฝึกพูดครบทุกหมวด<br>🔤 200 คำศัพท์ + 💬 100 ประโยค</div>
+        <button onclick="closeGame();navigate('pricing')" style="width:100%;padding:14px;background:white;color:#1565c0;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">
+          ✨ ดูแพคเกจ Premium
+        </button>
+      </div>
+      ` : ''}
+
       <div style="display:flex;flex-direction:column;gap:10px">
-        ${hasNext ? `<button onclick="speechStartLevel('${isVocab ? 'vocab' : 'sentence'}',${nextIdx})" style="padding:13px;background:linear-gradient(135deg,#27ae60,#2ecc71);color:white;border:none;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">
+        ${isPremium() && hasNext ? `
+        <button onclick="speechStartLevel('${isVocab ? 'vocab' : 'sentence'}',${nextIdx})" style="padding:13px;background:linear-gradient(135deg,#27ae60,#2ecc71);color:white;border:none;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">
           ➡️ ไปด่านถัดไป: ${levels[nextIdx].name}
         </button>` : ''}
         <button onclick="speechStartLevel('${isVocab ? 'vocab' : 'sentence'}',${speechState.levelIdx})" style="padding:13px;background:linear-gradient(135deg,#1976d2,#42a5f5);color:white;border:none;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">
