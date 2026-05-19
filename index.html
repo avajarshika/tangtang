@@ -20104,10 +20104,11 @@ async function speechSendSTT(blob, mimeType, w) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${SUPABASE_KEY}`
       },
-      body: JSON.stringify({ audioBase64: base64, mimeType, language: 'zh-CN' })
+      body: JSON.stringify({ audioBase64: base64, mimeType })
     });
     const data = await resp.json();
     const transcript = (data.transcript || '').trim();
+    const confidence = (typeof data.confidence === 'number') ? data.confidence : null;
 
     if (!transcript) {
       resultEl.innerHTML = `<div style="background:#fce4ec;border-radius:12px;padding:14px;text-align:center">
@@ -20115,54 +20116,52 @@ async function speechSendSTT(blob, mimeType, w) {
         <div style="color:#c62828;font-weight:700;margin-top:4px">ไม่ได้ยินเสียงค่ะ</div>
         <div style="font-size:12px;color:#ad1457;margin-top:4px">ลองพูดชัดๆ ดังขึ้นอีกนิดนะคะ</div>
       </div>`;
-      // reset mic button
       const micBtn = document.getElementById('sp-mic-btn');
-      if (micBtn) { micBtn.onclick = () => speechStartRec(); }
+      if (micBtn) micBtn.onclick = () => speechStartRec();
       return;
     }
 
-    speechCheckPinyin(transcript, w);
+    speechCheckPinyin(transcript, confidence, w);
 
   } catch(e) {
     resultEl.innerHTML = `<div style="background:#fff3cd;border-radius:12px;padding:12px;color:#7a5e00;text-align:center">
       ⚠️ เชื่อมต่อไม่ได้ ลองใหม่อีกครั้งนะคะ</div>`;
     const micBtn = document.getElementById('sp-mic-btn');
-    if (micBtn) { micBtn.onclick = () => speechStartRec(); }
+    if (micBtn) micBtn.onclick = () => speechStartRec();
   }
 }
 
-// ── ตรวจความถูกต้องโดยเทียบตัวอักษรจีน + พินอิน ──
-function speechCheckPinyin(transcript, w) {
-  // 1) เทียบตัวอักษรจีนตรงๆ (STT คืนมาเป็น 汉字)
+// ── ตรวจความถูกต้องโดยเทียบตัวอักษรจีน + confidence จาก Google STT ──
+function speechCheckPinyin(transcript, confidence, w) {
   const targetChar = w.char.replace(/\s/g, '');
   const gotChar    = transcript.replace(/\s/g, '');
 
-  // ต้องตรงทุกตัว — ไม่มี partial pass
+  // ✅ ต้องตรงตัวอักษรทุกตัว
   const charMatch = gotChar === targetChar;
 
-  // 2) เทียบพินอิน (strip tone marks → เสียงพยัญชนะ+สระ)
-  const stripTones = s => s.toLowerCase()
-    .replace(/[āáǎà]/g,'a').replace(/[ēéěè]/g,'e')
-    .replace(/[īíǐì]/g,'i').replace(/[ōóǒò]/g,'o')
-    .replace(/[ūúǔù]/g,'u').replace(/[ǖǘǚǜü]/g,'u')
-    .replace(/\s/g,'');
+  // ✅ confidence ต้อง ≥ 0.75 (Google ให้คะแนน 0-1)
+  //    ถ้า null = Google ไม่ส่งมา → ใช้ charMatch อย่างเดียว
+  const confOK = confidence === null ? true : confidence >= 0.75;
 
-  // พินอินจาก STT ไม่มี → ใช้ char match อย่างเดียว
-  const passed = charMatch;
+  const passed = charMatch && confOK;
 
-  // feedback ละเอียด
-  let heardLabel = transcript;
+  // feedback
   let hint = '';
+  const confPct = confidence !== null ? Math.round(confidence * 100) : null;
+
   if (!passed) {
-    // บอกว่าได้ยินอะไร
-    if (gotChar.length === targetChar.length) {
-      // ตัวอักษรเท่ากัน แต่ผิด → ผิดวรรณยุกต์
-      hint = '💡 เสียงวรรณยุกต์อาจยังไม่แม่น ลองฟังอีกครั้งแล้วเน้นเสียงสูง-ต่ำนะคะ';
-    } else {
-      hint = '💡 ลองพูดให้ชัดขึ้น หรือกด 🔊 ฟังเสียงต้นแบบก่อนนะคะ';
+    if (!charMatch) {
+      if (gotChar.length === targetChar.length) {
+        hint = `💡 ได้ยิน "${gotChar}" แต่ต้องการ "${targetChar}" — วรรณยุกต์อาจผิด ลองเน้นเสียงสูง-ต่ำนะคะ`;
+      } else {
+        hint = `💡 ได้ยิน "${gotChar}" ลองพูดให้ครบทุกพยางค์นะคะ`;
+      }
+    } else if (!confOK) {
+      hint = `💡 Google ได้ยิน "${gotChar}" แต่ความมั่นใจแค่ ${confPct}% (ต้องการ 75%+) ลองพูดชัดๆ อีกครั้งนะคะ`;
     }
   }
 
+  const heardLabel = transcript + (confPct !== null ? ` (${confPct}%)` : '');
   speechResult(passed, heardLabel, hint);
 }
 
