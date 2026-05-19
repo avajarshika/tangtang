@@ -20528,22 +20528,10 @@ async function speechStartRec() {
     resultEl.innerHTML = `<div style="text-align:center;color:var(--ink3);padding:8px">⏳ AI กำลังตรวจเสียง...</div>`;
 
     const blob = new Blob(chunks, { type: 'audio/webm' });
-
-    if (blob.size < 100) {
-      resultEl.innerHTML = `<div style="background:#fce4ec;border-radius:12px;padding:14px;text-align:center">
-        <div style="font-size:20px">🤫</div>
-        <div style="color:#c62828;font-weight:700;margin-top:4px">ไม่ได้ยินเสียงค่ะ</div>
-        <div style="font-size:12px;color:#ad1457;margin-top:4px">ลองกดปุ่มแล้วรอ 1 วินาทีก่อนพูดนะคะ</div>
-      </div>`;
-      const micBtn2 = document.getElementById('sp-mic-btn');
-      if (micBtn2) micBtn2.onclick = () => speechStartRec();
-      return;
-    }
-
     await speechSendSTT(blob, 'audio/webm', w);
   };
 
-  recorder.start(250);
+  recorder.start(); // ไม่ใส่ timeslice เหมือนเดิม
 
   // กด mic อีกครั้ง = หยุดบันทึก
   if (micBtn) {
