@@ -20542,14 +20542,15 @@ async function speechStartRec() {
     await speechSendSTT(blob, mime || 'audio/mp4', w);
   };
 
-  recorder.start(250);
+  recorder.start();
 
   // กด mic อีกครั้ง = หยุดบันทึก
   if (micBtn) {
     micBtn.disabled = false;
     micBtn.onclick = () => {
       if (speechState.recognizing && recorder.state === 'recording') {
-        recorder.stop();
+        recorder.requestData(); // บังคับดึง data ก่อน stop
+        setTimeout(() => recorder.stop(), 100);
         micBtn.onclick = () => speechStartRec();
       }
     };
@@ -20557,7 +20558,10 @@ async function speechStartRec() {
 
   // หยุดอัตโนมัติหลัง 7 วินาที
   speechState.autoStopTimer = setTimeout(() => {
-    if (recorder.state === 'recording') recorder.stop();
+    if (recorder.state === 'recording') {
+      recorder.requestData(); // บังคับดึง data ก่อน stop
+      setTimeout(() => recorder.stop(), 100);
+    }
   }, 7000);
 
   // กด mic อีกครั้ง = หยุดบันทึก
