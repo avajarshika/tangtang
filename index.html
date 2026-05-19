@@ -20509,10 +20509,13 @@ async function speechStartRec() {
     try { return MediaRecorder.isTypeSupported(m); } catch(e) { return false; }
   }) || '';
 
+  // ใช้ default mimeType เหมือนเดิมที่ใช้งานได้
   const chunks = [];
-  const recorder = new MediaRecorder(stream, mime ? { mimeType: mime } : {});
+  const recorder = new MediaRecorder(stream);
   speechState.recorder = recorder;
-  recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+  recorder.ondataavailable = e => {
+    if (e.data.size > 0) chunks.push(e.data);
+  };
 
   recorder.onstop = async () => {
     stream.getTracks().forEach(t => t.stop());
@@ -20524,11 +20527,8 @@ async function speechStartRec() {
     }
     resultEl.innerHTML = `<div style="text-align:center;color:var(--ink3);padding:8px">⏳ AI กำลังตรวจเสียง...</div>`;
 
-    const blob = new Blob(chunks, { type: mime || 'audio/mp4' });
+    const blob = new Blob(chunks, { type: 'audio/webm' });
 
-    console.log('🎤 DEBUG — mime:', mime, '| blob size:', blob.size, 'bytes | chunks:', chunks.length);
-
-    // ถ้า blob เล็กเกินไป = ไม่มีเสียงจริง
     if (blob.size < 100) {
       resultEl.innerHTML = `<div style="background:#fce4ec;border-radius:12px;padding:14px;text-align:center">
         <div style="font-size:20px">🤫</div>
@@ -20540,12 +20540,10 @@ async function speechStartRec() {
       return;
     }
 
-    console.log('🎤 Sending to STT, blob size:', blob.size);
-
-    await speechSendSTT(blob, mime || 'audio/mp4', w);
+    await speechSendSTT(blob, 'audio/webm', w);
   };
 
-  recorder.start(250); // บันทึกทุก 250ms แทนที่จะรอ stop
+  recorder.start(250);
 
   // กด mic อีกครั้ง = หยุดบันทึก
   if (micBtn) {
