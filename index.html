@@ -19902,567 +19902,105 @@ async function _acToggleMic() {
 
 
 // ═══════════════════════════════════════════════════════
-// 🎤 SPEECH GAME — ฝึกพูดออกเสียงภาษาจีน
+// 🎤 SPEECH GAME — ฝึกพูดออกเสียงภาษาจีน (Google TTS)
 // ═══════════════════════════════════════════════════════
 
-// ── คำศัพท์ แบ่งเป็นด่าน (10 คำ/ด่าน) ──
-const SPEECH_VOCAB_LEVELS = [
-  { id:1, name:'👋 ทักทาย', star:'⭐', words:[
-    { char:'你好', pinyin:'nǐ hǎo', meaning:'สวัสดี' },
-    { char:'谢谢', pinyin:'xiè xie', meaning:'ขอบคุณ' },
-    { char:'再见', pinyin:'zài jiàn', meaning:'ลาก่อน' },
-    { char:'对不起', pinyin:'duì bu qǐ', meaning:'ขอโทษ' },
-    { char:'没关系', pinyin:'méi guān xi', meaning:'ไม่เป็นไร' },
-    { char:'请', pinyin:'qǐng', meaning:'กรุณา / เชิญ' },
-    { char:'好', pinyin:'hǎo', meaning:'ดี / โอเค' },
-    { char:'是', pinyin:'shì', meaning:'ใช่ / คือ' },
-    { char:'不是', pinyin:'bú shì', meaning:'ไม่ใช่' },
-    { char:'我爱你', pinyin:'wǒ ài nǐ', meaning:'ฉันรักเธอ' },
-  ]},
-  { id:2, name:'🍜 อาหาร', star:'⭐', words:[
-    { char:'米饭', pinyin:'mǐ fàn', meaning:'ข้าว' },
-    { char:'面条', pinyin:'miàn tiáo', meaning:'เส้นก๋วยเตี๋ยว' },
-    { char:'水', pinyin:'shuǐ', meaning:'น้ำ' },
-    { char:'茶', pinyin:'chá', meaning:'ชา' },
-    { char:'咖啡', pinyin:'kā fēi', meaning:'กาแฟ' },
-    { char:'鸡肉', pinyin:'jī ròu', meaning:'เนื้อไก่' },
-    { char:'猪肉', pinyin:'zhū ròu', meaning:'เนื้อหมู' },
-    { char:'蔬菜', pinyin:'shū cài', meaning:'ผัก' },
-    { char:'水果', pinyin:'shuǐ guǒ', meaning:'ผลไม้' },
-    { char:'好吃', pinyin:'hǎo chī', meaning:'อร่อย' },
-  ]},
-  { id:3, name:'👨‍👩‍👧 ครอบครัว', star:'⭐', words:[
-    { char:'爸爸', pinyin:'bà ba', meaning:'พ่อ' },
-    { char:'妈妈', pinyin:'mā ma', meaning:'แม่' },
-    { char:'哥哥', pinyin:'gē ge', meaning:'พี่ชาย' },
-    { char:'姐姐', pinyin:'jiě jie', meaning:'พี่สาว' },
-    { char:'弟弟', pinyin:'dì di', meaning:'น้องชาย' },
-    { char:'妹妹', pinyin:'mèi mei', meaning:'น้องสาว' },
-    { char:'儿子', pinyin:'ér zi', meaning:'ลูกชาย' },
-    { char:'女儿', pinyin:'nǚ ér', meaning:'ลูกสาว' },
-    { char:'朋友', pinyin:'péng you', meaning:'เพื่อน' },
-    { char:'同事', pinyin:'tóng shì', meaning:'เพื่อนร่วมงาน' },
-  ]},
-  { id:4, name:'🔢 ตัวเลข', star:'⭐', words:[
-    { char:'一', pinyin:'yī', meaning:'หนึ่ง' },
-    { char:'二', pinyin:'èr', meaning:'สอง' },
-    { char:'三', pinyin:'sān', meaning:'สาม' },
-    { char:'四', pinyin:'sì', meaning:'สี่' },
-    { char:'五', pinyin:'wǔ', meaning:'ห้า' },
-    { char:'六', pinyin:'liù', meaning:'หก' },
-    { char:'七', pinyin:'qī', meaning:'เจ็ด' },
-    { char:'八', pinyin:'bā', meaning:'แปด' },
-    { char:'九', pinyin:'jiǔ', meaning:'เก้า' },
-    { char:'十', pinyin:'shí', meaning:'สิบ' },
-  ]},
-  { id:5, name:'🕐 เวลา', star:'⭐⭐', words:[
-    { char:'今天', pinyin:'jīn tiān', meaning:'วันนี้' },
-    { char:'明天', pinyin:'míng tiān', meaning:'พรุ่งนี้' },
-    { char:'昨天', pinyin:'zuó tiān', meaning:'เมื่อวาน' },
-    { char:'现在', pinyin:'xiàn zài', meaning:'ตอนนี้' },
-    { char:'早上', pinyin:'zǎo shang', meaning:'ตอนเช้า' },
-    { char:'下午', pinyin:'xià wǔ', meaning:'ตอนบ่าย' },
-    { char:'晚上', pinyin:'wǎn shang', meaning:'ตอนเย็น/กลางคืน' },
-    { char:'星期一', pinyin:'xīng qī yī', meaning:'วันจันทร์' },
-    { char:'周末', pinyin:'zhōu mò', meaning:'วันหยุดสุดสัปดาห์' },
-    { char:'节日', pinyin:'jié rì', meaning:'วันหยุดเทศกาล' },
-  ]},
-  { id:6, name:'😊 อารมณ์', star:'⭐⭐', words:[
-    { char:'高兴', pinyin:'gāo xìng', meaning:'ดีใจ' },
-    { char:'开心', pinyin:'kāi xīn', meaning:'มีความสุข' },
-    { char:'难过', pinyin:'nán guò', meaning:'เศร้า' },
-    { char:'累', pinyin:'lèi', meaning:'เหนื่อย' },
-    { char:'生气', pinyin:'shēng qì', meaning:'โกรธ' },
-    { char:'害怕', pinyin:'hài pà', meaning:'กลัว' },
-    { char:'紧张', pinyin:'jǐn zhāng', meaning:'ตื่นเต้น/เครียด' },
-    { char:'无聊', pinyin:'wú liáo', meaning:'เบื่อ' },
-    { char:'喜欢', pinyin:'xǐ huān', meaning:'ชอบ' },
-    { char:'爱', pinyin:'ài', meaning:'รัก' },
-  ]},
-  { id:7, name:'🏙️ สถานที่', star:'⭐⭐', words:[
-    { char:'学校', pinyin:'xué xiào', meaning:'โรงเรียน' },
-    { char:'医院', pinyin:'yī yuàn', meaning:'โรงพยาบาล' },
-    { char:'超市', pinyin:'chāo shì', meaning:'ซูเปอร์มาร์เก็ต' },
-    { char:'餐厅', pinyin:'cān tīng', meaning:'ร้านอาหาร' },
-    { char:'公司', pinyin:'gōng sī', meaning:'บริษัท' },
-    { char:'银行', pinyin:'yín háng', meaning:'ธนาคาร' },
-    { char:'机场', pinyin:'jī chǎng', meaning:'สนามบิน' },
-    { char:'地铁站', pinyin:'dì tiě zhàn', meaning:'สถานีรถไฟใต้ดิน' },
-    { char:'酒店', pinyin:'jiǔ diàn', meaning:'โรงแรม' },
-    { char:'厕所', pinyin:'cè suǒ', meaning:'ห้องน้ำ' },
-  ]},
-  { id:8, name:'🛒 ช้อปปิง', star:'⭐⭐', words:[
-    { char:'多少钱', pinyin:'duō shao qián', meaning:'ราคาเท่าไหร่' },
-    { char:'便宜', pinyin:'pián yi', meaning:'ถูก' },
-    { char:'贵', pinyin:'guì', meaning:'แพง' },
-    { char:'买', pinyin:'mǎi', meaning:'ซื้อ' },
-    { char:'卖', pinyin:'mài', meaning:'ขาย' },
-    { char:'打折', pinyin:'dǎ zhé', meaning:'ลดราคา' },
-    { char:'付钱', pinyin:'fù qián', meaning:'ชำระเงิน' },
-    { char:'收据', pinyin:'shōu jù', meaning:'ใบเสร็จ' },
-    { char:'换', pinyin:'huàn', meaning:'แลก/เปลี่ยน' },
-    { char:'退货', pinyin:'tuì huò', meaning:'คืนสินค้า' },
-  ]},
-  { id:9, name:'💼 อาชีพ', star:'⭐⭐⭐', words:[
-    { char:'老师', pinyin:'lǎo shī', meaning:'ครู' },
-    { char:'医生', pinyin:'yī shēng', meaning:'หมอ' },
-    { char:'护士', pinyin:'hù shi', meaning:'พยาบาล' },
-    { char:'警察', pinyin:'jǐng chá', meaning:'ตำรวจ' },
-    { char:'厨师', pinyin:'chú shī', meaning:'พ่อครัว' },
-    { char:'司机', pinyin:'sī jī', meaning:'คนขับรถ' },
-    { char:'工程师', pinyin:'gōng chéng shī', meaning:'วิศวกร' },
-    { char:'设计师', pinyin:'shè jì shī', meaning:'นักออกแบบ' },
-    { char:'记者', pinyin:'jì zhě', meaning:'นักข่าว' },
-    { char:'学生', pinyin:'xué shēng', meaning:'นักเรียน' },
-  ]},
-  { id:10, name:'🌍 ประเทศและภาษา', star:'⭐⭐⭐', words:[
-    { char:'中国', pinyin:'Zhōng guó', meaning:'จีน' },
-    { char:'泰国', pinyin:'Tài guó', meaning:'ไทย' },
-    { char:'日本', pinyin:'Rì běn', meaning:'ญี่ปุ่น' },
-    { char:'韩国', pinyin:'Hán guó', meaning:'เกาหลี' },
-    { char:'美国', pinyin:'Měi guó', meaning:'อเมริกา' },
-    { char:'英国', pinyin:'Yīng guó', meaning:'อังกฤษ' },
-    { char:'中文', pinyin:'Zhōng wén', meaning:'ภาษาจีน' },
-    { char:'英文', pinyin:'Yīng wén', meaning:'ภาษาอังกฤษ' },
-    { char:'泰文', pinyin:'Tài wén', meaning:'ภาษาไทย' },
-    { char:'外国人', pinyin:'wài guó rén', meaning:'ชาวต่างชาติ' },
-  ]},
-  { id:11, name:'🏠 ในบ้าน', star:'⭐⭐', words:[
-    { char:'床', pinyin:'chuáng', meaning:'เตียงนอน' },
-    { char:'沙发', pinyin:'shā fā', meaning:'โซฟา' },
-    { char:'桌子', pinyin:'zhuō zi', meaning:'โต๊ะ' },
-    { char:'椅子', pinyin:'yǐ zi', meaning:'เก้าอี้' },
-    { char:'窗户', pinyin:'chuāng hu', meaning:'หน้าต่าง' },
-    { char:'门', pinyin:'mén', meaning:'ประตู' },
-    { char:'灯', pinyin:'dēng', meaning:'ไฟ/โคมไฟ' },
-    { char:'空调', pinyin:'kōng tiáo', meaning:'แอร์' },
-    { char:'电视', pinyin:'diàn shì', meaning:'โทรทัศน์' },
-    { char:'冰箱', pinyin:'bīng xiāng', meaning:'ตู้เย็น' },
-  ]},
-  { id:12, name:'🍳 ห้องครัว', star:'⭐⭐', words:[
-    { char:'锅', pinyin:'guō', meaning:'หม้อ' },
-    { char:'碗', pinyin:'wǎn', meaning:'ชาม' },
-    { char:'筷子', pinyin:'kuài zi', meaning:'ตะเกียบ' },
-    { char:'勺子', pinyin:'sháo zi', meaning:'ช้อน' },
-    { char:'刀', pinyin:'dāo', meaning:'มีด' },
-    { char:'油', pinyin:'yóu', meaning:'น้ำมัน' },
-    { char:'盐', pinyin:'yán', meaning:'เกลือ' },
-    { char:'糖', pinyin:'táng', meaning:'น้ำตาล' },
-    { char:'酱油', pinyin:'jiàng yóu', meaning:'ซีอิ๊ว' },
-    { char:'微波炉', pinyin:'wēi bō lú', meaning:'ไมโครเวฟ' },
-  ]},
-  { id:13, name:'☕ ร้านกาแฟ', star:'⭐⭐', words:[
-    { char:'美式咖啡', pinyin:'měi shì kā fēi', meaning:'อเมริกาโน่' },
-    { char:'拿铁', pinyin:'ná tiě', meaning:'ลาเต้' },
-    { char:'卡布奇诺', pinyin:'kǎ bù qí nuò', meaning:'คาปูชิโน่' },
-    { char:'热', pinyin:'rè', meaning:'ร้อน' },
-    { char:'冰', pinyin:'bīng', meaning:'เย็น/น้ำแข็ง' },
-    { char:'甜', pinyin:'tián', meaning:'หวาน' },
-    { char:'少糖', pinyin:'shǎo táng', meaning:'หวานน้อย' },
-    { char:'外带', pinyin:'wài dài', meaning:'สั่งกลับบ้าน' },
-    { char:'内用', pinyin:'nèi yòng', meaning:'นั่งทานที่ร้าน' },
-    { char:'杯', pinyin:'bēi', meaning:'แก้ว (ลักษณนาม)' },
-  ]},
-  { id:14, name:'🧍 ร่างกาย', star:'⭐⭐', words:[
-    { char:'头', pinyin:'tóu', meaning:'หัว' },
-    { char:'眼睛', pinyin:'yǎn jing', meaning:'ตา' },
-    { char:'耳朵', pinyin:'ěr duo', meaning:'หู' },
-    { char:'鼻子', pinyin:'bí zi', meaning:'จมูก' },
-    { char:'嘴', pinyin:'zuǐ', meaning:'ปาก' },
-    { char:'手', pinyin:'shǒu', meaning:'มือ' },
-    { char:'脚', pinyin:'jiǎo', meaning:'เท้า' },
-    { char:'肚子', pinyin:'dù zi', meaning:'ท้อง' },
-    { char:'背', pinyin:'bèi', meaning:'หลัง' },
-    { char:'心脏', pinyin:'xīn zàng', meaning:'หัวใจ' },
-  ]},
-  { id:15, name:'👗 เสื้อผ้า', star:'⭐⭐', words:[
-    { char:'衣服', pinyin:'yī fu', meaning:'เสื้อผ้า' },
-    { char:'裤子', pinyin:'kù zi', meaning:'กางเกง' },
-    { char:'裙子', pinyin:'qún zi', meaning:'กระโปรง' },
-    { char:'鞋子', pinyin:'xié zi', meaning:'รองเท้า' },
-    { char:'帽子', pinyin:'mào zi', meaning:'หมวก' },
-    { char:'包', pinyin:'bāo', meaning:'กระเป๋า' },
-    { char:'袜子', pinyin:'wà zi', meaning:'ถุงเท้า' },
-    { char:'外套', pinyin:'wài tào', meaning:'เสื้อกันหนาว' },
-    { char:'大小', pinyin:'dà xiǎo', meaning:'ขนาด' },
-    { char:'颜色', pinyin:'yán sè', meaning:'สี' },
-  ]},
-  { id:16, name:'🚗 การเดินทาง', star:'⭐⭐⭐', words:[
-    { char:'火车', pinyin:'huǒ chē', meaning:'รถไฟ' },
-    { char:'公交车', pinyin:'gōng jiāo chē', meaning:'รถเมล์' },
-    { char:'出租车', pinyin:'chū zū chē', meaning:'แท็กซี่' },
-    { char:'飞机', pinyin:'fēi jī', meaning:'เครื่องบิน' },
-    { char:'票', pinyin:'piào', meaning:'ตั๋ว' },
-    { char:'站', pinyin:'zhàn', meaning:'สถานี/ป้าย' },
-    { char:'路', pinyin:'lù', meaning:'ถนน' },
-    { char:'左', pinyin:'zuǒ', meaning:'ซ้าย' },
-    { char:'右', pinyin:'yòu', meaning:'ขวา' },
-    { char:'直走', pinyin:'zhí zǒu', meaning:'ตรงไป' },
-  ]},
-  { id:17, name:'📱 เทคโนโลยี', star:'⭐⭐⭐', words:[
-    { char:'手机', pinyin:'shǒu jī', meaning:'โทรศัพท์มือถือ' },
-    { char:'电脑', pinyin:'diàn nǎo', meaning:'คอมพิวเตอร์' },
-    { char:'网络', pinyin:'wǎng luò', meaning:'อินเตอร์เน็ต' },
-    { char:'密码', pinyin:'mì mǎ', meaning:'รหัสผ่าน' },
-    { char:'下载', pinyin:'xià zài', meaning:'ดาวน์โหลด' },
-    { char:'充电', pinyin:'chōng diàn', meaning:'ชาร์จแบต' },
-    { char:'拍照', pinyin:'pāi zhào', meaning:'ถ่ายรูป' },
-    { char:'视频', pinyin:'shì pín', meaning:'วิดีโอ' },
-    { char:'微信', pinyin:'Wēi xìn', meaning:'WeChat' },
-    { char:'支付宝', pinyin:'Zhī fù bǎo', meaning:'Alipay' },
-  ]},
-  { id:18, name:'🌤️ สภาพอากาศ', star:'⭐⭐⭐', words:[
-    { char:'天气', pinyin:'tiān qì', meaning:'อากาศ' },
-    { char:'热', pinyin:'rè', meaning:'ร้อน' },
-    { char:'冷', pinyin:'lěng', meaning:'หนาว' },
-    { char:'下雨', pinyin:'xià yǔ', meaning:'ฝนตก' },
-    { char:'晴天', pinyin:'qíng tiān', meaning:'ฟ้าใส/แดดออก' },
-    { char:'阴天', pinyin:'yīn tiān', meaning:'ฟ้าครึ้ม' },
-    { char:'风', pinyin:'fēng', meaning:'ลม' },
-    { char:'台风', pinyin:'tái fēng', meaning:'ไต้ฝุ่น' },
-    { char:'温度', pinyin:'wēn dù', meaning:'อุณหภูมิ' },
-    { char:'湿', pinyin:'shī', meaning:'ชื้น' },
-  ]},
-  { id:19, name:'🏥 สุขภาพ', star:'⭐⭐⭐', words:[
-    { char:'头疼', pinyin:'tóu téng', meaning:'ปวดหัว' },
-    { char:'发烧', pinyin:'fā shāo', meaning:'มีไข้' },
-    { char:'咳嗽', pinyin:'ké sou', meaning:'ไอ' },
-    { char:'肚子疼', pinyin:'dù zi téng', meaning:'ปวดท้อง' },
-    { char:'药', pinyin:'yào', meaning:'ยา' },
-    { char:'过敏', pinyin:'guò mǐn', meaning:'แพ้' },
-    { char:'休息', pinyin:'xiū xi', meaning:'พักผ่อน' },
-    { char:'手术', pinyin:'shǒu shù', meaning:'ผ่าตัด' },
-    { char:'保险', pinyin:'bǎo xiǎn', meaning:'ประกัน' },
-    { char:'急救', pinyin:'jí jiù', meaning:'ฉุกเฉิน/ปฐมพยาบาล' },
-  ]},
-  { id:20, name:'💕 ความรู้สึก', star:'⭐⭐⭐', words:[
-    { char:'想念', pinyin:'xiǎng niàn', meaning:'คิดถึง' },
-    { char:'感动', pinyin:'gǎn dòng', meaning:'ซึ้งใจ' },
-    { char:'失望', pinyin:'shī wàng', meaning:'ผิดหวัง' },
-    { char:'后悔', pinyin:'hòu huǐ', meaning:'เสียใจ/เสียดาย' },
-    { char:'嫉妒', pinyin:'jí dù', meaning:'อิจฉา' },
-    { char:'骄傲', pinyin:'jiāo ào', meaning:'ภูมิใจ' },
-    { char:'满足', pinyin:'mǎn zú', meaning:'พอใจ/อิ่มใจ' },
-    { char:'孤独', pinyin:'gū dú', meaning:'เหงา/โดดเดี่ยว' },
-    { char:'温暖', pinyin:'wēn nuǎn', meaning:'อบอุ่น' },
-    { char:'幸福', pinyin:'xìng fú', meaning:'มีความสุข/โชคดี' },
-  ]},
+const SPEECH_WORDS = [
+  // HSK1 — ง่ายมาก
+  { char:'你好', pinyin:'nǐ hǎo', meaning:'สวัสดี', level:1 },
+  { char:'谢谢', pinyin:'xiè xie', meaning:'ขอบคุณ', level:1 },
+  { char:'米饭', pinyin:'mǐ fàn', meaning:'ข้าว', level:1 },
+  { char:'水', pinyin:'shuǐ', meaning:'น้ำ', level:1 },
+  { char:'妈妈', pinyin:'māma', meaning:'แม่', level:1 },
+  { char:'爸爸', pinyin:'bàba', meaning:'พ่อ', level:1 },
+  { char:'朋友', pinyin:'péng you', meaning:'เพื่อน', level:1 },
+  { char:'老师', pinyin:'lǎo shī', meaning:'ครู', level:1 },
+  { char:'学生', pinyin:'xué shēng', meaning:'นักเรียน', level:1 },
+  { char:'中国', pinyin:'Zhōng guó', meaning:'จีน', level:1 },
+  { char:'我爱你', pinyin:'wǒ ài nǐ', meaning:'ฉันรักเธอ', level:1 },
+  { char:'再见', pinyin:'zài jiàn', meaning:'ลาก่อน', level:1 },
+  // HSK2
+  { char:'明天', pinyin:'míng tiān', meaning:'พรุ่งนี้', level:2 },
+  { char:'今天', pinyin:'jīn tiān', meaning:'วันนี้', level:2 },
+  { char:'天气', pinyin:'tiān qì', meaning:'อากาศ', level:2 },
+  { char:'喜欢', pinyin:'xǐ huān', meaning:'ชอบ', level:2 },
+  { char:'学习', pinyin:'xué xí', meaning:'เรียน', level:2 },
+  { char:'工作', pinyin:'gōng zuò', meaning:'ทำงาน', level:2 },
+  { char:'医院', pinyin:'yī yuàn', meaning:'โรงพยาบาล', level:2 },
+  { char:'公司', pinyin:'gōng sī', meaning:'บริษัท', level:2 },
+  // HSK3
+  { char:'经济', pinyin:'jīng jì', meaning:'เศรษฐกิจ', level:3 },
+  { char:'环境', pinyin:'huán jìng', meaning:'สิ่งแวดล้อม', level:3 },
+  { char:'发展', pinyin:'fā zhǎn', meaning:'พัฒนา', level:3 },
+  { char:'文化', pinyin:'wén huà', meaning:'วัฒนธรรม', level:3 },
+  // HSK4
+  { char:'积极', pinyin:'jī jí', meaning:'กระตือรือร้น', level:4 },
+  { char:'竞争', pinyin:'jìng zhēng', meaning:'แข่งขัน', level:4 },
+  { char:'影响', pinyin:'yǐng xiǎng', meaning:'ส่งผลกระทบ', level:4 },
 ];
 
-// ── ประโยค แบ่งตาม Pattern (5 ประโยค/หมวด) ──
-const SPEECH_SENTENCE_LEVELS = [
-  { id:1, name:'我是... ฉันคือ', star:'⭐', pattern:'我是 + [คำนาม]', sentences:[
-    { char:'我是泰国人', pinyin:'wǒ shì Tài guó rén', meaning:'ฉันเป็นคนไทย' },
-    { char:'我是学生', pinyin:'wǒ shì xué shēng', meaning:'ฉันเป็นนักเรียน' },
-    { char:'我是老师', pinyin:'wǒ shì lǎo shī', meaning:'ฉันเป็นครู' },
-    { char:'我是你的朋友', pinyin:'wǒ shì nǐ de péng you', meaning:'ฉันเป็นเพื่อนเธอ' },
-    { char:'我不是中国人', pinyin:'wǒ bú shì Zhōng guó rén', meaning:'ฉันไม่ใช่คนจีน' },
-  ]},
-  { id:2, name:'我喜欢... ฉันชอบ', star:'⭐', pattern:'我喜欢 + [กริยา/คำนาม]', sentences:[
-    { char:'我喜欢吃米饭', pinyin:'wǒ xǐ huān chī mǐ fàn', meaning:'ฉันชอบกินข้าว' },
-    { char:'我喜欢喝茶', pinyin:'wǒ xǐ huān hē chá', meaning:'ฉันชอบดื่มชา' },
-    { char:'我喜欢学中文', pinyin:'wǒ xǐ huān xué Zhōng wén', meaning:'ฉันชอบเรียนภาษาจีน' },
-    { char:'我喜欢听音乐', pinyin:'wǒ xǐ huān tīng yīn yuè', meaning:'ฉันชอบฟังเพลง' },
-    { char:'我喜欢你', pinyin:'wǒ xǐ huān nǐ', meaning:'ฉันชอบเธอ' },
-  ]},
-  { id:3, name:'我不喜欢... ฉันไม่ชอบ', star:'⭐', pattern:'我不喜欢 + [กริยา/คำนาม]', sentences:[
-    { char:'我不喜欢辣的', pinyin:'wǒ bù xǐ huān là de', meaning:'ฉันไม่ชอบของเผ็ด' },
-    { char:'我不喜欢冷天气', pinyin:'wǒ bù xǐ huān lěng tiān qì', meaning:'ฉันไม่ชอบอากาศหนาว' },
-    { char:'我不喜欢等', pinyin:'wǒ bù xǐ huān děng', meaning:'ฉันไม่ชอบรอ' },
-    { char:'我不喜欢吵闹', pinyin:'wǒ bù xǐ huān chǎo nào', meaning:'ฉันไม่ชอบเสียงดัง' },
-    { char:'我不喜欢一个人', pinyin:'wǒ bù xǐ huān yī gè rén', meaning:'ฉันไม่ชอบอยู่คนเดียว' },
-  ]},
-  { id:4, name:'我要... ฉันต้องการ', star:'⭐⭐', pattern:'我要 + [คำนาม/กริยา]', sentences:[
-    { char:'我要一杯水', pinyin:'wǒ yào yī bēi shuǐ', meaning:'ฉันต้องการน้ำหนึ่งแก้ว' },
-    { char:'我要吃米饭', pinyin:'wǒ yào chī mǐ fàn', meaning:'ฉันต้องการกินข้าว' },
-    { char:'我要去厕所', pinyin:'wǒ yào qù cè suǒ', meaning:'ฉันต้องไปห้องน้ำ' },
-    { char:'我要买这个', pinyin:'wǒ yào mǎi zhè ge', meaning:'ฉันต้องการซื้ออันนี้' },
-    { char:'我要回家了', pinyin:'wǒ yào huí jiā le', meaning:'ฉันต้องกลับบ้านแล้ว' },
-  ]},
-  { id:5, name:'我去... ฉันไป', star:'⭐⭐', pattern:'我去 + [สถานที่]', sentences:[
-    { char:'我去超市', pinyin:'wǒ qù chāo shì', meaning:'ฉันไปซูเปอร์มาร์เก็ต' },
-    { char:'我去学校', pinyin:'wǒ qù xué xiào', meaning:'ฉันไปโรงเรียน' },
-    { char:'我去吃饭', pinyin:'wǒ qù chī fàn', meaning:'ฉันไปกินข้าว' },
-    { char:'我去找你', pinyin:'wǒ qù zhǎo nǐ', meaning:'ฉันไปหาเธอ' },
-    { char:'我去中国旅行', pinyin:'wǒ qù Zhōng guó lǚ xíng', meaning:'ฉันไปเที่ยวจีน' },
-  ]},
-  { id:6, name:'我在... ฉันกำลัง', star:'⭐⭐', pattern:'我在 + [กริยา]', sentences:[
-    { char:'我在学中文', pinyin:'wǒ zài xué Zhōng wén', meaning:'ฉันกำลังเรียนภาษาจีน' },
-    { char:'我在吃饭', pinyin:'wǒ zài chī fàn', meaning:'ฉันกำลังกินข้าว' },
-    { char:'我在工作', pinyin:'wǒ zài gōng zuò', meaning:'ฉันกำลังทำงาน' },
-    { char:'我在等你', pinyin:'wǒ zài děng nǐ', meaning:'ฉันกำลังรอเธออยู่' },
-    { char:'我在想你', pinyin:'wǒ zài xiǎng nǐ', meaning:'ฉันกำลังคิดถึงเธอ' },
-  ]},
-  { id:7, name:'这里是... ที่นี่คือ', star:'⭐⭐', pattern:'这里是 + [สถานที่] / 这里在哪里？', sentences:[
-    { char:'这里是哪里', pinyin:'zhè lǐ shì nǎ lǐ', meaning:'ที่นี่คือที่ไหน' },
-    { char:'这里是餐厅', pinyin:'zhè lǐ shì cān tīng', meaning:'ที่นี่คือร้านอาหาร' },
-    { char:'厕所在哪里', pinyin:'cè suǒ zài nǎ lǐ', meaning:'ห้องน้ำอยู่ที่ไหน' },
-    { char:'地铁站在哪里', pinyin:'dì tiě zhàn zài nǎ lǐ', meaning:'สถานีรถไฟใต้ดินอยู่ที่ไหน' },
-    { char:'怎么走', pinyin:'zěn me zǒu', meaning:'ไปทางไหน / เดินยังไง' },
-  ]},
-  { id:8, name:'你能...吗 คุณช่วย...ได้ไหม', star:'⭐⭐⭐', pattern:'你能 + [กริยา] + 吗？', sentences:[
-    { char:'你能帮我吗', pinyin:'nǐ néng bāng wǒ ma', meaning:'คุณช่วยฉันได้ไหม' },
-    { char:'你能说慢一点吗', pinyin:'nǐ néng shuō màn yī diǎn ma', meaning:'คุณพูดช้าลงหน่อยได้ไหม' },
-    { char:'你能再说一遍吗', pinyin:'nǐ néng zài shuō yī biàn ma', meaning:'คุณพูดอีกครั้งได้ไหม' },
-    { char:'你能告诉我吗', pinyin:'nǐ néng gào su wǒ ma', meaning:'คุณบอกฉันได้ไหม' },
-    { char:'你能等我吗', pinyin:'nǐ néng děng wǒ ma', meaning:'คุณรอฉันได้ไหม' },
-  ]},
-  { id:9, name:'我觉得... ฉันรู้สึก', star:'⭐⭐⭐', pattern:'我觉得 + [ความรู้สึก/ความเห็น]', sentences:[
-    { char:'我觉得很累', pinyin:'wǒ jué de hěn lèi', meaning:'ฉันรู้สึกเหนื่อยมาก' },
-    { char:'我觉得很开心', pinyin:'wǒ jué de hěn kāi xīn', meaning:'ฉันรู้สึกมีความสุขมาก' },
-    { char:'我觉得这个很好', pinyin:'wǒ jué de zhè ge hěn hǎo', meaning:'ฉันคิดว่าอันนี้ดีมาก' },
-    { char:'我觉得你说得对', pinyin:'wǒ jué de nǐ shuō de duì', meaning:'ฉันคิดว่าเธอพูดถูก' },
-    { char:'我觉得有点奇怪', pinyin:'wǒ jué de yǒu diǎn qí guài', meaning:'ฉันรู้สึกแปลกๆ นิดหน่อย' },
-  ]},
-  { id:10, name:'如果...就... ถ้า...ก็...', star:'⭐⭐⭐⭐', pattern:'如果 + [เงื่อนไข] + 就 + [ผลลัพธ์]', sentences:[
-    { char:'如果你喜欢就买吧', pinyin:'rú guǒ nǐ xǐ huān jiù mǎi ba', meaning:'ถ้าชอบก็ซื้อเลย' },
-    { char:'如果有时间就来吧', pinyin:'rú guǒ yǒu shí jiān jiù lái ba', meaning:'ถ้ามีเวลาก็มาเลย' },
-    { char:'如果累了就休息吧', pinyin:'rú guǒ lèi le jiù xiū xi ba', meaning:'ถ้าเหนื่อยก็พักเลย' },
-    { char:'如果不懂就问我', pinyin:'rú guǒ bù dǒng jiù wèn wǒ', meaning:'ถ้าไม่เข้าใจก็ถามฉัน' },
-    { char:'如果你想我就打电话', pinyin:'rú guǒ nǐ xiǎng wǒ jiù dǎ diàn huà', meaning:'ถ้าคิดถึงฉันก็โทรมา' },
-  ]},
-  { id:11, name:'我想... ฉันอยากจะ', star:'⭐⭐', pattern:'我想 + [กริยา/คำนาม]', sentences:[
-    { char:'我想喝咖啡', pinyin:'wǒ xiǎng hē kā fēi', meaning:'ฉันอยากดื่มกาแฟ' },
-    { char:'我想回家', pinyin:'wǒ xiǎng huí jiā', meaning:'ฉันอยากกลับบ้าน' },
-    { char:'我想去旅行', pinyin:'wǒ xiǎng qù lǚ xíng', meaning:'ฉันอยากไปเที่ยว' },
-    { char:'我想见你', pinyin:'wǒ xiǎng jiàn nǐ', meaning:'ฉันอยากเจอเธอ' },
-    { char:'我想睡觉', pinyin:'wǒ xiǎng shuì jiào', meaning:'ฉันอยากนอนหลับ' },
-  ]},
-  { id:12, name:'可以...吗？ ...ได้ไหม', star:'⭐⭐', pattern:'可以 + [กริยา] + 吗？', sentences:[
-    { char:'可以打折吗', pinyin:'kě yǐ dǎ zhé ma', meaning:'ลดราคาได้ไหม' },
-    { char:'可以试穿吗', pinyin:'kě yǐ shì chuān ma', meaning:'ลองใส่ได้ไหม' },
-    { char:'可以刷卡吗', pinyin:'kě yǐ shuā kǎ ma', meaning:'รูดบัตรได้ไหม' },
-    { char:'可以帮我拍照吗', pinyin:'kě yǐ bāng wǒ pāi zhào ma', meaning:'ช่วยถ่ายรูปให้ได้ไหม' },
-    { char:'可以说英文吗', pinyin:'kě yǐ shuō Yīng wén ma', meaning:'พูดภาษาอังกฤษได้ไหม' },
-  ]},
-  { id:13, name:'有没有...？ มี...ไหม', star:'⭐⭐', pattern:'有没有 + [คำนาม]？', sentences:[
-    { char:'有没有中文菜单', pinyin:'yǒu méi yǒu Zhōng wén cài dān', meaning:'มีเมนูภาษาจีนไหม' },
-    { char:'有没有素食', pinyin:'yǒu méi yǒu sù shí', meaning:'มีอาหารมังสวิรัติไหม' },
-    { char:'有没有厕所', pinyin:'yǒu méi yǒu cè suǒ', meaning:'มีห้องน้ำไหม' },
-    { char:'有没有更便宜的', pinyin:'yǒu méi yǒu gèng pián yi de', meaning:'มีที่ถูกกว่านี้ไหม' },
-    { char:'有没有空位', pinyin:'yǒu méi yǒu kòng wèi', meaning:'มีที่นั่งว่างไหม' },
-  ]},
-  { id:14, name:'我们一起... ไปด้วยกัน', star:'⭐⭐', pattern:'我们一起 + [กริยา] + 吧', sentences:[
-    { char:'我们一起吃饭吧', pinyin:'wǒ men yī qǐ chī fàn ba', meaning:'ไปกินข้าวด้วยกันเถอะ' },
-    { char:'我们一起去看电影吧', pinyin:'wǒ men yī qǐ qù kàn diàn yǐng ba', meaning:'ไปดูหนังด้วยกันเถอะ' },
-    { char:'我们一起走吧', pinyin:'wǒ men yī qǐ zǒu ba', meaning:'เดินไปด้วยกันเถอะ' },
-    { char:'我们一起拍照吧', pinyin:'wǒ men yī qǐ pāi zhào ba', meaning:'ถ่ายรูปด้วยกันเถอะ' },
-    { char:'我们一起学中文吧', pinyin:'wǒ men yī qǐ xué Zhōng wén ba', meaning:'เรียนภาษาจีนด้วยกันเถอะ' },
-  ]},
-  { id:15, name:'帮我...好吗？ ช่วยหน่อยได้ไหม', star:'⭐⭐⭐', pattern:'帮我 + [กริยา] + 好吗？', sentences:[
-    { char:'帮我叫出租车好吗', pinyin:'bāng wǒ jiào chū zū chē hǎo ma', meaning:'ช่วยเรียกแท็กซี่ให้หน่อยได้ไหม' },
-    { char:'帮我推荐一下好吗', pinyin:'bāng wǒ tuī jiàn yī xià hǎo ma', meaning:'ช่วยแนะนำให้หน่อยได้ไหม' },
-    { char:'帮我看一下好吗', pinyin:'bāng wǒ kàn yī xià hǎo ma', meaning:'ช่วยดูให้หน่อยได้ไหม' },
-    { char:'帮我翻译一下好吗', pinyin:'bāng wǒ fān yì yī xià hǎo ma', meaning:'ช่วยแปลให้หน่อยได้ไหม' },
-    { char:'帮我送到这里好吗', pinyin:'bāng wǒ sòng dào zhè lǐ hǎo ma', meaning:'ช่วยส่งไปที่นี่ให้หน่อยได้ไหม' },
-  ]},
-  { id:16, name:'我不知道... ฉันไม่รู้', star:'⭐⭐⭐', pattern:'我不知道 + [ประโยค]', sentences:[
-    { char:'我不知道怎么走', pinyin:'wǒ bù zhī dào zěn me zǒu', meaning:'ฉันไม่รู้จะเดินยังไง' },
-    { char:'我不知道怎么说', pinyin:'wǒ bù zhī dào zěn me shuō', meaning:'ฉันไม่รู้จะพูดยังไง' },
-    { char:'我不知道在哪里买', pinyin:'wǒ bù zhī dào zài nǎ lǐ mǎi', meaning:'ฉันไม่รู้ซื้อได้ที่ไหน' },
-    { char:'我不知道几点开始', pinyin:'wǒ bù zhī dào jǐ diǎn kāi shǐ', meaning:'ฉันไม่รู้ว่าเริ่มกี่โมง' },
-    { char:'我不知道他是谁', pinyin:'wǒ bù zhī dào tā shì shuí', meaning:'ฉันไม่รู้ว่าเขาเป็นใคร' },
-  ]},
-  { id:17, name:'太...了！ ...เกินไปเลย', star:'⭐⭐⭐', pattern:'太 + [คุณศัพท์] + 了！', sentences:[
-    { char:'太好吃了', pinyin:'tài hǎo chī le', meaning:'อร่อยมากเลย!' },
-    { char:'太贵了', pinyin:'tài guì le', meaning:'แพงมากเลย!' },
-    { char:'太可爱了', pinyin:'tài kě ài le', meaning:'น่ารักมากเลย!' },
-    { char:'太累了', pinyin:'tài lèi le', meaning:'เหนื่อยมากเลย!' },
-    { char:'太好了', pinyin:'tài hǎo le', meaning:'ดีมากเลย!' },
-  ]},
-  { id:18, name:'我吃不了... ฉันกินไม่ได้', star:'⭐⭐⭐', pattern:'我吃不了/喝不了 + [อาหาร]', sentences:[
-    { char:'我吃不了辣的', pinyin:'wǒ chī bu liǎo là de', meaning:'ฉันกินเผ็ดไม่ได้' },
-    { char:'我吃不了生的', pinyin:'wǒ chī bu liǎo shēng de', meaning:'ฉันกินดิบไม่ได้' },
-    { char:'我对海鲜过敏', pinyin:'wǒ duì hǎi xiān guò mǐn', meaning:'ฉันแพ้อาหารทะเล' },
-    { char:'我不喝酒', pinyin:'wǒ bù hē jiǔ', meaning:'ฉันไม่ดื่มเหล้า' },
-    { char:'我吃素', pinyin:'wǒ chī sù', meaning:'ฉันกินมังสวิรัติ' },
-  ]},
-  { id:19, name:'多久...？ นานแค่ไหน', star:'⭐⭐⭐', pattern:'多久 + [กริยา]？/ 还要多久？', sentences:[
-    { char:'多久到机场', pinyin:'duō jiǔ dào jī chǎng', meaning:'ถึงสนามบินนานแค่ไหน' },
-    { char:'还要等多久', pinyin:'hái yào děng duō jiǔ', meaning:'ยังต้องรออีกนานแค่ไหน' },
-    { char:'多久能做好', pinyin:'duō jiǔ néng zuò hǎo', meaning:'ทำเสร็จต้องใช้เวลานานแค่ไหน' },
-    { char:'从这里走多久', pinyin:'cóng zhè lǐ zǒu duō jiǔ', meaning:'เดินจากที่นี่นานแค่ไหน' },
-    { char:'要等多久才有位子', pinyin:'yào děng duō jiǔ cái yǒu wèi zi', meaning:'ต้องรอนานแค่ไหนถึงจะมีที่นั่ง' },
-  ]},
-  { id:20, name:'下次... คราวหน้า', star:'⭐⭐⭐⭐', pattern:'下次 + [กริยา]', sentences:[
-    { char:'下次我请你吃饭', pinyin:'xià cì wǒ qǐng nǐ chī fàn', meaning:'คราวหน้าฉันเลี้ยงข้าวเธอ' },
-    { char:'下次一起来吧', pinyin:'xià cì yī qǐ lái ba', meaning:'คราวหน้ามาด้วยกันนะ' },
-    { char:'下次再聊吧', pinyin:'xià cì zài liáo ba', meaning:'คราวหน้าค่อยคุยกันนะ' },
-    { char:'下次早点来', pinyin:'xià cì zǎo diǎn lái', meaning:'คราวหน้ามาแต่เช้านะ' },
-    { char:'下次见', pinyin:'xià cì jiàn', meaning:'ไว้พบกันใหม่นะ' },
-  ]},
-];
-
-// ── State ──
 let speechState = {
-  mode: null,          // 'vocab' | 'sentence' | null (หน้าเลือก)
-  levelIdx: 0,         // index ของ level ที่เล่นอยู่
-  itemIdx: 0,          // index ของคำ/ประโยคใน level
+  idx: 0,
+  words: [],
   recognizing: false,
+  recognition: null,
   streak: 0,
   score: 0,
-  unlockedVocab: 1,    // ด่านที่ปลดล็อกแล้ว
-  unlockedSentence: 1,
 };
 
 function initSpeechGame() {
-  // โหลด progress จาก localStorage
-  try {
-    const saved = JSON.parse(localStorage.getItem('sp_progress') || '{}');
-    speechState.unlockedVocab     = saved.unlockedVocab     || 1;
-    speechState.unlockedSentence  = saved.unlockedSentence  || 1;
-  } catch(e) {}
-  speechState.mode = null;
+  speechState.words = [...SPEECH_WORDS].sort((a,b) => a.level - b.level);
+  speechState.idx = 0;
   speechState.streak = 0;
-  speechState.score  = 0;
-  renderSpeechHome();
-}
-
-function speechSaveProgress() {
-  try {
-    localStorage.setItem('sp_progress', JSON.stringify({
-      unlockedVocab:    speechState.unlockedVocab,
-      unlockedSentence: speechState.unlockedSentence,
-    }));
-  } catch(e) {}
-}
-
-// ── หน้าหลักเลือก Mode ──
-function renderSpeechHome() {
-  const root = document.getElementById('speech-game-root');
-  if (!root) return;
-  root.innerHTML = `
-    <div style="text-align:center;margin-bottom:20px">
-      <div style="font-size:28px;margin-bottom:6px">🎤</div>
-      <div style="font-size:18px;font-weight:800;color:var(--ink)">ฝึกพูดออกเสียงจีน</div>
-      <div style="font-size:13px;color:var(--ink3);margin-top:4px">เลือกโหมดที่ต้องการฝึกค่ะ</div>
-    </div>
-
-    <!-- Mode 1: คำศัพท์ -->
-    <div style="margin-bottom:14px">
-      <div style="font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:10px;letter-spacing:1px">🔤 คำศัพท์ — เรียงตามหมวด</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        ${SPEECH_VOCAB_LEVELS.map((lv,i) => {
-          const locked = i + 1 > speechState.unlockedVocab;
-          return `<div onclick="${locked ? '' : `speechStartLevel('vocab',${i})`}"
-            style="background:${locked ? '#f5f5f5' : 'linear-gradient(135deg,#e3f2fd,#f0f8ff)'};
-            border:1.5px solid ${locked ? '#ddd' : '#90caf9'};border-radius:14px;padding:12px 10px;
-            cursor:${locked ? 'default' : 'pointer'};opacity:${locked ? '0.6' : '1'};
-            transition:.2s;text-align:center"
-            ${locked ? '' : `onmouseover="this.style.borderColor='#1976d2'" onmouseout="this.style.borderColor='#90caf9'"`}>
-            <div style="font-size:13px;color:${locked ? '#aaa' : '#1976d2'};font-weight:700;margin-bottom:4px">ด่าน ${lv.id} ${lv.star}</div>
-            <div style="font-size:15px;color:${locked ? '#bbb' : 'var(--ink)'};font-weight:700">${lv.name}</div>
-            <div style="font-size:12px;color:${locked ? '#ccc' : 'var(--ink3)'}">10 คำ</div>
-            ${locked ? '<div style="font-size:20px;margin-top:4px">🔒</div>' : '<div style="font-size:20px;margin-top:4px">▶</div>'}
-          </div>`;
-        }).join('')}
-      </div>
-    </div>
-
-    <div style="border-top:1px solid var(--paper3);margin:18px 0"></div>
-
-    <!-- Mode 2: สูตรพูด -->
-    <div>
-      <div style="font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:10px;letter-spacing:1px">💬 สูตรพูด — ฝึกประโยค</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        ${SPEECH_SENTENCE_LEVELS.map((lv,i) => {
-          const locked = i + 1 > speechState.unlockedSentence;
-          return `<div onclick="${locked ? '' : `speechStartLevel('sentence',${i})`}"
-            style="background:${locked ? '#f5f5f5' : 'linear-gradient(135deg,#fce4ec,#fdf0f7)'};
-            border:1.5px solid ${locked ? '#ddd' : '#f48fb1'};border-radius:14px;padding:12px 10px;
-            cursor:${locked ? 'default' : 'pointer'};opacity:${locked ? '0.6' : '1'};
-            transition:.2s;text-align:center"
-            ${locked ? '' : `onmouseover="this.style.borderColor='#e91e8c'" onmouseout="this.style.borderColor='#f48fb1'"`}>
-            <div style="font-size:13px;color:${locked ? '#aaa' : '#e91e8c'};font-weight:700;margin-bottom:4px">หมวด ${lv.id} ${lv.star}</div>
-            <div style="font-size:14px;color:${locked ? '#bbb' : 'var(--ink)'};font-weight:700;line-height:1.4">${lv.name}</div>
-            <div style="font-size:12px;color:${locked ? '#ccc' : 'var(--ink3)'}">5 ประโยค</div>
-            ${locked ? '<div style="font-size:20px;margin-top:4px">🔒</div>' : '<div style="font-size:20px;margin-top:4px">▶</div>'}
-          </div>`;
-        }).join('')}
-      </div>
-    </div>
-  `;
-}
-
-function speechStartLevel(mode, idx) {
-  speechState.mode     = mode;
-  speechState.levelIdx = idx;
-  speechState.itemIdx  = 0;
-  speechState.streak   = 0;
-  speechState.score    = 0;
+  speechState.score = 0;
   renderSpeechGame();
 }
 
 function renderSpeechGame() {
   const root = document.getElementById('speech-game-root');
   if (!root) return;
-
-  const isVocab = speechState.mode === 'vocab';
-  const levels  = isVocab ? SPEECH_VOCAB_LEVELS : SPEECH_SENTENCE_LEVELS;
-  const lv      = levels[speechState.levelIdx];
-  const items   = isVocab ? lv.words : lv.sentences;
-  const w       = items[speechState.itemIdx];
-  const total   = items.length;
-  const pct     = Math.round((speechState.itemIdx / total) * 100);
-  const accent  = isVocab ? '#1976d2' : '#e91e8c';
-  const bgCard  = isVocab ? 'linear-gradient(145deg,#e3f2fd,#f0f8ff)' : 'linear-gradient(145deg,#fce4ec,#fdf5f9)';
-  const border  = isVocab ? '#90caf9' : '#f48fb1';
+  const w = speechState.words[speechState.idx];
+  const total = speechState.words.length;
+  const pct = Math.round((speechState.idx / total) * 100);
 
   root.innerHTML = `
-    <!-- back + title -->
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
-      <button onclick="renderSpeechHome()" style="background:var(--paper2);border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer">←</button>
-      <div>
-        <div style="font-size:14px;color:var(--ink3)">${isVocab ? '🔤 คำศัพท์' : '💬 สูตรพูด'} • ${lv.name}</div>
-        ${!isVocab ? `<div style="font-size:13px;color:${accent};font-weight:600">${lv.pattern}</div>` : ''}
-      </div>
-    </div>
-
-    <!-- progress -->
-    <div style="margin-bottom:16px">
-      <div style="font-size:14px;color:var(--ink3);margin-bottom:5px;display:flex;justify-content:space-between">
-        <span>${isVocab ? 'คำ' : 'ประโยค'}ที่ ${speechState.itemIdx+1} / ${total}</span>
-        <span>🔥 ${speechState.streak} &nbsp;⭐ ${speechState.score}</span>
-      </div>
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="font-size:12px;color:var(--ink3);margin-bottom:6px">คำที่ ${speechState.idx+1} / ${total} &nbsp;|&nbsp; 🔥 ${speechState.streak} คำต่อเนื่อง &nbsp;|&nbsp; ⭐ ${speechState.score} แต้ม</div>
       <div style="background:#f0e8f4;border-radius:20px;height:6px;overflow:hidden">
-        <div style="background:linear-gradient(90deg,${accent},${isVocab ? '#42a5f5' : '#a855f7'});height:100%;width:${pct}%;transition:width .4s"></div>
+        <div style="background:linear-gradient(90deg,#F13596,#a855f7);height:100%;width:${pct}%;transition:width .4s"></div>
       </div>
     </div>
 
-    <!-- card -->
-    <div style="background:${bgCard};border:2px solid ${border};border-radius:24px;padding:28px 20px;text-align:center;margin-bottom:16px">
-      <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:${accent};margin-bottom:10px">${lv.star} ด่าน ${lv.id}</div>
-      <div style="font-size:${isVocab ? '72px' : '36px'};font-family:'Noto Serif SC',serif;font-weight:700;color:#1a1a2e;line-height:1.2;margin-bottom:12px">${w.char}</div>
-      <div style="font-size:22px;color:${accent};font-weight:600;margin-bottom:8px;letter-spacing:1px">${w.pinyin}</div>
-      <div style="font-size:18px;color:var(--ink2)">${w.meaning}</div>
+    <div style="background:linear-gradient(145deg,#f0f8ff,#e0f0ff);border:2px solid #90caf9;border-radius:24px;padding:32px 20px;text-align:center;margin-bottom:20px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:2px;color:#1976d2;margin-bottom:12px">HSK ${w.level}</div>
+      <div style="font-size:72px;font-family:'Noto Serif SC',serif;font-weight:700;color:#1a1a2e;line-height:1;margin-bottom:12px">${w.char}</div>
+      <div style="font-size:22px;color:#1976d2;font-weight:600;margin-bottom:8px;letter-spacing:2px">${w.pinyin}</div>
+      <div style="font-size:16px;color:var(--ink2)">${w.meaning}</div>
     </div>
 
-    <!-- ปุ่มฟัง -->
-    <button id="sp-listen-btn" onclick="speechPlayTTS()" style="width:100%;padding:15px;background:linear-gradient(135deg,#1976d2,#42a5f5);color:white;border:none;border-radius:14px;font-size:17px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px">
+    <!-- ปุ่มฟังเสียง -->
+    <button id="sp-listen-btn" onclick="speechPlayTTS()" style="width:100%;padding:14px;background:linear-gradient(135deg,#1976d2,#42a5f5);color:white;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px">
       🔊 ฟังเสียงต้นแบบ
     </button>
 
     <!-- ปุ่มพูด -->
-    <button id="sp-mic-btn" onclick="speechStartRec()" style="width:100%;padding:15px;background:linear-gradient(135deg,#e91e8c,#F13596);color:white;border:none;border-radius:14px;font-size:17px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px">
+    <button id="sp-mic-btn" onclick="speechStartRec()" style="width:100%;padding:14px;background:linear-gradient(135deg,#e91e8c,#F13596);color:white;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px">
       🎤 กดแล้วพูดตาม
     </button>
 
     <!-- ผล -->
-    <div id="sp-result" style="min-height:60px;text-align:center;padding:6px"></div>
+    <div id="sp-result" style="min-height:60px;text-align:center;font-size:15px;padding:10px"></div>
 
-    <!-- ข้าม -->
-    <button onclick="speechSkip()" style="width:100%;padding:11px;background:transparent;color:var(--ink3);border:1.5px solid var(--paper3);border-radius:12px;font-size:15px;cursor:pointer;font-family:inherit;margin-top:4px">
+    <!-- ปุ่มข้าม -->
+    <button onclick="speechSkip()" style="width:100%;padding:10px;background:transparent;color:var(--ink3);border:1.5px solid var(--paper3);border-radius:12px;font-size:13px;cursor:pointer;font-family:inherit;margin-top:4px">
       ข้ามคำนี้ →
     </button>
   `;
 }
 
 async function speechPlayTTS() {
-  const isVocab = speechState.mode === 'vocab';
-  const lv   = (isVocab ? SPEECH_VOCAB_LEVELS : SPEECH_SENTENCE_LEVELS)[speechState.levelIdx];
-  const items = isVocab ? lv.words : lv.sentences;
-  const w    = items[speechState.itemIdx];
-  const btn  = document.getElementById('sp-listen-btn');
+  const w = speechState.words[speechState.idx];
+  const btn = document.getElementById('sp-listen-btn');
   if (btn) { btn.textContent = '⏳ กำลังโหลดเสียง...'; btn.disabled = true; }
   await speak(w.char, () => {
     if (btn) { btn.textContent = '🔊 ฟังเสียงต้นแบบ'; btn.disabled = false; }
@@ -20470,13 +20008,21 @@ async function speechPlayTTS() {
   if (btn) { btn.textContent = '🔊 ฟังเสียงต้นแบบ'; btn.disabled = false; }
 }
 
+function speechFallbackTTS(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'zh-CN';
+  utt.rate = 0.85;
+  const voices = window.speechSynthesis.getVoices().filter(v => v.lang.startsWith('zh'));
+  if (voices.length) utt.voice = voices[0];
+  window.speechSynthesis.speak(utt);
+}
+
 // ── บันทึกเสียงด้วย MediaRecorder แล้วส่ง STT จริง ──
 async function speechStartRec() {
   if (speechState.recognizing) return;
-  const isVocab = speechState.mode === 'vocab';
-  const lv   = (isVocab ? SPEECH_VOCAB_LEVELS : SPEECH_SENTENCE_LEVELS)[speechState.levelIdx];
-  const items = isVocab ? lv.words : lv.sentences;
-  const w    = items[speechState.itemIdx];
+  const w = speechState.words[speechState.idx];
   const resultEl = document.getElementById('sp-result');
   const micBtn   = document.getElementById('sp-mic-btn');
 
@@ -20498,23 +20044,14 @@ async function speechStartRec() {
   resultEl.innerHTML = `<div style="text-align:center;color:var(--ink3);padding:8px">
     <span style="font-size:24px">👂</span><br>กำลังฟังอยู่นะคะ...</div>`;
 
-  // เลือก mimeType — iPhone Safari รองรับแค่ audio/mp4
-  const mimePrefs = [
-    'audio/mp4',                  // iOS Safari ✅
-    'audio/webm;codecs=opus',     // Chrome/Android ✅
-    'audio/webm',                 // Chrome fallback ✅
-    'audio/ogg;codecs=opus',      // Firefox ✅
-  ];
-  const mime = mimePrefs.find(m => {
-    try { return MediaRecorder.isTypeSupported(m); } catch(e) { return false; }
-  }) || '';
+  // เลือก mimeType ที่รองรับ
+  const mime = ['audio/webm;codecs=opus','audio/webm','audio/ogg','audio/mp4']
+    .find(m => MediaRecorder.isTypeSupported(m)) || '';
 
   const chunks = [];
   const recorder = new MediaRecorder(stream, mime ? { mimeType: mime } : {});
   speechState.recorder = recorder;
-  recorder.ondataavailable = e => {
-    if (e.data.size > 0) chunks.push(e.data);
-  };
+  recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
 
   recorder.onstop = async () => {
     stream.getTracks().forEach(t => t.stop());
@@ -20526,20 +20063,8 @@ async function speechStartRec() {
     }
     resultEl.innerHTML = `<div style="text-align:center;color:var(--ink3);padding:8px">⏳ AI กำลังตรวจเสียง...</div>`;
 
-    const blob = new Blob(chunks, { type: mime || 'audio/mp4' });
-
-    if (blob.size < 100) {
-      resultEl.innerHTML = `<div style="background:#fce4ec;border-radius:12px;padding:14px;text-align:center">
-        <div style="font-size:20px">🤫</div>
-        <div style="color:#c62828;font-weight:700;margin-top:4px">ไม่ได้ยินเสียงค่ะ</div>
-        <div style="font-size:12px;color:#ad1457;margin-top:4px">ลองกดปุ่มแล้วรอ 1 วินาทีก่อนพูดนะคะ</div>
-      </div>`;
-      const micBtn2 = document.getElementById('sp-mic-btn');
-      if (micBtn2) micBtn2.onclick = () => speechStartRec();
-      return;
-    }
-
-    await speechSendSTT(blob, mime || 'audio/mp4', w);
+    const blob = new Blob(chunks, { type: mime || 'audio/webm' });
+    await speechSendSTT(blob, mime || 'audio/webm', w);
   };
 
   recorder.start();
@@ -20549,20 +20074,16 @@ async function speechStartRec() {
     micBtn.disabled = false;
     micBtn.onclick = () => {
       if (speechState.recognizing && recorder.state === 'recording') {
-        recorder.requestData();
-        setTimeout(() => recorder.stop(), 100);
-        micBtn.onclick = () => speechStartRec();
+        recorder.stop();
+        micBtn.onclick = () => speechStartRec(); // reset
       }
     };
   }
 
-  // หยุดอัตโนมัติหลัง 7 วินาที
+  // หยุดอัตโนมัติหลัง 5 วินาที
   speechState.autoStopTimer = setTimeout(() => {
-    if (recorder.state === 'recording') {
-      recorder.requestData();
-      setTimeout(() => recorder.stop(), 100);
-    }
-  }, 7000);
+    if (recorder.state === 'recording') recorder.stop();
+  }, 5000);
 }
 
 // ── ส่งเสียงไป STT แล้วตรวจพินอิน ──
@@ -20600,11 +20121,7 @@ async function speechSendSTT(blob, mimeType, w) {
       return;
     }
 
-    const isVocab2 = speechState.mode === 'vocab';
-    const lv2   = (isVocab2 ? SPEECH_VOCAB_LEVELS : SPEECH_SENTENCE_LEVELS)[speechState.levelIdx];
-    const items2 = isVocab2 ? lv2.words : lv2.sentences;
-    const w2    = items2[speechState.itemIdx];
-    speechCheckPinyin(transcript, confidence, w2);
+    speechCheckPinyin(transcript, confidence, w);
 
   } catch(e) {
     resultEl.innerHTML = `<div style="background:#fff3cd;border-radius:12px;padding:12px;color:#7a5e00;text-align:center">
@@ -20651,11 +20168,11 @@ function speechCheckPinyin(transcript, confidence, w) {
 function speechResult(passed, heard='', hint='') {
   const w = speechState.words[speechState.idx];
   const resultEl = document.getElementById('sp-result');
+  // reset mic button onclick
   const micBtn = document.getElementById('sp-mic-btn');
   if (micBtn) micBtn.onclick = () => speechStartRec();
 
   if (passed) {
-    speechSoundCorrect();
     speechState.streak++;
     speechState.score += (10 + speechState.streak);
     const bonus = speechState.streak >= 3 ? ` 🔥 ${speechState.streak} combo!` : '';
@@ -20669,7 +20186,6 @@ function speechResult(passed, heard='', hint='') {
     `;
     setTimeout(() => speechNext(), 1800);
   } else {
-    speechSoundWrong();
     speechState.streak = 0;
     resultEl.innerHTML = `
       <div style="background:linear-gradient(135deg,#fce4ec,#f8bbd9);border:2px solid #f48fb1;border-radius:16px;padding:16px;text-align:center;animation:fadeIn .3s">
@@ -20683,61 +20199,13 @@ function speechResult(passed, heard='', hint='') {
   }
 }
 
-// 🔊 เสียงถูก — โน้ตขึ้นสูงสดใส
-function speechSoundCorrect() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const notes = [523, 659, 784, 1047]; // C5 E5 G5 C6
-    notes.forEach((freq, i) => {
-      const osc  = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.type = 'sine';
-      osc.frequency.value = freq;
-      const t = ctx.currentTime + i * 0.1;
-      gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.25, t + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
-      osc.start(t);
-      osc.stop(t + 0.25);
-    });
-  } catch(e) {}
-}
-
-// 🔊 เสียงผิด — โน้ตลงต่ำทุ้มๆ
-function speechSoundWrong() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const notes = [330, 277]; // E4 → C#4 ลงต่ำ
-    notes.forEach((freq, i) => {
-      const osc  = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.type = 'sawtooth';
-      osc.frequency.value = freq;
-      const t = ctx.currentTime + i * 0.18;
-      gain.gain.setValueAtTime(0, t);
-      gain.gain.linearRampToValueAtTime(0.2, t + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-      osc.start(t);
-      osc.stop(t + 0.3);
-    });
-  } catch(e) {}
-}
-
 function speechNext() {
-  const isVocab = speechState.mode === 'vocab';
-  const levels  = isVocab ? SPEECH_VOCAB_LEVELS : SPEECH_SENTENCE_LEVELS;
-  const lv      = levels[speechState.levelIdx];
-  const total   = (isVocab ? lv.words : lv.sentences).length;
-
-  if (speechState.itemIdx + 1 >= total) {
+  const total = speechState.words.length;
+  if (speechState.idx + 1 >= total) {
     speechFinish();
     return;
   }
-  speechState.itemIdx++;
+  speechState.idx++;
   renderSpeechGame();
 }
 
@@ -20749,40 +20217,19 @@ function speechSkip() {
 function speechFinish() {
   const root = document.getElementById('speech-game-root');
   if (!root) return;
-  const isVocab = speechState.mode === 'vocab';
-  const levels  = isVocab ? SPEECH_VOCAB_LEVELS : SPEECH_SENTENCE_LEVELS;
-  const lv      = levels[speechState.levelIdx];
-  const nextIdx = speechState.levelIdx + 1;
-  const hasNext = nextIdx < levels.length;
-
-  // ปลดล็อกด่านถัดไป
-  if (isVocab) {
-    speechState.unlockedVocab    = Math.max(speechState.unlockedVocab,    nextIdx + 1);
-  } else {
-    speechState.unlockedSentence = Math.max(speechState.unlockedSentence, nextIdx + 1);
-  }
-  speechSaveProgress();
-
   root.innerHTML = `
-    <div style="text-align:center;padding:32px 16px;animation:fadeIn .4s">
-      <div style="font-size:64px;margin-bottom:12px">🎉</div>
-      <div style="font-size:22px;font-weight:800;color:var(--ink);margin-bottom:6px">ผ่านแล้ว!</div>
-      <div style="font-size:14px;color:var(--ink2);margin-bottom:20px">${lv.name} — ${isVocab ? 'ด่าน' : 'หมวด'} ${lv.id} ${lv.star}</div>
-      <div style="background:linear-gradient(135deg,#f0f8ff,#e3f2fd);border:2px solid #90caf9;border-radius:20px;padding:20px;margin-bottom:20px;display:inline-block;min-width:200px">
-        <div style="font-size:12px;color:var(--ink3)">คะแนนรวม</div>
-        <div style="font-size:44px;font-weight:900;color:#1976d2">⭐ ${speechState.score}</div>
+    <div style="text-align:center;padding:40px 20px;animation:fadeIn .4s">
+      <div style="font-size:64px;margin-bottom:16px">🎉</div>
+      <div style="font-size:22px;font-weight:800;color:var(--ink);margin-bottom:8px">เก่งมากเลย!</div>
+      <div style="font-size:15px;color:var(--ink2);margin-bottom:24px">ผ่านครบ ${speechState.words.length} คำแล้วค่ะ</div>
+      <div style="background:linear-gradient(135deg,#f0f8ff,#e3f2fd);border:2px solid #90caf9;border-radius:20px;padding:24px;margin-bottom:24px;display:inline-block;min-width:220px">
+        <div style="font-size:13px;color:var(--ink3);margin-bottom:4px">คะแนนรวม</div>
+        <div style="font-size:48px;font-weight:900;color:#1976d2">⭐ ${speechState.score}</div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        ${hasNext ? `<button onclick="speechStartLevel('${isVocab ? 'vocab' : 'sentence'}',${nextIdx})" style="padding:13px;background:linear-gradient(135deg,#27ae60,#2ecc71);color:white;border:none;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">
-          ➡️ ไปด่านถัดไป: ${levels[nextIdx].name}
-        </button>` : ''}
-        <button onclick="speechStartLevel('${isVocab ? 'vocab' : 'sentence'}',${speechState.levelIdx})" style="padding:13px;background:linear-gradient(135deg,#1976d2,#42a5f5);color:white;border:none;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">
-          🔄 เล่นด่านนี้อีกครั้ง
-        </button>
-        <button onclick="renderSpeechHome()" style="padding:11px;background:transparent;color:var(--ink3);border:1.5px solid var(--paper3);border-radius:14px;font-size:13px;cursor:pointer;font-family:inherit">
-          🏠 กลับหน้าเลือกด่าน
-        </button>
-      </div>
+      <br>
+      <button onclick="initSpeechGame()" style="padding:14px 32px;background:linear-gradient(135deg,#1976d2,#42a5f5);color:white;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">
+        🔄 เล่นอีกครั้ง
+      </button>
     </div>
   `;
 }
