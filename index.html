@@ -20334,6 +20334,13 @@ function speechSaveProgress() {
   } catch(e) {}
 }
 
+function speechGetUnlocked(type) {
+  // Premium = ปลดล็อคทุกด่าน
+  if (isPremium()) return 999;
+  // Free = ด่าน 1 เท่านั้น
+  return type === 'vocab' ? speechState.unlockedVocab : speechState.unlockedSentence;
+}
+
 // ── หน้าหลักเลือก Mode ──
 function renderSpeechHome() {
   const root = document.getElementById('speech-game-root');
@@ -20350,8 +20357,8 @@ function renderSpeechHome() {
       <div style="font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:10px;letter-spacing:1px">🔤 คำศัพท์ — เรียงตามหมวด</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
         ${SPEECH_VOCAB_LEVELS.map((lv,i) => {
-          const locked = i + 1 > speechState.unlockedVocab;
-          return `<div onclick="${locked ? '' : `speechStartLevel('vocab',${i})`}"
+          const locked = i + 1 > speechGetUnlocked('vocab');
+          return `<div onclick="${locked ? (isPremium() ? '' : `showToast('🔒 อัปเกรด Premium เพื่อปลดล็อคทุกด่านค่ะ')`) : `speechStartLevel('vocab',${i})`}"
             style="background:${locked ? '#f5f5f5' : 'linear-gradient(135deg,#e3f2fd,#f0f8ff)'};
             border:1.5px solid ${locked ? '#ddd' : '#90caf9'};border-radius:14px;padding:12px 10px;
             cursor:${locked ? 'default' : 'pointer'};opacity:${locked ? '0.6' : '1'};
@@ -20373,8 +20380,8 @@ function renderSpeechHome() {
       <div style="font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:10px;letter-spacing:1px">💬 สูตรพูด — ฝึกประโยค</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
         ${SPEECH_SENTENCE_LEVELS.map((lv,i) => {
-          const locked = i + 1 > speechState.unlockedSentence;
-          return `<div onclick="${locked ? '' : `speechStartLevel('sentence',${i})`}"
+          const locked = i + 1 > speechGetUnlocked('sentence');
+          return `<div onclick="${locked ? (isPremium() ? '' : `showToast('🔒 อัปเกรด Premium เพื่อปลดล็อคทุกหมวดค่ะ')`) : `speechStartLevel('sentence',${i})`}"
             style="background:${locked ? '#f5f5f5' : 'linear-gradient(135deg,#fce4ec,#fdf0f7)'};
             border:1.5px solid ${locked ? '#ddd' : '#f48fb1'};border-radius:14px;padding:12px 10px;
             cursor:${locked ? 'default' : 'pointer'};opacity:${locked ? '0.6' : '1'};
