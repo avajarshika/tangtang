@@ -20509,9 +20509,18 @@ async function speechStartRec() {
     try { return MediaRecorder.isTypeSupported(m); } catch(e) { return false; }
   }) || '';
 
-  // ใช้ default mimeType เหมือนเดิมที่ใช้งานได้
+  // เลือก mimeType ให้รองรับทุกอุปกรณ์
+  const mime = [
+    'audio/webm;codecs=opus',
+    'audio/webm',
+    'audio/mp4',
+    'audio/ogg',
+  ].find(m => MediaRecorder.isTypeSupported(m)) || '';
+
   const chunks = [];
-  const recorder = new MediaRecorder(stream);
+  const recorder = mime
+    ? new MediaRecorder(stream, { mimeType: mime })
+    : new MediaRecorder(stream);
   speechState.recorder = recorder;
   recorder.ondataavailable = e => {
     if (e.data.size > 0) chunks.push(e.data);
@@ -20527,11 +20536,12 @@ async function speechStartRec() {
     }
     resultEl.innerHTML = `<div style="text-align:center;color:var(--ink3);padding:8px">⏳ AI กำลังตรวจเสียง...</div>`;
 
-    const blob = new Blob(chunks, { type: 'audio/webm' });
-    await speechSendSTT(blob, 'audio/webm', w);
+    const actualMime = recorder.mimeType || mime || 'audio/webm';
+    const blob = new Blob(chunks, { type: actualMime });
+    await speechSendSTT(blob, actualMime, w);
   };
 
-  recorder.start(); // ไม่ใส่ timeslice เหมือนเดิม
+  recorder.start(1000); // ส่ง data ทุก 1 วินาที รองรับ iPhone ด้วย
 
   // กด mic อีกครั้ง = หยุดบันทึก
   if (micBtn) {
