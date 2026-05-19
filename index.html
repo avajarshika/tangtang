@@ -20498,14 +20498,23 @@ async function speechStartRec() {
   resultEl.innerHTML = `<div style="text-align:center;color:var(--ink3);padding:8px">
     <span style="font-size:24px">👂</span><br>กำลังฟังอยู่นะคะ...</div>`;
 
-  // เลือก mimeType ที่รองรับ — webm ก่อน mp4
-  const mime = ['audio/webm;codecs=opus','audio/webm','audio/ogg','audio/mp4']
-    .find(m => MediaRecorder.isTypeSupported(m)) || '';
+  // เลือก mimeType — iPhone Safari รองรับแค่ audio/mp4
+  const mimePrefs = [
+    'audio/mp4',                  // iOS Safari ✅
+    'audio/webm;codecs=opus',     // Chrome/Android ✅
+    'audio/webm',                 // Chrome fallback ✅
+    'audio/ogg;codecs=opus',      // Firefox ✅
+  ];
+  const mime = mimePrefs.find(m => {
+    try { return MediaRecorder.isTypeSupported(m); } catch(e) { return false; }
+  }) || '';
 
   const chunks = [];
   const recorder = new MediaRecorder(stream, mime ? { mimeType: mime } : {});
   speechState.recorder = recorder;
-  recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+  recorder.ondataavailable = e => {
+    if (e.data.size > 0) chunks.push(e.data);
+  };
 
   recorder.onstop = async () => {
     stream.getTracks().forEach(t => t.stop());
@@ -20516,8 +20525,21 @@ async function speechStartRec() {
       micBtn.disabled = false;
     }
     resultEl.innerHTML = `<div style="text-align:center;color:var(--ink3);padding:8px">⏳ AI กำลังตรวจเสียง...</div>`;
-    const blob = new Blob(chunks, { type: mime || 'audio/webm' });
-    await speechSendSTT(blob, mime || 'audio/webm', w);
+
+    const blob = new Blob(chunks, { type: mime || 'audio/mp4' });
+
+    if (blob.size < 100) {
+      resultEl.innerHTML = `<div style="background:#fce4ec;border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:20px">🤫</div>
+        <div style="color:#c62828;font-weight:700;margin-top:4px">ไม่ได้ยินเสียงค่ะ</div>
+        <div style="font-size:12px;color:#ad1457;margin-top:4px">ลองกดปุ่มแล้วรอ 1 วินาทีก่อนพูดนะคะ</div>
+      </div>`;
+      const micBtn2 = document.getElementById('sp-mic-btn');
+      if (micBtn2) micBtn2.onclick = () => speechStartRec();
+      return;
+    }
+
+    await speechSendSTT(blob, mime || 'audio/mp4', w);
   };
 
   recorder.start();
@@ -20527,16 +20549,20 @@ async function speechStartRec() {
     micBtn.disabled = false;
     micBtn.onclick = () => {
       if (speechState.recognizing && recorder.state === 'recording') {
-        recorder.stop();
+        recorder.requestData();
+        setTimeout(() => recorder.stop(), 100);
         micBtn.onclick = () => speechStartRec();
       }
     };
   }
 
-  // หยุดอัตโนมัติหลัง 5 วินาที
+  // หยุดอัตโนมัติหลัง 7 วินาที
   speechState.autoStopTimer = setTimeout(() => {
-    if (recorder.state === 'recording') recorder.stop();
-  }, 5000);
+    if (recorder.state === 'recording') {
+      recorder.requestData();
+      setTimeout(() => recorder.stop(), 100);
+    }
+  }, 7000);
 }
 
 // ── ส่งเสียงไป STT แล้วตรวจพินอิน ──
@@ -20623,7 +20649,10 @@ function speechCheckPinyin(transcript, confidence, w) {
 }
 
 function speechResult(passed, heard='', hint='') {
-  const w = speechState.words[speechState.idx];
+  const isVocab = speechState.mode === 'vocab';
+  const lv = (isVocab ? SPEECH_VOCAB_LEVELS : SPEECH_SENTENCE_LEVELS)[speechState.levelIdx];
+  const items = isVocab ? lv.words : lv.sentences;
+  const w = items[speechState.itemIdx];
   const resultEl = document.getElementById('sp-result');
   const micBtn = document.getElementById('sp-mic-btn');
   if (micBtn) micBtn.onclick = () => speechStartRec();
