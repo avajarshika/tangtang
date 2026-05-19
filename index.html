@@ -20529,7 +20529,7 @@ async function speechStartRec() {
     console.log('🎤 DEBUG — mime:', mime, '| blob size:', blob.size, 'bytes | chunks:', chunks.length);
 
     // ถ้า blob เล็กเกินไป = ไม่มีเสียงจริง
-    if (blob.size < 1000) {
+    if (blob.size < 100) {
       resultEl.innerHTML = `<div style="background:#fce4ec;border-radius:12px;padding:14px;text-align:center">
         <div style="font-size:20px">🤫</div>
         <div style="color:#c62828;font-weight:700;margin-top:4px">ไม่ได้ยินเสียงค่ะ</div>
@@ -20539,6 +20539,8 @@ async function speechStartRec() {
       if (micBtn2) micBtn2.onclick = () => speechStartRec();
       return;
     }
+
+    console.log('🎤 Sending to STT, blob size:', blob.size);
 
     await speechSendSTT(blob, mime || 'audio/mp4', w);
   };
