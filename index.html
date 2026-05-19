@@ -20607,33 +20607,26 @@ function speechCheckPinyin(transcript, confidence, w) {
   const targetChar = w.char.replace(/\s/g, '');
   const gotChar    = transcript.replace(/\s/g, '');
 
-  // ✅ ตัวอักษรต้องตรงทุกตัว
+  // ✅ Step 1: ตัวอักษรจีนต้องตรง
   const charMatch = gotChar === targetChar;
-
-  // ✅ confidence ต้อง ≥ 0.85 (เข้มขึ้นจาก 0.75)
-  // ถ้า null = Google ไม่มั่นใจ → ต้องผ่าน charMatch เท่านั้น แต่เพิ่ม threshold
-  const confOK = confidence === null ? charMatch : confidence >= 0.85;
-
-  const passed = charMatch && confOK;
-
-  // feedback
-  let hint = '';
-  const confPct = confidence !== null ? Math.round(confidence * 100) : null;
-
-  if (!passed) {
-    if (!charMatch) {
-      if (gotChar.length === targetChar.length) {
-        hint = `💡 ได้ยิน "${gotChar}" แต่ต้องการ "${targetChar}" — วรรณยุกต์อาจผิด ลองเน้นเสียงสูง-ต่ำนะคะ`;
-      } else {
-        hint = `💡 ได้ยิน "${gotChar}" ลองพูดให้ครบทุกพยางค์นะคะ`;
-      }
-    } else if (!confOK) {
-      hint = `💡 Google ได้ยิน "${gotChar}" แต่ความมั่นใจแค่ ${confPct}% (ต้องการ 75%+) ลองพูดชัดๆ อีกครั้งนะคะ`;
-    }
+  if (!charMatch) {
+    const hint = `💡 ได้ยิน "${transcript}" แต่ต้องการ "${w.char}" ลองพูดใหม่นะคะ`;
+    speechResult(false, transcript, hint);
+    return;
   }
 
-  const heardLabel = transcript + (confPct !== null ? ` (${confPct}%)` : '');
-  speechResult(passed, heardLabel, hint);
+  // ✅ Step 2: confidence ต้อง ≥ 0.85
+  // ถ้า confidence ต่ำ = Google ไม่มั่นใจ = เสียงไม่ชัด = ไม่ผ่าน
+  const confOK = confidence !== null && confidence >= 0.85;
+  if (!confOK) {
+    const confPct = confidence !== null ? Math.round(confidence * 100) : 0;
+    const hint = `💡 ความมั่นใจแค่ ${confPct}% (ต้องการ 85%+) วรรณยุกต์อาจยังไม่ถูก ลองพูดให้ชัดขึ้นนะคะ`;
+    speechResult(false, transcript, hint);
+    return;
+  }
+
+  // ✅ ผ่านทั้งหมด
+  speechResult(true, `${transcript} (${Math.round(confidence * 100)}%)`, '');
 }
 
 function speechResult(passed, heard='', hint='') {
