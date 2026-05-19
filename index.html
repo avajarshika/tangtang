@@ -20607,12 +20607,12 @@ function speechCheckPinyin(transcript, confidence, w) {
   const targetChar = w.char.replace(/\s/g, '');
   const gotChar    = transcript.replace(/\s/g, '');
 
-  // ✅ ต้องตรงตัวอักษรทุกตัว
+  // ✅ ตัวอักษรต้องตรงทุกตัว
   const charMatch = gotChar === targetChar;
 
-  // ✅ confidence ต้อง ≥ 0.75 (Google ให้คะแนน 0-1)
-  //    ถ้า null = Google ไม่ส่งมา → ใช้ charMatch อย่างเดียว
-  const confOK = confidence === null ? true : confidence >= 0.75;
+  // ✅ confidence ต้อง ≥ 0.85 (เข้มขึ้นจาก 0.75)
+  // ถ้า null = Google ไม่มั่นใจ → ต้องผ่าน charMatch เท่านั้น แต่เพิ่ม threshold
+  const confOK = confidence === null ? charMatch : confidence >= 0.85;
 
   const passed = charMatch && confOK;
 
