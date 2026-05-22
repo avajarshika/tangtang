@@ -442,7 +442,7 @@ body { font-family: 'DM Sans', 'Noto Sans Thai', sans-serif; background: var(--p
     <div style="font-size:14px;color:var(--ink3);line-height:1.6;margin-bottom:20px">ขอบคุณที่เลือก TangTang Chinese นะคะ 🎉<br>ระบบส่งข้อมูลให้แอดมินแล้ว จะปลดล็อคภายใน 30 นาที</div>
     <div style="background:var(--paper);border-radius:12px;padding:16px;text-align:left;margin-bottom:20px">
       <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink2);padding:5px 0">
-        <div class="step-num">1</div><span>⏳ แอดมินกำลังตรวจสอบสลิป</span>
+        <div class="step-num">1</div><span id="success-step1">⏳ แอดมินกำลังตรวจสอบสลิป</span>
       </div>
       <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--ink2);padding:5px 0">
         <div class="step-num">2</div><span>🔓 ปลดล็อค Premium ภายใน 30 นาที</span>
@@ -633,6 +633,10 @@ window.addEventListener('DOMContentLoaded', () => {
         paymentMethod: 'บัตรเครดิต (Stripe)',
       }),
     }).catch(function(e) {});
+
+    // เปลี่ยนข้อความ step 1 ให้ตรงกับวิธีจ่าย
+    const step1 = document.getElementById('success-step1');
+    if (step1) step1.textContent = '⏳ แอดมินกำลังตรวจสอบการชำระเงิน';
 
     // แสดงหน้า success
     document.getElementById('success-overlay').classList.add('show');
