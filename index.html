@@ -8619,7 +8619,36 @@ async function doRegister() {
   if(btn) btn.disabled = false;
   if (error) { err.textContent = error.message || 'สมัครไม่สำเร็จ'; return; }
   err.textContent = '';
-  showToast('✅ สมัครสมาชิกสำเร็จ! ยินดีต้อนรับ ' + name);
+
+  // เช็ค pending_premium ว่ามี email นี้ไหม
+  try {
+    const { data: pending } = await sb
+      .from('pending_premium')
+      .select('*')
+      .eq('email', email)
+      .single();
+
+    if (pending) {
+      // ปลดล็อค Premium ทันที
+      await sb.from('user_progress').update({
+        is_premium: true,
+        subscription_type: pending.subscription_type,
+        subscription_end: pending.subscription_end,
+        last_paid_at: new Date().toISOString(),
+        last_paid_amount: pending.amount,
+      }).eq('user_id', data.user.id);
+
+      // ลบออกจาก pending
+      await sb.from('pending_premium').delete().eq('email', email);
+
+      showToast('✅ สมัครสมาชิกสำเร็จ! ปลดล็อค Premium แล้วค่ะ 🎉');
+    } else {
+      showToast('✅ สมัครสมาชิกสำเร็จ! ยินดีต้อนรับ ' + name);
+    }
+  } catch(e) {
+    showToast('✅ สมัครสมาชิกสำเร็จ! ยินดีต้อนรับ ' + name);
+  }
+
   loginUser({ id: data.user.id, name, email });
 }
 
@@ -10143,14 +10172,14 @@ function renderProfile() {
             <div style="font-size:11px;font-weight:700;color:var(--ink3);margin-bottom:4px">สถานะแพ็กเกจ</div>
             <div style="font-size:14px;font-weight:800;color:${sub.color}">${sub.label}</div>
           </div>
-          <button onclick="${isActive ? 'openStripePortal()' : "goScreen('pricing')"}" style="padding:8px 16px;background:${isActive?sub.color:'#F13596'};color:white;border:none;border-radius:20px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer">
-            ${isActive ? '⚙️ จัดการ' : '⬆️ อัปเกรด'}
+          <button onclick="${isActive ? "window.location.href='checkout.html'" : "goScreen('pricing')"}" style="padding:8px 16px;background:${isActive?sub.color:'#F13596'};color:white;border:none;border-radius:20px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer">
+            ${isActive ? '🔄 ต่ออายุสมาชิก' : '⬆️ อัปเกรด'}
           </button>
         </div>
         ${isActive && !isLifetime ? `
         <div style="margin-top:10px;padding-top:10px;border-top:1px solid ${sub.color}20">
-          <button onclick="openStripePortal()" style="width:100%;padding:8px;background:transparent;color:#e53935;border:1.5px solid #e53935;border-radius:10px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer">
-            ❌ ยกเลิก subscription
+          <button onclick="openStripePortal()" style="width:100%;padding:8px;background:transparent;color:#1976d2;border:1.5px solid #1976d2;border-radius:10px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer">
+            💳 Subscription
           </button>
         </div>` : ''}
       </div>`;
