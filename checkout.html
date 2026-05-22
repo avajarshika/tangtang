@@ -275,13 +275,34 @@ body { font-family: 'DM Sans', 'Noto Sans Thai', sans-serif; background: var(--p
 
       <!-- PAYMENT METHOD -->
       <div class="section-title" style="margin-top:8px">💳 วิธีการชำระเงิน</div>
-      <div class="pay-opt selected" id="pay-opt-bank" style="border-color:var(--red);background:var(--red-light)">
+      <div class="pay-opt selected" id="pay-opt-bank" onclick="selectPayMethod('bank')" style="border-color:var(--red);background:var(--red-light);cursor:pointer">
         <span style="font-size:28px">🏦</span>
         <div style="flex:1">
           <div style="font-size:14px;font-weight:700">โอนเข้าบัญชี</div>
           <div style="font-size:12px;color:var(--ink3);margin-top:1px">ธนาคารไทยพาณิชย์ (SCB)</div>
         </div>
         <span style="background:#dcfce7;color:#16a34a;font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px">แนะนำ</span>
+      </div>
+
+      <!-- Credit Card Option -->
+      <div class="pay-opt" id="pay-opt-card" onclick="selectPayMethod('card')" style="margin-top:10px;cursor:pointer">
+        <span style="font-size:28px">💳</span>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:700">บัตรเครดิต / เดบิต</div>
+          <div style="font-size:12px;color:var(--ink3);margin-top:1px">Visa, Mastercard — รองรับทุกประเทศ 🌍</div>
+        </div>
+        <span style="background:#e3f2fd;color:#1565c0;font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px">ต่างประเทศ</span>
+      </div>
+
+      <!-- Card Section -->
+      <div id="payment-card-section" style="display:none;margin-top:12px">
+        <div style="background:#e3f2fd;border:1.5px solid #90caf9;border-radius:14px;padding:16px;text-align:center">
+          <div style="font-size:13px;font-weight:700;color:#1565c0;margin-bottom:8px">💳 ชำระผ่าน Stripe</div>
+          <div style="font-size:12px;color:#1976d2;margin-bottom:12px">ระบบจะพาไปหน้าชำระเงินที่ปลอดภัย<br>รองรับ Visa, Mastercard ทุกประเทศ</div>
+          <button onclick="payWithStripe()" style="width:100%;padding:14px;background:linear-gradient(135deg,#1565c0,#1976d2);color:white;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px">
+            💳 ชำระด้วยบัตรเครดิต/เดบิต
+          </button>
+        </div>
       </div>
 
       <!-- Bank Section -->
@@ -302,7 +323,7 @@ body { font-family: 'DM Sans', 'Noto Sans Thai', sans-serif; background: var(--p
       </div>
 
       <!-- SLIP UPLOAD -->
-      <div style="margin-top:16px">
+      <div id="slip-section" style="margin-top:16px">
         <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:8px">📎 แนบสลิปการโอนเงิน *</div>
         <div class="slip-upload-area" id="slip-upload-area"
           ondragover="event.preventDefault();this.classList.add('dragover')"
@@ -456,7 +477,87 @@ const SUPABASE_URL = 'https://zmshxxmcgbxavzlqmpxd.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inptc2h4eG1jZ2J4YXZ6bHFtcHhkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0NzkwODEsImV4cCI6MjA5MjA1NTA4MX0.USeFzW09aOqqtwtYFaC9lgmcLkpkjz12ciQLrG3IhZQ';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-let selectedPackage = 'yearly';
+const STRIPE_PRICE_IDS = {
+  monthly:  'price_1TZp5kEbML6Rr0fxjucXw1mi',
+  yearly:   'price_1TZp7HEbML6Rr0fxM7vignqL',
+  lifetime: 'price_1TZp8PEbML6Rr0fx8GUKwLtX',
+};
+
+let selectedPayMethod = 'bank';
+
+function selectPayMethod(method) {
+  selectedPayMethod = method;
+  const bankOpt = document.getElementById('pay-opt-bank');
+  const cardOpt = document.getElementById('pay-opt-card');
+  const bankSection = document.getElementById('payment-bank-section');
+  const slipSection = document.querySelector('[style*="slip-upload-area"]')?.parentElement;
+  const cardSection = document.getElementById('payment-card-section');
+
+  if (method === 'bank') {
+    bankOpt.style.borderColor = 'var(--red)';
+    bankOpt.style.background = 'var(--red-light)';
+    cardOpt.style.borderColor = '#e0e0e0';
+    cardOpt.style.background = 'white';
+    bankSection.style.display = 'block';
+    cardSection.style.display = 'none';
+    document.getElementById('slip-section').style.display = 'block';
+  } else {
+    cardOpt.style.borderColor = '#1565c0';
+    cardOpt.style.background = '#e3f2fd';
+    bankOpt.style.borderColor = '#e0e0e0';
+    bankOpt.style.background = 'white';
+    bankSection.style.display = 'none';
+    cardSection.style.display = 'block';
+    document.getElementById('slip-section').style.display = 'none';
+  }
+}
+
+async function payWithStripe() {
+  const email = document.getElementById('email')?.value?.trim();
+  const name = document.getElementById('name')?.value?.trim();
+
+  if (!email) {
+    alert('กรุณากรอกอีเมลก่อนนะคะ');
+    document.getElementById('email')?.focus();
+    return;
+  }
+
+  const btn = document.querySelector('#payment-card-section button');
+  if (btn) { btn.textContent = '⏳ กำลังเชื่อมต่อ Stripe...'; btn.disabled = true; }
+
+  try {
+    const priceId = STRIPE_PRICE_IDS[selectedPackage];
+    const { data: { session } } = await sb.auth.getSession();
+    const userId = session?.user?.id || '';
+
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/stripe-checkout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+      },
+      body: JSON.stringify({
+        priceId,
+        userId,
+        email,
+        successUrl: `${window.location.origin}/checkout.html?success=1&pkg=${selectedPackage}`,
+        cancelUrl: `${window.location.origin}/checkout.html?pkg=${selectedPackage}`,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      alert('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งค่ะ');
+      if (btn) { btn.textContent = '💳 ชำระด้วยบัตรเครดิต/เดบิต'; btn.disabled = false; }
+    }
+  } catch(e) {
+    alert('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งค่ะ');
+    if (btn) { btn.textContent = '💳 ชำระด้วยบัตรเครดิต/เดบิต'; btn.disabled = false; }
+  }
+}
 let selectedPrice = '990';
 let selectedAmountInt = 990;
 let slipFile = null;
@@ -494,6 +595,24 @@ function selectPackage(type) {
 // auto-select from URL param
 window.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
+
+  // เช็ค success จาก Stripe
+  if (params.get('success') === '1') {
+    document.body.innerHTML = `
+      <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--paper2);font-family:'DM Sans','Noto Sans Thai',sans-serif;padding:20px">
+        <div style="background:white;border-radius:24px;padding:40px 32px;text-align:center;max-width:400px;width:100%;box-shadow:0 4px 24px rgba(0,0,0,.08)">
+          <div style="font-size:64px;margin-bottom:16px">🎉</div>
+          <div style="font-size:22px;font-weight:800;color:#1a1a2e;margin-bottom:8px">ชำระเงินสำเร็จแล้ว!</div>
+          <div style="font-size:14px;color:#666;margin-bottom:24px">ระบบกำลังปลดล็อค Premium ให้อัตโนมัติค่ะ<br>อาจใช้เวลา 1-2 นาที</div>
+          <a href="https://tangtangchinese.com" style="display:block;padding:14px;background:linear-gradient(135deg,#F13596,#c01078);color:white;border-radius:14px;text-decoration:none;font-weight:700;font-size:15px">
+            🏠 กลับไปเรียนได้เลย!
+          </a>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
   const pkg = params.get('pkg');
   selectPackage(pkg && pkgData[pkg] ? pkg : 'yearly');
 
@@ -603,6 +722,11 @@ async function submitOrder() {
     if (!email || !email.includes('@')) { err.textContent = 'กรุณากรอกอีเมลให้ถูกต้อง'; return; }
     if (password.length < 6) { err.textContent = 'รหัสผ่านต้องมีอย่างน้อย 6 ตัว'; return; }
     if (password !== password2) { err.textContent = 'รหัสผ่านไม่ตรงกัน'; return; }
+  }
+  // ถ้าเลือกจ่ายบัตร → ไปที่ payWithStripe แทน ไม่ต้องแนบสลิป
+  if (selectedPayMethod === 'card') {
+    await payWithStripe();
+    return;
   }
   if (!slipFile) { slipErr.textContent = 'กรุณาแนบรูปสลิปการโอนเงิน'; document.getElementById('slip-upload-area').style.borderColor='var(--red)'; return; }
 
