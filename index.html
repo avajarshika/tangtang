@@ -10009,6 +10009,32 @@ function flipVMCard(zh) {
 // ═══════════════════════════════════
 // PROFILE
 // ═══════════════════════════════════
+async function openStripePortal() {
+  const email = state.user?.email || state.user?.data?.email;
+  if (!email) { showToast('ไม่พบอีเมลค่ะ'); return; }
+
+  showToast('⏳ กำลังเปิดหน้าจัดการ...');
+  try {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/stripe-portal`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${SUPABASE_KEY}` },
+      body: JSON.stringify({
+        userId: state.user.id,
+        email,
+        returnUrl: window.location.href,
+      }),
+    });
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      showToast('⚠️ ไม่พบบัญชี Stripe กรุณาติดต่อแอดมินค่ะ');
+    }
+  } catch(e) {
+    showToast('⚠️ เกิดข้อผิดพลาด ลองใหม่อีกครั้งค่ะ');
+  }
+}
+
 function renderProfile() {
   if (!state.user) return;
   const d = state.user.data;
@@ -10109,6 +10135,7 @@ function renderProfile() {
   if (subEl) {
     const sub = getSubscriptionLabel(state.user);
     const isActive = isPremium();
+    const isLifetime = state.user?.data?.subscription_type === 'lifetime';
     subEl.innerHTML = `
       <div style="background:${sub.bg};border:1.5px solid ${sub.color}40;border-radius:14px;padding:14px 16px;margin-bottom:12px">
         <div style="display:flex;align-items:center;justify-content:space-between">
@@ -10116,10 +10143,16 @@ function renderProfile() {
             <div style="font-size:11px;font-weight:700;color:var(--ink3);margin-bottom:4px">สถานะแพ็กเกจ</div>
             <div style="font-size:14px;font-weight:800;color:${sub.color}">${sub.label}</div>
           </div>
-          <button onclick="goScreen('pricing')" style="padding:8px 16px;background:${isActive?sub.color:'#F13596'};color:white;border:none;border-radius:20px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer">
-            ${isActive?'จัดการ':'⬆️ อัปเกรด'}
+          <button onclick="${isActive ? 'openStripePortal()' : "goScreen('pricing')"}" style="padding:8px 16px;background:${isActive?sub.color:'#F13596'};color:white;border:none;border-radius:20px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer">
+            ${isActive ? '⚙️ จัดการ' : '⬆️ อัปเกรด'}
           </button>
         </div>
+        ${isActive && !isLifetime ? `
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid ${sub.color}20">
+          <button onclick="openStripePortal()" style="width:100%;padding:8px;background:transparent;color:#e53935;border:1.5px solid #e53935;border-radius:10px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer">
+            ❌ ยกเลิก subscription
+          </button>
+        </div>` : ''}
       </div>`;
   }
 
