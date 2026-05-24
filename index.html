@@ -13087,6 +13087,10 @@ function renderGrammarTab() {
     return;
   }
 
+  if (!g.points || !g.points.length) {
+    box.innerHTML = '<div class="empty"><div class="empty-icon">📐</div><p>ยังไม่มีเนื้อหาแกรมม่าสำหรับบทนี้</p></div>';
+    return;
+  }
   const pointsHTML = g.points.map((p, i) => `
     <div style="margin-bottom:16px;border:1px solid var(--paper3);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow)">
       <div style="padding:12px 14px;background:${p.bg};border-bottom:1px solid ${p.color}30">
