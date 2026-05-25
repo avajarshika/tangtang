@@ -9335,10 +9335,15 @@ function renderHome() {
   const lvBadge = document.getElementById('home-level-badge');
   if (lvBadge) lvBadge.textContent = '⚡ Level ' + _lv;
 
-  // Review count
-  const due = getDueCount();
-  document.getElementById('review-count').textContent = due;
-  document.getElementById('review-banner').style.opacity = due > 0 ? '1' : '.5';
+  // Review count — นับทุกบทที่เรียนจบแล้ว (พินอิน + HSK + บทสนทนา)
+  const _completed = (state.user?.data?.completed || []);
+  const _commDone = (state.user?.data?.commDone || []);
+  const _pinCount = _completed.includes(0) ? 1 : 0;
+  const _hskCount = LESSONS.filter(l => _completed.includes(l.id)).length;
+  const _commCount = COMM_LESSONS.filter(l => _commDone.includes(l.id)).length;
+  const _totalReview = _pinCount + _hskCount + _commCount;
+  document.getElementById('review-count').textContent = _totalReview;
+  document.getElementById('review-banner').style.opacity = _totalReview > 0 ? '1' : '.5';
 
   // Paths — split into HSK levels and thematic
   const HSK_PATHS = PATHS.filter(p => p.id.startsWith('hsk'));
@@ -9557,28 +9562,45 @@ function openDailyReview() {
   if (!state.user) return;
   const d = state.user.data || {};
   const completed = d.completed || [];
+  const commDone = d.commDone || [];
+
+  // บทพินอิน (id:0)
+  const pinDone = completed.includes(0);
+
+  // บทเรียน HSK ที่จบแล้ว
   const doneLessons = LESSONS.filter(l => completed.includes(l.id));
 
-  // ลบ popup เก่าถ้ามี
-  const old = document.getElementById('daily-review-popup');
-  if (old) old.remove();
+  // บทสนทนาที่จบแล้ว
+  const doneComm = COMM_LESSONS.filter(l => commDone.includes(l.id));
 
-  if (doneLessons.length === 0) {
+  const totalDone = (pinDone ? 1 : 0) + doneLessons.length + doneComm.length;
+
+  // ลบ popup เก่าถ้ามี
+  const oldPopup = document.getElementById('daily-review-popup');
+  if (oldPopup) oldPopup.remove();
+
+  if (totalDone === 0) {
     goScreen('lessons-hub');
     showToast('เริ่มเรียนบทเรียนก่อนนะคะ แล้วจะมีเนื้อหาทบทวนค่ะ 📚');
     return;
   }
 
-  // สร้าง popup รายการบทที่เรียนจบแล้ว
-  const popup = document.createElement('div');
-  popup.id = 'daily-review-popup';
-  popup.style.cssText = `
-    position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:9999;
-    display:flex; align-items:center; justify-content:center; padding:20px;
-    font-family:'Noto Sans Thai',sans-serif;
-  `;
+  // สร้างแถวบทพินอิน
+  const pinRow = pinDone ? `
+    <div onclick="document.getElementById('daily-review-popup').remove(); goScreen('pinyin')"
+      style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #FFF0F8;cursor:pointer;transition:background .15s"
+      onmouseover="this.style.background='#FFF8FC'" onmouseout="this.style.background='transparent'">
+      <span style="font-size:24px">🔤</span>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:700;color:#2D1A24">พินอิน — รากฐานทุกอย่าง</div>
+        <div style="font-size:11px;color:#8C6B7A">ระบบออกเสียงภาษาจีน</div>
+      </div>
+      <span style="font-size:18px;color:#F13596">→</span>
+    </div>
+  ` : '';
 
-  const rows = doneLessons.map(l => `
+  // สร้างแถวบทเรียน HSK
+  const lessonRows = doneLessons.map(l => `
     <div onclick="document.getElementById('daily-review-popup').remove(); openLesson(${l.id})"
       style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #FFF0F8;cursor:pointer;transition:background .15s"
       onmouseover="this.style.background='#FFF8FC'" onmouseout="this.style.background='transparent'">
@@ -9591,17 +9613,43 @@ function openDailyReview() {
     </div>
   `).join('');
 
+  // สร้างแถวบทสนทนา
+  const commRows = doneComm.length > 0 ? `
+    <div style="padding:8px 16px;background:#FFF8FC;font-size:11px;font-weight:700;color:#F13596">💬 บทสนทนา</div>
+    ${doneComm.map(l => `
+      <div onclick="document.getElementById('daily-review-popup').remove(); openCommLesson('${l.id}')"
+        style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #FFF0F8;cursor:pointer;transition:background .15s"
+        onmouseover="this.style.background='#FFF8FC'" onmouseout="this.style.background='transparent'">
+        <span style="font-size:24px">${l.icon || '💬'}</span>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700;color:#2D1A24">${l.title || l.id}</div>
+          <div style="font-size:11px;color:#8C6B7A">${l.sub || 'บทสนทนาจริง'}</div>
+        </div>
+        <span style="font-size:18px;color:#F13596">→</span>
+      </div>
+    `).join('')}
+  ` : '';
+
+  // สร้าง popup
+  const popup = document.createElement('div');
+  popup.id = 'daily-review-popup';
+  popup.style.cssText = `
+    position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:9999;
+    display:flex; align-items:center; justify-content:center; padding:20px;
+    font-family:'Noto Sans Thai',sans-serif;
+  `;
+
   popup.innerHTML = `
     <div style="background:white;border-radius:20px;width:100%;max-width:480px;max-height:80vh;overflow-y:auto">
       <div style="padding:16px 20px;border-bottom:1px solid #FFF0F8;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:1">
         <div>
           <div style="font-size:16px;font-weight:800;color:#2D1A24">📬 ทบทวนประจำวัน</div>
-          <div style="font-size:12px;color:#8C6B7A">เรียนจบแล้ว ${doneLessons.length} บท — เลือกบทที่อยากทบทวนค่ะ</div>
+          <div style="font-size:12px;color:#8C6B7A">เรียนจบแล้ว ${totalDone} บท — เลือกบทที่อยากทบทวนค่ะ</div>
         </div>
         <button onclick="document.getElementById('daily-review-popup').remove()"
           style="background:#FFF0F8;border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;color:#F13596">✕</button>
       </div>
-      <div>${rows}</div>
+      <div>${pinRow}${lessonRows}${commRows}</div>
       <div style="height:20px"></div>
     </div>
   `;
