@@ -9557,21 +9557,60 @@ function openDailyReview() {
   if (!state.user) return;
   const d = state.user.data || {};
   const completed = d.completed || [];
-  
-  // หาบทที่เรียนจบแล้ว
   const doneLessons = LESSONS.filter(l => completed.includes(l.id));
-  
+
+  // ลบ popup เก่าถ้ามี
+  const old = document.getElementById('daily-review-popup');
+  if (old) old.remove();
+
   if (doneLessons.length === 0) {
-    // ยังไม่เคยเรียนบทไหนเลย → พาไปหน้าบทเรียน
     goScreen('lessons-hub');
     showToast('เริ่มเรียนบทเรียนก่อนนะคะ แล้วจะมีเนื้อหาทบทวนค่ะ 📚');
     return;
   }
-  
-  // เปิดบทล่าสุดที่เรียนจบ
-  const lastLesson = doneLessons[doneLessons.length - 1];
-  openLesson(lastLesson.id);
-  showToast('ทบทวนบท: ' + lastLesson.title + ' ค่ะ 📖');
+
+  // สร้าง popup รายการบทที่เรียนจบแล้ว
+  const popup = document.createElement('div');
+  popup.id = 'daily-review-popup';
+  popup.style.cssText = `
+    position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999;
+    display:flex; align-items:flex-end; justify-content:center;
+    font-family:'Noto Sans Thai',sans-serif;
+  `;
+
+  const rows = doneLessons.map(l => `
+    <div onclick="document.getElementById('daily-review-popup').remove(); openLesson(${l.id})"
+      style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #FFF0F8;cursor:pointer;transition:background .15s"
+      onmouseover="this.style.background='#FFF8FC'" onmouseout="this.style.background='transparent'">
+      <span style="font-size:24px">${l.icon || '📖'}</span>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:700;color:#2D1A24">${l.title}</div>
+        <div style="font-size:11px;color:#8C6B7A">${l.sub || ''}</div>
+      </div>
+      <span style="font-size:18px;color:#F13596">→</span>
+    </div>
+  `).join('');
+
+  popup.innerHTML = `
+    <div style="background:white;border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:75vh;overflow-y:auto">
+      <div style="padding:16px 20px;border-bottom:1px solid #FFF0F8;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:1">
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#2D1A24">📬 ทบทวนประจำวัน</div>
+          <div style="font-size:12px;color:#8C6B7A">เรียนจบแล้ว ${doneLessons.length} บท — เลือกบทที่อยากทบทวนค่ะ</div>
+        </div>
+        <button onclick="document.getElementById('daily-review-popup').remove()"
+          style="background:#FFF0F8;border:none;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;color:#F13596">✕</button>
+      </div>
+      <div>${rows}</div>
+      <div style="height:20px"></div>
+    </div>
+  `;
+
+  popup.addEventListener('click', function(e) {
+    if (e.target === popup) popup.remove();
+  });
+
+  document.body.appendChild(popup);
 }
 
 // ═══════════════════════════════════
