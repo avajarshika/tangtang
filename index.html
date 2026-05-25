@@ -9573,8 +9573,8 @@ function openDailyReview() {
   const popup = document.createElement('div');
   popup.id = 'daily-review-popup';
   popup.style.cssText = `
-    position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999;
-    display:flex; align-items:flex-end; justify-content:center;
+    position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:9999;
+    display:flex; align-items:center; justify-content:center; padding:20px;
     font-family:'Noto Sans Thai',sans-serif;
   `;
 
@@ -9592,7 +9592,7 @@ function openDailyReview() {
   `).join('');
 
   popup.innerHTML = `
-    <div style="background:white;border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:75vh;overflow-y:auto">
+    <div style="background:white;border-radius:20px;width:100%;max-width:480px;max-height:80vh;overflow-y:auto">
       <div style="padding:16px 20px;border-bottom:1px solid #FFF0F8;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:1">
         <div>
           <div style="font-size:16px;font-weight:800;color:#2D1A24">📬 ทบทวนประจำวัน</div>
