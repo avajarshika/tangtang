@@ -1495,7 +1495,7 @@ html {
     </div>
 
     <!-- Daily review -->
-    <div class="review-banner" id="review-banner" onclick="goScreen('vocab')">
+    <div class="review-banner" id="review-banner" onclick="openDailyReview()">
       <div class="review-banner-left">
         <div class="review-banner-title">📬 ทบทวนประจำวัน</div>
         <div class="review-banner-sub">มีคำที่ถึงเวลาทบทวนแล้ว</div>
@@ -9551,6 +9551,27 @@ function getDueCount() {
     const s = srs[v.zh];
     return s && s.nextReview <= now;
   }).length;
+}
+
+function openDailyReview() {
+  if (!state.user) return;
+  const d = state.user.data || {};
+  const completed = d.completed || [];
+  
+  // หาบทที่เรียนจบแล้ว
+  const doneLessons = LESSONS.filter(l => completed.includes(l.id));
+  
+  if (doneLessons.length === 0) {
+    // ยังไม่เคยเรียนบทไหนเลย → พาไปหน้าบทเรียน
+    goScreen('lessons-hub');
+    showToast('เริ่มเรียนบทเรียนก่อนนะคะ แล้วจะมีเนื้อหาทบทวนค่ะ 📚');
+    return;
+  }
+  
+  // เปิดบทล่าสุดที่เรียนจบ
+  const lastLesson = doneLessons[doneLessons.length - 1];
+  openLesson(lastLesson.id);
+  showToast('ทบทวนบท: ' + lastLesson.title + ' ค่ะ 📖');
 }
 
 // ═══════════════════════════════════
