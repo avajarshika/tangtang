@@ -10966,7 +10966,11 @@ async function speak(text, onEnd, rate=0.85) {
     audio.playbackRate = rate;
     audio.onended = () => { currentAudio = null; if (onEnd) onEnd(); };
     audio.onerror = () => { currentAudio = null; if (onEnd) onEnd(); };
-    audio.play();
+    // รอให้ audio buffer พร้อมก่อนเล่น ป้องกันคำแรกขาดหาย
+    audio.oncanplaythrough = () => {
+      setTimeout(() => { if (currentAudio === audio) audio.play(); }, 150);
+    };
+    audio.load();
   } catch(e) {
     if (onEnd) onEnd();
   }
@@ -19656,11 +19660,11 @@ function initRadicalGame() {
   window.rNext = function(){
     window._rState.current++;
     const FREE_LIMIT = 3;
-    const isPremium = (state.user?.is_premium === true) ||
+    const isUserPremium = (state.user?.is_premium === true) ||
       ['monthly','yearly','annual','lifetime'].includes(state.user?.data?.subscription_type);
 
     // ถ้าฟรีและเล่นครบ 3 ข้อแล้ว → show premium popup
-    if (!isPremium && window._rState.current >= FREE_LIMIT) {
+    if (!isUserPremium && window._rState.current >= FREE_LIMIT) {
       rShowPremiumWall();
       return;
     }
@@ -19801,19 +19805,208 @@ function initRadicalGame() {
 const AICHAT_URL = 'https://zmshxxmcgbxavzlqmpxd.supabase.co/functions/v1/aichat-game';
 const STT_URL    = 'https://zmshxxmcgbxavzlqmpxd.supabase.co/functions/v1/stt-service';
 
+// ── แบบที่ 1: Dynamic AI Chat (1 สถานการณ์ทดสอบ) ──
 const AICHAT_SCENARIOS = [
-  { id:'restaurant', icon:'🍜', name:'ร้านอาหาร',   role:'พนักงานเสิร์ฟ',        situation:'ลูกค้าเข้าร้านอาหารจีนมาสั่งอาหาร' },
-  { id:'airport',   icon:'✈️', name:'สนามบิน',      role:'พนักงานสายการบิน',     situation:'ผู้โดยสารมาเช็คอินที่เคาน์เตอร์สนามบิน' },
-  { id:'shopping',  icon:'🛍️', name:'ช้อปปิ้ง',    role:'พ่อค้าในตลาด',         situation:'ลูกค้าต่อราคาซื้อของในตลาดจีน' },
-  { id:'hotel',     icon:'🏨', name:'โรงแรม',       role:'พนักงาน Front Desk',   situation:'แขกมาเช็คอินที่โรงแรม' },
-  { id:'doctor',    icon:'🏥', name:'หาหมอ',        role:'แพทย์',                situation:'คนไข้มาพบแพทย์ที่คลินิก บอกอาการ' },
-  { id:'friend',    icon:'👫', name:'คุยกับเพื่อน', role:'เพื่อนชาวจีน',          situation:'เพื่อนชาวจีนคุยกันแบบสบายๆ' },
+  { id:'restaurant', icon:'🍜', name:'สั่งอาหาร', role:'พนักงานเสิร์ฟ', situation:'ลูกค้าเข้าร้านอาหารจีนมาสั่งอาหาร' },
 ];
+const AICHAT_LEVELS = [{ id:'easy', label:'เริ่มต้น', desc:'ประโยคสั้น คำง่าย' }];
 
-const AICHAT_LEVELS = [
-  { id:'easy',   label:'🟢 เริ่มต้น',  desc:'ประโยคสั้น คำง่าย' },
-  { id:'medium', label:'🟡 ปานกลาง',  desc:'ประโยคยาวขึ้น มีสำนวน' },
-  { id:'hard',   label:'🔴 ยาก',       desc:'ภาษาเร็ว สำนวนเยอะ' },
+const CAT_LABELS = {
+  basics: '🤝 มิตรภาพ',
+  dating: '💘 ตกหลุมรัก',
+  food: '🍜 ของกิน',
+  photo: '📸 แชะภาพ',
+  shopping: '🛍️ ช้อปปิ้ง',
+};
+
+const SCRIPTED_SCENARIOS = [
+  {id:'basics_1',cat:'basics',icon:'👋',name:'ทักทาย ขอบคุณ & ขอโทษ',desc:'ทักทายแรกพบพร้อมมารยาทพื้นฐาน',free:true,dialog:[
+    {s:'ai',cn:'你好！真的很谢谢你的帮助。',py:'Nǐ hǎo! Zhēnde hěn xièxie nǐ de bāngzhù.',th:'สวัสดีค่ะ! ขอบคุณสำหรับความช่วยเหลือมากๆ'},
+    {s:'user',cn:'没关系，对不起我来晚了。',py:'Méi guānxi, duìbuqǐ wǒ lái wǎn le.',th:'ไม่เป็นไร ขอโทษที่มาสายนะครับ/ค่ะ'},
+    {s:'ai',cn:'没关系！你来了就好。',py:'Méi guānxi! Nǐ lái le jiù hǎo.',th:'ไม่เป็นไรเลยค่ะ ที่มาได้ก็ดีแล้ว'},
+    {s:'user',cn:'谢谢你的理解！',py:'Xièxie nǐ de lǐjiě!',th:'ขอบคุณที่เข้าใจนะครับ/ค่ะ!'},
+  ]},
+  {id:'basics_2',cat:'basics',icon:'🚶',name:'ขอโทษ ขอทางหน่อย',desc:'ขอทางในรถไฟหรือตลาดนัด',free:true,dialog:[
+    {s:'user',cn:'不好意思，请让我过一下。',py:'Bù hǎoyìsi, qǐng ràng wǒ guò yíxià.',th:'ขอโทษนะคะ รบกวนขอทางเดินผ่านหน่อยค่ะ'},
+    {s:'ai',cn:'好的，请过。不客气！',py:'Hǎo de, qǐng guò. Bú kèqi!',th:'ได้เลยค่ะ เชิญผ่านเลย ไม่ต้องเกรงใจ'},
+    {s:'user',cn:'谢谢！非常感谢。',py:'Xièxie! Fēicháng gǎnxiè.',th:'ขอบคุณมากครับ/ค่ะ!'},
+    {s:'ai',cn:'没事，慢走！',py:'Méi shì, màn zǒu!',th:'ไม่เป็นไรค่ะ ระวังด้วยนะ!'},
+  ]},
+  {id:'basics_3',cat:'basics',icon:'🪪',name:'แนะนำตัวสะกดใจ',desc:'บอกชื่อ อายุ สัญชาติ และอาชีพ',free:false,dialog:[
+    {s:'ai',cn:'你好！你叫什么名字？',py:'Nǐ hǎo! Nǐ jiào shénme míngzi?',th:'สวัสดีค่ะ! คุณชื่ออะไรคะ?'},
+    {s:'user',cn:'你好！我叫小泰，我是泰国人。',py:'Nǐ hǎo! Wǒ jiào Xiǎo Tài, wǒ shì Tàiguó rén.',th:'สวัสดีครับ! ฉันชื่อเสี่ยวไท เป็นคนไทยครับ'},
+    {s:'ai',cn:'你在做什么工作？',py:'Nǐ zài zuò shénme gōngzuò?',th:'คุณทำงานอะไรอยู่คะ?'},
+    {s:'user',cn:'我是一名老师，你呢？',py:'Wǒ shì yī míng lǎoshī, nǐ ne?',th:'ฉันเป็นครูครับ แล้วคุณล่ะ?'},
+    {s:'ai',cn:'我是学生！很高兴认识你。',py:'Wǒ shì xuésheng! Hěn gāoxìng rènshi nǐ.',th:'ฉันเป็นนักศึกษาค่ะ! ยินดีที่รู้จักนะ'},
+    {s:'user',cn:'我也很高兴认识你！',py:'Wǒ yě hěn gāoxìng rènshi nǐ!',th:'ฉันก็ยินดีที่รู้จักเช่นกันครับ!'},
+  ]},
+  {id:'basics_4',cat:'basics',icon:'💬',name:'แอดวีแชตกันนะ',desc:'วิธีขอ WeChat แลกคอนแทกต์',free:false,dialog:[
+    {s:'user',cn:'我可以加你微信吗？',py:'Wǒ kěyǐ jiā nǐ Wēixìn ma?',th:'ขอแอด WeChat คุณได้ไหมครับ/ค่ะ?'},
+    {s:'ai',cn:'当然可以！我的微信号是TangTang888。',py:'Dāngrán kěyǐ! Wǒ de Wēixìn hào shì TangTang888.',th:'ได้เลยค่ะ WeChat ฉันคือ TangTang888'},
+    {s:'user',cn:'好的，我加你了！',py:'Hǎo de, wǒ jiā nǐ le!',th:'โอเค แอดแล้วนะครับ/ค่ะ!'},
+    {s:'ai',cn:'收到了！我们可以用中文聊天练习。',py:'Shōudào le! Wǒmen kěyǐ yòng Zhōngwén liáotiān liànxí.',th:'รับแล้วค่ะ คุยกันเป็นภาษาจีนฝึกกันได้เลย'},
+  ]},
+  {id:'basics_5',cat:'basics',icon:'💼',name:'คุณทำงานอะไรเหรอ',desc:'ถามอาชีพเพื่อสร้างความสนิท',free:false,dialog:[
+    {s:'ai',cn:'你在哪里工作？',py:'Nǐ zài nǎlǐ gōngzuò?',th:'คุณทำงานที่ไหนอยู่คะ?'},
+    {s:'user',cn:'我在曼谷的一家公司上班。你呢？',py:'Wǒ zài Màngǔ de yī jiā gōngsī shàngbān. Nǐ ne?',th:'ทำงานที่บริษัทในกรุงเทพครับ แล้วคุณล่ะ?'},
+    {s:'ai',cn:'我在上海工作，是一名设计师。',py:'Wǒ zài Shànghǎi gōngzuò, shì yī míng shèjìshī.',th:'ทำงานอยู่ที่เซี่ยงไฮ้ค่ะ เป็นนักออกแบบ'},
+    {s:'user',cn:'哇，设计师很厉害！',py:'Wā, shèjìshī hěn lìhai!',th:'ว้าว นักออกแบบเก่งมากเลยนะครับ!'},
+  ]},
+  {id:'basics_6',cat:'basics',icon:'✈️',name:'บอกลาพบกันใหม่',desc:'พูดอำลาและกล่าวอวยพร',free:false,dialog:[
+    {s:'user',cn:'我要走了，下次再见！',py:'Wǒ yào zǒu le, xià cì zàijiàn!',th:'ฉันต้องไปแล้ว แล้วพบกันใหม่นะครับ/ค่ะ!'},
+    {s:'ai',cn:'好的！一路平安，保重！',py:'Hǎo de! Yīlù píngān, bǎozhòng!',th:'โอเคค่ะ เดินทางปลอดภัยด้วยนะ ดูแลตัวด้วย!'},
+    {s:'user',cn:'你也保重！希望下次能再见面。',py:'Nǐ yě bǎozhòng! Xīwàng xià cì néng zài jiànmiàn.',th:'คุณก็ดูแลตัวด้วยนะครับ หวังว่าจะได้เจอกันอีก'},
+    {s:'ai',cn:'一定的！我们保持联系吧！',py:'Yīdìng de! Wǒmen bǎochí liánxì ba!',th:'แน่นอนค่ะ เราติดต่อกันไว้นะ!'},
+  ]},
+  {id:'dating_7',cat:'dating',icon:'👗',name:'วันนี้คุณแต่งตัวน่ารักจัง',desc:'ชมเพื่อเปิดใจด้วยคำพูดประทับใจ',free:true,dialog:[
+    {s:'user',cn:'你今天穿得很漂亮，很可爱。',py:'Nǐ jīntiān chuān de hěn piàoliang, hěn kěài.',th:'วันนี้คุณแต่งตัวสวยมากเลย น่ารักสุดๆ'},
+    {s:'ai',cn:'真的吗？谢谢你的夸奖！',py:'Zhēnde ma? Xièxie nǐ de kuājiǎng!',th:'จริงเหรอคะ? ขอบคุณที่ชมนะ เขินเลย'},
+    {s:'user',cn:'真的！你每天都很漂亮。',py:'Zhēnde! Nǐ měi tiān dōu hěn piàoliang.',th:'จริงๆ! คุณสวยทุกวันเลยครับ'},
+    {s:'ai',cn:'你太会说话了！',py:'Nǐ tài huì shuōhuà le!',th:'คุณพูดเก่งมากเลยนะคะ!'},
+  ]},
+  {id:'dating_8',cat:'dating',icon:'🦊',name:'คุณมีแฟนหรือยัง',desc:'ยิงคำถามหยั่งเชิงหัวใจ',free:true,dialog:[
+    {s:'user',cn:'请问，你有男朋友吗？',py:'Qǐngwèn, nǐ yǒu nán péngyou ma?',th:'ขอถามหน่อยนะคะ คุณมีแฟนหรือยัง?'},
+    {s:'ai',cn:'我还没有呢，你呢？',py:'Wǒ hái méiyǒu ne, nǐ ne?',th:'ฉันยังไม่มีเลยค่ะ แล้วคุณล่ะ?'},
+    {s:'user',cn:'我也没有！',py:'Wǒ yě méiyǒu!',th:'ฉันก็ไม่มีเหมือนกันครับ!'},
+    {s:'ai',cn:'哈哈！那我们可以去喝咖啡吗？',py:'Hāhā! Nà wǒmen kěyǐ qù hē kāfēi ma?',th:'ฮ่าๆ งั้นเราไปดื่มกาแฟด้วยกันได้ไหมคะ?'},
+  ]},
+  {id:'dating_9',cat:'dating',icon:'🌹',name:'ขอจีบคุณได้ไหม',desc:'ขอตรงๆ สัญญาจะดูแลอย่างดี',free:false,dialog:[
+    {s:'user',cn:'我喜欢你，可以追你吗？',py:'Wǒ xǐhuan nǐ, kěyǐ zhuī nǐ ma?',th:'ฉันชอบคุณนะ ขอจีบคุณได้ไหมครับ?'},
+    {s:'ai',cn:'真的吗？我需要想一想。',py:'Zhēnde ma? Wǒ xūyào xiǎng yī xiǎng.',th:'จริงเหรอคะ? ฉันต้องคิดดูก่อนนะ'},
+    {s:'user',cn:'好的，我会等你的答案。',py:'Hǎo de, wǒ huì děng nǐ de dáàn.',th:'โอเค ฉันจะรอคำตอบของคุณนะครับ'},
+    {s:'ai',cn:'谢谢你的勇气！',py:'Xièxie nǐ de yǒngqì!',th:'ขอบคุณที่กล้าบอกนะคะ!'},
+  ]},
+  {id:'dating_10',cat:'dating',icon:'☕',name:'ชวนเดตวันหยุด',desc:'ชวนไปทานกาแฟวันเสาร์นี้',free:false,dialog:[
+    {s:'user',cn:'这个周末你有空吗？',py:'Zhège zhōumò nǐ yǒu kòng ma?',th:'วันหยุดสุดสัปดาห์นี้คุณว่างไหมครับ?'},
+    {s:'ai',cn:'周六我有空，怎么了？',py:'Zhōuliù wǒ yǒu kòng, zěnme le?',th:'วันเสาร์ว่างค่ะ มีอะไรเหรอ?'},
+    {s:'user',cn:'我想邀请你去喝咖啡！',py:'Wǒ xiǎng yāoqǐng nǐ qù hē kāfēi!',th:'อยากชวนคุณไปดื่มกาแฟด้วยกันครับ!'},
+    {s:'ai',cn:'好啊！那几点见面？',py:'Hǎo a! Nà jǐ diǎn jiànmiàn?',th:'ได้เลยค่ะ แล้วนัดกันกี่โมงดีคะ?'},
+  ]},
+  {id:'dating_11',cat:'dating',icon:'🎧',name:'รสนิยมที่ใจตรงกัน',desc:'ถามความชอบ เพลง ภาพยนตร์',free:false,dialog:[
+    {s:'ai',cn:'你喜欢听什么音乐？',py:'Nǐ xǐhuan tīng shénme yīnyuè?',th:'คุณชอบฟังเพลงแนวไหนคะ?'},
+    {s:'user',cn:'我喜欢流行音乐！你呢？',py:'Wǒ xǐhuan liúxíng yīnyuè! Nǐ ne?',th:'ฉันชอบเพลงป็อปครับ! แล้วคุณล่ะ?'},
+    {s:'ai',cn:'我也喜欢！我们品味一样！',py:'Wǒ yě xǐhuan! Wǒmen pǐnwèi yīyàng!',th:'ฉันก็ชอบด้วยค่ะ รสนิยมเราเหมือนกันเลย!'},
+    {s:'user',cn:'太棒了！那你喜欢看什么电影？',py:'Tài bàng le! Nà nǐ xǐhuan kàn shénme diànyǐng?',th:'เยี่ยมมาก! แล้วคุณชอบดูหนังแนวไหนครับ?'},
+  ]},
+  {id:'dating_12',cat:'dating',icon:'🌙',name:'ฝันดีนะไอ้ต้าว',desc:'หยอดคำหวานบอกฝันดีก่อนนอน',free:false,dialog:[
+    {s:'user',cn:'时间不早了，你要去睡觉了吗？',py:'Shíjiān bù zǎo le, nǐ yào qù shuìjiào le ma?',th:'ดึกแล้ว คุณจะไปนอนแล้วใช่ไหมครับ?'},
+    {s:'ai',cn:'是的，要睡觉了。晚安！',py:'Shì de, yào shuìjiào le. Wǎnān!',th:'ใช่ค่ะ จะนอนแล้ว ราตรีสวัสดิ์!'},
+    {s:'user',cn:'晚安！做个好梦！',py:'Wǎnān! Zuò gè hǎo mèng!',th:'ราตรีสวัสดิ์ครับ ฝันดีนะ!'},
+    {s:'ai',cn:'谢谢！你也是，晚安亲爱的！',py:'Xièxie! Nǐ yě shì, wǎnān qīnài de!',th:'ขอบคุณค่ะ คุณก็ฝันดีด้วยนะคะที่รัก!'},
+  ]},
+  {id:'food_13',cat:'food',icon:'🍽️',name:'โต๊ะนี้ว่างไหม',desc:'ถามหาโต๊ะว่างและนั่งทานอาหาร',free:true,dialog:[
+    {s:'user',cn:'你好，请问这张桌子空着吗？',py:'Nǐ hǎo, qǐngwèn zhè zhāng zhuōzi kòng zhe ma?',th:'สวัสดีค่ะ ขอถามว่าโต๊ะนี้ว่างไหมคะ?'},
+    {s:'ai',cn:'是的，空着的。请坐！',py:'Shì de, kòng zhe de. Qǐng zuò!',th:'ว่างอยู่ค่ะ เชิญนั่งเลยนะคะ!'},
+    {s:'user',cn:'谢谢！可以给我看菜单吗？',py:'Xièxie! Kěyǐ gěi wǒ kàn càidān ma?',th:'ขอบคุณค่ะ! ขอดูเมนูได้ไหมคะ?'},
+    {s:'ai',cn:'当然，这是我们的菜单。',py:'Dāngrán, zhè shì wǒmen de càidān.',th:'ได้เลยค่ะ นี่คือเมนูของเราค่ะ'},
+    {s:'user',cn:'我要一碗面，微辣，不加味精。',py:'Wǒ yào yī wǎn miàn, wēi là, bù jiā wèijīng.',th:'ขอหมี่หนึ่งชาม เผ็ดน้อย ไม่ใส่ผงชูรสนะคะ'},
+    {s:'ai',cn:'好的，请稍等！',py:'Hǎo de, qǐng shāo děng!',th:'โอเคค่ะ รอสักครู่นะคะ!'},
+  ]},
+  {id:'food_14',cat:'food',icon:'🌶️',name:'รสชาติโดนใจคนไทย',desc:'สั่งเผ็ดน้อย ไม่หวาน ไม่ผักชี',free:false,dialog:[
+    {s:'user',cn:'我要微辣，不要香菜，不加糖。',py:'Wǒ yào wēi là, bú yào xiāngcài, bù jiā táng.',th:'ขอเผ็ดน้อย ไม่ใส่ผักชี ไม่ใส่น้ำตาลด้วยนะคะ'},
+    {s:'ai',cn:'好的，没有香菜，微辣，不加糖。',py:'Hǎo de, méiyǒu xiāngcài, wēi là, bù jiā táng.',th:'โอเคค่ะ ไม่มีผักชี เผ็ดน้อย ไม่ใส่น้ำตาล'},
+    {s:'user',cn:'对！谢谢你！',py:'Duì! Xièxie nǐ!',th:'ถูกต้องเลยค่ะ ขอบคุณมากนะคะ!'},
+    {s:'ai',cn:'好的，马上来！',py:'Hǎo de, mǎshàng lái!',th:'โอเคค่ะ มาทันทีเลยนะคะ!'},
+  ]},
+  {id:'food_15',cat:'food',icon:'🧋',name:'สั่งชานมหวาน 50%',desc:'หวานน้อย น้ำแข็งน้อย มุกเยอะ',free:false,dialog:[
+    {s:'user',cn:'我要一杯珍珠奶茶，甜度50%，少冰。',py:'Wǒ yào yī bēi zhēnzhū nǎichá, tián dù 50%, shǎo bīng.',th:'ขอชานมไข่มุกหนึ่งแก้ว หวาน 50% น้ำแข็งน้อยนะคะ'},
+    {s:'ai',cn:'好的！要加多少珍珠？',py:'Hǎo de! Yào jiā duōshao zhēnzhū?',th:'โอเคค่ะ! ใส่มุกเท่าไหร่ดีคะ?'},
+    {s:'user',cn:'多加一点珍珠！',py:'Duō jiā yīdiǎn zhēnzhū!',th:'ใส่มุกเยอะๆ หน่อยนะคะ!'},
+    {s:'ai',cn:'好嘞！请稍等。',py:'Hǎo lei! Qǐng shāo děng.',th:'โอเคค่ะ รอสักครู่นะคะ'},
+  ]},
+  {id:'food_16',cat:'food',icon:'🍲',name:'ลุยหมาล่าหม้อไฟ',desc:'เลือกซุปหมาล่า สั่งเนื้อสัตว์',free:false,dialog:[
+    {s:'user',cn:'请给我一个番茄锅底。',py:'Qǐng gěi wǒ yī gè fānqié guōdǐ.',th:'ขอซุปมะเขือเทศหนึ่งหม้อนะคะ'},
+    {s:'ai',cn:'好的！你要点什么肉？',py:'Hǎo de! Nǐ yào diǎn shénme ròu?',th:'โอเคค่ะ! จะสั่งเนื้ออะไรดีคะ?'},
+    {s:'user',cn:'我要牛肉和羊肉。',py:'Wǒ yào niúròu hé yángròu.',th:'ขอเนื้อวัวและเนื้อแกะนะคะ'},
+    {s:'ai',cn:'好的！还要点什么吗？',py:'Hǎo de! Hái yào diǎn shénme ma?',th:'โอเคค่ะ! จะสั่งอะไรเพิ่มอีกไหมคะ?'},
+  ]},
+  {id:'food_17',cat:'food',icon:'🥗',name:'เมนูมังสวิรัติ',desc:'บอกพนักงานว่าทานเจหรือทานแต่ผัก',free:false,dialog:[
+    {s:'user',cn:'我是素食者，有素食菜单吗？',py:'Wǒ shì sùshí zhě, yǒu sùshí càidān ma?',th:'ฉันทานมังสวิรัติค่ะ มีเมนูมังสวิรัติไหมคะ?'},
+    {s:'ai',cn:'有的！这里是我们的素食菜单。',py:'Yǒu de! Zhèlǐ shì wǒmen de sùshí càidān.',th:'มีค่ะ! นี่คือเมนูมังสวิรัติของเราค่ะ'},
+    {s:'user',cn:'谢谢！不要加肉，不要加鱼露。',py:'Xièxie! Bú yào jiā ròu, bú yào jiā yúlù.',th:'ขอบคุณค่ะ! ไม่ใส่เนื้อ ไม่ใส่น้ำปลาด้วยนะคะ'},
+    {s:'ai',cn:'好的，我们会注意的！',py:'Hǎo de, wǒmen huì zhùyì de!',th:'โอเคค่ะ เราจะระวังให้นะคะ!'},
+  ]},
+  {id:'food_18',cat:'food',icon:'💳',name:'คิดเงินสแกนจ่าย',desc:'ขอเช็คบิลและสแกนมือถือ',free:false,dialog:[
+    {s:'user',cn:'服务员，买单！',py:'Fúwùyuán, mǎi dān!',th:'พนักงานค่ะ เช็คบิลด้วยนะคะ!'},
+    {s:'ai',cn:'好的，一共150块钱。',py:'Hǎo de, yīgòng 150 kuài qián.',th:'โอเคค่ะ รวมทั้งหมด 150 หยวนค่ะ'},
+    {s:'user',cn:'可以微信支付吗？',py:'Kěyǐ Wēixìn zhīfù ma?',th:'จ่ายผ่าน WeChat Pay ได้ไหมคะ?'},
+    {s:'ai',cn:'可以！扫这个二维码。',py:'Kěyǐ! Sǎo zhège èrwéimǎ.',th:'ได้ค่ะ! สแกน QR Code นี้ได้เลยค่ะ'},
+  ]},
+  {id:'photo_19',cat:'photo',icon:'📷',name:'ช่วยถ่ายรูปให้หน่อย',desc:'ขอให้ช่วยกดถ่ายรูปคู่สวยๆ',free:true,dialog:[
+    {s:'user',cn:'你好，可以帮我拍张照片吗？',py:'Nǐ hǎo, kěyǐ bāng wǒ pāi zhāng zhàopiàn ma?',th:'สวัสดีค่ะ ช่วยถ่ายรูปให้หน่อยได้ไหมคะ?'},
+    {s:'ai',cn:'当然可以！要横着拍还是竖着拍？',py:'Dāngrán kěyǐ! Yào héng zhe pāi háishi shù zhe pāi?',th:'ได้เลยค่ะ! เอาแนวนอนหรือแนวตั้งดีคะ?'},
+    {s:'user',cn:'竖着拍，麻烦往后退一点！',py:'Shù zhe pāi, máfan wǎng hòu tuì yìdiǎn!',th:'แนวตั้งค่ะ รบกวนถอยหลังไปอีกนิดนะคะ!'},
+    {s:'ai',cn:'好的！准备好了吗？一二三，茄子！',py:'Hǎo de! Zhǔnbèi hǎo le ma? Yī èr sān, qiézi!',th:'โอเคค่ะ พร้อมหรือยัง? หนึ่ง สอง สาม ยิ้มค่ะ!'},
+    {s:'user',cn:'谢谢！可以再拍一张吗？',py:'Xièxie! Kěyǐ zài pāi yī zhāng ma?',th:'ขอบคุณมากค่ะ! ขอถ่ายอีกรูปได้ไหมคะ?'},
+    {s:'ai',cn:'当然！来，再一次！',py:'Dāngrán! Lái, zài yīcì!',th:'ได้เลยค่ะ มา อีกครั้ง!'},
+  ]},
+  {id:'photo_20',cat:'photo',icon:'🌅',name:'ขอดูรูปว่าสวยไหม',desc:'ขอถ่ายอีกเพราะย้อนแสง',free:false,dialog:[
+    {s:'user',cn:'可以看一下照片吗？',py:'Kěyǐ kàn yíxià zhàopiàn ma?',th:'ขอดูรูปหน่อยได้ไหมคะ?'},
+    {s:'ai',cn:'当然，看看吧！',py:'Dāngrán, kàn kàn ba!',th:'ได้เลยค่ะ ดูเลย!'},
+    {s:'user',cn:'逆光太强了，可以再拍一张吗？',py:'Nì guāng tài qiáng le, kěyǐ zài pāi yī zhāng ma?',th:'แสงย้อนแรงเกินไป ถ่ายอีกรูปได้ไหมคะ?'},
+    {s:'ai',cn:'好的！我们换个方向拍。',py:'Hǎo de! Wǒmen huàn gè fāngxiàng pāi.',th:'โอเคค่ะ เปลี่ยนทิศแล้วถ่ายใหม่นะคะ'},
+  ]},
+  {id:'photo_21',cat:'photo',icon:'🎬',name:'ถ่ายวิดีโอสั้นให้หน่อย',desc:'ขอให้ถ่ายวิดีโอลง TikTok',free:false,dialog:[
+    {s:'user',cn:'不好意思，能帮我拍个短视频吗？',py:'Bù hǎoyìsi, néng bāng wǒ pāi gè duǎn shìpín ma?',th:'ขอโทษนะคะ ช่วยถ่ายวิดีโอสั้นๆ ให้หน่อยได้ไหมคะ?'},
+    {s:'ai',cn:'没问题！竖着拍还是横着拍？',py:'Méi wèntí! Shù zhe pāi háishi héng zhe pāi?',th:'ไม่มีปัญหาค่ะ! แนวตั้งหรือแนวนอนดีคะ?'},
+    {s:'user',cn:'竖着拍，大概10秒就可以了。',py:'Shù zhe pāi, dàgài 10 miǎo jiù kěyǐ le.',th:'แนวตั้งค่ะ ประมาณ 10 วินาทีก็พอแล้วค่ะ'},
+    {s:'ai',cn:'好的，你准备好了就说开始！',py:'Hǎo de, nǐ zhǔnbèi hǎo le jiù shuō kāishǐ!',th:'โอเคค่ะ พร้อมแล้วบอกว่าเริ่มได้เลยนะคะ!'},
+  ]},
+  {id:'photo_22',cat:'photo',icon:'🚻',name:'ห้องน้ำอยู่ทางไหน',desc:'ถามพิกัดห้องน้ำฉุกเฉิน',free:false,dialog:[
+    {s:'user',cn:'请问，厕所在哪里？',py:'Qǐngwèn, cèsuǒ zài nǎlǐ?',th:'ขอถามหน่อยค่ะ ห้องน้ำอยู่ที่ไหนคะ?'},
+    {s:'ai',cn:'在那边，往右走就到了。',py:'Zài nàbiān, wǎng yòu zǒu jiù dào le.',th:'อยู่ทางนั้นค่ะ เดินไปทางขวาแล้วจะถึงเลยค่ะ'},
+    {s:'user',cn:'谢谢！大概走多久？',py:'Xièxie! Dàgài zǒu duō jiǔ?',th:'ขอบคุณค่ะ! เดินประมาณนานแค่ไหนคะ?'},
+    {s:'ai',cn:'不远，大概两分钟。',py:'Bù yuǎn, dàgài liǎng fēnzhōng.',th:'ไม่ไกลค่ะ ประมาณสองนาทีค่ะ'},
+  ]},
+  {id:'photo_23',cat:'photo',icon:'🗺️',name:'หลงทางช่วยดูแผนที่',desc:'ขอความช่วยเหลือหาพิกัด',free:false,dialog:[
+    {s:'user',cn:'不好意思，我迷路了，可以帮我看地图吗？',py:'Bù hǎoyìsi, wǒ mílù le, kěyǐ bāng wǒ kàn dìtú ma?',th:'ขอโทษนะคะ ฉันหลงทางค่ะ ช่วยดูแผนที่ให้หน่อยได้ไหมคะ?'},
+    {s:'ai',cn:'没问题！你要去哪里？',py:'Méi wèntí! Nǐ yào qù nǎlǐ?',th:'ได้เลยค่ะ! คุณจะไปที่ไหนคะ?'},
+    {s:'user',cn:'我要去这个酒店。',py:'Wǒ yào qù zhège jiǔdiàn.',th:'ฉันจะไปโรงแรมนี้ค่ะ'},
+    {s:'ai',cn:'明白了！往前走，然后左转就到了。',py:'Míngbái le! Wǎng qián zǒu, ránhòu zuǒ zhuǎn jiù dào le.',th:'เข้าใจแล้วค่ะ! เดินตรงไปแล้วเลี้ยวซ้ายก็ถึงแล้วค่ะ'},
+  ]},
+  {id:'photo_24',cat:'photo',icon:'🚇',name:'ขอทางไปสถานีรถไฟ',desc:'ถามทางขึ้นรถไฟฟ้าใต้ดิน',free:false,dialog:[
+    {s:'user',cn:'请问最近的地铁站在哪里？',py:'Qǐngwèn zuìjìn de dìtiě zhàn zài nǎlǐ?',th:'ขอถามหน่อยค่ะ สถานีรถไฟฟ้าที่ใกล้ที่สุดอยู่ที่ไหนคะ?'},
+    {s:'ai',cn:'从这里走大概五分钟就到了。',py:'Cóng zhèlǐ zǒu dàgài wǔ fēnzhōng jiù dào le.',th:'จากที่นี่เดินประมาณห้านาทีก็ถึงค่ะ'},
+    {s:'user',cn:'走哪个方向？',py:'Zǒu nǎge fāngxiàng?',th:'เดินไปทางไหนคะ?'},
+    {s:'ai',cn:'向北走，看到红绿灯右转。',py:'Xiàng běi zǒu, kàndào hónglǜdēng yòu zhuǎn.',th:'เดินไปทางเหนือ พอเห็นสัญญาณไฟเลี้ยวขวาค่ะ'},
+  ]},
+  {id:'shopping_25',cat:'shopping',icon:'💵',name:'อันนี้ราคาเท่าไหร่',desc:'ถามราคาสินค้าอย่างคล่องแคล่ว',free:true,dialog:[
+    {s:'user',cn:'这个多少钱？',py:'Zhège duōshao qián?',th:'อันนี้ราคาเท่าไหร่คะ?'},
+    {s:'ai',cn:'这个一百五十块钱。',py:'Zhège yībǎi wǔshí kuài qián.',th:'อันนี้ราคา 150 หยวนค่ะ'},
+    {s:'user',cn:'有便宜一点的吗？',py:'Yǒu piányí yīdiǎn de ma?',th:'มีที่ถูกกว่านี้อีกไหมคะ?'},
+    {s:'ai',cn:'这个款式有，只要一百块。',py:'Zhège kuǎnshì yǒu, zhǐ yào yībǎi kuài.',th:'รุ่นนี้มีค่ะ ราคาแค่ 100 หยวนเท่านั้น'},
+  ]},
+  {id:'shopping_26',cat:'shopping',icon:'🧣',name:'ต่อราคาตลาดแตกรุ่นใหญ่',desc:'เจรจาขอลดราคาสินค้า',free:true,dialog:[
+    {s:'ai',cn:'这个包包两百块钱。',py:'Zhège bāobāo liǎngbǎi kuài qián.',th:'กระเป๋าใบนี้ราคา 200 หยวนค่ะ'},
+    {s:'user',cn:'太贵了！一百块行吗？',py:'Tài guì le! Yībǎi kuài xíng ma?',th:'แพงไปแล้ว! 100 หยวนได้ไหมครับ/ค่ะ?'},
+    {s:'ai',cn:'不行，最低一百五！',py:'Bù xíng, zuìdī yībǎi wǔ!',th:'ไม่ได้ค่ะ อย่างน้อย 150 เลยค่ะ!'},
+    {s:'user',cn:'好吧，一百二十行吗？',py:'Hǎo ba, yībǎi èrshí xíng ma?',th:'งั้น 120 หยวนได้ไหมครับ/ค่ะ?'},
+    {s:'ai',cn:'好，成交！',py:'Hǎo, chéngjiao!',th:'ตกลงค่ะ ขายแล้ว!'},
+  ]},
+  {id:'shopping_27',cat:'shopping',icon:'👕',name:'ขอลองเสื้อไซส์อื่น',desc:'ถามหาไซส์ขอลองในห้อง',free:false,dialog:[
+    {s:'user',cn:'这件衣服有L码吗？',py:'Zhè jiàn yīfu yǒu L mǎ ma?',th:'เสื้อตัวนี้มีไซส์ L ไหมคะ?'},
+    {s:'ai',cn:'有的！你要试穿吗？',py:'Yǒu de! Nǐ yào shìchuān ma?',th:'มีค่ะ! จะลองใส่ดูไหมคะ?'},
+    {s:'user',cn:'好的，试衣间在哪里？',py:'Hǎo de, shì yī jiān zài nǎlǐ?',th:'ได้ค่ะ ห้องลองอยู่ที่ไหนคะ?'},
+    {s:'ai',cn:'在右边，请跟我来。',py:'Zài yòubiān, qǐng gēn wǒ lái.',th:'อยู่ทางขวาค่ะ เชิญตามมาได้เลยค่ะ'},
+  ]},
+  {id:'shopping_28',cat:'shopping',icon:'🎁',name:'ตามล่าหาของฝากเด่น',desc:'ถามว่าแถวนี้มีอะไรน่าซื้อ',free:false,dialog:[
+    {s:'user',cn:'这附近有什么特产吗？',py:'Zhè fùjìn yǒu shénme tèchǎn ma?',th:'แถวนี้มีของขึ้นชื่ออะไรบ้างคะ?'},
+    {s:'ai',cn:'有很多！这里的茶叶和丝巾很有名。',py:'Yǒu hěn duō! Zhèlǐ de cháyè hé sī jīn hěn yǒumíng.',th:'มีเยอะเลยค่ะ ชาและผ้าไหมที่นี่ขึ้นชื่อมากค่ะ'},
+    {s:'user',cn:'带什么当礼物比较好？',py:'Dài shénme dāng lǐwù bǐjiào hǎo?',th:'เอาอะไรไปฝากเพื่อนดีคะ?'},
+    {s:'ai',cn:'茶叶是最好的选择！人人都喜欢。',py:'Cháyè shì zuì hǎo de xuǎnzé! Rénrén dōu xǐhuan.',th:'ชาเป็นตัวเลือกที่ดีที่สุดค่ะ ทุกคนชอบกัน'},
+  ]},
+  {id:'shopping_29',cat:'shopping',icon:'🏪',name:'เข้าร้านสะดวกซื้อ',desc:'ซื้อของกินเล่นยามดึก',free:false,dialog:[
+    {s:'user',cn:'你好，请问有矿泉水吗？',py:'Nǐ hǎo, qǐngwèn yǒu kuàngquán shuǐ ma?',th:'สวัสดีค่ะ มีน้ำแร่ไหมคะ?'},
+    {s:'ai',cn:'有的！在冰箱里，自己拿吧。',py:'Yǒu de! Zài bīngxiāng lǐ, zìjǐ ná ba.',th:'มีค่ะ อยู่ในตู้เย็น หยิบเองได้เลยนะคะ'},
+    {s:'user',cn:'好的，这个薯片多少钱？',py:'Hǎo de, zhège shǔpiàn duōshao qián?',th:'โอเคค่ะ แล้วมันฝรั่งทอดนี้ราคาเท่าไหร่คะ?'},
+    {s:'ai',cn:'八块钱，一共十块。',py:'Bā kuài qián, yīgòng shí kuài.',th:'แปดหยวนค่ะ รวมทั้งหมดสิบหยวนค่ะ'},
+  ]},
+  {id:'shopping_30',cat:'shopping',icon:'⚠️',name:'ขอเปลี่ยนสินค้าชำรุด',desc:'แจ้งว่าเสื้อมีตำหนิขอเคลม',free:false,dialog:[
+    {s:'user',cn:'不好意思，这件衣服有污渍，可以换一件吗？',py:'Bù hǎoyìsi, zhè jiàn yīfu yǒu wūzì, kěyǐ huàn yī jiàn ma?',th:'ขอโทษนะคะ เสื้อตัวนี้มีรอยเปื้อน ขอเปลี่ยนตัวใหม่ได้ไหมคะ?'},
+    {s:'ai',cn:'真的吗？我看一下。',py:'Zhēnde ma? Wǒ kàn yíxià.',th:'จริงเหรอคะ? ขอดูหน่อยนะคะ'},
+    {s:'user',cn:'在这里，看到了吗？',py:'Zài zhèlǐ, kàndào le ma?',th:'ตรงนี้ค่ะ เห็นไหมคะ?'},
+    {s:'ai',cn:'哎呀！对不起，我马上给你换一件。',py:'Āiya! Duìbuqǐ, wǒ mǎshàng gěi nǐ huàn yī jiàn.',th:'โอ้! ขอโทษด้วยนะคะ เดี๋ยวเปลี่ยนให้ทันทีเลยค่ะ'},
+  ]},
 ];
 
 let _ac = {
@@ -19834,45 +20027,61 @@ function initAIChatGame() {
 }
 
 // ── SCENARIO PICKER ──
-function _acRenderPicker() {
+function _acRenderPicker(activeCat) {
+  activeCat = activeCat || 'basics';
   const el = document.getElementById('aichat-content');
-  el.innerHTML = `
-    <div style="padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--paper3);background:white;position:sticky;top:56px;z-index:30;flex-shrink:0">
-      <button onclick="closeGame()" style="background:var(--paper2);border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer">←</button>
-      <div style="font-size:15px;font-weight:700;color:var(--ink)">🎙️ สนทนากับ AI</div>
-    </div>
-    <div style="flex:1;overflow-y:auto;padding:16px">
-      <div style="background:linear-gradient(135deg,#fff7ed,#fef3c7);border:1.5px solid #fcd34d;border-radius:14px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:flex-start;gap:10px">
-        <div style="font-size:24px;flex-shrink:0">🚧</div>
-        <div>
-          <div style="font-size:13px;font-weight:800;color:#92400e;margin-bottom:4px">ฟีเจอร์นี้กำลังพัฒนาอยู่นะคะ</div>
-          <div style="font-size:12px;color:#b45309;line-height:1.6;font-family:Noto Sans Thai,sans-serif">ขณะนี้ยังไม่เปิดให้ใช้งาน ทีมงานกำลังปรับปรุงระบบให้สมบูรณ์ที่สุด รอติดตามอัปเดตได้เร็วๆ นี้ค่ะ ✨</div>
+  const cats = ['basics','dating','food','photo','shopping'];
+  const filtered = SCRIPTED_SCENARIOS.filter(s => s.cat === activeCat);
+  const isPremiumUser = typeof isPremium === 'function' ? isPremium() : false;
+
+  const tabsHTML = cats.map(c => `
+    <button onclick="_acRenderPicker('${c}')"
+      style="flex:1;padding:8px 4px;border:none;border-radius:50px;font-size:11px;font-weight:700;cursor:pointer;transition:.2s;font-family:'Noto Sans Thai',sans-serif;
+      background:${c===activeCat?'white':'transparent'};color:${c===activeCat?'#1a0533':'rgba(255,255,255,.7)'};
+      box-shadow:${c===activeCat?'0 2px 8px rgba(0,0,0,.15)':'none'}">
+      ${CAT_LABELS[c]}
+    </button>
+  `).join('');
+
+  const listHTML = filtered.map((s,i) => {
+    const locked = !s.free && !isPremiumUser;
+    const num = SCRIPTED_SCENARIOS.indexOf(s) + 1;
+    return `
+      <div onclick="${locked ? 'showPaymentModal()' : `_acStartScripted('${s.id}')`}"
+        style="background:white;border-radius:16px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:14px;box-shadow:0 1px 6px rgba(0,0,0,.06);margin-bottom:10px;transition:.15s;opacity:${locked?'.65':'1'}"
+        onmouseover="this.style.transform='translateX(3px)'"
+        onmouseout="this.style.transform='none'">
+        <div style="font-size:28px;flex-shrink:0">${s.icon}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:800;color:#1a0533;margin-bottom:2px">${num}. ${s.name}</div>
+          <div style="font-size:11px;color:#888;font-family:'Noto Sans Thai',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.desc}</div>
+          ${s.free ? `<span style="font-size:10px;font-weight:700;color:#F13596;background:#fff0f7;border-radius:20px;padding:2px 8px;display:inline-block;margin-top:4px">ฝึกออกเสียงพูดจริง →</span>` : ''}
         </div>
+        ${locked ? `<span style="font-size:18px;flex-shrink:0">🔒</span>` : `<span style="font-size:16px;color:#F13596;flex-shrink:0">→</span>`}
       </div>
-      <div style="font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:10px">เลือกระดับ</div>
-      <div style="display:flex;gap:8px;margin-bottom:20px">
-        ${AICHAT_LEVELS.map(l=>`
-          <div id="lvl-${l.id}" onclick="_acSetLevel('${l.id}')"
-            style="flex:1;border-radius:12px;padding:10px 8px;text-align:center;cursor:pointer;transition:.15s;border:1.5px solid ${l.id==='easy'?'#7c3aed':'var(--paper3)'};background:${l.id==='easy'?'#f3e8ff':'white'}">
-            <div style="font-size:12px;font-weight:700;color:var(--ink)">${l.label}</div>
-            <div style="font-size:10px;color:var(--ink3);margin-top:2px;font-family:'Noto Sans Thai',sans-serif">${l.desc}</div>
-          </div>`).join('')}
+    `;
+  }).join('');
+
+  el.innerHTML = `
+    <div style="background:linear-gradient(135deg,#1a0533,#3d0f6b);padding:20px 16px 16px;color:white;flex-shrink:0">
+      <button onclick="closeGame()" style="background:rgba(255,255,255,.15);border:none;border-radius:50%;width:34px;height:34px;font-size:16px;cursor:pointer;color:white;margin-bottom:10px">←</button>
+      <div style="font-size:22px;font-weight:900;letter-spacing:-.5px">30 สถานการณ์จริง 💬</div>
+      <div style="font-size:12px;opacity:.7;margin-top:4px;font-family:'Noto Sans Thai',sans-serif">บทเรียนเอาตัวรอดภาษาจีน ครอบคลุมชีวิตประจำวันครบวงจร</div>
+      <!-- Tabs -->
+      <div style="display:flex;gap:4px;margin-top:14px;background:rgba(255,255,255,.1);border-radius:50px;padding:3px">
+        ${tabsHTML}
       </div>
-      <div style="font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:10px">เลือกสถานการณ์</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
-        ${AICHAT_SCENARIOS.map(s=>`
-          <div id="sc-${s.id}" onclick="_acSetScenario('${s.id}')"
-            style="background:white;border:1.5px solid var(--paper3);border-radius:14px;padding:14px;cursor:pointer;transition:.15s;text-align:center">
-            <div style="font-size:30px;margin-bottom:6px">${s.icon}</div>
-            <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px">${s.name}</div>
-            <div style="font-size:10px;color:var(--ink3);font-family:'Noto Sans Thai',sans-serif">${s.role}</div>
-          </div>`).join('')}
-      </div>
-      <button id="ac-start-btn" onclick="_acStartChat()" disabled
-        style="width:100%;padding:14px;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;border:none;border-radius:50px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;opacity:.4;transition:.2s;box-shadow:0 6px 20px rgba(124,58,237,.3)">
-        🎙️ เริ่มสนทนาเลย!
-      </button>
-    </div>`;
+    </div>
+
+    <div style="background:linear-gradient(135deg,#fff7ed,#fef3c7);border-bottom:1.5px solid #fcd34d;padding:8px 16px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+      <span style="font-size:14px">🚧</span>
+      <span style="font-size:11px;color:#92400e;font-family:'Noto Sans Thai',sans-serif;font-weight:700">ฟีเจอร์นี้กำลังพัฒนาอยู่นะคะ — ทดสอบได้เลยค่ะ ✨</span>
+    </div>
+
+    <div style="flex:1;overflow-y:auto;padding:14px 16px 80px;background:#fdf8ff">
+      ${listHTML}
+    </div>
+  `;
 }
 
 function _acSetLevel(id) {
@@ -19885,16 +20094,107 @@ function _acSetLevel(id) {
   });
 }
 
-function _acSetScenario(id) {
+function _acSetScenario(id, type) {
   _ac.scenario = AICHAT_SCENARIOS.find(s => s.id === id);
-  AICHAT_SCENARIOS.forEach(s => {
-    const el = document.getElementById('sc-' + s.id);
-    if (!el) return;
-    el.style.borderColor = s.id === id ? '#7c3aed' : 'var(--paper3)';
-    el.style.background   = s.id === id ? '#f3e8ff' : 'white';
+  _ac.history = [];
+  _acRenderChat();
+  _acAIFirst();
+}
+
+// ── START SCRIPTED ──
+function _acStartScripted(id) {
+  const sc = SCRIPTED_SCENARIOS.find(s => s.id === id);
+  if (!sc) return;
+  _acRenderScripted(sc);
+}
+
+// ── SCRIPTED UI ──
+function _acRenderScripted(sc) {
+  const el = document.getElementById('aichat-content');
+
+  const rows = sc.dialog.map((t, i) => {
+    const isAI = t.s === 'ai'; // s:'ai'=ซ้ายกล่องขาว, s:'user'=ขวากล่องชมพู
+    const cn_safe = encodeURIComponent(t.cn||'');
+    const btnId = 'tts-btn-' + i;
+    return `
+      <div style="display:flex;flex-direction:column;align-items:${isAI?'flex-start':'flex-end'};gap:4px;animation:floatIn .3s ease ${i*0.1}s both">
+        <div style="font-size:11px;font-weight:700;color:${isAI?'#7c3aed':'#F13596'};padding:0 6px">
+          ${isAI ? (sc.role||'คู่สนทนา') + ' 🤖' : 'คุณ 👤'}
+        </div>
+        <div style="max-width:82%;background:${isAI?'white':'linear-gradient(135deg,#F13596,#c0186a)'};border:${isAI?'1.5px solid #e8d5ff':'none'};border-radius:${isAI?'4px 18px 18px 18px':'18px 4px 18px 18px'};padding:14px 16px;box-shadow:0 2px 10px rgba(0,0,0,.08)">
+          <div style="font-family:'Noto Serif SC',serif;font-size:19px;font-weight:700;color:${isAI?'#1a0533':'white'};margin-bottom:5px;line-height:1.4">${t.cn}</div>
+          <div style="font-size:12px;color:${isAI?'#7c3aed':'rgba(255,255,255,.85)'};margin-bottom:4px;font-style:italic">${t.py}</div>
+          <div style="font-size:12px;color:${isAI?'#555':'rgba(255,255,255,.9)'};font-family:'Noto Sans Thai',sans-serif;line-height:1.5">${t.th}</div>
+          <button id="${btnId}" onclick="_acPlayTTSBtn(decodeURIComponent('${cn_safe}'),'${btnId}')"
+            style="margin-top:10px;background:${isAI?'#f3e8ff':'rgba(255,255,255,.22)'};border:none;border-radius:50px;padding:6px 16px;font-size:12px;font-weight:700;color:${isAI?'#7c3aed':'white'};cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:.15s">
+            🔊 ฟังเสียง
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  el.innerHTML = `
+    <div style="background:linear-gradient(135deg,#1a0533,#3d0f6b);padding:14px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0">
+      <button onclick="_acRenderPicker()" style="background:rgba(255,255,255,.15);border:none;border-radius:50%;width:34px;height:34px;font-size:16px;cursor:pointer;color:white">←</button>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:800;color:white">${sc.icon} ${sc.name}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.6);font-family:'Noto Sans Thai',sans-serif">🎬 Scripted · กด 🔊 ฟังเสียงแต่ละประโยคได้เลยค่ะ</div>
+      </div>
+      <div style="background:rgba(255,255,255,.15);border-radius:20px;padding:3px 10px;font-size:11px;color:white;font-weight:700">${sc.dialog.length} กล่อง</div>
+    </div>
+
+    <div style="background:linear-gradient(135deg,#fff7ed,#fef3c7);border-bottom:1.5px solid #fcd34d;padding:8px 16px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+      <span style="font-size:14px">🚧</span>
+      <span style="font-size:11px;color:#92400e;font-family:'Noto Sans Thai',sans-serif;font-weight:700">ฟีเจอร์นี้กำลังพัฒนาอยู่นะคะ — ทดสอบได้เลยค่ะ ✨</span>
+    </div>
+
+    <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px;background:#fdf8ff">
+      ${rows}
+      <div style="text-align:center;padding:16px 0">
+        <div style="font-size:20px;margin-bottom:6px">🎉</div>
+        <div style="font-size:13px;font-weight:800;color:#1a0533;margin-bottom:4px">จบบทสนทนาแล้วค่ะ!</div>
+        <div style="font-size:11px;color:#666;font-family:'Noto Sans Thai',sans-serif;margin-bottom:12px">กด 🔊 ฟังเสียงแต่ละกล่องได้เลยนะคะ</div>
+        <button onclick="_acStartScripted('${sc.id}')"
+          style="background:linear-gradient(135deg,#F13596,#c0186a);color:white;border:none;border-radius:50px;padding:10px 28px;font-size:13px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(241,53,150,.3)">
+          🔄 เริ่มอ่านใหม่
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+// ── PLAY TTS for scripted ──
+function _acPlayTTS(text, btn) {
+  if (!text) return;
+  const orig = btn ? btn.innerHTML : '';
+  if (btn) btn.innerHTML = '📢 กำลังเล่น...';
+  speak(text);
+  setTimeout(() => { if (btn) btn.innerHTML = orig; }, 2000);
+}
+
+function _acPlayTTSBtn(text, btnId) {
+  if (!text) return;
+  const btn = document.getElementById(btnId);
+  if (!btn) { speak(text); return; }
+  // stop if already playing
+  if (btn.dataset.playing === '1') {
+    stopSpeech();
+    btn.dataset.playing = '0';
+    btn.innerHTML = '🔊 ฟังเสียง';
+    return;
+  }
+  // reset all other tts buttons first
+  document.querySelectorAll('[id^="tts-btn-"]').forEach(b => {
+    b.dataset.playing = '0';
+    b.innerHTML = '🔊 ฟังเสียง';
   });
-  const btn = document.getElementById('ac-start-btn');
-  if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+  btn.dataset.playing = '1';
+  btn.innerHTML = '🔈 กำลังเล่น...';
+  speak(text, () => {
+    btn.dataset.playing = '0';
+    btn.innerHTML = '🔊 ฟังเสียง';
+  });
 }
 
 // ── START CHAT ──
@@ -19911,28 +20211,33 @@ function _acRenderChat() {
   const lvlLabel = AICHAT_LEVELS.find(l => l.id === _ac.level)?.label || '';
   const el = document.getElementById('aichat-content');
   el.innerHTML = `
-    <div style="padding:10px 16px;background:white;border-bottom:1.5px solid var(--paper3);display:flex;align-items:center;gap:10px;flex-shrink:0">
-      <button onclick="_acRenderPicker()" style="background:var(--paper2);border:none;border-radius:50%;width:34px;height:34px;font-size:18px;cursor:pointer">←</button>
+    <div style="background:linear-gradient(135deg,#1a0533,#3d0f6b);padding:14px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0">
+      <button onclick="_acRenderPicker()" style="background:rgba(255,255,255,.15);border:none;border-radius:50%;width:34px;height:34px;font-size:16px;cursor:pointer;color:white">←</button>
       <div style="flex:1">
-        <div style="font-size:14px;font-weight:700;color:var(--ink)">${sc.icon} ${sc.name}</div>
-        <div style="font-size:11px;color:var(--ink3);font-family:'Noto Sans Thai',sans-serif">AI รับบท: ${sc.role} · ${lvlLabel}</div>
+        <div style="font-size:14px;font-weight:800;color:white">${sc.icon} ${sc.name}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.6);font-family:'Noto Sans Thai',sans-serif">🤖 AI รับบท: ${sc.role}</div>
       </div>
       <span style="font-size:11px;background:#f3e8ff;color:#7c3aed;border:1px solid #c4b5fd;border-radius:50px;padding:3px 10px;font-weight:700">🎙️ AI</span>
     </div>
-    <div id="ac-messages" style="flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px;background:var(--paper2)"></div>
-    <div style="padding:10px 12px;background:white;border-top:1.5px solid var(--paper3);flex-shrink:0;padding-bottom:max(10px,env(safe-area-inset-bottom))">
+    <div style="background:linear-gradient(135deg,#fff7ed,#fef3c7);border-bottom:1.5px solid #fcd34d;padding:8px 16px;display:flex;align-items:center;gap:8px;flex-shrink:0">
+      <span style="font-size:14px">🚧</span>
+      <span style="font-size:11px;color:#92400e;font-family:'Noto Sans Thai',sans-serif;font-weight:700">ฟีเจอร์นี้กำลังพัฒนาอยู่นะคะ — ทดสอบได้เลยค่ะ ✨</span>
+    </div>
+    <div id="ac-messages" style="flex:1;overflow-y:auto;padding:12px 14px 150px;display:flex;flex-direction:column;gap:10px;background:var(--paper2)"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;background:white;border-top:1.5px solid var(--paper3);padding:8px 12px;padding-bottom:max(10px,env(safe-area-inset-bottom));z-index:10">
+      <div id="ac-hints" style="display:flex;gap:6px;margin-bottom:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap"></div>
       <div style="font-size:11px;color:var(--ink3);text-align:center;margin-bottom:6px;font-family:'Noto Sans Thai',sans-serif" id="ac-hint">พิมพ์ภาษาจีนหรือไทย หรือกด 🎙️ เพื่อบันทึกเสียง</div>
-      <div style="display:flex;gap:8px;align-items:flex-end">
+      <div style="display:flex;gap:8px;align-items:center">
         <textarea id="ac-input" placeholder="พิมพ์ตอบที่นี่..." rows="1"
-          style="flex:1;background:var(--paper);border:1.5px solid var(--paper3);border-radius:20px;padding:10px 14px;font-size:15px;font-family:'DM Sans','Noto Serif SC','Noto Sans Thai',sans-serif;color:var(--ink);outline:none;resize:none;max-height:90px;min-height:44px;transition:.15s;line-height:1.4"
-          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();_acSend()}"
-          oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,90)+'px'"></textarea>
+          style="flex:1;background:var(--paper);border:1.5px solid var(--paper3);border-radius:20px;padding:10px 14px;font-size:14px;font-family:'DM Sans','Noto Serif SC','Noto Sans Thai',sans-serif;color:var(--ink);outline:none;resize:none;height:44px;transition:.15s;line-height:1.4"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();_acSend()}"></textarea>
         <button id="ac-mic" onclick="_acToggleMic()"
-          style="width:44px;height:44px;border-radius:50%;background:#f3e8ff;border:1.5px solid #c4b5fd;color:#7c3aed;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s">🎙️</button>
+          style="width:44px;height:44px;border-radius:50%;background:#f3e8ff;border:1.5px solid #c4b5fd;color:#7c3aed;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">🎙️</button>
         <button id="ac-send" onclick="_acSend()"
-          style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;border:none;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(124,58,237,.35);transition:.15s">▶</button>
+          style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#5b21b6);color:white;border:none;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(124,58,237,.35)">▶</button>
       </div>
     </div>`;
+  el.style.position = "relative";
 }
 
 // ── MESSAGES ──
@@ -19959,6 +20264,26 @@ function _acAddAIMsg(data) {
       ${fb}
     </div>`;
   box.scrollTop = box.scrollHeight;
+
+  // อัป hint buttons ตามสถานการณ์
+  const hintsMap = {
+    restaurant: ['你好！', '我要点菜。', '有什么推荐吗？', '买单！'],
+    airport: ['你好！', '我要办理登机。', '我的行李在哪里？', '谢谢！'],
+    shopping: ['多少钱？', '太贵了！', '便宜一点吧。', '我买了。'],
+    hotel: ['你好，我要入住。', '我有预订。', '房间在几楼？', '谢谢！'],
+    doctor: ['我头疼。', '我肚子痛。', '严重吗？', '谢谢医生。'],
+    friend: ['你好！', '你最近怎么样？', '我很好，你呢？', '我们一起去吧！'],
+  };
+  const hints = hintsMap[_ac.scenario?.id] || ['你好！', '谢谢！', '对不起。'];
+  const hintsEl = document.getElementById('ac-hints');
+  if (hintsEl) {
+    hintsEl.innerHTML = hints.map(h => `
+      <button onclick="document.getElementById('ac-input').value='${h.replace(/'/g,"\'")}';document.getElementById('ac-input').focus()"
+        style="background:#f3e8ff;border:1.5px solid #c4b5fd;border-radius:50px;padding:5px 14px;font-size:12px;font-weight:700;color:#7c3aed;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:'Noto Serif SC',serif">
+        ${h}
+      </button>
+    `).join('');
+  }
 }
 
 function _acAddUserMsg(text) {
