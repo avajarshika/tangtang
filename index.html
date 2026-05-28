@@ -9240,7 +9240,11 @@ function updateTopbar() {
   const initials = state.user.name.charAt(0).toUpperCase();
   const topAv = document.getElementById('top-avatar');
   if (state.user.data.avatarUrl) {
-    topAv.innerHTML = '<img src="' + state.user.data.avatarUrl + '" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">';
+    const avImg = document.createElement('img');
+    avImg.src = state.user.data.avatarUrl;
+    avImg.style.cssText = 'width:32px;height:32px;border-radius:50%;object-fit:cover;';
+    topAv.innerHTML = '';
+    topAv.appendChild(avImg);
     topAv.style.background = 'transparent';
     topAv.style.padding = '0';
   } else if (state.user.data.avatarEmoji) {
@@ -9675,8 +9679,8 @@ function isPremium() {
   // เช็ค subscription ใหม่
   if (d.subscription_type === 'lifetime') return true;
   if (d.subscription_end && new Date(d.subscription_end) > new Date()) return true;
-  // legacy fallback
-  return state.user.is_premium === true || d.isPremium === true;
+  // legacy fallback (removed d.isPremium - localStorage can be tampered)
+  return state.user.is_premium === true;
 }
 
 function tryOpenLesson(id, index) {
