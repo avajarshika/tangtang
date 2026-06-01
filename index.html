@@ -2117,7 +2117,7 @@ html {
           <button onclick="openEditNameModal()" style="background:rgba(255,255,255,.2);border:none;border-radius:20px;padding:3px 8px;font-size:11px;font-weight:700;color:white;cursor:pointer;font-family:inherit">✏️ แก้ไข</button>
         </div>
         <div class="profile-email" id="prof-email">guest</div>
-        <div class="profile-hsk">🎯 HSK 1 — Beginner</div>
+        <div class="profile-hsk" id="prof-hsk">🎯 HSK 1 — Beginner</div>
       </div>
     </div>
     <div class="profile-section">
@@ -2200,30 +2200,30 @@ html {
           <div class="hsk-bar"><div class="hsk-fill" id="hsk1-bar" style="width:0%;background:var(--red)"></div></div>
           <div class="hsk-pct" id="hsk1-pct">0%</div>
         </div>
-        <div class="hsk-row" style="opacity:.4">
+        <div class="hsk-row">
           <div class="hsk-lbl">HSK 2</div>
-          <div class="hsk-bar"><div class="hsk-fill" style="width:0%;background:var(--amber)"></div></div>
-          <div class="hsk-pct">เร็วๆนี้</div>
+          <div class="hsk-bar"><div class="hsk-fill" id="hsk2-bar" style="width:0%;background:var(--amber)"></div></div>
+          <div class="hsk-pct" id="hsk2-pct">0%</div>
         </div>
-        <div class="hsk-row" style="opacity:.25">
+        <div class="hsk-row">
           <div class="hsk-lbl">HSK 3</div>
-          <div class="hsk-bar"><div class="hsk-fill" style="width:0%;background:var(--blue)"></div></div>
-          <div class="hsk-pct">เร็วๆนี้</div>
+          <div class="hsk-bar"><div class="hsk-fill" id="hsk3-bar" style="width:0%;background:var(--blue)"></div></div>
+          <div class="hsk-pct" id="hsk3-pct">0%</div>
         </div>
-        <div class="hsk-row" style="opacity:.2">
+        <div class="hsk-row">
           <div class="hsk-lbl">HSK 4</div>
           <div class="hsk-bar"><div class="hsk-fill" id="hsk4-bar" style="width:0%;background:#8b5cf6"></div></div>
-          <div class="hsk-pct" id="hsk4-pct">เร็วๆนี้</div>
+          <div class="hsk-pct" id="hsk4-pct">0%</div>
         </div>
-        <div class="hsk-row" style="opacity:.15">
+        <div class="hsk-row">
           <div class="hsk-lbl">HSK 5</div>
           <div class="hsk-bar"><div class="hsk-fill" id="hsk5-bar" style="width:0%;background:#e67e22"></div></div>
-          <div class="hsk-pct" id="hsk5-pct">เร็วๆนี้</div>
+          <div class="hsk-pct" id="hsk5-pct">0%</div>
         </div>
-        <div class="hsk-row" style="opacity:.1">
+        <div class="hsk-row">
           <div class="hsk-lbl">HSK 6</div>
           <div class="hsk-bar"><div class="hsk-fill" id="hsk6-bar" style="width:0%;background:#c0186e"></div></div>
-          <div class="hsk-pct" id="hsk6-pct">เร็วๆนี้</div>
+          <div class="hsk-pct" id="hsk6-pct">0%</div>
         </div>
       </div>
 
@@ -9240,11 +9240,7 @@ function updateTopbar() {
   const initials = state.user.name.charAt(0).toUpperCase();
   const topAv = document.getElementById('top-avatar');
   if (state.user.data.avatarUrl) {
-    const avImg = document.createElement('img');
-    avImg.src = state.user.data.avatarUrl;
-    avImg.style.cssText = 'width:32px;height:32px;border-radius:50%;object-fit:cover;';
-    topAv.innerHTML = '';
-    topAv.appendChild(avImg);
+    topAv.innerHTML = '<img src="' + state.user.data.avatarUrl + '" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">';
     topAv.style.background = 'transparent';
     topAv.style.padding = '0';
   } else if (state.user.data.avatarEmoji) {
@@ -9679,8 +9675,8 @@ function isPremium() {
   // เช็ค subscription ใหม่
   if (d.subscription_type === 'lifetime') return true;
   if (d.subscription_end && new Date(d.subscription_end) > new Date()) return true;
-  // legacy fallback (removed d.isPremium - localStorage can be tampered)
-  return state.user.is_premium === true;
+  // legacy fallback
+  return state.user.is_premium === true || d.isPremium === true;
 }
 
 function tryOpenLesson(id, index) {
@@ -10220,9 +10216,32 @@ function renderProfile() {
   document.getElementById('ps-streak').textContent = d.streak || 0;
   document.getElementById('ps-known').textContent = (d.knownWords || []).length;
 
-  const pct = Math.round((d.completed || []).length / LESSONS.length * 100);
-  document.getElementById('hsk1-bar').style.width = pct + '%';
-  document.getElementById('hsk1-pct').textContent = pct + '%';
+  // คำนวณ HSK level จากบทที่เรียนจบ
+  const completedIds = d.completed || [];
+  const completedLessons = LESSONS.filter(l => completedIds.includes(l.id));
+  const hskLabels = {1:'Beginner',2:'Elementary',3:'Intermediate',4:'Upper-Int',5:'Advanced',6:'Master'};
+  let currentHSK = 1;
+  if (completedLessons.length > 0) {
+    // เอา HSK สูงสุดที่เรียนจบมา
+    currentHSK = Math.max(...completedLessons.map(l => l.hsk || 1));
+  }
+  const hskEl = document.getElementById('prof-hsk');
+  if (hskEl) {
+    hskEl.textContent = `🎯 HSK ${currentHSK} — ${hskLabels[currentHSK]}`;
+  }
+
+  // คำนวณ % progress แยกตามแต่ละ HSK level
+  for (let level = 1; level <= 6; level++) {
+    const lessonsInLevel = LESSONS.filter(l => l.hsk === level);
+    const completedInLevel = lessonsInLevel.filter(l => completedIds.includes(l.id));
+    const levelPct = lessonsInLevel.length > 0
+      ? Math.round(completedInLevel.length / lessonsInLevel.length * 100)
+      : 0;
+    const barEl = document.getElementById('hsk' + level + '-bar');
+    const pctEl = document.getElementById('hsk' + level + '-pct');
+    if (barEl) barEl.style.width = levelPct + '%';
+    if (pctEl) pctEl.textContent = levelPct + '%';
+  }
 
   // Level
   const lv = getLevelFromXP(d.xp || 0);
