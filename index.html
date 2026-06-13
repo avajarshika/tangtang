@@ -15405,7 +15405,7 @@ async function approveOrder(orderId, email, referralCode, amount) {
   // 3. หา user_id จาก auth users ผ่าน RPC แล้ว set premium + subscription
   let targetUserId = null;
   try {
-    const { data: rawData } = await sb.rpc('admin_list_users');
+    const { data: rawData } = await sb.rpc('admin_list_users').limit(99999);
     let authUsers = [];
     (rawData || []).forEach(row => {
       try {
@@ -15504,7 +15504,7 @@ async function loadAdminUsers() {
 
   listEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--ink3)">⏳ กำลังโหลด...</div>';
 
-  const { data: rawData, error } = await sb.rpc('admin_list_users');
+  const { data: rawData, error } = await sb.rpc('admin_list_users').limit(99999);
   if (error) {
     listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--red)">❌ ' + error.message + '</div>';
     return;
@@ -16693,7 +16693,7 @@ async function previewExportData() {
     if (progErr) throw progErr;
 
     // ดึง auth users สำหรับ email
-    const { data: rawData, error } = await sb.rpc('admin_list_users');
+    const { data: rawData, error } = await sb.rpc('admin_list_users').limit(99999);
     if (error) throw error;
 
     // parse RPC response
